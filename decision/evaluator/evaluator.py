@@ -20,13 +20,7 @@ from decision.domain.ai_model import AIModel, QualityLevel
 from decision.domain.candidate import Candidate
 from decision.domain.context import BudgetLevel, Context, Priority
 
-_QUALITY_ORDINAL = {
-    QualityLevel.LOW: 0,
-    QualityLevel.MEDIUM: 1,
-    QualityLevel.HIGH: 2,
-    QualityLevel.VERY_HIGH: 3,
-}
-_MAX_QUALITY_ORDINAL = max(_QUALITY_ORDINAL.values())
+_MAX_QUALITY_ORDINAL = QualityLevel.VERY_HIGH.ordinal
 
 
 class CostTier(IntEnum):
@@ -70,16 +64,12 @@ def evaluate(context: Context, models: list[AIModel]) -> list[Candidate]:
 
 
 def _derive_cost_tiers(models: list[AIModel]) -> dict[str, CostTier]:
-    ranked_by_cost = sorted(models, key=_blended_cost)
+    ranked_by_cost = sorted(models, key=lambda model: model.cost.blended)
     total = len(ranked_by_cost)
     return {
         model.id: CostTier(min(rank * 3 // total, CostTier.HIGH))
         for rank, model in enumerate(ranked_by_cost)
     }
-
-
-def _blended_cost(model: AIModel) -> float:
-    return model.cost.input_per_million + model.cost.output_per_million
 
 
 def _split_by_hard_filters(context: Context, models: list[AIModel], cost_tiers: dict[str, CostTier]):
@@ -121,8 +111,8 @@ def _score(context: Context, model: AIModel, qualifying: list[AIModel]) -> Candi
 def _normalized_factor(priority: Priority, model: AIModel, qualifying: list[AIModel]) -> float:
     if priority == Priority.COST:
         return _normalize_relative(
-            value=_blended_cost(model),
-            values=[_blended_cost(m) for m in qualifying],
+            value=model.cost.blended,
+            values=[m.cost.blended for m in qualifying],
             lower_is_better=True,
         )
     if priority == Priority.CONTEXT_WINDOW:
@@ -142,7 +132,7 @@ def _normalized_factor(priority: Priority, model: AIModel, qualifying: list[AIMo
         Priority.CREATIVE_WRITING: model.quality.creative_writing,
         Priority.INSTRUCTION_FOLLOWING: model.quality.instruction_following,
     }
-    return _QUALITY_ORDINAL[quality_by_priority[priority]] / _MAX_QUALITY_ORDINAL
+    return quality_by_priority[priority].ordinal / _MAX_QUALITY_ORDINAL
 
 
 def _normalize_relative(value: float, values: list[float], lower_is_better: bool) -> float:

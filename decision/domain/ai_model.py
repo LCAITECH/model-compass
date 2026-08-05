@@ -10,6 +10,10 @@ class QualityLevel(str, Enum):
     HIGH = "high"
     VERY_HIGH = "very_high"
 
+    @property
+    def ordinal(self) -> int:
+        return list(QualityLevel).index(self)
+
 
 class License(str, Enum):
     PROPRIETARY = "proprietary"
@@ -57,6 +61,16 @@ class Operational:
 class Cost:
     input_per_million: float
     output_per_million: float
+
+    @property
+    def blended(self) -> float:
+        """Cost of an equal mix of input and output tokens.
+
+        An intermediate derived figure, not stored in the dataset (see
+        SCHEMA.md's Cost section) — used to rank and tier models by
+        price without picking one of input/output alone.
+        """
+        return self.input_per_million + self.output_per_million
 
 
 @dataclass(frozen=True)
