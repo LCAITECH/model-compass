@@ -1,0 +1,102 @@
+# IMPLEMENTATION_NOTES.md — Model Compass
+
+This document is not one of the 7 official project documents. It is a
+running log of friction discovered while implementing against
+`SCHEMA.md` and `ARCHITECTURE.md`. It is allowed to be incomplete,
+informal, and out of date — its only job is to keep observations from
+being lost until there's enough evidence to act on them.
+
+An observation here does not mean the schema or architecture is wrong.
+It means something was noticed. Most observations should stay
+observations. A schema or architecture change is a separate, deliberate
+decision made in `SCHEMA.md` / `ARCHITECTURE.md` directly, only after a
+pattern repeats — not on the first, second, or even third occurrence in
+isolation.
+
+---
+
+## Iteration #1
+
+**Observation**
+Several providers (OpenAI, Anthropic, DeepSeek) don't publish an
+explicit language list. Curated a reasonable list from public docs
+and practical usage in those 3 cases.
+
+**Current decision**
+No schema change. Treat as a documentation/process gap, not a
+schema gap — `languages` as a field is correct; what's missing (if
+anything) is guidance for contributors on this edge case.
+
+**Status**
+Observation only. Review after ~20-30 dataset entries, once we can
+tell a real pattern from a coincidence of which providers we loaded
+first.
+
+---
+
+## Iteration #2
+
+**Observation**
+Third-party pricing/spec aggregators (OpenRouter, pricepertoken,
+llm-stats, etc.) frequently mix up model versions — e.g. surfacing
+GPT-5.4 figures under a GPT-5 search, or Mistral Large 2 figures under
+"Mistral Large". Only the provider's own docs could be trusted to
+identify which version was actually being described.
+
+**Current decision**
+No schema change. This isn't a gap in what fields exist — it's a
+sourcing discipline problem. `SCHEMA.md` and `CONTRIBUTING.md` already
+say objective fields must come from official provider documentation;
+this is a data point confirming why that rule exists, not a reason to
+add a new one.
+
+**Status**
+Observation only. Worth revisiting only if it turns into a recurring
+contributor mistake once external Pull Requests start landing (Phase
+5, Community & Governance) — at that point it might warrant an
+explicit callout in `CONTRIBUTING.md` about not trusting aggregators.
+
+---
+
+## Iteration #3
+
+**Observation**
+`operational.max_output` is not always documented as a distinct,
+explicit number. Some providers report it plainly (OpenAI, DeepSeek);
+others report a context window without separately confirming the true
+output ceiling, so it had to be inferred as equal to the context
+window from what the model card actually stated (e.g. Mistral Large
+3).
+
+**Current decision**
+No schema change. The field definition is correct; this is a
+data-collection nuance (objective fields sometimes need reasonable
+inference from adjacent published facts, not always a direct lookup)
+rather than evidence the field is wrong or missing something.
+
+**Status**
+Observation only. Revisit if this inference pattern becomes common
+enough that `SCHEMA.md` should say explicitly how to handle it.
+
+---
+
+## Iteration #4
+
+**Observation**
+Two of the five example models from `HANDOFF.md` had drifted by the
+time they were actually loaded: DeepSeek V3 is no longer served by
+DeepSeek's API (replaced by V4), and Mistral Large is now Mistral
+Large 3 — Apache 2.0 / open-weights, not proprietary as the original
+example assumed.
+
+**Current decision**
+No schema or architecture change. This is catalog drift, not a schema
+gap — the schema handled both substitutions (DeepSeek V4 Flash,
+Mistral Large 3) without any friction. It's a preview of an ongoing
+reality: `dataset/` entries and even example model choices in docs
+will keep drifting out from under the project over time.
+
+**Status**
+Observation only. Confirms the value of the planned dataset-update
+pipeline noted in `HANDOFF.md` ("Ideas anotadas pero explícitamente NO
+comprometidas todavía") — not an argument to build it now.

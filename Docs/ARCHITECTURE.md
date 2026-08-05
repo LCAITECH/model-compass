@@ -208,11 +208,17 @@ resolving them now would mean designing implementation details before
 they're needed. They are noted here so they aren't forgotten, not
 because they're unimportant:
 
-- **Dataset validation** — where the responsibility for validating
-  that a YAML file conforms to the schema lives (inside `loader/`, or
-  as a separate step). To be resolved when `loader/` is implemented.
 - **Project tooling** — dependency management, test layout, and other
   implementation-level configuration. Deliberately not defined here.
+
+### Resolved
+
+- **Dataset validation** (was open, resolved when `decision/loader/`
+  was implemented) — validation lives inside `loader/`, as part of
+  turning a YAML file into an `AIModel`. A single component reading
+  and validating the dataset was the simplest option for the set of
+  rules `SCHEMA.md` currently defines; a separate validation step can
+  be split out later if the rules grow enough to justify it.
 
 ---
 
