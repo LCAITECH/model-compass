@@ -4,3 +4,7 @@ __pycache__/
 .pytest_cache/
 .venv/
 venv/
+
+# Internal dev-only docs, not meant for the public repo.
+HANDOFF.md
+AGENTS.md
