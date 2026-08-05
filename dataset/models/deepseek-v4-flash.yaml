@@ -1,0 +1,41 @@
+id: deepseek-v4-flash
+name: DeepSeek V4 Flash
+provider: DeepSeek
+version: "V4"
+license: open-weights
+
+capabilities:
+  vision: false
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+
+quality:
+  reasoning: medium
+  coding: high
+  creative_writing: medium
+  instruction_following: medium
+
+languages: [en, zh, es, fr, de, ja, ru]
+language_quality:
+  en: very_high
+  zh: very_high
+  es: medium
+  fr: medium
+  de: medium
+  ja: medium
+  ru: medium
+
+operational:
+  context_window: 1000000
+  max_output: 384000
+
+cost:
+  input_per_million: 0.14
+  output_per_million: 0.28
+
+ecosystem:
+  integration_ease: medium
+  maturity: stable
