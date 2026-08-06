@@ -21,21 +21,31 @@ feedback — see the git history from today for what that included
 affordability figures, narrative reasons, per-alternative "choose this
 if" reasoning, content reordering).
 
-What's genuinely still open, not yet started, and is real visual
-design work (not content/logic):
+**Update:** a first visual design pass landed (see git history —
+"Visual design pass on interfaces/web/"): a real type scale, a 4px
+spacing scale, an expanded color palette (still one neutral
+violet/indigo accent, plus semantic positive/caution/danger colors,
+still nothing resembling any AI provider's brand), small inline SVG
+icons for reasons/trade-offs/alternatives, and card components
+grouping the result page's sections. Backend was untouched throughout.
 
-- **Typography** — currently system font stack only, no real type
-  scale decisions made.
-- **Spacing / layout rhythm** — currently ad hoc per-element margins,
-  no consistent spacing scale.
-- **Color palette** — currently one placeholder neutral accent
-  (violet/indigo), chosen only to avoid resembling any AI provider's
-  brand color. Not a considered palette yet.
-- **Iconography** — none in use today beyond a plain "ⓘ" tooltip
-  glyph.
-- **Card / component treatments** — result sections are plain
-  `<div>`/`<ul>` blocks with minimal borders; no considered visual
-  hierarchy beyond heading levels.
+What's still open after that pass — smaller, more polish-grade than
+the first round:
+
+- **Responsive / mobile check** — never tested at a narrow viewport;
+  the content column is fixed-width-centered and likely needs a real
+  check, not an assumption that it degrades gracefully.
+- **Dark mode** — not attempted. The current palette was designed for
+  light mode only.
+- **Accessibility pass** — color contrast, focus states, and screen
+  reader labelling (e.g. the SVG icons are `aria-hidden`, meaning
+  their meaning currently rides entirely on the adjacent text, which
+  is probably fine but hasn't been deliberately checked) haven't had a
+  dedicated review.
+- **Empty/loading states** — no consideration yet for what the form
+  looks like mid-submit, or other micro-states beyond the three main
+  screens (form, result, no-match).
+- **Favicon / social preview metadata** — none set.
 
 ## Explicitly out of scope for this document
 
