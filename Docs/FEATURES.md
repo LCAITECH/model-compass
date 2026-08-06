@@ -140,3 +140,19 @@ phases of the [Roadmap](./ROADMAP.md).
   — a token budget only translates to real-world usage once the user
   supplies their own volume or spend numbers, not from an invented
   usage category.
+- **Subscription vs. API Comparator** — help a developer decide
+  between a flat-rate subscription (e.g. ChatGPT Plus, Claude Pro) and
+  pay-per-token API access. A standalone tool, deliberately kept
+  separate from the model recommender — it answers "how should I pay
+  for this" rather than "which model should I use", and the two
+  questions shouldn't be mixed into one flow. Meaningfully harder than
+  anything else on this list: subscriptions don't have per-token
+  pricing at all, only usage caps that providers rarely publish as a
+  fixed, stable, token-denominated number — a genuinely different kind
+  of objective data than anything `SCHEMA.md` currently sources, likely
+  requiring its own schema extension before this could be built
+  honestly. Any version of this must be explicit about what's
+  verifiable (subscription price, API price) versus estimated
+  (token-equivalent usage), and must not claim a precise equivalence
+  like "$20 of Plus = X million tokens" — that's the same fabricated-
+  precision problem Multi-Model Cost Strategies runs into, above.

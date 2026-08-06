@@ -6,6 +6,23 @@
   <p class="eyebrow">Recommended model</p>
   <h1>{{ recommendation.recommended.name }}</h1>
 
+  <h2>Why this model?</h2>
+  <ul class="reasons">
+    {% for reason in recommendation.reasons %}
+    <li>{{ reason }}</li>
+    {% endfor %}
+  </ul>
+
+  {% if recommendation.trade_offs %}
+  <h2>Trade-offs</h2>
+  <ul class="trade-offs">
+    {% for trade_off in recommendation.trade_offs %}
+    <li>{{ trade_off }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h2>Pricing</h2>
   <div class="pricing">
     <div>
       <span class="label">Input</span>
@@ -59,29 +76,20 @@
   </div>
   {% endif %}
 
-  <h2>Why this model?</h2>
-  <ul class="reasons">
-    {% for reason in recommendation.reasons %}
-    <li>{{ reason }}</li>
-    {% endfor %}
-  </ul>
-
-  {% if recommendation.trade_offs %}
-  <h2>Trade-offs</h2>
-  <ul class="trade-offs">
-    {% for trade_off in recommendation.trade_offs %}
-    <li>{{ trade_off }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-
   {% if recommendation.alternatives %}
   <h2>Alternatives</h2>
   <ul class="alternatives">
     {% for alt in recommendation.alternatives %}
     <li>
-      {{ alt.name }}
-      <span class="muted">— ${{ "%.2f"|format(alt.cost.input_per_million) }} / ${{ "%.2f"|format(alt.cost.output_per_million) }} per 1M tokens</span>
+      <strong>{{ alt.model.name }}</strong>
+      <span class="muted">— ${{ "%.2f"|format(alt.model.cost.input_per_million) }} / ${{ "%.2f"|format(alt.model.cost.output_per_million) }} per 1M tokens</span>
+      {% if alt.reasons %}
+      <ul class="standout-reasons">
+        {% for reason in alt.reasons %}
+        <li>{{ reason }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
     </li>
     {% endfor %}
   </ul>

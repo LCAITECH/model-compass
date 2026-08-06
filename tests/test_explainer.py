@@ -72,7 +72,29 @@ def test_alternatives_are_capped(models):
     recommendation = explain(context, candidates)
 
     assert len(recommendation.alternatives) == 3
-    assert recommendation.recommended not in recommendation.alternatives
+    assert recommendation.recommended.id not in {alt.model.id for alt in recommendation.alternatives}
+
+
+def test_alternatives_get_honest_standout_reasons_or_none(models):
+    # Winner is deepseek-v4-flash (cheapest); alternatives ranked by cost
+    # are gpt-5-mini, gemini-2.5-flash, mistral-large-3. Among all 5
+    # qualifying models, claude-sonnet-5 dominates every quality
+    # dimension, so most alternatives here have nothing left to stand
+    # out on except gemini's context window.
+    context = Context(
+        use_case="Bot",
+        budget=BudgetLevel.HIGH,
+        priorities=(Priority.COST,),
+        language="es",
+    )
+    candidates = evaluate(context, models)
+
+    recommendation = explain(context, candidates)
+    by_id = {alt.model.id: alt for alt in recommendation.alternatives}
+
+    assert any("largest context window" in reason for reason in by_id["gemini-2.5-flash"].reasons)
+    assert by_id["gpt-5-mini"].reasons == ()
+    assert by_id["mistral-large-3"].reasons == ()
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):

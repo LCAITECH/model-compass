@@ -17,10 +17,24 @@ class Exclusion:
 
 
 @dataclass(frozen=True)
+class Alternative:
+    """A qualifying model other than the winner.
+
+    `reasons` explains why you'd pick this one instead — dimensions it's
+    the best qualifying option for. Empty when it isn't the strongest at
+    anything relative to the rest of the qualifying set; that's an
+    honest outcome, not a gap to paper over with an invented reason.
+    """
+
+    model: AIModel
+    reasons: tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class Recommendation:
     recommended: AIModel
     cost_tier: CostTier
     reasons: tuple[str, ...]
     trade_offs: tuple[str, ...]
-    alternatives: tuple[AIModel, ...]
+    alternatives: tuple[Alternative, ...]
     excluded: tuple[Exclusion, ...]

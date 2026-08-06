@@ -15,7 +15,7 @@ logic already picked.
 from decision.domain.ai_model import AIModel
 from decision.domain.candidate import Candidate
 from decision.domain.context import Context, Priority
-from decision.domain.recommendation import Exclusion, Recommendation
+from decision.domain.recommendation import Alternative, Exclusion, Recommendation
 from decision.explainer.errors import NoQualifyingModelsError
 
 MAX_ALTERNATIVES = 3
@@ -51,7 +51,10 @@ def explain(context: Context, candidates: list[Candidate]) -> Recommendation:
         cost_tier=winner.cost_tier,
         reasons=_build_reasons(context, winner.model, qualifying_models),
         trade_offs=_build_trade_offs(context, winner.model, qualifying_models),
-        alternatives=tuple(c.model for c in runners_up[:MAX_ALTERNATIVES]),
+        alternatives=tuple(
+            Alternative(model=c.model, reasons=_standout_reasons(c.model, qualifying_models))
+            for c in runners_up[:MAX_ALTERNATIVES]
+        ),
         excluded=tuple(
             Exclusion(model=c.model, reasons=c.disqualified_reasons)
             for c in candidates
@@ -136,6 +139,27 @@ def _build_trade_offs(context: Context, winner: AIModel, qualifying: list[AIMode
             trade_offs.append(f"Not the strongest {label} among the qualifying alternatives")
 
     return tuple(trade_offs)
+
+
+def _standout_reasons(model: AIModel, qualifying: list[AIModel]) -> tuple[str, ...]:
+    """Why you'd pick `model` over the winner — dimensions it's the best qualifying option for.
+
+    The mirror image of _build_trade_offs: instead of "what the winner
+    gives up", this is "what this alternative is actually best at".
+    Never invents a reason — a model that isn't the strongest at
+    anything among the qualifying set simply gets no reasons here.
+    """
+    reasons = []
+
+    if _is_cheapest(model, qualifying):
+        reasons.append("Choose this if cost matters most to you — it's the cheapest qualifying option")
+    if _has_largest_context(model, qualifying):
+        reasons.append("Choose this if you need the largest context window")
+    for priority, attr in _QUALITY_ATTR.items():
+        if _is_best_quality(priority, model, qualifying):
+            reasons.append(f"Choose this if {_PRIORITY_LABEL[priority]} matters most to you")
+
+    return tuple(reasons)
 
 
 def _is_cheapest(model: AIModel, qualifying: list[AIModel]) -> bool:
