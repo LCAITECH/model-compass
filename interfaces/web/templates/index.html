@@ -2,9 +2,11 @@
 {% import "_icons.html" as icons %}
 {% block title %}Model Compass — What model should I use?{% endblock %}
 {% block content %}
+<div class="fade-in">
 <div class="hero">
   <h1>Find the right AI model for your project.</h1>
-  <p class="hero-subhead">Deterministic recommendations. Transparent reasoning. Real API pricing.</p>
+  <p class="hero-lead">Stop guessing.</p>
+  <p class="hero-subhead">Get the model that fits your project — based on cost, quality, and what matters most to you.</p>
   <button type="button" id="demo-button" class="secondary-button">See a live example</button>
 </div>
 
@@ -81,5 +83,33 @@
 
     <button type="submit" class="primary-button">Get a recommendation</button>
   </form>
+</div>
+
+<div class="how-it-works">
+  <p class="eyebrow">How it works</p>
+  <ol>
+    <li>
+      <span class="step-number">1</span>
+      <div>
+        <strong>Describe your project.</strong>
+        <p>Use case, language, and budget — as much or as little detail as you have.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-number">2</span>
+      <div>
+        <strong>Choose your priorities.</strong>
+        <p>Rank what matters most: cost, reasoning, coding, or context window.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-number">3</span>
+      <div>
+        <strong>Get a transparent recommendation.</strong>
+        <p>A model, the reasons behind it, its trade-offs, and why every other model didn't make the cut.</p>
+      </div>
+    </li>
+  </ol>
+</div>
 </div>
 {% endblock %}

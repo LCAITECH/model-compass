@@ -73,12 +73,12 @@
   <h2>{{ icons.dollar() }}Pricing</h2>
   <div class="stat-grid">
     <div class="stat-card">
-      <span class="label">Input</span>
+      <span class="label">{{ icons.arrow_in() }}Input</span>
       <span class="value">${{ "%.2f"|format(recommendation.recommended.cost.input_per_million) }}</span>
       <span class="unit">per 1M tokens</span>
     </div>
     <div class="stat-card">
-      <span class="label">Output</span>
+      <span class="label">{{ icons.arrow_out() }}Output</span>
       <span class="value">${{ "%.2f"|format(recommendation.recommended.cost.output_per_million) }}</span>
       <span class="unit">per 1M tokens</span>
     </div>
