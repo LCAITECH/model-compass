@@ -78,6 +78,56 @@
   background: var(--surface);
 }
 
+.tip {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.tip a {
+  color: var(--accent);
+}
+
+/* Capacity bars: scaled relative to each other, never to a fixed ceiling */
+
+.capacity-bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: var(--space-3) 0;
+}
+
+.capacity-bar-row {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.capacity-bar-row .label {
+  color: var(--text-secondary);
+}
+
+.capacity-bar-row .value {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.capacity-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.capacity-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--accent);
+}
+
 /* Quality profile: 4 discrete segments per dimension, never a percentage */
 
 .quality-profile {
@@ -120,15 +170,21 @@
   text-align: right;
 }
 
+.quality-profile-large .segment {
+  height: 10px;
+}
+
+.quality-profile-large .quality-row {
+  font-size: var(--text-base);
+}
+
 /* Best for / less suited chips */
 
-.profile {
+.chip-section {
   margin-top: var(--space-5);
   padding-top: var(--space-5);
   border-top: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+  display: block;
 }
 
 .chip-row {

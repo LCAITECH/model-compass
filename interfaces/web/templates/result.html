@@ -28,6 +28,47 @@
   {% endif %}
 </div>
 
+{% if profile %}
+<div class="card">
+  <h2>Quality profile</h2>
+  <div class="quality-profile quality-profile-large">
+    {% for dim in profile.quality_profile %}
+    <div class="quality-row">
+      <span class="quality-label">{{ dim.label }}</span>
+      <span class="quality-segments" aria-hidden="true">
+        {% for i in range(dim.max_ordinal + 1) %}
+        <span class="segment{{ ' filled' if i <= dim.ordinal else '' }}"></span>
+        {% endfor %}
+      </span>
+      <span class="quality-level">{{ dim.level | capitalize }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if profile.best_for %}
+  <div class="chip-section">
+    <span class="label">Best for</span>
+    <div class="chip-row">
+      {% for item in profile.best_for %}
+      <span class="chip chip-positive">{{ icons.check() }}{{ item }}</span>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if profile.less_suited_for %}
+  <div class="chip-section">
+    <span class="label">Less suited for</span>
+    <div class="chip-row">
+      {% for item in profile.less_suited_for %}
+      <span class="chip chip-muted">{{ item }}</span>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+
 <div class="card">
   <h2>{{ icons.dollar() }}Pricing</h2>
   <div class="stat-grid">
@@ -53,66 +94,28 @@
   {% if input_capacity %}
   <div class="affordability">
     <p>With ${{ "%.2f"|format(budget_usd) }}/month, this model gets you approximately:</p>
-    <div class="stat-grid">
-      <div class="stat-card">
+    <div class="capacity-bars">
+      <div class="capacity-bar-row">
         <span class="label">Input capacity</span>
-        <span class="value">{{ "{:,}".format(input_capacity) }}</span>
-        <span class="unit">tokens</span>
+        <div class="capacity-bar"><div class="capacity-bar-fill" style="width: {{ input_capacity_pct }}%"></div></div>
+        <span class="value">{{ "{:,}".format(input_capacity) }} tokens</span>
       </div>
-      <div class="stat-card">
+      <div class="capacity-bar-row">
         <span class="label">Output capacity</span>
-        <span class="value">{{ "{:,}".format(output_capacity) }}</span>
-        <span class="unit">tokens</span>
+        <div class="capacity-bar"><div class="capacity-bar-fill" style="width: {{ output_capacity_pct }}%"></div></div>
+        <span class="value">{{ "{:,}".format(output_capacity) }} tokens</span>
       </div>
     </div>
     <p class="muted">
       Each figure assumes the full budget spent on that one type alone — independent upper
-      bounds, not a combined total. Real usage mixes both, so your actual capacity falls
-      somewhere between the two, closer to whichever type dominates your usage.
+      bounds, not a combined total. Bars are scaled to each other, not to any fixed ceiling.
+      Real usage mixes both, so your actual capacity falls somewhere between the two.
     </p>
-  </div>
-  {% endif %}
-
-  {% if profile %}
-  <div class="profile">
-    <div>
-      <span class="label">Quality profile</span>
-      <div class="quality-profile">
-        {% for dim in profile.quality_profile %}
-        <div class="quality-row">
-          <span class="quality-label">{{ dim.label }}</span>
-          <span class="quality-segments" aria-hidden="true">
-            {% for i in range(dim.max_ordinal + 1) %}
-            <span class="segment{{ ' filled' if i <= dim.ordinal else '' }}"></span>
-            {% endfor %}
-          </span>
-          <span class="quality-level">{{ dim.level | capitalize }}</span>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-
-    {% if profile.best_for %}
-    <div>
-      <span class="label">Best for</span>
-      <div class="chip-row">
-        {% for item in profile.best_for %}
-        <span class="chip chip-positive">{{ icons.check() }}{{ item }}</span>
-        {% endfor %}
-      </div>
-    </div>
-    {% endif %}
-
-    {% if profile.less_suited_for %}
-    <div>
-      <span class="label">Less suited for</span>
-      <div class="chip-row">
-        {% for item in profile.less_suited_for %}
-        <span class="chip chip-muted">{{ item }}</span>
-        {% endfor %}
-      </div>
-    </div>
-    {% endif %}
+    <p class="tip">
+      Tip: many teams reduce total cost by using a cheaper model for simple requests and a
+      stronger one only where it's needed — this project tracks that idea as a possible
+      future capability, not yet built.
+    </p>
   </div>
   {% endif %}
 </div>
@@ -122,9 +125,16 @@
   <h2>{{ icons.swap() }}Alternatives</h2>
   <ul class="alternatives">
     {% for alt in recommendation.alternatives %}
-    <li>
-      <span class="alt-name">{{ alt.model.name }}</span>
-      <span class="muted">— ${{ "%.2f"|format(alt.model.cost.input_per_million) }} / ${{ "%.2f"|format(alt.model.cost.output_per_million) }} per 1M tokens</span>
+    <li class="alternative-card">
+      <div class="alternative-header">
+        <span class="alt-name">{{ alt.model.name }}</span>
+        {% if alt.model.cost.blended < recommendation.recommended.cost.blended %}
+        <span class="chip chip-positive">Cheaper</span>
+        {% elif alt.model.cost.blended > recommendation.recommended.cost.blended %}
+        <span class="chip chip-muted">More expensive</span>
+        {% endif %}
+      </div>
+      <span class="muted">${{ "%.2f"|format(alt.model.cost.input_per_million) }} / ${{ "%.2f"|format(alt.model.cost.output_per_million) }} per 1M tokens</span>
       {% if alt.reasons %}
       <ul class="standout-reasons">
         {% for reason in alt.reasons %}

@@ -28,6 +28,24 @@ def estimated_output_capacity(budget_usd: float, model: AIModel) -> int:
     return round((budget_usd / model.cost.output_per_million) * 1_000_000)
 
 
+def capacity_bar_widths(input_capacity: int, output_capacity: int) -> tuple[int, int]:
+    """Bar widths (0-100) for input/output capacity, scaled relative to each other.
+
+    Not relative to any assumed ceiling -- there isn't one. The larger
+    of the two figures gets 100, the other is scaled proportionally, so
+    the bars visualize the real ratio between them (e.g. input often
+    being much cheaper than output) without implying either one is
+    "full" in any absolute sense.
+    """
+    larger = max(input_capacity, output_capacity)
+    if larger == 0:
+        return (0, 0)
+    return (
+        round(input_capacity / larger * 100),
+        round(output_capacity / larger * 100),
+    )
+
+
 def parse_budget_usd(raw: str | None) -> float | None:
     """Parses an optional form field into a positive float, or None if absent/invalid.
 

@@ -18,6 +18,7 @@ from decision.evaluator import evaluate
 from decision.explainer import NoQualifyingModelsError, explain
 from decision.loader import load_dataset
 from interfaces.web.affordability import (
+    capacity_bar_widths,
     estimated_input_capacity,
     estimated_output_capacity,
     parse_budget_usd,
@@ -83,10 +84,11 @@ async def recommend(request: Request):
     profile = _model_profile(recommendation.recommended) if recommendation else None
 
     budget_usd = parse_budget_usd(form.get("monthly_budget_usd"))
-    input_capacity = output_capacity = None
+    input_capacity = output_capacity = input_capacity_pct = output_capacity_pct = None
     if recommendation and budget_usd:
         input_capacity = estimated_input_capacity(budget_usd, recommendation.recommended)
         output_capacity = estimated_output_capacity(budget_usd, recommendation.recommended)
+        input_capacity_pct, output_capacity_pct = capacity_bar_widths(input_capacity, output_capacity)
 
     return templates.TemplateResponse(
         request,
@@ -98,5 +100,7 @@ async def recommend(request: Request):
             "budget_usd": budget_usd,
             "input_capacity": input_capacity,
             "output_capacity": output_capacity,
+            "input_capacity_pct": input_capacity_pct,
+            "output_capacity_pct": output_capacity_pct,
         },
     )

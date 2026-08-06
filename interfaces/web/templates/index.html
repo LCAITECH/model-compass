@@ -1,14 +1,30 @@
 {% extends "base.html" %}
+{% import "_icons.html" as icons %}
 {% block title %}Model Compass — What model should I use?{% endblock %}
 {% block content %}
 <div class="hero">
   <h1>Find the right AI model for your project.</h1>
   <p class="hero-subhead">Deterministic recommendations. Transparent reasoning. Real API pricing.</p>
+  <button type="button" id="demo-button" class="secondary-button">See a live example</button>
 </div>
 
-<div class="card">
+<ul class="principles">
+  <li>{{ icons.check() }}Transparent</li>
+  <li>{{ icons.check() }}Open source</li>
+  <li>{{ icons.check() }}Explainable</li>
+  <li>{{ icons.check() }}Deterministic</li>
+</ul>
+
+<div class="card form-card">
   <form method="post" action="/recommend" class="context-form">
     {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
+
+    <label>Popular use cases <span class="optional">(optional shortcut)</span></label>
+    <div class="pill-row">
+      {% for label, priorities in use_cases[:5] %}
+      <button type="button" class="use-case-pill" data-label="{{ label }}" data-priorities="{{ priorities | map(attribute='value') | join(',') }}">{{ label }}</button>
+      {% endfor %}
+    </div>
 
     <label for="use_case_preset">Use case <span class="optional">(optional)</span></label>
     <select id="use_case_preset">
@@ -60,7 +76,7 @@
       {% endfor %}
     </fieldset>
 
-    <button type="submit">Get a recommendation</button>
+    <button type="submit" class="primary-button">Get a recommendation</button>
   </form>
 </div>
 {% endblock %}
