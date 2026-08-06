@@ -2,14 +2,16 @@
 {% import "_icons.html" as icons %}
 {% block title %}Model Compass — Recommendation{% endblock %}
 {% block content %}
+<div class="fade-in">
 {% if recommendation %}
 <div class="recommendation">
   <p class="eyebrow">Recommended model</p>
   <h1>{{ recommendation.recommended.name }}</h1>
+  <span class="pill">{{ icons.star() }}Best match for your context</span>
 </div>
 
 <div class="card">
-  <h2>Why this model?</h2>
+  <h2>{{ icons.sparkle() }}Why this model?</h2>
   <ul class="reasons">
     {% for reason in recommendation.reasons %}
     <li>{{ icons.check() }}<span>{{ reason }}</span></li>
@@ -27,33 +29,40 @@
 </div>
 
 <div class="card">
-  <h2>Pricing</h2>
-  <div class="pricing">
-    <div>
+  <h2>{{ icons.dollar() }}Pricing</h2>
+  <div class="stat-grid">
+    <div class="stat-card">
       <span class="label">Input</span>
-      <span class="value">${{ "%.2f"|format(recommendation.recommended.cost.input_per_million) }} / 1M tokens</span>
+      <span class="value">${{ "%.2f"|format(recommendation.recommended.cost.input_per_million) }}</span>
+      <span class="unit">per 1M tokens</span>
     </div>
-    <div>
+    <div class="stat-card">
       <span class="label">Output</span>
-      <span class="value">${{ "%.2f"|format(recommendation.recommended.cost.output_per_million) }} / 1M tokens</span>
+      <span class="value">${{ "%.2f"|format(recommendation.recommended.cost.output_per_million) }}</span>
+      <span class="unit">per 1M tokens</span>
     </div>
-    <div>
+    <div class="stat-card">
       <span class="label">Cost tier</span>
-      <span class="value">{{ recommendation.cost_tier.name | capitalize }}</span>
+      <span class="value">
+        <span class="tier-dot tier-{{ recommendation.cost_tier.name | lower }}"></span>
+        {{ recommendation.cost_tier.name | capitalize }}
+      </span>
     </div>
   </div>
 
   {% if input_capacity %}
   <div class="affordability">
     <p>With ${{ "%.2f"|format(budget_usd) }}/month, this model gets you approximately:</p>
-    <div class="pricing">
-      <div>
+    <div class="stat-grid">
+      <div class="stat-card">
         <span class="label">Input capacity</span>
-        <span class="value">{{ "{:,}".format(input_capacity) }} tokens</span>
+        <span class="value">{{ "{:,}".format(input_capacity) }}</span>
+        <span class="unit">tokens</span>
       </div>
-      <div>
+      <div class="stat-card">
         <span class="label">Output capacity</span>
-        <span class="value">{{ "{:,}".format(output_capacity) }} tokens</span>
+        <span class="value">{{ "{:,}".format(output_capacity) }}</span>
+        <span class="unit">tokens</span>
       </div>
     </div>
     <p class="muted">
@@ -64,18 +73,44 @@
   </div>
   {% endif %}
 
-  {% if profile.best_for or profile.less_suited_for %}
+  {% if profile %}
   <div class="profile">
+    <div>
+      <span class="label">Quality profile</span>
+      <div class="quality-profile">
+        {% for dim in profile.quality_profile %}
+        <div class="quality-row">
+          <span class="quality-label">{{ dim.label }}</span>
+          <span class="quality-segments" aria-hidden="true">
+            {% for i in range(dim.max_ordinal + 1) %}
+            <span class="segment{{ ' filled' if i <= dim.ordinal else '' }}"></span>
+            {% endfor %}
+          </span>
+          <span class="quality-level">{{ dim.level | capitalize }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
     {% if profile.best_for %}
     <div>
       <span class="label">Best for</span>
-      <p>{{ profile.best_for | join(', ') }}</p>
+      <div class="chip-row">
+        {% for item in profile.best_for %}
+        <span class="chip chip-positive">{{ icons.check() }}{{ item }}</span>
+        {% endfor %}
+      </div>
     </div>
     {% endif %}
+
     {% if profile.less_suited_for %}
     <div>
       <span class="label">Less suited for</span>
-      <p>{{ profile.less_suited_for | join(', ') }}</p>
+      <div class="chip-row">
+        {% for item in profile.less_suited_for %}
+        <span class="chip chip-muted">{{ item }}</span>
+        {% endfor %}
+      </div>
     </div>
     {% endif %}
   </div>
@@ -84,7 +119,7 @@
 
 {% if recommendation.alternatives %}
 <div class="card">
-  <h2>Alternatives</h2>
+  <h2>{{ icons.swap() }}Alternatives</h2>
   <ul class="alternatives">
     {% for alt in recommendation.alternatives %}
     <li>
@@ -105,7 +140,7 @@
 
 {% if recommendation.excluded %}
 <details class="excluded">
-  <summary>Why not the other {{ recommendation.excluded | length }} model(s)?</summary>
+  <summary>{{ icons.no_entry() }}Why not the other {{ recommendation.excluded | length }} model(s)?</summary>
   <ul>
     {% for exclusion in recommendation.excluded %}
     <li><strong>{{ exclusion.model.name }}</strong> — {{ exclusion.reasons | join(', ') }}</li>
@@ -121,4 +156,5 @@
 </div>
 {% endif %}
 <a class="back-link" href="/">&larr; Try another context</a>
+</div>
 {% endblock %}

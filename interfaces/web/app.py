@@ -24,7 +24,7 @@ from interfaces.web.affordability import (
 )
 from interfaces.web.context_form import InvalidFormError, context_from_form
 from interfaces.web.languages import language_name
-from interfaces.web.model_profile import best_for, less_suited_for
+from interfaces.web.model_profile import best_for, less_suited_for, quality_profile
 from interfaces.web.use_cases import USE_CASES
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -54,6 +54,7 @@ def _model_profile(model) -> dict:
         "model": model,
         "best_for": best_for(model, models),
         "less_suited_for": less_suited_for(model),
+        "quality_profile": quality_profile(model),
     }
 
 

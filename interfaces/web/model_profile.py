@@ -48,6 +48,26 @@ def less_suited_for(model: AIModel) -> list[str]:
     ]
 
 
+def quality_profile(model: AIModel) -> list[dict]:
+    """The model's own quality ordinals, for a segmented (not percentage) display.
+
+    Position on SCHEMA.md's fixed low/medium/high/very_high scale --
+    never a percentage. Editorial ratings aren't scored precisely
+    enough for that (SCHEMA.md: "not benchmark scores"), so this stays
+    a 4-segment indicator, not a smooth bar.
+    """
+    max_ordinal = QualityLevel.VERY_HIGH.ordinal
+    return [
+        {
+            "label": label,
+            "level": getattr(model.quality, attr).value.replace("_", " "),
+            "ordinal": getattr(model.quality, attr).ordinal,
+            "max_ordinal": max_ordinal,
+        }
+        for attr, label in _QUALITY_LABELS.items()
+    ]
+
+
 def _has_above_average_context(model: AIModel, all_models: list[AIModel]) -> bool:
     average = sum(m.operational.context_window for m in all_models) / len(all_models)
     return model.operational.context_window > average
