@@ -4,8 +4,10 @@
 
 **Status: Pre-MVP — in active development**
 
-The project is currently in its documentation-first phase. Implementation
-will begin after the architecture is finalized.
+The core decision engine (dataset loader, evaluator, explainer) and a
+first web interface are implemented and tested. The project is still
+pre-1.0 and evolving — see [Getting Started](#getting-started) to run
+it locally.
 
 ---
 
@@ -77,8 +79,33 @@ Claude Sonnet
 ────────────────────────────────
 ```
 
-*This is an example of the intended user experience. The implementation
-is currently under development.*
+*This illustrates the interaction — the exact wording and ranking logic
+may differ slightly from a live run. Try it yourself locally, see
+[Getting Started](#getting-started) below.*
+
+## Getting Started
+
+Requires Python 3.11+.
+
+```bash
+git clone https://github.com/LCAITECH/model-compass.git
+cd model-compass
+pip install -e ".[dev]"
+```
+
+Run the test suite:
+
+```bash
+pytest
+```
+
+Run the web interface locally:
+
+```bash
+uvicorn interfaces.web.app:app --reload
+```
+
+Then open `http://localhost:8000`.
 
 ## Core Principles
 
