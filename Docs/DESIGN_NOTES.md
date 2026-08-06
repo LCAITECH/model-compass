@@ -59,33 +59,6 @@ the first round:
   screens (form, result, no-match).
 - **Favicon / social preview metadata** — none set.
 
-**Update 3:** third design-only pass — toned down the featured-card
-glow (the first version, card gradient + strong colored shadow + badge
-+ giant title, read as "too much" per direct feedback: "más que eso
-puede empezar a parecer publicidad"), replaced it with a single small
-blurred orb behind the recommended model's name instead. Added a third
-background gradient tone (aurora-style, still restrained), staggered
-the page-section fade-in instead of animating the whole page as one
-block, animated the quality-profile segments filling in on load,
-alternating background bands inside the form card, and bigger (22px)
-directional icons on the pricing stat cards. Adopted a guiding design
-principle from this round worth remembering for future passes: the
-interface should feel like a precision instrument for a decision
-("radar de decisión"), not a marketing landing page or a financial
-dashboard — favor short, functional motion and restraint over density
-of effects.
-
-**A v2 idea, explicitly not for this version** — a background accent
-tint that shifts based on which model gets recommended (e.g. a
-different subtle color pairing for a Gemini vs. a Claude vs. a
-DeepSeek result), with no logos or provider branding, just a
-color-only "this result feels different" cue. Interesting and
-low-risk architecturally (interfaces/web/ reading which model won and
-picking a tint is presentation-only, decision/ still never touches a
-name) — but real work: needs a considered color mapping across the
-whole dataset, not just the 5 models on hand today, so it wasn't
-started now.
-
 ## Explicitly out of scope for this document
 
 Ideas that sound like design but are actually product/architecture

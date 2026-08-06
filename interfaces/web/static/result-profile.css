@@ -18,9 +18,8 @@
 
 .stat-card .label {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-2);
+  align-items: center;
+  gap: var(--space-1);
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -28,10 +27,9 @@
 }
 
 .stat-card .label .icon {
-  width: 22px;
-  height: 22px;
+  width: 0.9em;
+  height: 0.9em;
   margin-top: 0;
-  color: var(--accent);
 }
 
 .stat-card .value {
@@ -209,31 +207,10 @@
   height: 6px;
   border-radius: 3px;
   background: var(--border);
-  transform-origin: left;
 }
 
 .segment.filled {
   background: var(--accent);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .segment.filled {
-    animation: segment-fill 300ms ease-out backwards;
-  }
-
-  .quality-row:nth-of-type(1) .segment.filled { animation-delay: 80ms; }
-  .quality-row:nth-of-type(2) .segment.filled { animation-delay: 140ms; }
-  .quality-row:nth-of-type(3) .segment.filled { animation-delay: 200ms; }
-  .quality-row:nth-of-type(4) .segment.filled { animation-delay: 260ms; }
-}
-
-@keyframes segment-fill {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
 }
 
 .quality-level {
