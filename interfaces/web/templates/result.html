@@ -21,6 +21,14 @@
     </div>
   </div>
 
+  {% if token_capacity %}
+  <p class="affordability">
+    Your ${{ "%.2f"|format(budget_usd) }}/month covers approximately
+    <strong>{{ "{:,}".format(token_capacity) }} tokens</strong> with this model
+    (assuming a roughly even mix of input and output).
+  </p>
+  {% endif %}
+
   {% if profile.best_for or profile.less_suited_for %}
   <div class="profile">
     {% if profile.best_for %}

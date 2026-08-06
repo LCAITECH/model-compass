@@ -17,6 +17,7 @@ from decision.domain import BudgetLevel, Priority
 from decision.evaluator import evaluate
 from decision.explainer import NoQualifyingModelsError, explain
 from decision.loader import load_dataset
+from interfaces.web.affordability import estimated_token_capacity, parse_budget_usd
 from interfaces.web.context_form import InvalidFormError, context_from_form
 from interfaces.web.languages import language_name
 from interfaces.web.model_profile import best_for, less_suited_for
@@ -76,8 +77,21 @@ async def recommend(request: Request):
 
     profile = _model_profile(recommendation.recommended) if recommendation else None
 
+    budget_usd = parse_budget_usd(form.get("monthly_budget_usd"))
+    token_capacity = (
+        estimated_token_capacity(budget_usd, recommendation.recommended)
+        if recommendation and budget_usd
+        else None
+    )
+
     return templates.TemplateResponse(
         request,
         "result.html",
-        {"context": context, "recommendation": recommendation, "profile": profile},
+        {
+            "context": context,
+            "recommendation": recommendation,
+            "profile": profile,
+            "budget_usd": budget_usd,
+            "token_capacity": token_capacity,
+        },
     )
