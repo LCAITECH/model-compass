@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Model Compass — What model should I use?{% endblock %}
+{% block content %}
+<form method="post" action="/recommend" class="context-form">
+  {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
+
+  <label for="use_case">Use case <span class="optional">(optional)</span></label>
+  <input type="text" id="use_case" name="use_case" placeholder="e.g. Telegram community bot">
+
+  <label for="language">Language</label>
+  <select id="language" name="language" required>
+    <option value="" disabled selected>Choose a language</option>
+    {% for lang in languages %}
+    <option value="{{ lang }}">{{ lang }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="budget">Budget</label>
+  <select id="budget" name="budget" required>
+    <option value="" disabled selected>Choose a budget</option>
+    {% for b in budgets %}
+    <option value="{{ b.value }}">{{ b.value | capitalize }}</option>
+    {% endfor %}
+  </select>
+
+  <fieldset class="priorities">
+    <legend>Priorities <span class="optional">(most important first)</span></legend>
+    {% for rank in [1, 2, 3] %}
+    <label for="priority_{{ rank }}">
+      Priority #{{ rank }}
+      {% if rank > 1 %}<span class="optional">(optional)</span>{% endif %}
+    </label>
+    <select id="priority_{{ rank }}" name="priority_{{ rank }}">
+      <option value="">—</option>
+      {% for p in priorities %}
+      <option value="{{ p.value }}">{{ p.value | replace('_', ' ') | capitalize }}</option>
+      {% endfor %}
+    </select>
+    {% endfor %}
+  </fieldset>
+
+  <button type="submit">Get a recommendation</button>
+</form>
+{% endblock %}

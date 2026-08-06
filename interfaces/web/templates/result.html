@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Model Compass — Recommendation{% endblock %}
+{% block content %}
+{% if recommendation %}
+<section class="recommendation">
+  <p class="eyebrow">Recommended model</p>
+  <h1>{{ recommendation.recommended.name }}</h1>
+
+  <h2>Reason</h2>
+  <ul class="reasons">
+    {% for reason in recommendation.reasons %}
+    <li>{{ reason }}</li>
+    {% endfor %}
+  </ul>
+
+  {% if recommendation.trade_offs %}
+  <h2>Trade-offs</h2>
+  <ul class="trade-offs">
+    {% for trade_off in recommendation.trade_offs %}
+    <li>{{ trade_off }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if recommendation.alternatives %}
+  <h2>Alternatives</h2>
+  <ul class="alternatives">
+    {% for alt in recommendation.alternatives %}
+    <li>{{ alt.name }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if recommendation.excluded %}
+  <details class="excluded">
+    <summary>{{ recommendation.excluded | length }} model(s) not considered</summary>
+    <ul>
+      {% for exclusion in recommendation.excluded %}
+      <li><strong>{{ exclusion.model.name }}</strong> — {{ exclusion.reasons | join(', ') }}</li>
+      {% endfor %}
+    </ul>
+  </details>
+  {% endif %}
+</section>
+{% else %}
+<section class="no-match">
+  <p class="eyebrow">No recommendation</p>
+  <h1>No model in the dataset fits these constraints</h1>
+  <p>Try relaxing your budget or choosing a different language.</p>
+</section>
+{% endif %}
+<a class="back-link" href="/">&larr; Try another context</a>
+{% endblock %}

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Model Compass{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">Model Compass</a>
+    <p class="tagline">Developers don't need more information. They need better decisions.</p>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <p>Deterministic, explainable AI model recommendations.
+      <a href="https://github.com/LCAITECH/model-compass" target="_blank" rel="noopener">Source on GitHub</a>
+    </p>
+  </footer>
+</body>
+</html>

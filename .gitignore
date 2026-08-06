@@ -8,3 +8,6 @@ venv/
 # Internal dev-only docs, not meant for the public repo.
 HANDOFF.md
 AGENTS.md
+
+# Local tool config (e.g. machine-specific paths for the dev server).
+.claude/
