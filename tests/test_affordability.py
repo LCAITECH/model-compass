@@ -12,7 +12,11 @@ from decision.domain import (
     Quality,
     QualityLevel,
 )
-from interfaces.web.affordability import estimated_token_capacity, parse_budget_usd
+from interfaces.web.affordability import (
+    estimated_input_capacity,
+    estimated_output_capacity,
+    parse_budget_usd,
+)
 
 
 def _model(input_per_million: float, output_per_million: float) -> AIModel:
@@ -32,10 +36,13 @@ def _model(input_per_million: float, output_per_million: float) -> AIModel:
     )
 
 
-def test_estimated_token_capacity_is_budget_over_blended_price():
-    model = _model(input_per_million=2.0, output_per_million=10.0)  # blended = 12.0
+def test_estimated_input_and_output_capacity_are_independent_bounds():
+    # $10 spent entirely on input vs. entirely on output -- two separate
+    # extremes, not a combined total assuming some split.
+    model = _model(input_per_million=2.0, output_per_million=10.0)
 
-    assert estimated_token_capacity(10, model) == round((10 / 12.0) * 1_000_000)
+    assert estimated_input_capacity(10, model) == round((10 / 2.0) * 1_000_000)
+    assert estimated_output_capacity(10, model) == round((10 / 10.0) * 1_000_000)
 
 
 @pytest.mark.parametrize("raw", [None, "", "0", "-5", "not-a-number"])

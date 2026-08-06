@@ -11,9 +11,21 @@ derived token capacity, not the other way around.
 from decision.domain import AIModel
 
 
-def estimated_token_capacity(budget_usd: float, model: AIModel) -> int:
-    """Tokens `budget_usd` buys per month, assuming a roughly even mix of input/output."""
-    return round((budget_usd / model.cost.blended) * 1_000_000)
+def estimated_input_capacity(budget_usd: float, model: AIModel) -> int:
+    """Input tokens `budget_usd` buys, if spent entirely on input.
+
+    One of two independent bounds, not a joint estimate -- a single
+    blended number (e.g. "assuming an even split of input/output")
+    would bake in an unstated ratio assumption that doesn't hold for
+    most real usage. Showing both extremes makes no assumption about
+    the mix at all; real usage falls somewhere between the two.
+    """
+    return round((budget_usd / model.cost.input_per_million) * 1_000_000)
+
+
+def estimated_output_capacity(budget_usd: float, model: AIModel) -> int:
+    """Output tokens `budget_usd` buys, if spent entirely on output. See estimated_input_capacity."""
+    return round((budget_usd / model.cost.output_per_million) * 1_000_000)
 
 
 def parse_budget_usd(raw: str | None) -> float | None:
