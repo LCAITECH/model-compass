@@ -115,7 +115,7 @@ fieldset.priorities legend {
   border-radius: var(--radius-sm);
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-sm);
-  margin: 0 0 var(--space-5);
+  margin: var(--space-6) var(--space-6) 0;
 }
 
 /* Landing hero (index page only) */
@@ -223,8 +223,38 @@ fieldset.priorities legend {
 }
 
 .form-card {
+  padding: 0;
+  overflow: hidden;
   border-color: var(--border-strong);
   box-shadow: 0 2px 8px rgba(15, 15, 20, 0.06), 0 1px 3px rgba(15, 15, 20, 0.04);
+}
+
+/* Bands within the form, alternating tint -- reads as steps rather
+   than one undifferentiated block. */
+
+.form-section {
+  padding: var(--space-6);
+}
+
+.form-section--top {
+  padding-top: var(--space-6);
+}
+
+.form-section--bottom {
+  padding-bottom: var(--space-6);
+}
+
+.form-section--muted {
+  background: var(--bg);
+}
+
+.form-section--accent {
+  background: var(--accent-soft);
+  text-align: center;
+}
+
+.form-section--accent .primary-button {
+  margin-top: 0;
 }
 
 /* How it works */
