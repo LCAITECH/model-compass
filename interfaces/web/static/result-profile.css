@@ -88,9 +88,48 @@
 }
 
 .tip {
-  margin: var(--space-3) 0 0;
+  margin: var(--space-5) 0 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   font-size: var(--text-sm);
   color: var(--text-secondary);
+}
+
+/* Savings callout: a concrete, computed price comparison, not an estimate */
+
+.savings-callout {
+  margin-top: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--positive-soft);
+  border-left: 3px solid var(--positive);
+  background: var(--positive-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.savings-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  color: var(--positive);
+}
+
+.savings-header .icon {
+  width: 1.1em;
+  height: 1.1em;
+  margin-top: 0;
+  color: var(--positive);
+}
+
+.savings-callout p {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+}
+
+.savings-callout p:first-of-type {
+  margin-top: 0;
 }
 
 .tip a {

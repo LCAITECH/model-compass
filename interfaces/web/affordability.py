@@ -46,6 +46,41 @@ def capacity_bar_widths(input_capacity: int, output_capacity: int) -> tuple[int,
     )
 
 
+def cost_savings_pct(from_model: AIModel, to_model: AIModel) -> tuple[float, float]:
+    """How much cheaper `to_model` is than `from_model`, input and output separately.
+
+    An exact ratio of two real prices, not an estimate -- it holds
+    regardless of actual usage volume, since cost is linear in tokens
+    used. Kept as two figures instead of one blended percentage
+    because the input/output price ratio can differ between models;
+    see estimated_input_capacity's docstring for the same reasoning.
+    Returns 0 for either side priced at $0 (nothing to save there).
+    """
+    input_pct = _pct_lower(from_model.cost.input_per_million, to_model.cost.input_per_million)
+    output_pct = _pct_lower(from_model.cost.output_per_million, to_model.cost.output_per_million)
+    return (input_pct, output_pct)
+
+
+def _pct_lower(from_price: float, to_price: float) -> float:
+    if from_price == 0:
+        return 0
+    return (from_price - to_price) / from_price * 100
+
+
+def cheapest_qualifying_alternative(recommended: AIModel, qualifying_models: list[AIModel]) -> AIModel | None:
+    """The cheapest qualifying model other than the winner, if any is actually cheaper.
+
+    Searches every qualifying candidate, not just the capped
+    Recommendation.alternatives list -- the true cheapest option might
+    not be among the top-ranked runners-up shown there.
+    """
+    others = [m for m in qualifying_models if m.id != recommended.id]
+    if not others:
+        return None
+    cheapest = min(others, key=lambda m: m.cost.blended)
+    return cheapest if cheapest.cost.blended < recommended.cost.blended else None
+
+
 def parse_budget_usd(raw: str | None) -> float | None:
     """Parses an optional form field into a positive float, or None if absent/invalid.
 

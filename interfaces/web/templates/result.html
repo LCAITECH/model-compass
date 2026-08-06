@@ -111,12 +111,36 @@
       bounds, not a combined total. Bars are scaled to each other, not to any fixed ceiling.
       Real usage mixes both, so your actual capacity falls somewhere between the two.
     </p>
-    <p class="tip">
-      Tip: many teams reduce total cost by using a cheaper model for simple requests and a
-      stronger one only where it's needed — this project tracks that idea as a possible
-      future capability, not yet built.
+  </div>
+  {% endif %}
+
+  {% if savings %}
+  <div class="savings-callout">
+    <p class="savings-header">{{ icons.sparkle() }}<strong>You could spend less</strong></p>
+    <p>
+      <strong>{{ savings.model.name }}</strong> costs
+      <strong>{{ savings.input_pct }}%</strong> less on input and
+      <strong>{{ savings.output_pct }}%</strong> less on output than {{ recommendation.recommended.name }} —
+      an exact price ratio, true for any usage volume.
+    </p>
+    {% if savings.input_capacity %}
+    <p class="muted">
+      At ${{ "%.2f"|format(budget_usd) }}/month, that's {{ "{:,}".format(savings.input_capacity) }} input
+      tokens or {{ "{:,}".format(savings.output_capacity) }} output tokens with {{ savings.model.name }},
+      instead of {{ "{:,}".format(input_capacity) }} / {{ "{:,}".format(output_capacity) }}.
+    </p>
+    {% endif %}
+    <p class="muted">
+      It wasn't the recommendation because of the trade-offs above — this shows what switching
+      would cost, not a suggestion to switch.
     </p>
   </div>
+  {% elif input_capacity %}
+  <p class="tip">
+    Tip: many teams reduce total cost by using a cheaper model for simple requests and a
+    stronger one only where it's needed — this project tracks that idea as a possible
+    future capability, not yet built.
+  </p>
   {% endif %}
 </div>
 

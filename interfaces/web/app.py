@@ -19,6 +19,8 @@ from decision.explainer import NoQualifyingModelsError, explain
 from decision.loader import load_dataset
 from interfaces.web.affordability import (
     capacity_bar_widths,
+    cheapest_qualifying_alternative,
+    cost_savings_pct,
     estimated_input_capacity,
     estimated_output_capacity,
     parse_budget_usd,
@@ -59,6 +61,25 @@ def _model_profile(model) -> dict:
     }
 
 
+def _savings_summary(recommendation, candidates, budget_usd) -> dict | None:
+    if not recommendation:
+        return None
+
+    qualifying_models = [c.model for c in candidates if c.qualifies]
+    cheaper = cheapest_qualifying_alternative(recommendation.recommended, qualifying_models)
+    if not cheaper:
+        return None
+
+    input_pct, output_pct = cost_savings_pct(recommendation.recommended, cheaper)
+    summary = {"model": cheaper, "input_pct": round(input_pct), "output_pct": round(output_pct)}
+
+    if budget_usd:
+        summary["input_capacity"] = estimated_input_capacity(budget_usd, cheaper)
+        summary["output_capacity"] = estimated_output_capacity(budget_usd, cheaper)
+
+    return summary
+
+
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     return templates.TemplateResponse(request, "index.html", _form_context())
@@ -90,6 +111,8 @@ async def recommend(request: Request):
         output_capacity = estimated_output_capacity(budget_usd, recommendation.recommended)
         input_capacity_pct, output_capacity_pct = capacity_bar_widths(input_capacity, output_capacity)
 
+    savings = _savings_summary(recommendation, candidates, budget_usd) if recommendation else None
+
     return templates.TemplateResponse(
         request,
         "result.html",
@@ -102,5 +125,6 @@ async def recommend(request: Request):
             "output_capacity": output_capacity,
             "input_capacity_pct": input_capacity_pct,
             "output_capacity_pct": output_capacity_pct,
+            "savings": savings,
         },
     )
