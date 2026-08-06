@@ -4,13 +4,13 @@
 {% block content %}
 <div class="fade-in">
 {% if recommendation %}
-<div class="recommendation">
-  <p class="eyebrow">Recommended model</p>
-  <h1>{{ recommendation.recommended.name }}</h1>
-  <span class="pill">{{ icons.star() }}Best match for your context</span>
-</div>
+<div class="card card-featured">
+  <div class="recommendation">
+    <p class="eyebrow">Recommended model</p>
+    <h1>{{ recommendation.recommended.name }}</h1>
+    <span class="pill">{{ icons.star() }}Best match for your context</span>
+  </div>
 
-<div class="card">
   <h2>{{ icons.sparkle() }}Why this model?</h2>
   <ul class="reasons">
     {% for reason in recommendation.reasons %}
@@ -145,11 +145,11 @@
 </div>
 
 {% if recommendation.alternatives %}
-<div class="card">
-  <h2>{{ icons.swap() }}Alternatives</h2>
-  <ul class="alternatives">
+<div>
+  <p class="eyebrow section-eyebrow">{{ icons.swap() }}Alternatives</p>
+  <div class="alternatives-grid">
     {% for alt in recommendation.alternatives %}
-    <li class="alternative-card">
+    <div class="card alternative-card">
       <div class="alternative-header">
         <span class="alt-name">{{ alt.model.name }}</span>
         {% if alt.model.cost.blended < recommendation.recommended.cost.blended %}
@@ -166,9 +166,9 @@
         {% endfor %}
       </ul>
       {% endif %}
-    </li>
+    </div>
     {% endfor %}
-  </ul>
+  </div>
 </div>
 {% endif %}
 

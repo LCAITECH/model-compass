@@ -132,28 +132,33 @@
   color: var(--caution);
 }
 
-/* Alternatives */
+/* Alternatives: a grid of independent mini-cards, not a stacked list */
 
-.alternatives {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.section-eyebrow {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+
+.section-eyebrow .icon {
+  width: 1em;
+  height: 1em;
+  margin-top: 0;
+  color: var(--muted);
+}
+
+.alternatives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: var(--space-4);
 }
 
-.alternatives li {
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--border);
+.alternative-card {
+  padding: var(--space-5);
 }
 
-.alternatives li:first-child {
-  padding-top: 0;
-  border-top: none;
-}
-
-.alternatives .alt-name {
+.alt-name {
   font-weight: 600;
 }
 

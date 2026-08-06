@@ -29,12 +29,24 @@ still nothing resembling any AI provider's brand), small inline SVG
 icons for reasons/trade-offs/alternatives, and card components
 grouping the result page's sections. Backend was untouched throughout.
 
+**Update 2:** a "visual identity" pass followed (gradient background,
+featured/glow card treatment for the recommendation, alternatives
+rebuilt as a card grid instead of a stacked list, hero badge and
+decorative blobs, wider content column, richer buttons) — see git
+history, "Design polish pass" and the visual-identity commit after it.
+Checked at a 375px mobile viewport for the first time this session:
+no horizontal overflow, all content readable, on both the form and
+result pages. Not a full responsive audit (only one breakpoint
+checked), but the "never tested" gap below is now partially closed.
+
 What's still open after that pass — smaller, more polish-grade than
 the first round:
 
-- **Responsive / mobile check** — never tested at a narrow viewport;
-  the content column is fixed-width-centered and likely needs a real
-  check, not an assumption that it degrades gracefully.
+- **Responsive / mobile check** — one viewport (375px) verified with
+  no overflow; tablet-width and truly small phones (<360px) still
+  unchecked, as is whether the grid layouts (alternatives,
+  quality-row) look intentional at in-between widths, not just
+  "doesn't break."
 - **Dark mode** — not attempted. The current palette was designed for
   light mode only.
 - **Accessibility pass** — color contrast, focus states, and screen
