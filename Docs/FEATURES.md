@@ -127,3 +127,16 @@ phases of the [Roadmap](./ROADMAP.md).
   for a given use case has changed over time, as models, pricing, and
   the dataset evolve. A long-term direction, not a near-term
   commitment.
+- **Multi-Model Cost Strategies** — instead of a single recommended
+  model, suggest splitting a workload across two or more models by
+  task (e.g. a cheaper model for simple requests, a stronger one for
+  complex ones) to reduce total spend. A genuinely different question
+  from "what's the best single model for this context" — it needs its
+  own domain concept for a workload made of distinct sub-tasks, and a
+  defensible way to score the quality of a *blend* of models rather
+  than one model's own editorial ratings. Explicitly not part of the
+  MVP: doing this honestly means never presenting an estimated usage
+  volume (e.g. "≈450 conversations/month") as if it were sourced data
+  — a token budget only translates to real-world usage once the user
+  supplies their own volume or spend numbers, not from an invented
+  usage category.
