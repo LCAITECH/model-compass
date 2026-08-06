@@ -2,12 +2,15 @@
 
 > Developers don't need more information. They need better decisions.
 
-**Status: Pre-MVP — in active development**
+**Stop guessing.**
 
-The core decision engine (dataset loader, evaluator, explainer) and a
-first web interface are implemented and tested. The project is still
-pre-1.0 and evolving — see [Getting Started](#getting-started) to run
-it locally.
+**Status: Active development (Pre-1.0)**
+
+Model Compass is functional end-to-end: the core recommendation engine,
+explainability layer, web interface, and automated test suite are all
+implemented. Current work is focused on visual polish, documentation,
+and preparing for the first public release. See
+[Getting Started](#getting-started) to run it locally.
 
 ---
 
@@ -43,6 +46,9 @@ against a transparent and curated knowledge base to produce deterministic,
 explainable recommendations.
 
 Every recommendation can be understood, reviewed, and reproduced.
+
+No leaderboards. No hidden heuristics. No affiliate links. Just
+explainable recommendations.
 
 ## How it works
 
