@@ -156,3 +156,18 @@ phases of the [Roadmap](./ROADMAP.md).
   (token-equivalent usage), and must not claim a precise equivalence
   like "$20 of Plus = X million tokens" — that's the same fabricated-
   precision problem Multi-Model Cost Strategies runs into, above.
+- **Total Cost of Task (a.k.a. "Effective Cost")** — a cheaper model
+  that needs several corrective re-prompts to get a complex task right
+  can end up costing more, in tokens and time, than a pricier model
+  that succeeds on the first try. Real phenomenon, real product
+  insight — and explicitly not buildable today: it would require a
+  per-model, per-task-type expected iteration count, which does not
+  exist anywhere as sourceable data. Estimating it would mean
+  inventing a multiplier and presenting it as fact, the same mistake
+  already avoided for Multi-Model Cost Strategies. Only build this if
+  it can be grounded in actual evidence — repeatable benchmarks, the
+  project's own structured evaluations, or opt-in user telemetry — not
+  a model's or a contributor's guess. A "Cost Efficiency" star rating
+  without that evidence behind it is exactly the kind of fabricated-
+  confidence badge this project has declined every time it's come up;
+  don't add one just because the underlying idea is good.

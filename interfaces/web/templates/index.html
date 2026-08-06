@@ -61,7 +61,10 @@
     <input type="number" id="monthly_budget_usd" name="monthly_budget_usd" min="0" step="0.01" placeholder="e.g. 10">
 
     <fieldset class="priorities">
-      <legend>Priorities <span class="optional">(most important first)</span></legend>
+      <legend>
+        Priorities <span class="optional">(most important first)</span>
+        <span class="help" title="If getting this wrong would be costly (production code, infrastructure, anything hard to undo), put reasoning or coding above cost. A stronger model that succeeds on the first try is often cheaper in practice than a cheaper one that needs several corrections.">ⓘ</span>
+      </legend>
       {% for rank in [1, 2, 3] %}
       <label for="priority_{{ rank }}">
         Priority #{{ rank }}
