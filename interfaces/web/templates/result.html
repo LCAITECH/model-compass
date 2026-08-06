@@ -114,7 +114,7 @@
   </div>
   {% endif %}
 
-  {% if savings %}
+  {% if savings and not savings.is_cheapest %}
   <div class="savings-callout">
     <p class="savings-header">{{ icons.sparkle() }}<strong>You could spend less</strong></p>
     <p>
@@ -135,7 +135,18 @@
       would cost, not a suggestion to switch.
     </p>
   </div>
-  {% elif input_capacity %}
+  {% elif savings and savings.is_cheapest %}
+  <div class="savings-callout">
+    <p class="savings-header">{{ icons.check() }}<strong>Already the cheapest option</strong></p>
+    <p>
+      No other qualifying model would stretch your budget further —
+      <strong>{{ recommendation.recommended.name }}</strong> is already the least expensive
+      choice among the models that fit your context.
+    </p>
+  </div>
+  {% endif %}
+
+  {% if input_capacity %}
   <p class="tip">
     Tip: many teams reduce total cost by using a cheaper model for simple requests and a
     stronger one only where it's needed — this project tracks that idea as a possible

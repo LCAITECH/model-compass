@@ -62,16 +62,29 @@ def _model_profile(model) -> dict:
 
 
 def _savings_summary(recommendation, candidates, budget_usd) -> dict | None:
+    """Whether a cheaper qualifying model exists, and by how much.
+
+    Always returns a dict when there's a recommendation -- silently
+    omitting this when the winner is already the cheapest option left
+    the UI unable to say *why* there was nothing to show, which read as
+    a gap rather than a (genuinely good) answer. `is_cheapest` lets the
+    template say so explicitly instead of just falling silent.
+    """
     if not recommendation:
         return None
 
     qualifying_models = [c.model for c in candidates if c.qualifies]
     cheaper = cheapest_qualifying_alternative(recommendation.recommended, qualifying_models)
     if not cheaper:
-        return None
+        return {"is_cheapest": True}
 
     input_pct, output_pct = cost_savings_pct(recommendation.recommended, cheaper)
-    summary = {"model": cheaper, "input_pct": round(input_pct), "output_pct": round(output_pct)}
+    summary = {
+        "is_cheapest": False,
+        "model": cheaper,
+        "input_pct": round(input_pct),
+        "output_pct": round(output_pct),
+    }
 
     if budget_usd:
         summary["input_capacity"] = estimated_input_capacity(budget_usd, cheaper)
