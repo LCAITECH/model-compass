@@ -7,7 +7,7 @@ displayed."
 
 from dataclasses import dataclass
 
-from decision.domain.ai_model import AIModel
+from decision.domain.ai_model import AIModel, CostTier
 
 
 @dataclass(frozen=True)
@@ -19,6 +19,7 @@ class Exclusion:
 @dataclass(frozen=True)
 class Recommendation:
     recommended: AIModel
+    cost_tier: CostTier
     reasons: tuple[str, ...]
     trade_offs: tuple[str, ...]
     alternatives: tuple[AIModel, ...]

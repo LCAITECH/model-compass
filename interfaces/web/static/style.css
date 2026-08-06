@@ -60,6 +60,14 @@ label {
   color: var(--muted);
 }
 
+.help {
+  display: inline-block;
+  margin-left: 0.25rem;
+  color: var(--muted);
+  cursor: help;
+  font-weight: 400;
+}
+
 input[type="text"],
 select {
   width: 100%;
@@ -128,6 +136,46 @@ button:hover {
 .no-match h1 {
   margin: 0.25rem 0 1.5rem;
   font-size: 2rem;
+}
+
+.pricing {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.pricing .label,
+.profile .label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.pricing .value {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+}
+
+.profile {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.profile p {
+  margin: 0.25rem 0 0;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.875rem;
 }
 
 .recommendation h2 {

@@ -4,18 +4,27 @@
 <form method="post" action="/recommend" class="context-form">
   {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
 
-  <label for="use_case">Use case <span class="optional">(optional)</span></label>
+  <label for="use_case_preset">Use case <span class="optional">(optional)</span></label>
+  <select id="use_case_preset">
+    <option value="">Choose a common use case, or type your own below</option>
+    {% for label, priorities in use_cases %}
+    <option value="{{ label }}" data-priorities="{{ priorities | map(attribute='value') | join(',') }}">{{ label }}</option>
+    {% endfor %}
+  </select>
   <input type="text" id="use_case" name="use_case" placeholder="e.g. Telegram community bot">
 
   <label for="language">Language</label>
   <select id="language" name="language" required>
     <option value="" disabled selected>Choose a language</option>
     {% for lang in languages %}
-    <option value="{{ lang }}">{{ lang }}</option>
+    <option value="{{ lang }}">{{ lang | language_name }}</option>
     {% endfor %}
   </select>
 
-  <label for="budget">Budget</label>
+  <label for="budget">
+    Budget
+    <span class="help" title="Your estimated monthly API budget. More capable models usually cost more per token — but using different models for different tasks (routing) can reduce your total spend.">ⓘ</span>
+  </label>
   <select id="budget" name="budget" required>
     <option value="" disabled selected>Choose a budget</option>
     {% for b in budgets %}

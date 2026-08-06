@@ -1,7 +1,7 @@
 """AIModel: a model as read from the dataset, per SCHEMA.md."""
 
 from dataclasses import dataclass
-from enum import Enum
+from enum import Enum, IntEnum
 
 
 class QualityLevel(str, Enum):
@@ -31,6 +31,20 @@ class Maturity(str, Enum):
     EXPERIMENTAL = "experimental"
     STABLE = "stable"
     MATURE = "mature"
+
+
+class CostTier(IntEnum):
+    """How a model's price compares to its peers in a given evaluation.
+
+    Derived, not stored in the dataset — see SCHEMA.md's Cost section.
+    The type lives here as shared vocabulary; the actual derivation
+    (relative to whichever models are being compared) stays in
+    decision/evaluator/, the only place that computes it.
+    """
+
+    LOW = 0
+    MEDIUM = 1
+    HIGH = 2
 
 
 @dataclass(frozen=True)

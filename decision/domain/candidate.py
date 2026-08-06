@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 
-from decision.domain.ai_model import AIModel
+from decision.domain.ai_model import AIModel, CostTier
 from decision.domain.context import Priority
 
 
@@ -10,6 +10,7 @@ from decision.domain.context import Priority
 class Candidate:
     model: AIModel
     score: float
+    cost_tier: CostTier
     factor_scores: dict[Priority, float] = field(default_factory=dict)
     disqualified_reasons: tuple[str, ...] = ()
 

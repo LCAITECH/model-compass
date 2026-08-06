@@ -14,22 +14,11 @@ being evaluated against (SCHEMA.md: "cost_tier is not stored... it's a
 derived value").
 """
 
-from enum import IntEnum
-
-from decision.domain.ai_model import AIModel, QualityLevel
+from decision.domain.ai_model import AIModel, CostTier, QualityLevel
 from decision.domain.candidate import Candidate
 from decision.domain.context import BudgetLevel, Context, Priority
 
 _MAX_QUALITY_ORDINAL = QualityLevel.VERY_HIGH.ordinal
-
-
-class CostTier(IntEnum):
-    """Derived, not stored — see SCHEMA.md's Cost section."""
-
-    LOW = 0
-    MEDIUM = 1
-    HIGH = 2
-
 
 _BUDGET_CEILING = {
     BudgetLevel.LOW: CostTier.LOW,
@@ -54,9 +43,9 @@ def evaluate(context: Context, models: list[AIModel]) -> list[Candidate]:
     cost_tiers = _derive_cost_tiers(models)
     qualifying, disqualified = _split_by_hard_filters(context, models, cost_tiers)
 
-    candidates = [_score(context, model, qualifying) for model in qualifying]
+    candidates = [_score(context, model, qualifying, cost_tiers) for model in qualifying]
     candidates += [
-        Candidate(model=model, score=0.0, disqualified_reasons=reasons)
+        Candidate(model=model, score=0.0, cost_tier=cost_tiers[model.id], disqualified_reasons=reasons)
         for model, reasons in disqualified
     ]
 
@@ -92,7 +81,7 @@ def _split_by_hard_filters(context: Context, models: list[AIModel], cost_tiers: 
     return qualifying, disqualified
 
 
-def _score(context: Context, model: AIModel, qualifying: list[AIModel]) -> Candidate:
+def _score(context: Context, model: AIModel, qualifying: list[AIModel], cost_tiers: dict[str, CostTier]) -> Candidate:
     weights = {
         priority: len(context.priorities) - index
         for index, priority in enumerate(context.priorities)
@@ -105,7 +94,7 @@ def _score(context: Context, model: AIModel, qualifying: list[AIModel]) -> Candi
     }
     score = sum(weights[p] * factor_scores[p] for p in context.priorities) / total_weight
 
-    return Candidate(model=model, score=score, factor_scores=factor_scores)
+    return Candidate(model=model, score=score, cost_tier=cost_tiers[model.id], factor_scores=factor_scores)
 
 
 def _normalized_factor(priority: Priority, model: AIModel, qualifying: list[AIModel]) -> float:

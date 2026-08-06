@@ -48,6 +48,7 @@ def explain(context: Context, candidates: list[Candidate]) -> Recommendation:
 
     return Recommendation(
         recommended=winner.model,
+        cost_tier=winner.cost_tier,
         reasons=_build_reasons(context, winner.model, qualifying_models),
         trade_offs=_build_trade_offs(context, winner.model, qualifying_models),
         alternatives=tuple(c.model for c in runners_up[:MAX_ALTERNATIVES]),
@@ -60,9 +61,35 @@ def explain(context: Context, candidates: list[Candidate]) -> Recommendation:
 
 
 def _build_reasons(context: Context, winner: AIModel, qualifying: list[AIModel]) -> tuple[str, ...]:
-    reasons = [_priority_reason(priority, winner, qualifying) for priority in context.priorities]
+    reasons = []
+    opening = _opening_reason(context)
+    if opening:
+        reasons.append(opening)
+    reasons.extend(_priority_reason(priority, winner, qualifying) for priority in context.priorities)
     reasons.append(_language_reason(context, winner))
     return tuple(reasons)
+
+
+def _opening_reason(context: Context) -> str | None:
+    """A framing sentence tying the priorities back to the use case, when given.
+
+    Still fully deterministic string formatting over Context — no model
+    is asked to write this, and the same Context always produces the
+    same sentence.
+    """
+    if not context.use_case:
+        return None
+
+    labels = [_PRIORITY_LABEL[priority] for priority in context.priorities]
+    return f"Because your use case is {context.use_case}, we weighted {_join_naturally(labels)} most heavily."
+
+
+def _join_naturally(items: list[str]) -> str:
+    if len(items) == 1:
+        return items[0]
+    if len(items) == 2:
+        return f"{items[0]} and {items[1]}"
+    return f"{', '.join(items[:-1])}, and {items[-1]}"
 
 
 def _priority_reason(priority: Priority, winner: AIModel, qualifying: list[AIModel]) -> str:

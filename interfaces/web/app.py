@@ -18,6 +18,9 @@ from decision.evaluator import evaluate
 from decision.explainer import NoQualifyingModelsError, explain
 from decision.loader import load_dataset
 from interfaces.web.context_form import InvalidFormError, context_from_form
+from interfaces.web.languages import language_name
+from interfaces.web.model_profile import best_for, less_suited_for
+from interfaces.web.use_cases import USE_CASES
 
 BASE_DIR = Path(__file__).resolve().parent
 DATASET_DIR = BASE_DIR.parent.parent / "dataset" / "models"
@@ -25,6 +28,7 @@ DATASET_DIR = BASE_DIR.parent.parent / "dataset" / "models"
 app = FastAPI(title="Model Compass")
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
+templates.env.filters["language_name"] = language_name
 
 models = load_dataset(DATASET_DIR)
 languages = sorted({language for model in models for language in model.languages})
@@ -35,7 +39,16 @@ def _form_context(error: str | None = None) -> dict:
         "languages": languages,
         "budgets": list(BudgetLevel),
         "priorities": list(Priority),
+        "use_cases": USE_CASES,
         "error": error,
+    }
+
+
+def _model_profile(model) -> dict:
+    return {
+        "model": model,
+        "best_for": best_for(model, models),
+        "less_suited_for": less_suited_for(model),
     }
 
 
@@ -61,6 +74,10 @@ async def recommend(request: Request):
     except NoQualifyingModelsError:
         recommendation = None
 
+    profile = _model_profile(recommendation.recommended) if recommendation else None
+
     return templates.TemplateResponse(
-        request, "result.html", {"context": context, "recommendation": recommendation}
+        request,
+        "result.html",
+        {"context": context, "recommendation": recommendation, "profile": profile},
     )

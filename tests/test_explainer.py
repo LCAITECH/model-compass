@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from decision.domain import BudgetLevel, Context, Priority
+from decision.domain import BudgetLevel, Context, CostTier, Priority
 from decision.evaluator import evaluate
 from decision.explainer import NoQualifyingModelsError, explain
 from decision.loader import load_dataset
@@ -29,7 +29,9 @@ def test_cost_priority_explains_the_cheapest_model_and_its_weaknesses(models):
     recommendation = explain(context, candidates)
 
     assert recommendation.recommended.id == "deepseek-v4-flash"
-    assert "Lowest cost" in recommendation.reasons[0]
+    assert recommendation.cost_tier == CostTier.LOW
+    assert "your use case is High-volume low-cost bot" in recommendation.reasons[0]
+    assert any("Lowest cost" in reason for reason in recommendation.reasons)
     assert any("es" in reason and "quality" in reason for reason in recommendation.reasons)
     assert len(recommendation.trade_offs) == 5  # every other factor, none of which it wins
 
@@ -49,7 +51,9 @@ def test_reasoning_priority_explains_a_model_that_dominates_most_factors(models)
     recommendation = explain(context, candidates)
 
     assert recommendation.recommended.id == "claude-sonnet-5"
-    assert "Strongest reasoning" in recommendation.reasons[0]
+    assert recommendation.cost_tier == CostTier.HIGH
+    assert "your use case is Complex agentic workflow" in recommendation.reasons[0]
+    assert any("Strongest reasoning" in reason for reason in recommendation.reasons)
     assert recommendation.trade_offs == (
         "Not the cheapest option among the qualifying alternatives",
         "Not the largest context window among the qualifying alternatives",
@@ -95,6 +99,21 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         any("language" in reason for reason in excl.reasons)
         for excl in recommendation.excluded
     )
+
+
+def test_no_opening_reason_when_use_case_is_blank(models):
+    context = Context(
+        use_case="",
+        budget=BudgetLevel.HIGH,
+        priorities=(Priority.COST,),
+        language="es",
+    )
+    candidates = evaluate(context, models)
+
+    recommendation = explain(context, candidates)
+
+    assert not recommendation.reasons[0].startswith("Because your use case")
+    assert all("use case" not in reason for reason in recommendation.reasons)
 
 
 def test_raises_when_no_model_qualifies(models):
