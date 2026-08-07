@@ -13,17 +13,13 @@
 
   <h2>{{ icons.sparkle() }}Why this model?</h2>
   <ul class="reasons">
-    {% for reason in recommendation.reasons %}
-    <li>{{ icons.check() }}<span>{{ reason }}</span></li>
-    {% endfor %}
+    {{ icons.item_list(recommendation.reasons, icons.check) }}
   </ul>
 
   {% if recommendation.trade_offs %}
   <h2>Trade-offs</h2>
   <ul class="trade-offs">
-    {% for trade_off in recommendation.trade_offs %}
-    <li>{{ icons.dash() }}<span>{{ trade_off }}</span></li>
-    {% endfor %}
+    {{ icons.item_list(recommendation.trade_offs, icons.dash) }}
   </ul>
   {% endif %}
 </div>
@@ -172,9 +168,7 @@
       <span class="muted">${{ "%.2f"|format(alt.model.cost.input_per_million) }} / ${{ "%.2f"|format(alt.model.cost.output_per_million) }} per 1M tokens</span>
       {% if alt.reasons %}
       <ul class="standout-reasons">
-        {% for reason in alt.reasons %}
-        <li>{{ icons.check() }}<span>{{ reason }}</span></li>
-        {% endfor %}
+        {{ icons.item_list(alt.reasons, icons.check) }}
       </ul>
       {% endif %}
     </div>

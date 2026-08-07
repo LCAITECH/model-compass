@@ -180,19 +180,6 @@ main {
   box-shadow: var(--shadow-glow), var(--shadow-md);
 }
 
-.card h2 {
-  margin: 0 0 var(--space-3);
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  font-weight: 700;
-}
-
-.card h2:not(:first-child) {
-  margin-top: var(--space-6);
-}
-
 .back-link {
   display: inline-block;
   color: var(--accent);

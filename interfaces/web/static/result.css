@@ -74,12 +74,24 @@
   color: var(--text-secondary);
 }
 
-/* Card section headings carry an icon */
+/* Card section headings -- only used on this page (index.html's
+   form-card has no <h2>), so the whole rule lives here rather than
+   split with a "shared" portion in base.css. */
 
 .card h2 {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.card h2:not(:first-child) {
+  margin-top: var(--space-6);
 }
 
 .card h2 .icon {
