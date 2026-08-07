@@ -15,7 +15,7 @@ logic already picked.
 from decision.domain.ai_model import AIModel
 from decision.domain.candidate import Candidate
 from decision.domain.context import Context, Priority
-from decision.domain.recommendation import Alternative, Exclusion, Recommendation
+from decision.domain.recommendation import Alternative, Exclusion, Outranked, Recommendation
 from decision.explainer.errors import NoQualifyingModelsError
 
 MAX_ALTERNATIVES = 3
@@ -50,10 +50,15 @@ def explain(context: Context, candidates: list[Candidate]) -> Recommendation:
         recommended=winner.model,
         cost_tier=winner.cost_tier,
         reasons=_build_reasons(context, winner.model, qualifying_models),
-        trade_offs=_build_trade_offs(context, winner.model, qualifying_models),
+        trade_offs=_dimension_gaps(winner.model, qualifying_models, skip=context.priorities),
+        total_qualifying=len(qualifying),
         alternatives=tuple(
-            Alternative(model=c.model, reasons=_standout_reasons(c.model, qualifying_models))
-            for c in runners_up[:MAX_ALTERNATIVES]
+            Alternative(model=c.model, rank=rank, reasons=_standout_reasons(c.model, qualifying_models))
+            for rank, c in enumerate(runners_up[:MAX_ALTERNATIVES], start=2)
+        ),
+        outranked=tuple(
+            Outranked(model=c.model, rank=rank, reasons=_dimension_gaps(c.model, qualifying_models))
+            for rank, c in enumerate(runners_up[MAX_ALTERNATIVES:], start=MAX_ALTERNATIVES + 2)
         ),
         excluded=tuple(
             Exclusion(model=c.model, reasons=c.disqualified_reasons)
@@ -123,29 +128,41 @@ def _language_reason(context: Context, winner: AIModel) -> str:
     return f"Supports {context.language} with {level} quality"
 
 
-def _build_trade_offs(context: Context, winner: AIModel, qualifying: list[AIModel]) -> tuple[str, ...]:
-    trade_offs = []
+def _dimension_gaps(
+    model: AIModel, qualifying: list[AIModel], skip: tuple[Priority, ...] = ()
+) -> tuple[str, ...]:
+    """Every dimension `model` isn't the best qualifying option on.
+
+    Two different callers, two different `skip` values: the winner's
+    `trade_offs` pass `context.priorities` here, so a dimension already
+    covered by a positive `reasons` line isn't repeated as a negative —
+    that would contradict it. An `Outranked` model's `reasons` pass no
+    skip at all: there's no positive line to contradict, and if the
+    user's top priority is cost, "not the cheapest" is exactly why this
+    model didn't win — omitting it would hide the real reason.
+    """
+    gaps = []
 
     for priority in Priority:
-        if priority in context.priorities:
-            continue  # already covered by a reason; a trade-off there would contradict it.
+        if priority in skip:
+            continue
 
-        if priority == Priority.COST and not _is_cheapest(winner, qualifying):
-            trade_offs.append("Not the cheapest option among the qualifying alternatives")
-        elif priority == Priority.CONTEXT_WINDOW and not _has_largest_context(winner, qualifying):
-            trade_offs.append("Not the largest context window among the qualifying alternatives")
-        elif priority in _QUALITY_ATTR and not _is_best_quality(priority, winner, qualifying):
+        if priority == Priority.COST and not _is_cheapest(model, qualifying):
+            gaps.append("Not the cheapest option among the qualifying alternatives")
+        elif priority == Priority.CONTEXT_WINDOW and not _has_largest_context(model, qualifying):
+            gaps.append("Not the largest context window among the qualifying alternatives")
+        elif priority in _QUALITY_ATTR and not _is_best_quality(priority, model, qualifying):
             label = _PRIORITY_LABEL[priority]
-            trade_offs.append(f"Not the strongest {label} among the qualifying alternatives")
+            gaps.append(f"Not the strongest {label} among the qualifying alternatives")
 
-    return tuple(trade_offs)
+    return tuple(gaps)
 
 
 def _standout_reasons(model: AIModel, qualifying: list[AIModel]) -> tuple[str, ...]:
     """Why you'd pick `model` over the winner — dimensions it's the best qualifying option for.
 
-    The mirror image of _build_trade_offs: instead of "what the winner
-    gives up", this is "what this alternative is actually best at".
+    The mirror image of _dimension_gaps: instead of "what this model
+    isn't best at", this is "what this alternative is actually best at".
     Never invents a reason — a model that isn't the strongest at
     anything among the qualifying set simply gets no reasons here.
     """

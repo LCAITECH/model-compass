@@ -9,6 +9,7 @@
     <p class="eyebrow">Recommended model</p>
     <h1>{{ recommendation.recommended.name }}</h1>
     <span class="pill">{{ icons.star() }}Best match for your context</span>
+    <span class="pill pill-muted">#1 of {{ recommendation.total_qualifying }} qualifying model{{ 's' if recommendation.total_qualifying != 1 }}</span>
   </div>
 
   <h2>{{ icons.sparkle() }}Why this model?</h2>
@@ -165,7 +166,7 @@
         <span class="chip chip-muted">More expensive</span>
         {% endif %}
       </div>
-      <span class="muted">${{ "%.2f"|format(alt.model.cost.input_per_million) }} / ${{ "%.2f"|format(alt.model.cost.output_per_million) }} per 1M tokens</span>
+      <span class="muted">#{{ alt.rank }} of {{ recommendation.total_qualifying }} — ${{ "%.2f"|format(alt.model.cost.input_per_million) }} / ${{ "%.2f"|format(alt.model.cost.output_per_million) }} per 1M tokens</span>
       {% if alt.reasons %}
       <ul class="standout-reasons">
         {{ icons.item_list(alt.reasons, icons.check) }}
@@ -177,12 +178,23 @@
 </div>
 {% endif %}
 
+{% if recommendation.outranked %}
+<details class="excluded">
+  <summary>{{ icons.no_entry() }}{{ recommendation.outranked | length }} more model{{ 's' if recommendation.outranked | length != 1 }} qualified but ranked lower</summary>
+  <ul>
+    {% for o in recommendation.outranked %}
+    <li><strong>{{ o.model.name }}</strong> — #{{ o.rank }} of {{ recommendation.total_qualifying }}: {{ o.reasons | join(', ') }}</li>
+    {% endfor %}
+  </ul>
+</details>
+{% endif %}
+
 {% if recommendation.excluded %}
 <details class="excluded">
-  <summary>{{ icons.no_entry() }}Why not the other {{ recommendation.excluded | length }} model(s)?</summary>
+  <summary>{{ icons.no_entry() }}{{ recommendation.excluded | length }} model{{ 's' if recommendation.excluded | length != 1 }} didn't qualify at all</summary>
   <ul>
     {% for exclusion in recommendation.excluded %}
-    <li><strong>{{ exclusion.model.name }}</strong> — {{ exclusion.reasons | join(', ') }}</li>
+    <li><strong>{{ exclusion.model.name }}</strong> — never entered the ranking: {{ exclusion.reasons | join(', ') }}</li>
     {% endfor %}
   </ul>
 </details>

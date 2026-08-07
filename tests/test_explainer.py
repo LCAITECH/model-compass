@@ -154,6 +154,50 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     )
 
 
+def test_total_qualifying_and_alternative_ranks(models):
+    # 19 models total, all support "es" and all fit a HIGH budget, so
+    # all 19 qualify. Alternatives are the winner's immediate runners-up
+    # (rank starts at 2, since the winner is implicitly rank 1).
+    context = Context(
+        use_case="High-volume low-cost bot",
+        budget=BudgetLevel.HIGH,
+        priorities=(Priority.COST,),
+        language="es",
+    )
+    candidates = evaluate(context, models)
+
+    recommendation = explain(context, candidates)
+
+    assert recommendation.total_qualifying == 19
+    assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
+
+
+def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
+    # Same context as above. gemini-3.5-flash-lite is the first model
+    # past the top-3 alternatives (rank 5 of 19) -- unlike the winner's
+    # trade_offs, its reasons include "Not the cheapest option" even
+    # though COST is the prioritized dimension, because there's no
+    # positive "reasons" line for it to contradict; omitting the
+    # cost gap would hide the actual reason it lost, per _dimension_gaps'
+    # docstring.
+    context = Context(
+        use_case="High-volume low-cost bot",
+        budget=BudgetLevel.HIGH,
+        priorities=(Priority.COST,),
+        language="es",
+    )
+    candidates = evaluate(context, models)
+
+    recommendation = explain(context, candidates)
+
+    assert len(recommendation.outranked) == 15  # 19 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 20))
+
+    first = recommendation.outranked[0]
+    assert first.model.id == "gemini-3.5-flash-lite"
+    assert any("Not the cheapest" in reason for reason in first.reasons)
+
+
 def test_no_opening_reason_when_use_case_is_blank(models):
     context = Context(
         use_case="",
