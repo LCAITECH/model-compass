@@ -173,3 +173,49 @@ forum thread.
 Observation only. Revisit if Google ever ships Antigravity models
 through the standard token-priced Gemini API, which would make this
 moot.
+
+---
+
+## Iteration #7
+
+**Observation**
+Two more models researched this pass didn't clear the admission bar,
+plus one non-model that shouldn't be researched as one:
+
+- **NVIDIA NIM** isn't a model at all — it's an inference-serving
+  platform (like Bedrock, Vertex AI, or Antigravity) that re-hosts
+  other providers' models (Llama, Mistral Large, and ~140 others) as
+  hosted endpoints or self-hosted containers. Confirmed via NVIDIA's
+  own developer docs. Nothing to add under this name; if a specific
+  model NIM happens to host isn't already in the dataset, that model
+  (e.g. a Llama release) is the right thing to research, not "NIM."
+- **Mistral Medium 3.5** is real (confirmed via `docs.mistral.ai` and
+  `mistral.ai/news`), but every pricing number findable for it came
+  from third-party aggregators (OpenRouter, artificialanalysis.ai,
+  pricepertoken.com, others) — explicitly disallowed as a source for
+  `[Objective]` fields. Mistral's own model-card URL for it
+  (`/models/model-cards/mistral-medium-3-5`) 404s, and the official
+  pricing page only gives a worked example for Mistral Large, not
+  Medium 3.5 specifically.
+- **Grok 4.5** (xAI) has an official, sourced context window (500,000
+  tokens) and pricing (tiered above/below 200k tokens — a fourth
+  independent instance of the Iteration #5 friction), but **no
+  official source states `max_output`**, checked across both the
+  model-specific page and the general models listing. `SCHEMA.md`
+  requires every operational field, so this one field being unsourced
+  blocks the whole entry, even though everything else about it is
+  confirmed. Also noted, not fully resolved: the model's own docs page
+  referred to the provider as "SpaceXAI" rather than the commonly known
+  "xAI" — possible rebrand, possible page error, not chased down
+  further this pass.
+
+**Current decision**
+No schema change — this is the admission-criteria policy from
+`CONTRIBUTING.md` working exactly as designed. Neither model enters
+`dataset/models/` until the missing objective field has an official
+source.
+
+**Status**
+Pending. Revisit Mistral Medium 3.5 if Mistral publishes its own
+pricing page entry. Revisit Grok 4.5 if xAI publishes a max-output
+value, and resolve the "SpaceXAI" naming question at that point too.
