@@ -26,6 +26,35 @@ save you time and help your contribution get merged smoothly.
 
 This is the primary way to contribute today.
 
+### Model admission criteria
+
+This is the general rule for whether a model enters `dataset/models/`
+at all — it governs every contribution below, not just how to fill out
+a YAML file:
+
+> **If a field has no clear official source, it is not added as hard
+> data.** It gets marked as pending instead, and the model does not
+> enter the main dataset until every required field has one.
+
+This follows directly from `SCHEMA.md`'s own philosophy — "a model
+does not enter the dataset because it exists, it enters when it is
+fully characterized" — made explicit as a standing admission
+criterion, not just a per-field guideline. A model with 11 of 12
+required fields cleanly sourced and one guessed is not a 92%-complete
+contribution. It's not ready. Open a discussion or a draft PR flagging
+the missing field instead of filling it with a best guess — a
+half-verified entry is worse than an honest gap, because it looks the
+same as a fully verified one to anyone using the tool downstream.
+
+The same standard applies to `docs/models/{id}.md`, the audit-trail
+companion to each dataset entry (see
+[`docs/models/README.md`](../docs/models/README.md)): every field
+either cites where it came from, or is explicitly marked as not
+independently confirmed. Third-party aggregators (OpenRouter, pricing
+trackers, etc.) are never an acceptable source for objective fields —
+see [IMPLEMENTATION_NOTES.md, Iteration #2](./IMPLEMENTATION_NOTES.md#iteration-2)
+for why.
+
 ### Adding a new model
 
 1. Create a new file at `dataset/models/{model-id}.yaml`.
@@ -64,13 +93,19 @@ notice a model entry is outdated:
 
 ## Contributing code
 
-Model Compass doesn't have an implementation yet — the project is
-currently documentation-first, and the architecture is defined in
-[ARCHITECTURE.md](./ARCHITECTURE.md).
+Model Compass is implemented and functional end-to-end — the decision
+engine (`decision/loader` → `evaluator` → `explainer`) and the web
+interface (`interfaces/web/`) both exist and are tested. The
+architecture is defined in [ARCHITECTURE.md](./ARCHITECTURE.md); read
+it before touching `decision/` — its three non-negotiable principles
+(one-way dependency from `interfaces/` to `decision/`, no model names
+in decision logic, rules-as-code/data-as-data) apply to every code
+contribution, not just the maintainer's own work.
 
-Code contributions will open once the MVP implementation begins.
-Guidelines for setting up the project, running it locally, and
-submitting code will be added at that point.
+To run the project locally: `pip install -e ".[dev]"`, then `pytest`
+for the test suite or `uvicorn interfaces.web.app:app --reload` for the
+web interface. See [README.md](../README.md#getting-started) for
+details.
 
 ## Review process
 

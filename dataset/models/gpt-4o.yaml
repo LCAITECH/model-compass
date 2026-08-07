@@ -1,0 +1,44 @@
+id: gpt-4o
+name: GPT-4o
+provider: OpenAI
+version: "4o"
+license: proprietary
+
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+
+quality:
+  reasoning: medium
+  coding: medium
+  creative_writing: medium
+  instruction_following: high
+
+languages: [en, es, pt, fr, de, ja, zh, hi, ar, ru]
+language_quality:
+  en: very_high
+  es: high
+  pt: high
+  fr: high
+  de: high
+  ja: medium
+  zh: medium
+  hi: medium
+  ar: medium
+  ru: medium
+
+operational:
+  context_window: 128000
+  max_output: 16384
+
+cost:
+  input_per_million: 2.50
+  output_per_million: 10.00
+
+ecosystem:
+  integration_ease: high
+  maturity: stable

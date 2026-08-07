@@ -13,13 +13,17 @@ EXPECTED_IDS = {
     "claude-sonnet-5",
     "deepseek-v4-flash",
     "mistral-large-3",
+    "gpt-5",
+    "gemini-2.5-pro",
+    "claude-opus-5",
+    "gpt-4o",
 }
 
 
-def test_loads_all_five_real_models():
+def test_loads_all_real_models():
     models = load_dataset(DATASET_DIR)
 
-    assert len(models) == 5
+    assert len(models) == 9
     assert all(isinstance(model, AIModel) for model in models)
     assert {model.id for model in models} == EXPECTED_IDS
 

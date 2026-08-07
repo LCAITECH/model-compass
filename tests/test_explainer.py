@@ -16,8 +16,10 @@ def models():
 
 
 def test_cost_priority_explains_the_cheapest_model_and_its_weaknesses(models):
-    # deepseek-v4-flash is the cheapest of all 5 (blended cost 0.42) but
-    # is not the strongest on any quality dimension or context window.
+    # deepseek-v4-flash is the cheapest of all 8 (blended cost 0.42) but
+    # is not the strongest on any quality dimension or context window --
+    # true with 5 models and still true with 8, since adding more
+    # competitors can only add ground it doesn't win, never remove it.
     context = Context(
         use_case="High-volume low-cost bot",
         budget=BudgetLevel.HIGH,
@@ -37,9 +39,17 @@ def test_cost_priority_explains_the_cheapest_model_and_its_weaknesses(models):
 
 
 def test_reasoning_priority_explains_a_model_that_dominates_most_factors(models):
-    # claude-sonnet-5 has the best reasoning, coding, creative_writing
-    # and instruction_following among all 5 — but is neither the
-    # cheapest nor the largest context window (gemini-2.5-flash is).
+    # claude-opus-5 ties claude-sonnet-5, gemini-2.5-pro, and gpt-5 for
+    # the best reasoning, coding, and instruction_following among all 8
+    # (all very_high -- "best" via _is_best_quality tolerates ties), and
+    # ties claude-sonnet-5/gpt-5/gemini-2.5-pro for creative_writing too
+    # (all high, the current ceiling for that dimension -- see
+    # Docs/models/gpt-5.md). claude-opus-5 wins the reasoning-priority
+    # tie-break by dataset load order (see test_evaluator.py). It's
+    # still neither the cheapest (claude-opus-5 is the priciest model in
+    # the dataset) nor the largest context window (gemini-2.5-flash and
+    # gemini-2.5-pro both have a bigger one) -- same two trade-offs as
+    # when claude-sonnet-5 was the winner under 5 models.
     context = Context(
         use_case="Complex agentic workflow",
         budget=BudgetLevel.HIGH,
@@ -50,7 +60,7 @@ def test_reasoning_priority_explains_a_model_that_dominates_most_factors(models)
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.recommended.id == "claude-sonnet-5"
+    assert recommendation.recommended.id == "claude-opus-5"
     assert recommendation.cost_tier == CostTier.HIGH
     assert "your use case is Complex agentic workflow" in recommendation.reasons[0]
     assert any("Strongest reasoning" in reason for reason in recommendation.reasons)
@@ -77,10 +87,14 @@ def test_alternatives_are_capped(models):
 
 def test_alternatives_get_honest_standout_reasons_or_none(models):
     # Winner is deepseek-v4-flash (cheapest); alternatives ranked by cost
-    # are gpt-5-mini, gemini-2.5-flash, mistral-large-3. Among all 5
-    # qualifying models, claude-sonnet-5 dominates every quality
-    # dimension, so most alternatives here have nothing left to stand
-    # out on except gemini's context window.
+    # are gpt-5-mini, gemini-2.5-flash, mistral-large-3 -- unchanged by
+    # the 3 new models, since all three (gpt-5, gemini-2.5-pro,
+    # claude-opus-5) are pricier than mistral-large-3, so none displace
+    # the top-3 alternatives. Among all 8 qualifying models, several tie
+    # for the best quality on every dimension, so gpt-5-mini and
+    # mistral-large-3 still have nothing left to stand out on;
+    # gemini-2.5-flash still ties gemini-2.5-pro for the largest context
+    # window (a tie still counts as "largest").
     context = Context(
         use_case="Bot",
         budget=BudgetLevel.HIGH,
@@ -98,7 +112,11 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
-    # Only mistral-large-3 supports "ko".
+    # Only mistral-large-3 supports "ko" -- none of the other 4 newer
+    # models (gpt-5, gpt-4o, gemini-2.5-pro, claude-opus-5) list it
+    # either, since their curated language lists were inherited from
+    # their same-provider siblings, none of which support "ko" (see
+    # Docs/models/*.md).
     context = Context(
         use_case="Korean support assistant",
         budget=BudgetLevel.HIGH,
@@ -116,6 +134,10 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "gpt-5-mini",
         "claude-sonnet-5",
         "deepseek-v4-flash",
+        "gpt-5",
+        "gemini-2.5-pro",
+        "claude-opus-5",
+        "gpt-4o",
     }
     assert all(
         any("language" in reason for reason in excl.reasons)

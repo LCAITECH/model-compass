@@ -100,3 +100,39 @@ will keep drifting out from under the project over time.
 Observation only. Confirms the value of the planned dataset-update
 pipeline noted in `HANDOFF.md` ("Ideas anotadas pero explícitamente NO
 comprometidas todavía") — not an argument to build it now.
+
+---
+
+## Iteration #5
+
+**Observation**
+`cost.input_per_million` / `cost.output_per_million` assume one price
+per model, but real provider pricing is frequently more granular than
+that. This has now shown up independently at least three times:
+Gemini 2.5 Flash prices audio input separately from text/image/video
+input ($1.00/M vs $0.30/M); Claude Sonnet 5 has distinct 5-minute and
+1-hour prompt-caching write rates plus a cache-hit rate, on top of base
+input/output pricing; and Gemini 2.5 Pro charges a materially different
+rate above a 200k-token prompt threshold ($2.50/$15.00 vs $1.25/$10.00).
+In every case, the dataset entry uses the standard/base-tier price a
+typical first request would hit, and the more granular real pricing is
+documented in that model's `docs/models/*.md` file, not silently
+dropped.
+
+**Current decision**
+No schema change yet, per this file's own discipline (2-3 independent
+occurrences before proposing one) — this is the third, so it's now
+explicitly on the table rather than a coincidence. Options if this
+keeps happening as more models are added (not decided, just named for
+whoever picks this up): (a) keep `cost.*` as a single "typical" price
+and treat the granularity gap as `docs/models/`'s job, which is what's
+happening today by default; or (b) add an optional `cost.notes` free-text
+field to `SCHEMA.md` for exactly this kind of nuance, so it's visible
+from the YAML itself and not only from the audit-trail doc. Not
+proposing (b) yet — raise it with the project owner before acting on
+it, per `AGENTS.md`.
+
+**Status**
+Observation, now with three independent occurrences. Worth an explicit
+decision (not necessarily a schema change) next time schema/architecture
+gets a deliberate look, rather than staying an open-ended "watch this."
