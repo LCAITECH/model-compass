@@ -67,6 +67,11 @@ It exposes the trade-offs behind every recommendation.
 - Does not do prompting or compare model outputs.
 - Does not rank by popularity alone.
 - Does not make the final decision for the user — it informs it.
+- Does not show a number or claim that looks like real data when it's
+  actually an invented assumption. Usage-volume estimates, decorative
+  confidence scores, and quality scoring for a mix of models are only
+  ever shown when the engine can actually derive them — never guessed
+  to fill a visual gap.
 
 ## What a recommendation looks like
 

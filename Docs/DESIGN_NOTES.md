@@ -59,6 +59,36 @@ the first round:
   screens (form, result, no-match).
 - **Favicon / social preview metadata** — none set.
 
+## Guiding principle
+
+The interface should feel like a precision instrument for making a
+decision, not a marketing landing page and not a financial dashboard.
+This has been the actual criterion behind several concrete rejections,
+not just a vibe: no heavy glassmorphism/blur (readability risk, and
+already a dated trend), no literal "neural network / connected nodes"
+illustration (the most repeated visual cliché in AI products of the
+last two years, and it also fights the instrument framing directly),
+restrained color saturation, no decorative motion for its own sake.
+When evaluating a new visual idea, this is the question to ask first:
+does it make the tool feel more like an instrument, or more like every
+other AI landing page?
+
+## Rejected explorations
+
+**Subtle glow / three-tone "aurora" background (tried and reverted).**
+A version of the visual-identity pass replaced the featured
+recommendation card's strong glow/gradient treatment with a smaller,
+more subtle blurred circle behind the model name, added staggered
+entrance animations, and swapped the page background for a three-tone
+"aurora" gradient. Committed as `f53acbc`. The user tried it and said
+directly that it looked *worse* than the previous version, not
+better — so it was reverted with `git revert` (`96f29b0`), not
+`reset --hard`, specifically to keep a record of what was tried and
+why it didn't stick. **The strong-glow treatment (`647a0ba`) is the
+current, confirmed-preferred version.** Don't re-propose the subtle
+orb / aurora combination without knowing this was already tried and
+rejected after a direct side-by-side comparison.
+
 ## Explicitly out of scope for this document
 
 Ideas that sound like design but are actually product/architecture
