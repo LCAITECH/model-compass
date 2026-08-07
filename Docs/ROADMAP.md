@@ -15,6 +15,8 @@ of maturity reached at each stage.
 
 ## Phase 1 — Foundation
 
+**Status: Complete.**
+
 The base the entire project is built on: identity, documentation,
 project structure, and the initial dataset.
 
@@ -40,6 +42,8 @@ published.
 
 ## Phase 2 — Decision Engine
 
+**Status: Complete.**
+
 The core of the product: the decision logic itself, designed and
 validated independently of any user interface.
 
@@ -56,6 +60,11 @@ recommendations for the project's primary defined use cases.
 ---
 
 ## Phase 3 — Web Platform
+
+**Status: Functionally complete — not yet announced as MVP.** The
+end-to-end experience works and is tested; whether it's ready to call
+"MVP, public and announced" is the project owner's call to make, not a
+technical one — see this phase's own "complete when" criterion below.
 
 The first user-facing product: a web application that lets any
 developer use the Decision Engine without installing anything.
@@ -74,6 +83,8 @@ context to receiving a reasoned recommendation — end to end.
 
 ## Phase 4 — Developer Platform
 
+**Status: Not started.**
+
 Expanding access beyond the browser, for developers who want to
 integrate Model Compass directly into their own tools and workflows.
 
@@ -89,6 +100,11 @@ integrations.
 ---
 
 ## Phase 5 — Community & Governance
+
+**Status: Not started** as a distinct phase — though note the "note on
+ordering" below: community contributions have been open since Phase 1
+by design, this status is about the *governance maturity* this phase
+specifically tracks.
 
 This phase is not about opening the project to the community — that
 happens from Phase 1. It's about maturing how the project is governed
