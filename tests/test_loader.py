@@ -17,13 +17,17 @@ EXPECTED_IDS = {
     "gemini-2.5-pro",
     "claude-opus-5",
     "gpt-4o",
+    "gpt-5-nano",
+    "claude-haiku-4-5",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash-lite",
 }
 
 
 def test_loads_all_real_models():
     models = load_dataset(DATASET_DIR)
 
-    assert len(models) == 9
+    assert len(models) == 13
     assert all(isinstance(model, AIModel) for model in models)
     assert {model.id for model in models} == EXPECTED_IDS
 

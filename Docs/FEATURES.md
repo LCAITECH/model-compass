@@ -156,6 +156,23 @@ phases of the [Roadmap](./ROADMAP.md).
   (token-equivalent usage), and must not claim a precise equivalence
   like "$20 of Plus = X million tokens" — that's the same fabricated-
   precision problem Multi-Model Cost Strategies runs into, above.
+- **Specialized / Domain-Specific Models** — a separate category for
+  models fine-tuned or purpose-built for a narrow domain (e.g. Gemini
+  3.5 Flash Cyber, tuned for cybersecurity vulnerability work) rather
+  than general-purpose use. Noted 2026-08-07 when Gemini 3.5 Flash
+  Cyber came up during a dataset-expansion pass and was deliberately
+  left out of the general-purpose catalog instead of shoehorned in.
+  The reason it's a separate capability, not just "another row in
+  `dataset/models/`": `SCHEMA.md`'s quality dimensions
+  (`reasoning`/`coding`/`creative_writing`/`instruction_following`) and
+  cost-tier ranking assume models are being compared for the same kind
+  of general work — rating a cybersecurity-specialized model on
+  "creative writing" would be meaningless, and ranking it against
+  general-purpose models on blended cost would misrepresent what it's
+  actually for. Needs its own comparison axis (or its own section of
+  the dataset) before the first specialized model is added, not an
+  attempt to squeeze it into the existing schema and hope the
+  dimensions happen to still make sense.
 - **Total Cost of Task (a.k.a. "Effective Cost")** — a cheaper model
   that needs several corrective re-prompts to get a complex task right
   can end up costing more, in tokens and time, than a pricier model

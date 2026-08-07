@@ -45,11 +45,10 @@ def test_recommend_shows_no_match_when_nothing_qualifies():
 
 
 def test_recommend_confirms_when_the_winner_is_already_cheapest():
-    # Budget=low leaves deepseek-v4-flash, gpt-5-mini, and
-    # gemini-2.5-flash qualifying (see test_evaluator.py's cost-tier
-    # math); deepseek wins on cost and is already the cheapest of the
-    # three, so there's no honest savings to show -- the UI should say
-    # so explicitly instead of just omitting the savings box.
+    # Budget=low leaves 5 models qualifying (see test_evaluator.py's
+    # cost-tier math); deepseek wins on cost and is already the cheapest
+    # of the five, so there's no honest savings to show -- the UI should
+    # say so explicitly instead of just omitting the savings box.
     response = client.post(
         "/recommend",
         data={

@@ -51,13 +51,13 @@ def test_disqualifies_models_that_dont_support_the_language(models):
 
 
 def test_low_budget_only_admits_the_cheapest_cost_tier(models):
-    # Blended cost (input+output per million), ascending: deepseek-v4-flash
-    # 0.42, gpt-5-mini 2.25, gemini-2.5-flash 2.80, mistral-large-3 8.00,
-    # gemini-2.5-pro 11.25, gpt-5 11.25, claude-sonnet-5 12.00, gpt-4o
-    # 12.50, claude-opus-5 30.00. With 9 models, tier = rank*3//9: ranks
-    # 0-2 (the three cheapest) land in "low", 3-5 in "medium", 6-8 in
-    # "high" -- the low tier is unchanged from the 8-model dataset,
-    # since gpt-4o lands in the high tier alongside sonnet and opus.
+    # Blended cost (input+output per million), ascending, all 13 models:
+    # deepseek-v4-flash 0.42, gpt-5-nano 0.45, gpt-5-mini 2.25,
+    # gemini-2.5-flash 2.80, gemini-3.5-flash-lite 2.80, claude-haiku-4-5
+    # 6.00, mistral-large-3 8.00, gemini-3.6-flash 9.00, gemini-2.5-pro
+    # 11.25, gpt-5 11.25, claude-sonnet-5 12.00, gpt-4o 12.50,
+    # claude-opus-5 30.00. tier = rank*3//13: ranks 0-4 (the five
+    # cheapest) land in "low".
     context = Context(
         use_case="High-volume low-cost bot",
         budget=BudgetLevel.LOW,
@@ -68,7 +68,13 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     candidates = evaluate(context, models)
     qualifying = {c.model.id for c in candidates if c.qualifies}
 
-    assert qualifying == {"deepseek-v4-flash", "gpt-5-mini", "gemini-2.5-flash"}
+    assert qualifying == {
+        "deepseek-v4-flash",
+        "gpt-5-nano",
+        "gpt-5-mini",
+        "gemini-2.5-flash",
+        "gemini-3.5-flash-lite",
+    }
 
 
 def test_cost_priority_picks_the_cheapest_qualifying_model(models):

@@ -86,15 +86,15 @@ def test_alternatives_are_capped(models):
 
 
 def test_alternatives_get_honest_standout_reasons_or_none(models):
-    # Winner is deepseek-v4-flash (cheapest); alternatives ranked by cost
-    # are gpt-5-mini, gemini-2.5-flash, mistral-large-3 -- unchanged by
-    # the 3 new models, since all three (gpt-5, gemini-2.5-pro,
-    # claude-opus-5) are pricier than mistral-large-3, so none displace
-    # the top-3 alternatives. Among all 8 qualifying models, several tie
-    # for the best quality on every dimension, so gpt-5-mini and
-    # mistral-large-3 still have nothing left to stand out on;
-    # gemini-2.5-flash still ties gemini-2.5-pro for the largest context
-    # window (a tie still counts as "largest").
+    # Winner is deepseek-v4-flash (cheapest, blended 0.42). Alternatives
+    # ranked by cost among the other 12: gpt-5-nano (0.45), gpt-5-mini
+    # (2.25), gemini-2.5-flash (2.80, tied with gemini-3.5-flash-lite but
+    # alphabetically first) -- gpt-5-nano's arrival bumped mistral-large-3
+    # out of the top 3. Among all 13 qualifying models, several tie for
+    # the best quality on every dimension, so gpt-5-nano and gpt-5-mini
+    # have nothing left to stand out on; gemini-2.5-flash now ties three
+    # other Gemini models (2.5 Pro, 3.6 Flash, 3.5 Flash-Lite) for the
+    # largest context window -- a tie still counts as "largest".
     context = Context(
         use_case="Bot",
         budget=BudgetLevel.HIGH,
@@ -107,16 +107,15 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
     by_id = {alt.model.id: alt for alt in recommendation.alternatives}
 
     assert any("largest context window" in reason for reason in by_id["gemini-2.5-flash"].reasons)
+    assert by_id["gpt-5-nano"].reasons == ()
     assert by_id["gpt-5-mini"].reasons == ()
-    assert by_id["mistral-large-3"].reasons == ()
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
-    # Only mistral-large-3 supports "ko" -- none of the other 4 newer
-    # models (gpt-5, gpt-4o, gemini-2.5-pro, claude-opus-5) list it
-    # either, since their curated language lists were inherited from
-    # their same-provider siblings, none of which support "ko" (see
-    # Docs/models/*.md).
+    # Only mistral-large-3 supports "ko" -- none of the other 12 models
+    # list it either, since every curated language list in this dataset
+    # was inherited from a same-provider sibling, none of which support
+    # "ko" (see Docs/models/*.md).
     context = Context(
         use_case="Korean support assistant",
         budget=BudgetLevel.HIGH,
@@ -138,6 +137,10 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "gemini-2.5-pro",
         "claude-opus-5",
         "gpt-4o",
+        "gpt-5-nano",
+        "claude-haiku-4-5",
+        "gemini-3.6-flash",
+        "gemini-3.5-flash-lite",
     }
     assert all(
         any("language" in reason for reason in excl.reasons)
