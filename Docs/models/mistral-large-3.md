@@ -88,6 +88,14 @@ pricing line next time that page is reachable.
 
 ---
 
+## Access
+
+Standard Mistral API (La Plateforme) at the pricing in `cost.*` above.
+Also downloadable as open-weights (`license: open-weights`, Apache
+2.0) for self-hosting — a genuinely different access path from the
+rest of this dataset's proprietary models, though not priced per-token
+when self-hosted, so not reflected in `cost.*`.
+
 ## Sources
 
 - [Mistral models overview](https://docs.mistral.ai/getting-started/models/models_overview/) — identity, license, version tag.

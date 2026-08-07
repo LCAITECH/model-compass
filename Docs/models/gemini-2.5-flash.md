@@ -95,6 +95,11 @@ here rather than worked around in the dataset:
 
 ---
 
+## Access
+
+Standard Gemini API — Google AI Studio and Vertex AI — at the pricing
+in `cost.*` above. No other access surface checked for this entry.
+
 ## Sources
 
 - [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost fields.

@@ -98,6 +98,13 @@ current pricing — see the note above on why that matters for the
 
 ---
 
+## Access
+
+Standard Claude API, plus Amazon Bedrock, Google Cloud Vertex AI, and
+Microsoft Foundry, at (or close to) the pricing in `cost.*` above —
+same access surface as Opus 5, unsurprisingly, since it's the model
+being recommended as the migration target.
+
 ## Sources
 
 - [Claude models overview, "Legacy models" section](https://platform.claude.com/docs/en/docs/about-claude/models/overview) — pricing, context window, max output, capabilities, explicit "consider migrating" language.

@@ -75,6 +75,11 @@ Confirmed directly against OpenAI's pricing page (standard tier).
 
 ---
 
+## Access
+
+Standard OpenAI API at the pricing in `cost.*` above. No other access
+surface checked for this entry.
+
 ## Sources
 
 - [OpenAI API pricing](https://developers.openai.com/api/docs/pricing) — cost fields.

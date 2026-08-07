@@ -88,6 +88,13 @@ happen without obvious warning on the page itself.
 
 ---
 
+## Access
+
+Standard Gemini API — Google AI Studio and Vertex AI — at the pricing
+in `cost.*` above. Also exposed inside Google Antigravity, which
+isn't itself a valid pricing source — see
+`IMPLEMENTATION_NOTES.md`, Iteration #6.
+
 ## Sources
 
 - [Gemini 3.6 Flash model card](https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash) — capabilities, context window, max output.

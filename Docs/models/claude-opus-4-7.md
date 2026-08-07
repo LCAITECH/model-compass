@@ -78,6 +78,11 @@ current Opus 5 pricing.
 
 ---
 
+## Access
+
+Standard Claude API, plus Amazon Bedrock, Google Cloud Vertex AI, and
+Microsoft Foundry, at (or close to) the pricing in `cost.*` above.
+
 ## Sources
 
 - [Claude models overview, "Legacy models" section](https://platform.claude.com/docs/en/docs/about-claude/models/overview) — pricing, context window, max output, capabilities.

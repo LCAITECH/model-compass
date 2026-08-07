@@ -75,6 +75,13 @@ pricing as of the verification date.
 
 ---
 
+## Access
+
+Standard Claude API, plus Amazon Bedrock, Google Cloud Vertex AI, and
+Microsoft Foundry, at (or close to) the pricing in `cost.*` above.
+Consumer-subscription access is a separate question this section
+deliberately doesn't answer — see `docs/models/README.md`.
+
 ## Sources
 
 - [Claude models overview](https://platform.claude.com/docs/en/docs/about-claude/models/overview) — pricing, context window, max output, capabilities, thinking-mode positioning, knowledge cutoff (reliable: Feb 2025; training: Jul 2025).

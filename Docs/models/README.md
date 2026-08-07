@@ -21,6 +21,28 @@ the YAML can't hold:
 See [`gemini-2.5-flash.md`](gemini-2.5-flash.md) for the reference
 example.
 
+Every entry also includes an **Access** section: which official,
+token-priced API(s) actually serve this exact model. For the common
+case — one provider, one API, matching the `cost.*` fields already in
+the entry — a single sentence is enough; don't inflate it into a
+section it doesn't need. It earns more space when the access story is
+genuinely more complex than "call the API" — see
+[`claude-fable-5.md`](claude-fable-5.md) (subscription tiers, one-time
+credits, and direct API access are three different things for the
+same model) or [`gemini-3.1-pro-preview.md`](gemini-3.1-pro-preview.md)
+(available both through the standard API and through a separate
+product, Google Antigravity, that isn't itself a valid data source —
+see `IMPLEMENTATION_NOTES.md`, Iteration #6).
+
+**This is deliberately scoped narrower than "how do I pay for this
+model."** Consumer subscription equivalence (does my ChatGPT Plus or
+Claude Pro plan already include this, and for how much usage) is a
+separate, harder problem — tracked as "Subscription vs. API
+Comparator" in `FEATURES.md`, explicitly parked because subscriptions
+don't have stable per-token pricing to source honestly. The Access
+section here only answers "which API can I call," not "what does my
+existing subscription get me."
+
 ## Sourcing rule
 
 If a field has no clear official source, it is **not** written up as

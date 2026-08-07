@@ -88,6 +88,15 @@ the top of this document.
 
 ---
 
+## Access
+
+Standard Claude API, plus Amazon Bedrock, Google Cloud Vertex AI, and
+Microsoft Foundry, at (or close to) the pricing in `cost.*` above —
+cloud-platform pricing can differ slightly, see Anthropic's pricing
+page. Consumer-subscription access (Claude Pro/Max) is a separate
+question this section deliberately doesn't answer — see
+`docs/models/README.md`.
+
 ## Sources
 
 - [Claude API pricing](https://platform.claude.com/docs/en/docs/about-claude/pricing) — cost fields, introductory pricing expiration date.

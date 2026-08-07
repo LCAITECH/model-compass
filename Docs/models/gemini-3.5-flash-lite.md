@@ -80,6 +80,11 @@ inherited 2.5 Flash's price point as the new "entry tier" price while
 
 ---
 
+## Access
+
+Standard Gemini API — Google AI Studio and Vertex AI — at the pricing
+in `cost.*` above. No other access surface checked for this entry.
+
 ## Sources
 
 - [Gemini 3.5 Flash-Lite model card](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite) — capabilities, context window, max output, positioning.

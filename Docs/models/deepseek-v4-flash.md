@@ -92,6 +92,11 @@ revisited.
 
 ---
 
+## Access
+
+Standard DeepSeek API at the pricing in `cost.*` above. No other
+access surface checked for this entry.
+
 ## Sources
 
 - [DeepSeek Models & Pricing](https://api-docs.deepseek.com/quick_start/pricing) — cost fields, context window, max output.

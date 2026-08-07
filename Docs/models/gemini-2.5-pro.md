@@ -82,6 +82,11 @@ on `claude-sonnet-5.md`).
 
 ---
 
+## Access
+
+Standard Gemini API — Google AI Studio and Vertex AI — at the pricing
+in `cost.*` above. No other access surface checked for this entry.
+
 ## Sources
 
 - [Gemini 2.5 Pro model card](https://ai.google.dev/gemini-api/docs/models/gemini-2.5-pro) — capabilities, context window, max output, knowledge cutoff (January 2025).

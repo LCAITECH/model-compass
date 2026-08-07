@@ -99,6 +99,11 @@ quality on this dataset's dimensions.
 
 ---
 
+## Access
+
+Standard OpenAI API at the pricing in `cost.*` above. No other access
+surface checked for this entry.
+
 ## Sources
 
 - [GPT-4o model card](https://developers.openai.com/api/docs/models/gpt-4o) — capabilities, context window, max output, knowledge cutoff (Oct 1, 2023), availability status.

@@ -74,6 +74,15 @@ clearest "no reason to stay here" case in the Opus line.
 
 ---
 
+## Access
+
+Standard Claude API, plus Amazon Bedrock, Google Cloud Vertex AI, and
+Microsoft Foundry, at (or close to) the pricing in `cost.*` above. Also
+exposed inside Google Antigravity labeled "(thinking)" — see
+`SCHEMA.md`'s note on why that's a parameter, not a separate model, and
+`IMPLEMENTATION_NOTES.md` Iteration #6 for why Antigravity isn't a
+valid pricing source.
+
 ## Sources
 
 - [Claude models overview, "Legacy models" section](https://platform.claude.com/docs/en/docs/about-claude/models/overview) — pricing, context window, max output, capabilities, thinking-mode status, knowledge cutoffs.
