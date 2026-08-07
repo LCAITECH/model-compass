@@ -198,6 +198,26 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
     assert any("Not the cheapest" in reason for reason in first.reasons)
 
 
+def test_outranked_reasons_put_the_users_actual_priority_first(models):
+    # With priority=CODING instead of COST, claude-haiku-4-5 (which has
+    # a real coding gap, unlike most outranked models under this
+    # priority) should show "Not the strongest coding" first, not
+    # buried where cost would normally sort in the canonical dimension
+    # order (cost, then quality dimensions, then context window).
+    context = Context(
+        use_case="x",
+        budget=BudgetLevel.HIGH,
+        priorities=(Priority.CODING,),
+        language="es",
+    )
+    candidates = evaluate(context, models)
+
+    recommendation = explain(context, candidates)
+    by_id = {o.model.id: o for o in recommendation.outranked}
+
+    assert by_id["claude-haiku-4-5"].reasons[0] == "Not the strongest coding among the qualifying alternatives"
+
+
 def test_no_opening_reason_when_use_case_is_blank(models):
     context = Context(
         use_case="",

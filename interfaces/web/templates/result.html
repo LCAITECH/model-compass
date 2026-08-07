@@ -183,7 +183,15 @@
   <summary>{{ icons.no_entry() }}{{ recommendation.outranked | length }} more model{{ 's' if recommendation.outranked | length != 1 }} qualified but ranked lower</summary>
   <ul>
     {% for o in recommendation.outranked %}
-    <li><strong>{{ o.model.name }}</strong> — #{{ o.rank }} of {{ recommendation.total_qualifying }}: {{ o.reasons | join(', ') }}</li>
+    <li>
+      <strong>{{ o.model.name }}</strong> — #{{ o.rank }} of {{ recommendation.total_qualifying }}: {{ o.reasons[:2] | join(', ') }}
+      {% if o.reasons | length > 2 %}
+      <details class="more-reasons">
+        <summary>{{ o.reasons | length - 2 }} more reason{{ 's' if o.reasons | length - 2 != 1 }}</summary>
+        {{ o.reasons[2:] | join(', ') }}
+      </details>
+      {% endif %}
+    </li>
     {% endfor %}
   </ul>
 </details>
@@ -192,11 +200,16 @@
 {% if recommendation.excluded %}
 <details class="excluded">
   <summary>{{ icons.no_entry() }}{{ recommendation.excluded | length }} model{{ 's' if recommendation.excluded | length != 1 }} didn't qualify at all</summary>
-  <ul>
-    {% for exclusion in recommendation.excluded %}
-    <li><strong>{{ exclusion.model.name }}</strong> — never entered the ranking: {{ exclusion.reasons | join(', ') }}</li>
-    {% endfor %}
-  </ul>
+  {% for reasons, group in recommendation.excluded | groupby('reasons') %}
+  <details class="excluded-reason-group">
+    <summary>{{ group | length }} model{{ 's' if group | length != 1 }} — {{ reasons | join(', ') }}</summary>
+    <ul>
+      {% for exclusion in group %}
+      <li>{{ exclusion.model.name }}</li>
+      {% endfor %}
+    </ul>
+  </details>
+  {% endfor %}
 </details>
 {% endif %}
 {% else %}

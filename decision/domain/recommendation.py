@@ -49,7 +49,9 @@ class Outranked:
     `reasons` lists every dimension it isn't the best qualifying option
     on, including ones the user prioritized (unlike the winner's
     `trade_offs`, there's no positive "reasons" line here to avoid
-    contradicting).
+    contradicting) — ordered with the user's actual priorities first,
+    so a display that only shows the first item or two still shows the
+    most relevant reason(s), not an arbitrary subset.
     """
 
     model: AIModel

@@ -218,3 +218,31 @@ details.excluded ul {
 details.excluded li {
   margin: var(--space-2) 0;
 }
+
+details.excluded-reason-group {
+  margin: var(--space-2) 0 var(--space-2) var(--space-3);
+}
+
+details.excluded-reason-group summary {
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+details.excluded-reason-group ul {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-5);
+}
+
+details.more-reasons {
+  display: inline;
+  margin-left: var(--space-1);
+}
+
+details.more-reasons summary {
+  display: inline;
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 600;
+}

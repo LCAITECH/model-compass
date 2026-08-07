@@ -50,14 +50,14 @@ def explain(context: Context, candidates: list[Candidate]) -> Recommendation:
         recommended=winner.model,
         cost_tier=winner.cost_tier,
         reasons=_build_reasons(context, winner.model, qualifying_models),
-        trade_offs=_dimension_gaps(winner.model, qualifying_models, skip=context.priorities),
+        trade_offs=_trade_offs(context, winner.model, qualifying_models),
         total_qualifying=len(qualifying),
         alternatives=tuple(
             Alternative(model=c.model, rank=rank, reasons=_standout_reasons(c.model, qualifying_models))
             for rank, c in enumerate(runners_up[:MAX_ALTERNATIVES], start=2)
         ),
         outranked=tuple(
-            Outranked(model=c.model, rank=rank, reasons=_dimension_gaps(c.model, qualifying_models))
+            Outranked(model=c.model, rank=rank, reasons=_outranked_reasons(context, c.model, qualifying_models))
             for rank, c in enumerate(runners_up[MAX_ALTERNATIVES:], start=MAX_ALTERNATIVES + 2)
         ),
         excluded=tuple(
@@ -128,34 +128,55 @@ def _language_reason(context: Context, winner: AIModel) -> str:
     return f"Supports {context.language} with {level} quality"
 
 
-def _dimension_gaps(
-    model: AIModel, qualifying: list[AIModel], skip: tuple[Priority, ...] = ()
-) -> tuple[str, ...]:
-    """Every dimension `model` isn't the best qualifying option on.
+def _dimension_gaps(model: AIModel, qualifying: list[AIModel]) -> dict[Priority, str]:
+    """Every dimension `model` isn't the best qualifying option on, keyed by Priority.
 
-    Two different callers, two different `skip` values: the winner's
-    `trade_offs` pass `context.priorities` here, so a dimension already
-    covered by a positive `reasons` line isn't repeated as a negative —
-    that would contradict it. An `Outranked` model's `reasons` pass no
-    skip at all: there's no positive line to contradict, and if the
-    user's top priority is cost, "not the cheapest" is exactly why this
-    model didn't win — omitting it would hide the real reason.
+    Keyed rather than a flat tuple so the two callers below can each
+    reshape it differently without re-deriving which gap came from
+    which dimension. Iterates `Priority` in its declared order (cost,
+    then each quality dimension, then context window), so insertion
+    order is deterministic.
     """
-    gaps = []
+    gaps: dict[Priority, str] = {}
 
     for priority in Priority:
-        if priority in skip:
-            continue
-
         if priority == Priority.COST and not _is_cheapest(model, qualifying):
-            gaps.append("Not the cheapest option among the qualifying alternatives")
+            gaps[priority] = "Not the cheapest option among the qualifying alternatives"
         elif priority == Priority.CONTEXT_WINDOW and not _has_largest_context(model, qualifying):
-            gaps.append("Not the largest context window among the qualifying alternatives")
+            gaps[priority] = "Not the largest context window among the qualifying alternatives"
         elif priority in _QUALITY_ATTR and not _is_best_quality(priority, model, qualifying):
             label = _PRIORITY_LABEL[priority]
-            gaps.append(f"Not the strongest {label} among the qualifying alternatives")
+            gaps[priority] = f"Not the strongest {label} among the qualifying alternatives"
 
-    return tuple(gaps)
+    return gaps
+
+
+def _trade_offs(context: Context, winner: AIModel, qualifying: list[AIModel]) -> tuple[str, ...]:
+    """The winner's gaps, minus whatever the user already prioritized.
+
+    A gap on a prioritized dimension would contradict the positive
+    `reasons` line already covering it (see `_build_reasons`) — e.g. if
+    cost was priority #1, `reasons` already says "lowest cost", so a
+    trade-off wouldn't make sense there even if it were somehow true.
+    """
+    gaps = _dimension_gaps(winner, qualifying)
+    return tuple(text for priority, text in gaps.items() if priority not in context.priorities)
+
+
+def _outranked_reasons(context: Context, model: AIModel, qualifying: list[AIModel]) -> tuple[str, ...]:
+    """An outranked model's gaps, most relevant first -- nothing omitted.
+
+    Unlike `_trade_offs`, nothing is skipped: there's no positive
+    `reasons` line here to contradict, and if the user's top priority
+    is cost, "not the cheapest" is exactly why this model lost —
+    hiding it would hide the actual reason. Instead, the dimensions the
+    user actually prioritized (in the order they ranked them) are moved
+    to the front, so the template can show the 1-2 most relevant
+    reasons without truncating to an arbitrary/alphabetical subset.
+    """
+    gaps = _dimension_gaps(model, qualifying)
+    relevance_order = list(context.priorities) + [p for p in Priority if p not in context.priorities]
+    return tuple(gaps[priority] for priority in relevance_order if priority in gaps)
 
 
 def _standout_reasons(model: AIModel, qualifying: list[AIModel]) -> tuple[str, ...]:

@@ -64,3 +64,30 @@ independently auditable.**
 
 All of the above shipped in 8 commits to `main`, all tests passing
 (59/59) at every step.
+
+**Added full ranking transparency to every recommendation.** Until
+now, a qualifying model that ranked below the top 3 alternatives
+simply disappeared from the result — not shown as a pick, not shown as
+excluded, just gone. Every recommendation now shows:
+
+- The recommended model's and every alternative's real rank ("#1 of
+  19 qualifying models", "#2 of 19", etc.) — a true, computed position,
+  not an invented confidence score. A raw match score (e.g. "80/100")
+  was considered and deliberately not built: the underlying number is
+  only meaningful relative to whichever models happen to qualify for
+  one specific query, so the same model could score very differently
+  for two different users with no change in the model itself —
+  presenting that as an absolute percentage would have implied a
+  precision the number doesn't have.
+- Every model that qualified but didn't rank in the top 3, with a real
+  rank and the actual dimensions it lost on — reordered so whatever
+  the user actually prioritized shows first, not buried in a fixed
+  list order. Only the top 2 reasons show by default, with the rest
+  available on demand — a model can lose on five dimensions at once,
+  and listing all five up front was noise, not information.
+- Every model that never qualified at all, now grouped by why —
+  "12 models — cost tier exceeds a 'low' budget" once, instead of the
+  same sentence repeated 12 times. Distinct on purpose from the models
+  above: these never entered the ranking, so they don't get a rank.
+
+Tests: 59 → 62.
