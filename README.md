@@ -134,25 +134,26 @@ Then open `http://localhost:8000`.
 | v3    | Python SDK  | Planned |
 | v4    | CLI         | Planned |
 
-See [ROADMAP.md](./ROADMAP.md) for details.
+See [ROADMAP.md](./Docs/ROADMAP.md) for details.
 
 ## Contributing
 
 Model Compass is in its early stages, and contributions — code, dataset
 entries, ideas, feedback — are welcome.
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines on how to get
-involved.
+See [CONTRIBUTING.md](./Docs/CONTRIBUTING.md) for guidelines on how to
+get involved.
 
 ## License
 
-MIT — see [LICENSE](./LICENSE) for details.
+MIT — see [LICENSE](./LICENSE.md) for details.
 
 ## Learn More
 
-- [VISION.md](./VISION.md) — project mission and philosophy
-- [ROADMAP.md](./ROADMAP.md) — where the project is headed
-- [FEATURES.md](./FEATURES.md) — planned and existing features
-- [ARCHITECTURE.md](./ARCHITECTURE.md) — technical design
-- [SCHEMA.md](./SCHEMA.md) — how the dataset represents knowledge
-- [CONTRIBUTING.md](./CONTRIBUTING.md) — how to contribute
+- [VISION.md](./Docs/VISION.md) — project mission and philosophy
+- [ROADMAP.md](./Docs/ROADMAP.md) — where the project is headed
+- [FEATURES.md](./Docs/FEATURES.md) — planned and existing features
+- [ARCHITECTURE.md](./Docs/ARCHITECTURE.md) — technical design
+- [SCHEMA.md](./Docs/SCHEMA.md) — how the dataset represents knowledge
+- [CONTRIBUTING.md](./Docs/CONTRIBUTING.md) — how to contribute
+- [CHANGELOG.md](./Docs/CHANGELOG.md) — what changed, and why, dated
