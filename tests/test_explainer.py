@@ -146,6 +146,7 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "claude-opus-4-6",
         "claude-sonnet-4-6",
         "claude-fable-5",
+        "gemini-3.1-pro-preview",
     }
     assert all(
         any("language" in reason for reason in excl.reasons)

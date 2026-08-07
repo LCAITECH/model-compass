@@ -64,6 +64,19 @@ context, but they are never the source of an editorial rating.
 | `version`  | string | `[Objective]` | Model version, as published by the provider. |
 | `license`  | string | `[Objective]` | One of: `proprietary`, `open-weights`, `open-source`. |
 
+**A runtime mode is not a separate model.** If a provider exposes the
+same underlying model with a toggle — e.g. Anthropic's
+`thinking.type: "enabled"` parameter on Claude Sonnet 4.6 or Opus
+4.6 — that's one dataset entry, not two. The signal to check: does the
+provider's own API documentation assign it a distinct model ID? If
+yes, it's a separate entry (e.g. Claude Haiku 4.5 really is a
+different `id` from Sonnet 4.5). If it's a request parameter on the
+same model ID, it stays one entry, and the mode itself isn't
+represented in `SCHEMA.md` at all. This came up concretely with
+Google Antigravity's UI, which lists "Claude Opus 4.6 (thinking)" as
+if it were its own model — it isn't, per Anthropic's own API
+reference, and third-party UI labeling never overrides that.
+
 ### Functional Capabilities
 
 What the model is able to do. Binary, factual, verifiable against
