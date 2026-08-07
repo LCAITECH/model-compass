@@ -51,13 +51,14 @@ def test_disqualifies_models_that_dont_support_the_language(models):
 
 
 def test_low_budget_only_admits_the_cheapest_cost_tier(models):
-    # Blended cost (input+output per million), ascending, all 13 models:
+    # Blended cost (input+output per million), ascending, all 18 models:
     # deepseek-v4-flash 0.42, gpt-5-nano 0.45, gpt-5-mini 2.25,
     # gemini-2.5-flash 2.80, gemini-3.5-flash-lite 2.80, claude-haiku-4-5
     # 6.00, mistral-large-3 8.00, gemini-3.6-flash 9.00, gemini-2.5-pro
     # 11.25, gpt-5 11.25, claude-sonnet-5 12.00, gpt-4o 12.50,
-    # claude-opus-5 30.00. tier = rank*3//13: ranks 0-4 (the five
-    # cheapest) land in "low".
+    # claude-sonnet-4-6 18.00, claude-opus-4-6/4-7/4-8/5 30.00 each,
+    # claude-fable-5 60.00. tier = rank*3//18: ranks 0-5 (the six
+    # cheapest) land in "low" -- claude-haiku-4-5 joined it this batch.
     context = Context(
         use_case="High-volume low-cost bot",
         budget=BudgetLevel.LOW,
@@ -74,6 +75,7 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
         "gpt-5-mini",
         "gemini-2.5-flash",
         "gemini-3.5-flash-lite",
+        "claude-haiku-4-5",
     }
 
 
@@ -91,12 +93,14 @@ def test_cost_priority_picks_the_cheapest_qualifying_model(models):
 
 
 def test_reasoning_priority_picks_the_strongest_reasoning_model(models):
-    # Four models now share the top reasoning rating (very_high):
-    # claude-opus-5, claude-sonnet-5, gemini-2.5-pro, gpt-5. The quality
-    # scale is intentionally coarse (SCHEMA.md), so ties are expected,
-    # not a bug -- the Evaluator breaks them deterministically by
-    # dataset load order (alphabetical by id, see loader.py), and
-    # "claude-opus-5" sorts first among the tied models.
+    # Seven models now share the top reasoning rating (very_high):
+    # claude-fable-5, claude-opus-4-7, claude-opus-4-8, claude-opus-5,
+    # claude-sonnet-5, gemini-2.5-pro, gpt-5. The quality scale is
+    # intentionally coarse (SCHEMA.md), so ties are expected, not a
+    # bug -- the Evaluator breaks them deterministically by dataset
+    # load order (alphabetical by id, see loader.py), and
+    # "claude-fable-5" now sorts first among the tied models (it didn't
+    # exist in the dataset when claude-opus-5 used to win this tie).
     context = Context(
         use_case="Complex agentic workflow",
         budget=BudgetLevel.HIGH,
@@ -106,19 +110,26 @@ def test_reasoning_priority_picks_the_strongest_reasoning_model(models):
 
     candidates = evaluate(context, models)
 
-    assert candidates[0].model.id == "claude-opus-5"
+    assert candidates[0].model.id == "claude-fable-5"
 
 
 def test_priority_order_changes_the_winner(models):
+    # Budget=HIGH stopped demonstrating this once claude-fable-5 (blended
+    # cost 60.00) entered the dataset -- it stretches the cost
+    # normalization so much that a mid-priced, very-high-reasoning model
+    # (gemini-2.5-pro) wins both orderings, tested and confirmed directly
+    # against the Evaluator rather than assumed. Budget=LOW keeps the
+    # qualifying pool small enough that swapping priority order still
+    # changes the winner, which is the actual thing this test checks.
     cost_first = Context(
         use_case="Bot",
-        budget=BudgetLevel.HIGH,
+        budget=BudgetLevel.LOW,
         priorities=(Priority.COST, Priority.REASONING),
         language="es",
     )
     reasoning_first = Context(
         use_case="Bot",
-        budget=BudgetLevel.HIGH,
+        budget=BudgetLevel.LOW,
         priorities=(Priority.REASONING, Priority.COST),
         language="es",
     )

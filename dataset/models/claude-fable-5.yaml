@@ -1,0 +1,44 @@
+id: claude-fable-5
+name: Claude Fable 5
+provider: Anthropic
+version: "5"
+license: proprietary
+
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+
+quality:
+  reasoning: very_high
+  coding: very_high
+  creative_writing: very_high
+  instruction_following: very_high
+
+languages: [en, es, pt, fr, de, ja, zh, hi, ar, ru]
+language_quality:
+  en: very_high
+  es: very_high
+  pt: high
+  fr: high
+  de: high
+  ja: high
+  zh: high
+  hi: medium
+  ar: medium
+  ru: medium
+
+operational:
+  context_window: 1000000
+  max_output: 128000
+
+cost:
+  input_per_million: 10.00
+  output_per_million: 50.00
+
+ecosystem:
+  integration_ease: high
+  maturity: stable

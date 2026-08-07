@@ -45,9 +45,9 @@ def test_recommend_shows_no_match_when_nothing_qualifies():
 
 
 def test_recommend_confirms_when_the_winner_is_already_cheapest():
-    # Budget=low leaves 5 models qualifying (see test_evaluator.py's
+    # Budget=low leaves 6 models qualifying (see test_evaluator.py's
     # cost-tier math); deepseek wins on cost and is already the cheapest
-    # of the five, so there's no honest savings to show -- the UI should
+    # of the six, so there's no honest savings to show -- the UI should
     # say so explicitly instead of just omitting the savings box.
     response = client.post(
         "/recommend",
@@ -65,7 +65,7 @@ def test_recommend_confirms_when_the_winner_is_already_cheapest():
 
 
 def test_recommend_shows_real_savings_when_a_cheaper_option_exists():
-    # Budget=high, priority=reasoning -> claude-opus-5 wins (see
+    # Budget=high, priority=reasoning -> claude-fable-5 wins (see
     # test_evaluator.py for the reasoning-priority tie-break), but
     # deepseek-v4-flash is real and cheaper.
     response = client.post(

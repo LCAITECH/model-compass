@@ -39,17 +39,17 @@ def test_cost_priority_explains_the_cheapest_model_and_its_weaknesses(models):
 
 
 def test_reasoning_priority_explains_a_model_that_dominates_most_factors(models):
-    # claude-opus-5 ties claude-sonnet-5, gemini-2.5-pro, and gpt-5 for
-    # the best reasoning, coding, and instruction_following among all 8
-    # (all very_high -- "best" via _is_best_quality tolerates ties), and
-    # ties claude-sonnet-5/gpt-5/gemini-2.5-pro for creative_writing too
-    # (all high, the current ceiling for that dimension -- see
-    # Docs/models/gpt-5.md). claude-opus-5 wins the reasoning-priority
-    # tie-break by dataset load order (see test_evaluator.py). It's
-    # still neither the cheapest (claude-opus-5 is the priciest model in
-    # the dataset) nor the largest context window (gemini-2.5-flash and
-    # gemini-2.5-pro both have a bigger one) -- same two trade-offs as
-    # when claude-sonnet-5 was the winner under 5 models.
+    # claude-fable-5 is the only model in the dataset rated very_high on
+    # creative_writing (see Docs/models/claude-fable-5.md), so it "wins"
+    # that dimension outright, not just by tie -- and ties several other
+    # flagship models (claude-opus-4-7/4-8/5, claude-sonnet-5,
+    # gemini-2.5-pro, gpt-5) on reasoning/coding/instruction_following
+    # (all very_high). It wins the reasoning-priority tie-break by
+    # dataset load order (see test_evaluator.py). Still neither the
+    # cheapest (claude-fable-5 is the priciest model in the dataset, at
+    # $10/$50 direct API pricing) nor the largest context window
+    # (several Gemini models have a bigger one) -- same two trade-offs
+    # as every prior winner of this test.
     context = Context(
         use_case="Complex agentic workflow",
         budget=BudgetLevel.HIGH,
@@ -60,7 +60,7 @@ def test_reasoning_priority_explains_a_model_that_dominates_most_factors(models)
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.recommended.id == "claude-opus-5"
+    assert recommendation.recommended.id == "claude-fable-5"
     assert recommendation.cost_tier == CostTier.HIGH
     assert "your use case is Complex agentic workflow" in recommendation.reasons[0]
     assert any("Strongest reasoning" in reason for reason in recommendation.reasons)
@@ -141,6 +141,11 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "claude-haiku-4-5",
         "gemini-3.6-flash",
         "gemini-3.5-flash-lite",
+        "claude-opus-4-8",
+        "claude-opus-4-7",
+        "claude-opus-4-6",
+        "claude-sonnet-4-6",
+        "claude-fable-5",
     }
     assert all(
         any("language" in reason for reason in excl.reasons)

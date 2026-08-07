@@ -136,3 +136,40 @@ it, per `AGENTS.md`.
 Observation, now with three independent occurrences. Worth an explicit
 decision (not necessarily a schema change) next time schema/architecture
 gets a deliberate look, rather than staying an open-ended "watch this."
+
+---
+
+## Iteration #6
+
+**Observation**
+Models surfaced through Google Antigravity (an IDE/agent product, not
+the public Gemini API) — specifically "Gemini 3.1 Pro" and
+Claude Sonnet 4.6 / Opus 4.6 "(thinking)" — don't cleanly meet the
+model admission criteria in `CONTRIBUTING.md`. Two separate problems,
+not one: (1) Antigravity's own docs (`antigravity.google/docs/models`)
+don't publish per-token pricing at all, only subscription-tier rate
+limits (Free/Plus/Pro/Ultra/Enterprise) — there's no objective number
+to put in `cost.*`. (2) A thread on Google's own AI Developers forum
+claims Antigravity's model labels don't reliably match what's actually
+deployed (e.g. a labeled "Gemini 3 Pro" allegedly actually being
+"Gemini 2.0 Flash" under the hood) — unverified, but exactly the kind
+of reliability problem the "official docs only, no aggregators" rule
+exists to guard against, even though Antigravity is Google's own
+product. Separately: "(thinking)" isn't a distinct model on Anthropic's
+own API — it's the `thinking.type: "enabled"` request parameter,
+confirmed against Anthropic's official models table. Sonnet 4.6 and
+Opus 4.6 *do* qualify on their own (see the dataset additions in this
+same pass), just not as "-thinking" variants.
+
+**Current decision**
+No schema change. Not a schema gap — it's a sourcing gap, same
+category as Iteration #2 (aggregators). These stay out of the
+dataset until Google publishes real per-token pricing for
+Antigravity-exposed models through an official channel, or until the
+labeling-accuracy concern is resolved by a source better than one
+forum thread.
+
+**Status**
+Observation only. Revisit if Google ever ships Antigravity models
+through the standard token-priced Gemini API, which would make this
+moot.
