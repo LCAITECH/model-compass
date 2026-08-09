@@ -219,3 +219,99 @@ source.
 Pending. Revisit Mistral Medium 3.5 if Mistral publishes its own
 pricing page entry. Revisit Grok 4.5 if xAI publishes a max-output
 value, and resolve the "SpaceXAI" naming question at that point too.
+
+---
+
+## Iteration #8
+
+**Observation**
+A dedicated research pass (2026-08-09, prompted by the NVIDIA NIM
+investigation in Iteration #7) looked at free/no-cost access paths
+across six providers — NVIDIA NIM, Google Gemini, Anthropic, OpenAI,
+DeepSeek, Groq — to see whether "free access" could be represented as
+an objective schema field (e.g. `rpm`/`tpm`/`rpd` limits). It can't, at
+least not as raw numbers, and the reason itself is the useful finding:
+
+- **Groq** publishes a real, stable, per-model rate-limit table on its
+  own docs (`console.groq.com/docs/rate-limits`) — the one case where a
+  citable official number actually exists.
+- **Google** explicitly does *not* publish a fixed table for the
+  interactive API — its own rate-limits page states limits "depend on
+  a variety of factors... can be viewed in Google AI Studio" and
+  points to a dashboard, not a static doc. Any "5 RPM for Pro" figure
+  in circulation comes from aggregators re-describing that dashboard,
+  not from Google.
+- **NVIDIA NIM** never publishes a rate-limit number anywhere in its
+  own docs (`docs.api.nvidia.com/nim/docs/product` — checked directly,
+  no mention at all). The "~40 RPM" figure that circulates is NVIDIA
+  Developer Forum folklore, informally acknowledged by NVIDIA staff as
+  "dependent on model, use-case, and current traffic" rather than a
+  fixed guarantee. Confirmed independently by the project owner's own
+  account dashboard, which does show "Up to 40 rpm" — real, but a
+  per-account, logged-in view, not a public documented fact the way
+  `SCHEMA.md`'s `[Objective]` fields require (sourced from public
+  provider documentation, reproducible by anyone).
+- **Anthropic** confirms in its own docs that new accounts get "a small
+  amount of free credits" but deliberately never states the figure
+  (commonly reported as $5 by third parties). No continuous free tier,
+  trial only.
+- **OpenAI**'s current docs mention a "Free" tier at "$100/month" for
+  users in allowed geographies, which contradicts older third-party
+  reports of a one-time $5 credit — ambiguous enough that it wasn't
+  chased further this pass.
+- **DeepSeek** confirms no free tier at all, anywhere in its official
+  pricing docs.
+
+Knowledge-cutoff dates came up in the same discussion: Llama 3.1 (Dec
+2023) and GPT-OSS-120B (Jun 2024) — both official model cards — are
+genuinely older, but that's a property of *those specific* open-weight
+models being older, not a property of "NIM" or "free access" as a
+category. DeepSeek V4 Pro, also hosted on NIM, has an April 2026
+cutoff. Free/cheap access and stale cutoff correlate for older
+commodity open-weight releases, but it isn't a rule of the hosting
+platform.
+
+**Current decision**
+No schema change. Putting raw `rpm`/`tpm`/`rpd` numbers into `SCHEMA.md`
+would violate the project's "never fabricate precision" principle for
+5 of the 6 providers checked — citing a Groq number next to a NVIDIA
+forum number next to a Google dashboard snapshot would misrepresent
+all three as equally solid facts, when they aren't.
+
+What was proposed instead, for the project owner to decide on
+explicitly (not applied yet, per this file's own discipline of raising
+before editing): a single boolean, `has_free_access`, with a
+deliberately narrow definition — *"there currently exists an official,
+documented way to use this specific model without paying for API
+usage, even if rate-limited or otherwise restricted."* `true` only
+when a specific model has demonstrable official free access (Groq's
+documented free-tier models, Google AI Studio's free-tier models);
+`false` by default, including for Anthropic (one-time trial credit
+isn't continuous free access) and for any model where free access is
+suspected but not officially confirmed — never `true` by inference.
+This is a "does a documented path exist" fact, not a "how generous is
+it" fact — the unstable part (exact limits, how long they last, what
+conditions apply) stays out of the schema entirely and continues to
+live in `docs/models/*.md`'s existing "Access" section, in prose, the
+same place subscription-vs-API nuance already lives.
+
+Proposed downstream use, also not implemented: `has_free_access` as a
+*secondary* signal for `budget=LOW`, not a replacement for `cost_tier`
+— e.g. surfacing "also has documented free access" alongside a
+qualifying cheap model, never claiming a model "is free" outright
+(which would misrepresent rate-limited access as if it were
+unconditional).
+
+Separately, NVIDIA NIM raised a genuinely different question that
+doesn't fit this proposal at all: self-hosted / infrastructure-based
+cost (GPU requirements → GPU-hour pricing → operational cost), which is
+a different shape of data than token pricing entirely. Logged as its
+own future direction in `FEATURES.md` ("Planned Capabilities") instead
+of folded into this one, since mixing the two would force an API-shaped
+cost model onto something that isn't priced per token at all.
+
+**Status**
+Proposal documented, not decided. Needs the project owner's explicit
+go-ahead before touching `SCHEMA.md`, any YAML, or `decision/` — this
+file's job is to keep the reasoning from being lost until that
+decision happens, not to make it.

@@ -188,3 +188,23 @@ phases of the [Roadmap](./ROADMAP.md).
   without that evidence behind it is exactly the kind of fabricated-
   confidence badge this project has declined every time it's come up;
   don't add one just because the underlying idea is good.
+- **Self-Hosted / Infrastructure Cost** — for models distributed as
+  open weights and served through an inference platform like NVIDIA
+  NIM, the real question often isn't "what's the per-token price" (many
+  have none, or none NVIDIA itself publishes) but "what does it cost to
+  operate this." NVIDIA's own docs separate this cleanly from token
+  pricing: NIM Day 0 (free, unofficial rate limits, no compliance SLA)
+  vs. NIM Certified (requires NVIDIA AI Enterprise, priced per-GPU —
+  $4,500/GPU/year or ~$1/GPU/hour — flat regardless of model or GPU
+  size), plus an official per-model GPU support matrix (verified GPU
+  SKUs and tensor-parallelism profiles, e.g. Llama 3.1 70B on
+  A100-SXM4-40GB/H100-80GB). That's a genuinely different data shape
+  than `cost.input_per_million`/`output_per_million` — model to GPU
+  requirement to GPU-hour price to operational cost — and forcing it
+  into the existing token-cost fields would misrepresent a flat
+  infrastructure license as if it were a per-token API price. Noted
+  2026-08-09 during the free-access research pass (see
+  `IMPLEMENTATION_NOTES.md`, Iteration #8); not started, not scoped,
+  and explicitly not part of the `has_free_access` proposal in that
+  same iteration — this needs its own schema extension, decided
+  separately, once (or if) it's worth pursuing.
