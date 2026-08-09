@@ -1,24 +1,30 @@
 :root {
   /* Color */
-  --bg: #fafafa;
+  --bg: #f8f9fb;
   --surface: #ffffff;
+  --input-bg: #eef0f6;
   --text: #16161f;
   --text-secondary: #3f3f46;
   --muted: #71717a;
   --border: #e4e4e7;
-  --border-strong: #d4d4d8;
+  --border-strong: #87878f;
 
   --accent: #4f46e5;
   --accent-hover: #4338ca;
+  --accent-strong: #6d28d9;
+  --accent-secondary: #06b6d4;
   --accent-contrast: #ffffff;
   --accent-soft: #eef2ff;
 
-  --positive: #059669;
+  --positive: #047857;
   --positive-soft: #ecfdf5;
   --caution: #b45309;
   --caution-soft: #fffbeb;
   --danger: #b91c1c;
   --danger-soft: #fef2f2;
+  --danger-border: #fecaca;
+
+  --neutral-soft: #f4f4f5;
 
   /* Type */
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -158,12 +164,6 @@ main {
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
   padding: var(--space-6);
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
-}
-
-.card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
 }
 
 .card + .card {
@@ -176,10 +176,6 @@ main {
   box-shadow: var(--shadow-glow);
 }
 
-.card-featured:hover {
-  box-shadow: var(--shadow-glow), var(--shadow-md);
-}
-
 .back-link {
   display: inline-block;
   color: var(--accent);
@@ -190,4 +186,14 @@ main {
 
 .back-link:hover {
   color: var(--accent-hover);
+}
+
+/* Focus */
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }

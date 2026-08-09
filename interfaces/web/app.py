@@ -40,6 +40,7 @@ templates.env.filters["language_name"] = language_name
 
 models = load_dataset(DATASET_DIR)
 languages = sorted({language for model in models for language in model.languages})
+providers = sorted({model.provider for model in models})
 
 
 def _form_context(error: str | None = None) -> dict:
@@ -48,6 +49,7 @@ def _form_context(error: str | None = None) -> dict:
         "budgets": list(BudgetLevel),
         "priorities": list(Priority),
         "use_cases": USE_CASES,
+        "providers": providers,
         "error": error,
     }
 

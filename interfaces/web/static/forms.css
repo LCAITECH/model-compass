@@ -27,6 +27,11 @@ label:first-of-type {
   margin-left: var(--space-1);
   color: var(--muted);
   cursor: help;
+  border-bottom: 1px dotted var(--border-strong);
+}
+
+.help:focus-visible {
+  border-bottom-style: solid;
 }
 
 input[type="text"],
@@ -39,8 +44,8 @@ select {
   font-size: var(--text-base);
   font-family: inherit;
   color: var(--text);
-  background: var(--surface);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  background: var(--input-bg);
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 input[type="text"]:focus,
@@ -48,6 +53,7 @@ input[type="number"]:focus,
 select:focus {
   outline: none;
   border-color: var(--accent);
+  background: var(--accent-soft);
   box-shadow: 0 0 0 4px var(--accent-soft);
 }
 
@@ -69,23 +75,24 @@ fieldset.priorities legend {
   padding: var(--space-3) var(--space-6);
   border: none;
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--accent) 0%, #6d28d9 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
   color: var(--accent-contrast);
-  font-size: var(--text-base);
-  font-weight: 600;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .primary-button:hover {
-  transform: translateY(-1px) scale(1.02);
+  transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(79, 70, 229, 0.32);
-  filter: brightness(1.05);
 }
 
 .primary-button:active {
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
   box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
 }
 
@@ -111,7 +118,7 @@ fieldset.priorities legend {
 .form-error {
   background: var(--danger-soft);
   color: var(--danger);
-  border: 1px solid #fecaca;
+  border: 1px solid var(--danger-border);
   border-radius: var(--radius-sm);
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-sm);
@@ -148,7 +155,7 @@ fieldset.priorities legend {
   height: 220px;
   top: -30px;
   right: -10px;
-  background: #06b6d4;
+  background: var(--accent-secondary);
   opacity: 0.12;
 }
 
@@ -222,11 +229,6 @@ fieldset.priorities legend {
   margin-top: 0;
 }
 
-.form-card {
-  border-color: var(--border-strong);
-  box-shadow: 0 2px 8px rgba(15, 15, 20, 0.06), 0 1px 3px rgba(15, 15, 20, 0.04);
-}
-
 /* How it works */
 
 .how-it-works {
@@ -297,4 +299,28 @@ fieldset.priorities legend {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-soft);
+}
+
+/* Supported models: provider neutrality as a feature, not an afterthought */
+
+.supported-models {
+  padding: var(--space-2) 0 var(--space-6);
+  text-align: center;
+}
+
+.provider-row {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+}
+
+.provider-row li {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }

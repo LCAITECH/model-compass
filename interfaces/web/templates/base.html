@@ -4,12 +4,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Model Compass{% endblock %}</title>
+  <meta name="description" content="An open-source decision engine that helps developers choose the most suitable AI model for their specific use case — with a reason, never just a model name.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Model Compass">
+  <meta property="og:title" content="Model Compass">
+  <meta property="og:description" content="Developers don't need more information. They need better decisions.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
   <link rel="stylesheet" href="/static/base.css">
   <link rel="stylesheet" href="/static/forms.css">
+  <link rel="stylesheet" href="/static/decision-form.css">
   <link rel="stylesheet" href="/static/result.css">
   <link rel="stylesheet" href="/static/result-profile.css">
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
   <header class="site-header">
     <a class="brand" href="/">Model Compass</a>
     <p class="tagline">Developers don't need more information. They need better decisions.</p>

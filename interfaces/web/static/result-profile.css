@@ -264,6 +264,6 @@
 }
 
 .chip-muted {
-  background: #f4f4f5;
+  background: var(--neutral-soft);
   color: var(--text-secondary);
 }

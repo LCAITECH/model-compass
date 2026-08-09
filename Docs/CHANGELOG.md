@@ -19,6 +19,48 @@ public release to version against.
 
 ---
 
+## 2026-08-09 — v0.1.0
+
+**Accessibility, responsive, and visual design pass — no changes to the
+recommendation engine or the dataset.**
+
+- Fixed two real color-contrast failures against WCAG AA (a green text
+  color and a form-input border that were both too light to reliably
+  read), added a visible focus ring to every interactive element, made
+  the three help tooltips reachable by keyboard, and gave two page
+  sections real `<h2>` headings instead of styled paragraphs so they
+  show up when navigating by heading (a common screen-reader pattern).
+- Audited both pages at 340px and 768px, including the densest state
+  of the result page (a budget entered, showing capacity bars and a
+  savings callout) — no horizontal overflow anywhere.
+- Added a favicon, a meta description, and Open Graph tags — none of
+  that existed before.
+- Added a "Supported models" section to the landing page, listing
+  every provider currently in the dataset. The list is generated from
+  the dataset itself, not hand-typed, so it grows on its own as new
+  providers are added.
+- A hierarchy and consistency pass on the result page: section titles
+  now read as more important than small inline labels (they didn't
+  before), removed a hover animation from cards that aren't actually
+  clickable, and consolidated a handful of colors that had drifted
+  outside the shared palette back into it.
+- Rebuilt the form itself. It no longer sits inside a white card
+  floating on the page — it's laid out as three numbered stages (Use
+  case, Priorities, Budget) directly on the page, with a two-column
+  layout on desktop instead of the previous single stacked column.
+  Priorities now comes before Budget: it's the input that actually
+  drives which model wins (the first priority you pick matters most),
+  while Budget only filters candidates out — and moving it earlier
+  puts it next to the quick-pick buttons that pre-fill it. Collapses
+  back to a single column below 640px, audited the same way as above.
+- None of this touched `decision/`, the dataset, or how a
+  recommendation is computed — verified before and after every step
+  with the full test suite and, for anything scoped as "visual only,"
+  a `git status` check confirming zero Python files changed.
+
+Tests: 62/62, unchanged in count (this pass added no new engine
+behavior to test).
+
 ## 2026-08-07 — v0.1.0
 
 **Grew the model dataset from 5 to 19 models, and made every entry

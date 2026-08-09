@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% import "_icons.html" as icons %}
 {% block title %}Model Compass — What model should I use?{% endblock %}
+{% block body_class %}page-index{% endblock %}
 {% block content %}
 <div class="fade-in">
 <div class="hero">
@@ -20,76 +21,120 @@
   <li>{{ icons.check() }}Deterministic</li>
 </ul>
 
-<div class="card form-card">
-  <form method="post" action="/recommend" class="context-form">
-    {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
+<form method="post" action="/recommend" class="context-form decision-form">
+  {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
 
-    <label>Popular use cases <span class="optional">(optional shortcut)</span></label>
-    <div class="pill-row">
-      {% for label, priorities in use_cases[:5] %}
-      <button type="button" class="use-case-pill" data-label="{{ label }}" data-priorities="{{ priorities | map(attribute='value') | join(',') }}">{{ label }}</button>
-      {% endfor %}
+  <section class="decision-stage" aria-labelledby="stage-use-case">
+    <h2 id="stage-use-case" class="stage-heading"><span class="stage-index">01</span><span class="stage-name">Use case</span></h2>
+
+    <div class="decision-field">
+      <div class="field-label"><label>Popular use cases <span class="optional">(optional shortcut)</span></label></div>
+      <div class="field-control">
+        <div class="pill-row">
+          {% for label, priorities in use_cases[:5] %}
+          <button type="button" class="use-case-pill" data-label="{{ label }}" data-priorities="{{ priorities | map(attribute='value') | join(',') }}">{{ label }}</button>
+          {% endfor %}
+        </div>
+      </div>
     </div>
 
-    <label for="use_case_preset">Use case <span class="optional">(optional)</span></label>
-    <select id="use_case_preset">
-      <option value="">Choose a common use case, or type your own below</option>
-      {% for label, priorities in use_cases %}
-      <option value="{{ label }}" data-priorities="{{ priorities | map(attribute='value') | join(',') }}">{{ label }}</option>
-      {% endfor %}
-    </select>
-    <input type="text" id="use_case" name="use_case" placeholder="e.g. Telegram community bot">
+    <div class="decision-field">
+      <div class="field-label"><label for="use_case_preset">Use case <span class="optional">(optional)</span></label></div>
+      <div class="field-control">
+        <select id="use_case_preset">
+          <option value="">Choose a common use case, or type your own below</option>
+          {% for label, priorities in use_cases %}
+          <option value="{{ label }}" data-priorities="{{ priorities | map(attribute='value') | join(',') }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+        <input type="text" id="use_case" name="use_case" placeholder="e.g. Telegram community bot">
+      </div>
+    </div>
 
-    <label for="language">Language</label>
-    <select id="language" name="language" required>
-      <option value="" disabled selected>Choose a language</option>
-      {% for lang in languages %}
-      <option value="{{ lang }}">{{ lang | language_name }}</option>
-      {% endfor %}
-    </select>
+    <div class="decision-field">
+      <div class="field-label"><label for="language">Language</label></div>
+      <div class="field-control">
+        <select id="language" name="language" required>
+          <option value="" disabled selected>Choose a language</option>
+          {% for lang in languages %}
+          <option value="{{ lang }}">{{ lang | language_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </section>
 
-    <label for="budget">
-      Budget
-      <span class="help" title="Your estimated monthly API budget. More capable models usually cost more per token — but using different models for different tasks (routing) can reduce your total spend.">ⓘ</span>
-    </label>
-    <select id="budget" name="budget" required>
-      <option value="" disabled selected>Choose a budget</option>
-      {% for b in budgets %}
-      <option value="{{ b.value }}">{{ b.value | capitalize }}</option>
-      {% endfor %}
-    </select>
-
-    <label for="monthly_budget_usd">
-      Monthly budget in $ <span class="optional">(optional)</span>
-      <span class="help" title="If you enter a dollar amount, we'll show roughly how many tokens per month that buys with the recommended model — real math on real pricing, not an estimate of how many 'requests' that is.">ⓘ</span>
-    </label>
-    <input type="number" id="monthly_budget_usd" name="monthly_budget_usd" min="0" step="0.01" placeholder="e.g. 10">
+  <section class="decision-stage" aria-labelledby="stage-priorities">
+    <h2 id="stage-priorities" class="stage-heading"><span class="stage-index">02</span><span class="stage-name">Priorities</span></h2>
 
     <fieldset class="priorities">
       <legend>
         Priorities <span class="optional">(most important first)</span>
-        <span class="help" title="If getting this wrong would be costly (production code, infrastructure, anything hard to undo), put reasoning or coding above cost. A stronger model that succeeds on the first try is often cheaper in practice than a cheaper one that needs several corrections.">ⓘ</span>
+        <span class="help" tabindex="0" title="If getting this wrong would be costly (production code, infrastructure, anything hard to undo), put reasoning or coding above cost. A stronger model that succeeds on the first try is often cheaper in practice than a cheaper one that needs several corrections." aria-label="If getting this wrong would be costly (production code, infrastructure, anything hard to undo), put reasoning or coding above cost. A stronger model that succeeds on the first try is often cheaper in practice than a cheaper one that needs several corrections.">ⓘ</span>
       </legend>
+      <span class="rank-label">Rank</span>
       {% for rank in [1, 2, 3] %}
-      <label for="priority_{{ rank }}">
-        Priority #{{ rank }}
-        {% if rank > 1 %}<span class="optional">(optional)</span>{% endif %}
-      </label>
-      <select id="priority_{{ rank }}" name="priority_{{ rank }}">
-        <option value="">—</option>
-        {% for p in priorities %}
-        <option value="{{ p.value }}">{{ p.value | replace('_', ' ') | capitalize }}</option>
-        {% endfor %}
-      </select>
+      <div class="decision-field priority-row">
+        <div class="field-label">
+          <span class="rank-badge" aria-hidden="true">{{ rank }}</span>
+          <label for="priority_{{ rank }}">
+            Priority #{{ rank }}
+            {% if rank > 1 %}<span class="optional">(optional)</span>{% endif %}
+          </label>
+        </div>
+        <div class="field-control">
+          <select id="priority_{{ rank }}" name="priority_{{ rank }}">
+            <option value="">—</option>
+            {% for p in priorities %}
+            <option value="{{ p.value }}">{{ p.value | replace('_', ' ') | capitalize }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
       {% endfor %}
     </fieldset>
+  </section>
 
-    <button type="submit" class="primary-button">Get a recommendation</button>
-  </form>
-</div>
+  <section class="decision-stage" aria-labelledby="stage-budget">
+    <h2 id="stage-budget" class="stage-heading"><span class="stage-index">03</span><span class="stage-name">Budget</span></h2>
+
+    <div class="decision-field-pair">
+      <div class="decision-field">
+        <div class="field-label">
+          <label for="budget">
+            Budget
+            <span class="help" tabindex="0" title="Your estimated monthly API budget. More capable models usually cost more per token — but using different models for different tasks (routing) can reduce your total spend." aria-label="Your estimated monthly API budget. More capable models usually cost more per token — but using different models for different tasks (routing) can reduce your total spend.">ⓘ</span>
+          </label>
+        </div>
+        <div class="field-control">
+          <select id="budget" name="budget" required>
+            <option value="" disabled selected>Choose a budget</option>
+            {% for b in budgets %}
+            <option value="{{ b.value }}">{{ b.value | capitalize }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="decision-field">
+        <div class="field-label">
+          <label for="monthly_budget_usd">
+            Monthly budget in $ <span class="optional">(optional)</span>
+            <span class="help" tabindex="0" title="If you enter a dollar amount, we'll show roughly how many tokens per month that buys with the recommended model — real math on real pricing, not an estimate of how many 'requests' that is." aria-label="If you enter a dollar amount, we'll show roughly how many tokens per month that buys with the recommended model — real math on real pricing, not an estimate of how many 'requests' that is.">ⓘ</span>
+          </label>
+        </div>
+        <div class="field-control">
+          <input type="number" id="monthly_budget_usd" name="monthly_budget_usd" min="0" step="0.01" placeholder="e.g. 10">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <button type="submit" class="primary-button">Get a recommendation</button>
+</form>
 
 <div class="how-it-works">
-  <p class="eyebrow">How it works</p>
+  <h2 class="eyebrow">How it works</h2>
   <ol>
     <li>
       <span class="step-number">1</span>
@@ -113,6 +158,15 @@
       </div>
     </li>
   </ol>
+</div>
+
+<div class="supported-models">
+  <h2 class="eyebrow">Supported models from</h2>
+  <ul class="provider-row">
+    {% for provider in providers %}
+    <li>{{ provider }}</li>
+    {% endfor %}
+  </ul>
 </div>
 </div>
 {% endblock %}
