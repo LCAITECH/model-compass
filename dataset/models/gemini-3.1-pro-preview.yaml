@@ -42,3 +42,6 @@ cost:
 ecosystem:
   integration_ease: high
   maturity: experimental
+
+access:
+  has_free_access: false

@@ -97,6 +97,11 @@ revisited.
 Standard DeepSeek API at the pricing in `cost.*` above. No other
 access surface checked for this entry.
 
+**Free access (`access.has_free_access`):** `false`. DeepSeek's own
+pricing docs (same page cited below) make no mention of any free tier
+— confirmed directly during the 2026-08-09 free-access research pass
+(`IMPLEMENTATION_NOTES.md`, Iteration #8).
+
 ## Sources
 
 - [DeepSeek Models & Pricing](https://api-docs.deepseek.com/quick_start/pricing) — cost fields, context window, max output.

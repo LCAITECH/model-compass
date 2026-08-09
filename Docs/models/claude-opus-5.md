@@ -95,6 +95,11 @@ Microsoft Foundry, at (or close to) the pricing in `cost.*` above.
 Consumer-subscription access is a separate question this section
 deliberately doesn't answer — see `docs/models/README.md`.
 
+**Free access (`access.has_free_access`):** `false`. Anthropic's own
+Console docs describe only a one-time starter credit for new accounts,
+not continuous free access — doesn't meet the strict bar defined in
+`SCHEMA.md`'s Access section.
+
 ## Sources
 
 - [Claude API pricing](https://platform.claude.com/docs/en/docs/about-claude/pricing) — cost fields.

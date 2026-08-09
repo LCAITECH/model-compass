@@ -81,6 +81,11 @@ DeepSeek V4 Flash at $0.42, essentially tied).
 Standard OpenAI API at the pricing in `cost.*` above. No other access
 surface checked for this entry.
 
+**Free access (`access.has_free_access`):** `false`. OpenAI's official
+API pricing page lists no free tier for any language model — the only
+free entries there are the moderation endpoint and storage allowances,
+unrelated to this model.
+
 ## Sources
 
 - [GPT-5 Nano model card](https://developers.openai.com/api/docs/models/gpt-5-nano) — capabilities, context window, max output, knowledge cutoff (May 31, 2024).

@@ -84,6 +84,48 @@ def test_recommend_shows_real_savings_when_a_cheaper_option_exists():
     assert "DeepSeek V4 Flash" in response.text
 
 
+def test_free_access_chip_shown_for_low_budget_winner_with_free_access():
+    # Budget=low, priority=context_window -> gemini-2.5-flash wins and
+    # has access.has_free_access=True (see docs/models/gemini-2.5-flash.md).
+    response = client.post(
+        "/recommend",
+        data={
+            "use_case": "",
+            "language": "en",
+            "budget": "low",
+            "priority_1": "context_window",
+        },
+    )
+
+    assert response.status_code == 200
+    assert "Gemini 2.5 Flash" in response.text
+    assert "Free access also documented" in response.text
+    assert (
+        "https://github.com/LCAITECH/model-compass/blob/main/Docs/models/gemini-2.5-flash.md#access"
+        in response.text
+    )
+
+
+def test_free_access_chip_not_shown_above_low_budget():
+    # Same winner (gemini-2.5-flash) and same has_free_access=True as
+    # above, only budget differs -- isolates that the chip is
+    # budget-gated, not just tied to the model.
+    response = client.post(
+        "/recommend",
+        data={
+            "use_case": "",
+            "language": "en",
+            "budget": "high",
+            "priority_1": "context_window",
+        },
+    )
+
+    assert response.status_code == 200
+    assert "Gemini 2.5 Flash" in response.text
+    assert "Free access also documented" not in response.text
+    assert "Read access docs" not in response.text
+
+
 def test_recommend_rejects_a_missing_priority():
     response = client.post(
         "/recommend",

@@ -96,6 +96,14 @@ Also downloadable as open-weights (`license: open-weights`, Apache
 rest of this dataset's proprietary models, though not priced per-token
 when self-hosted, so not reflected in `cost.*`.
 
+**Free access (`access.has_free_access`):** `false`. Mistral's own docs
+confirm La Plateforme has a free API tier generally ("designed to allow
+you to try and explore their API"), but no official source found this
+pass confirms Mistral Large 3 specifically is included rather than
+restricted to smaller models — defaults to `false` per the strict,
+no-inference rule in `SCHEMA.md`'s Access section. Revisit if Mistral
+publishes a model-by-model free-tier breakdown.
+
 ## Sources
 
 - [Mistral models overview](https://docs.mistral.ai/getting-started/models/models_overview/) — identity, license, version tag.

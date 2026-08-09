@@ -87,6 +87,12 @@ on `claude-sonnet-5.md`).
 Standard Gemini API — Google AI Studio and Vertex AI — at the pricing
 in `cost.*` above. No other access surface checked for this entry.
 
+**Free access (`access.has_free_access`):** `false`. Google's own
+Gemini API pricing page marks this model's free-tier rows "Not
+available" — "Free of charge" is listed only for the Priority tier
+input, not standard usage — confirmed directly against
+`ai.google.dev/gemini-api/docs/pricing`, 2026-08-09.
+
 ## Sources
 
 - [Gemini 2.5 Pro model card](https://ai.google.dev/gemini-api/docs/models/gemini-2.5-pro) — capabilities, context window, max output, knowledge cutoff (January 2025).

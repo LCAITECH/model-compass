@@ -88,6 +88,13 @@
     </div>
   </div>
 
+  {% if context.budget.value == 'low' and recommendation.recommended.access.has_free_access %}
+  <div class="chip-row-with-link">
+    <span class="chip chip-positive">{{ icons.check() }}Free access also documented — see this model's Access notes for limits</span>
+    <a class="chip-link" href="https://github.com/LCAITECH/model-compass/blob/main/Docs/models/{{ recommendation.recommended.id }}.md#access" target="_blank" rel="noopener">Read access docs &rarr;</a>
+  </div>
+  {% endif %}
+
   {% if input_capacity %}
   <div class="affordability">
     <p>With ${{ "%.2f"|format(budget_usd) }}/month, this model gets you approximately:</p>
@@ -165,7 +172,13 @@
         {% elif alt.model.cost.blended > recommendation.recommended.cost.blended %}
         <span class="chip chip-muted">More expensive</span>
         {% endif %}
+        {% if context.budget.value == 'low' and alt.model.access.has_free_access %}
+        <span class="chip chip-positive">Free access documented</span>
+        {% endif %}
       </div>
+      {% if context.budget.value == 'low' and alt.model.access.has_free_access %}
+      <a class="chip-link" href="https://github.com/LCAITECH/model-compass/blob/main/Docs/models/{{ alt.model.id }}.md#access" target="_blank" rel="noopener">Read access docs &rarr;</a>
+      {% endif %}
       <span class="muted">#{{ alt.rank }} of {{ recommendation.total_qualifying }} — ${{ "%.2f"|format(alt.model.cost.input_per_million) }} / ${{ "%.2f"|format(alt.model.cost.output_per_million) }} per 1M tokens</span>
       {% if alt.reasons %}
       <ul class="standout-reasons">

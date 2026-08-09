@@ -148,6 +148,29 @@ changes.
 | `ecosystem.integration_ease`| enum | `[Editorial]` | `low`, `medium`, `high` |
 | `ecosystem.maturity`        | enum | `[Editorial]` | `experimental`, `stable`, `mature` |
 
+### Access
+
+| Field                       | Type    | Category      |
+|-------------------------------|---------|---------------|
+| `access.has_free_access`    | boolean | `[Objective]` |
+
+**Definition, deliberately narrow:** there currently exists an official,
+documented way to use this specific model without paying for API usage —
+even if rate-limited, quota-capped, or otherwise restricted. `false` by
+default. Only becomes `true` when a specific model has demonstrable official
+free access from the provider's own documentation — never `true` by
+inference, and never based on a one-time trial credit (that's temporary, not
+continuous free access).
+
+The boolean says whether a documented path exists — not how generous it is.
+Exact limits, conditions, and expiry are not objective facts stable enough to
+put in this schema (see `Docs/IMPLEMENTATION_NOTES.md`, Iteration #8: most
+providers' rate limits are dynamic per-account dashboards or simply
+undocumented, only one of six providers checked publishes a stable official
+table). That detail stays in prose, in that model's `docs/models/{id}.md`
+Access section, the same place other access nuance (subscription tiers,
+multi-surface access) already lives.
+
 ---
 
 ## Example — `gemini-2.5-flash.yaml`
@@ -190,6 +213,9 @@ cost:
 ecosystem:
   integration_ease: high
   maturity: stable
+
+access:
+  has_free_access: false
 ```
 
 *Values in this example are illustrative and may not reflect the
@@ -213,6 +239,7 @@ document, is the source of truth for actual values.*
   non-negative numbers.
 - `operational.context_window` and `operational.max_output` must be
   positive integers.
+- `access.has_free_access` must be a boolean.
 
 ## Contributing a New Model
 

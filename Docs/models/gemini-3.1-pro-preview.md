@@ -84,7 +84,7 @@ the tiered-pricing pattern already logged in
 same convention as `gemini-2.5-pro`. Batch, Flex, and Priority tiers
 also exist at different rates, not captured here.
 
-## Access — where this model can actually be called from
+## Access
 
 Directly relevant to the discussion that led to re-checking this
 model: Gemini 3.1 Pro Preview **is** reachable through the standard,
@@ -96,6 +96,11 @@ why Antigravity itself wasn't treated as a valid source) — but
 Antigravity is one more surface this model happens to be available
 through, not the only way to reach it. The `cost.*` values above
 reflect the standard API, not Antigravity's subscription tiers.
+
+**Free access (`access.has_free_access`):** `false`. Google's own
+Gemini API pricing page marks this model's free-tier rows "Not
+available" for Standard, Batch, and Flex — confirmed directly against
+`ai.google.dev/gemini-api/docs/pricing`, 2026-08-09.
 
 ## Ecosystem `[Editorial]`
 

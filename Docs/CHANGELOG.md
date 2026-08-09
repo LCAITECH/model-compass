@@ -19,6 +19,39 @@ public release to version against.
 
 ---
 
+## 2026-08-09 — v0.1.0 (2)
+
+**Added `has_free_access` — a strict, single-boolean answer to "can I use
+this model without paying," across the whole dataset.**
+
+- Two research passes this week (documented in `IMPLEMENTATION_NOTES.md`,
+  Iteration #8) looked at whether free-access rate limits (NVIDIA NIM,
+  Google's free tier, Groq, and others) could become part of the dataset.
+  They can't, honestly — only one of six providers checked publishes a
+  stable, official rate-limit table; the rest are dynamic per-account
+  dashboards or simply undocumented. Putting raw numbers in the dataset
+  would have meant presenting a Groq figure as equally solid as NVIDIA
+  Developer Forum folklore.
+- What survived instead: a new `access.has_free_access` field, strictly
+  defined as "does an official, documented free-access path exist for this
+  specific model today" — never inferred, never based on a one-time trial
+  credit. Every one of the 19 dataset entries was individually checked
+  against its provider's own pricing docs. Three qualify: Gemini 2.5 Flash,
+  Gemini 3.6 Flash, and Gemini 3.5 Flash-Lite, all confirmed "Free of
+  charge" on Google's own pricing page. Every other model — including
+  Gemini's own Pro-tier releases, all Claude, OpenAI, DeepSeek, and Mistral
+  entries — is `false`, most because no free path exists at all, one
+  (Mistral Large 3) because a free API tier exists at the platform level but
+  couldn't be confirmed for that specific model.
+- Surfaced in the web interface as a secondary signal, not a headline claim:
+  a small "Free access also documented" note appears next to pricing, but
+  only when the developer's stated budget is Low — it never claims a model
+  "is free" outright, since real-world limits still apply.
+- No changes to `decision/evaluator/` or `decision/explainer/` — the field
+  doesn't affect qualification or ranking, only what's displayed.
+
+Tests: 62 → 67.
+
 ## 2026-08-09 — v0.1.0
 
 **Accessibility, responsive, and visual design pass — no changes to the

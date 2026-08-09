@@ -90,6 +90,11 @@ exposed inside Google Antigravity labeled "(thinking)" — see
 `IMPLEMENTATION_NOTES.md` Iteration #6 for why Antigravity isn't a
 valid pricing source.
 
+**Free access (`access.has_free_access`):** `false`. Anthropic's own
+Console docs describe only a one-time starter credit for new accounts,
+not continuous free access — doesn't meet the strict bar defined in
+`SCHEMA.md`'s Access section.
+
 ## Sources
 
 - [Claude models overview, "Legacy models" section](https://platform.claude.com/docs/en/docs/about-claude/models/overview) — pricing, context window, max output, capabilities.

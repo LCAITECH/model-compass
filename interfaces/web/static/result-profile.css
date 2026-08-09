@@ -267,3 +267,21 @@
   background: var(--neutral-soft);
   color: var(--text-secondary);
 }
+
+.chip-row-with-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.chip-link {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.chip-link:hover {
+  color: var(--accent-hover);
+}

@@ -104,6 +104,11 @@ quality on this dataset's dimensions.
 Standard OpenAI API at the pricing in `cost.*` above. No other access
 surface checked for this entry.
 
+**Free access (`access.has_free_access`):** `false`. OpenAI's official
+API pricing page lists no free tier for any language model — the only
+free entries there are the moderation endpoint and storage allowances,
+unrelated to this model.
+
 ## Sources
 
 - [GPT-4o model card](https://developers.openai.com/api/docs/models/gpt-4o) — capabilities, context window, max output, knowledge cutoff (Oct 1, 2023), availability status.

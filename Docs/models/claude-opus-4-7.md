@@ -83,6 +83,11 @@ current Opus 5 pricing.
 Standard Claude API, plus Amazon Bedrock, Google Cloud Vertex AI, and
 Microsoft Foundry, at (or close to) the pricing in `cost.*` above.
 
+**Free access (`access.has_free_access`):** `false`. Anthropic's own
+Console docs describe only a one-time starter credit for new accounts,
+not continuous free access — doesn't meet the strict bar defined in
+`SCHEMA.md`'s Access section.
+
 ## Sources
 
 - [Claude models overview, "Legacy models" section](https://platform.claude.com/docs/en/docs/about-claude/models/overview) — pricing, context window, max output, capabilities.

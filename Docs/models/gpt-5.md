@@ -80,6 +80,11 @@ Confirmed directly against OpenAI's pricing page (standard tier).
 Standard OpenAI API at the pricing in `cost.*` above. No other access
 surface checked for this entry.
 
+**Free access (`access.has_free_access`):** `false`. OpenAI's official
+API pricing page lists no free tier for any language model — the only
+free entries there are the moderation endpoint and storage allowances,
+unrelated to this model.
+
 ## Sources
 
 - [OpenAI API pricing](https://developers.openai.com/api/docs/pricing) — cost fields.

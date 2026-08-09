@@ -46,6 +46,13 @@ def test_claude_sonnet_5_fields_round_trip():
     assert model.quality.reasoning == QualityLevel.VERY_HIGH
     assert model.operational.context_window == 1_000_000
     assert model.cost.input_per_million == 2.00
+    assert model.access.has_free_access is False
+
+
+def test_gemini_2_5_flash_has_free_access():
+    model = load_model_file(DATASET_DIR / "gemini-2.5-flash.yaml")
+
+    assert model.access.has_free_access is True
 
 
 @pytest.mark.parametrize("model_id", sorted(EXPECTED_IDS))
@@ -86,6 +93,8 @@ cost:
 ecosystem:
   integration_ease: high
   maturity: stable
+access:
+  has_free_access: false
 """
     path = tmp_path / "expected-id.yaml"
     path.write_text(content, encoding="utf-8")
@@ -137,6 +146,8 @@ cost:
 ecosystem:
   integration_ease: high
   maturity: stable
+access:
+  has_free_access: false
 """
     path = tmp_path / "broken.yaml"
     path.write_text(content, encoding="utf-8")
@@ -178,6 +189,8 @@ cost:
 ecosystem:
   integration_ease: high
   maturity: stable
+access:
+  has_free_access: false
 """
     path = tmp_path / "broken.yaml"
     path.write_text(content, encoding="utf-8")
@@ -186,3 +199,87 @@ ecosystem:
         load_model_file(path)
 
     assert "invalid license" in str(exc_info.value)
+
+
+def test_rejects_missing_access_field(tmp_path):
+    content = """
+id: broken
+name: Broken
+provider: Test
+version: "1"
+license: proprietary
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+quality:
+  reasoning: high
+  coding: high
+  creative_writing: high
+  instruction_following: high
+languages: [en]
+language_quality:
+  en: high
+operational:
+  context_window: 1000
+  max_output: 1000
+cost:
+  input_per_million: 1.0
+  output_per_million: 1.0
+ecosystem:
+  integration_ease: high
+  maturity: stable
+"""
+    path = tmp_path / "broken.yaml"
+    path.write_text(content, encoding="utf-8")
+
+    with pytest.raises(DatasetValidationError) as exc_info:
+        load_model_file(path)
+
+    assert "missing required field 'access'" in str(exc_info.value)
+
+
+def test_rejects_non_boolean_has_free_access(tmp_path):
+    content = """
+id: broken
+name: Broken
+provider: Test
+version: "1"
+license: proprietary
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+quality:
+  reasoning: high
+  coding: high
+  creative_writing: high
+  instruction_following: high
+languages: [en]
+language_quality:
+  en: high
+operational:
+  context_window: 1000
+  max_output: 1000
+cost:
+  input_per_million: 1.0
+  output_per_million: 1.0
+ecosystem:
+  integration_ease: high
+  maturity: stable
+access:
+  has_free_access: "yes"
+"""
+    path = tmp_path / "broken.yaml"
+    path.write_text(content, encoding="utf-8")
+
+    with pytest.raises(DatasetValidationError) as exc_info:
+        load_model_file(path)
+
+    assert "access.has_free_access must be a boolean" in str(exc_info.value)

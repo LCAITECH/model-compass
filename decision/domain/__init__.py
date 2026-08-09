@@ -1,4 +1,5 @@
 from decision.domain.ai_model import (
+    Access,
     AIModel,
     Capabilities,
     Cost,
@@ -16,6 +17,7 @@ from decision.domain.context import BudgetLevel, Context, Priority
 from decision.domain.recommendation import Alternative, Exclusion, Outranked, Recommendation
 
 __all__ = [
+    "Access",
     "AIModel",
     "Alternative",
     "BudgetLevel",

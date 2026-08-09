@@ -94,6 +94,18 @@ class Ecosystem:
 
 
 @dataclass(frozen=True)
+class Access:
+    """Whether a documented, official free-access path exists today.
+
+    Deliberately just this one boolean — see SCHEMA.md's Access section
+    for the strict definition. Rate limits and other unstable detail
+    stay out of the schema entirely and live in docs/models/*.md prose.
+    """
+
+    has_free_access: bool
+
+
+@dataclass(frozen=True)
 class AIModel:
     id: str
     name: str
@@ -107,3 +119,4 @@ class AIModel:
     operational: Operational
     cost: Cost
     ecosystem: Ecosystem
+    access: Access

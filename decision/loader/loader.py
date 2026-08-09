@@ -13,6 +13,7 @@ from pathlib import Path
 import yaml
 
 from decision.domain.ai_model import (
+    Access,
     AIModel,
     Capabilities,
     Cost,
@@ -39,6 +40,7 @@ REQUIRED_TOP_LEVEL_FIELDS = (
     "operational",
     "cost",
     "ecosystem",
+    "access",
 )
 
 REQUIRED_CAPABILITIES = (
@@ -140,6 +142,10 @@ def _validate(raw, path: Path) -> list[str]:
     if ecosystem.get("maturity") not in _values(Maturity):
         issues.append(f"invalid ecosystem.maturity='{ecosystem.get('maturity')}'")
 
+    access = raw["access"]
+    if not isinstance(access.get("has_free_access"), bool):
+        issues.append("access.has_free_access must be a boolean")
+
     return issues
 
 
@@ -182,4 +188,5 @@ def _to_ai_model(raw: dict) -> AIModel:
             integration_ease=IntegrationEase(ecosystem["integration_ease"]),
             maturity=Maturity(ecosystem["maturity"]),
         ),
+        access=Access(**raw["access"]),
     )

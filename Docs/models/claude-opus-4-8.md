@@ -105,6 +105,11 @@ Microsoft Foundry, at (or close to) the pricing in `cost.*` above —
 same access surface as Opus 5, unsurprisingly, since it's the model
 being recommended as the migration target.
 
+**Free access (`access.has_free_access`):** `false`. Anthropic's own
+Console docs describe only a one-time starter credit for new accounts,
+not continuous free access — doesn't meet the strict bar defined in
+`SCHEMA.md`'s Access section.
+
 ## Sources
 
 - [Claude models overview, "Legacy models" section](https://platform.claude.com/docs/en/docs/about-claude/models/overview) — pricing, context window, max output, capabilities, explicit "consider migrating" language.

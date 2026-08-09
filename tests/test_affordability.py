@@ -1,6 +1,7 @@
 import pytest
 
 from decision.domain import (
+    Access,
     AIModel,
     Capabilities,
     Cost,
@@ -35,6 +36,7 @@ def _model(input_per_million: float, output_per_million: float, id: str = "test-
         operational=Operational(context_window=1000, max_output=1000),
         cost=Cost(input_per_million=input_per_million, output_per_million=output_per_million),
         ecosystem=Ecosystem(IntegrationEase.LOW, Maturity.STABLE),
+        access=Access(has_free_access=False),
     )
 
 

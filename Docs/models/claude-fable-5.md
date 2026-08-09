@@ -8,7 +8,7 @@ the sourcing rule it follows.
 
 ---
 
-## Access — the part that doesn't fit anywhere in SCHEMA.md yet
+## Access
 
 This is the model that motivated the user's "how do I actually get
 access to this" question, so it gets documented here in full even
@@ -36,6 +36,13 @@ for Pro"). That volatility is itself a reason this belongs in prose
 here rather than a rigid schema field for now — a field that goes
 stale every few weeks needs a different design than "one enum value
 per model."
+
+**Free access (`access.has_free_access`):** `false`. None of the three
+paths above is continuous, unconditional free access — the Pro/Team
+Standard credit is explicitly one-time, and Max/Team Premium requires
+an existing paid subscription. Doesn't meet the strict bar defined in
+`SCHEMA.md`'s Access section (the open discussion referenced above is
+now resolved — this is that field).
 
 ## Identity
 

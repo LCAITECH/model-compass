@@ -43,6 +43,12 @@ don't have stable per-token pricing to source honestly. The Access
 section here only answers "which API can I call," not "what does my
 existing subscription get me."
 
+Since 2026-08-09, the Access section also states this model's
+`access.has_free_access` value and its source — see `SCHEMA.md`'s
+Access section for the strict definition. That field only says whether
+a documented free path exists; the unstable detail (exact limits,
+conditions) stays here in prose, never as a structured field.
+
 ## Sourcing rule
 
 If a field has no clear official source, it is **not** written up as
