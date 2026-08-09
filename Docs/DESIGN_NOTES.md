@@ -11,7 +11,92 @@ an instruction to build it now — see the current status note below.
 
 ---
 
-## Current status (2026-08-06)
+## Current status (2026-08-09)
+
+The items flagged as open below (responsive/mobile, accessibility,
+favicon/metadata) are now resolved — see the dated update at the top
+of this section for detail and the reasoning behind each. Dark mode
+and empty/loading states remain genuinely open. Kept the original
+2026-08-06 status note below as-is, unedited, for the same reason the
+"Rejected explorations" section below exists: knowing what was true
+*before* a pass, and why it changed, is more useful than a silently
+updated snapshot.
+
+**Update (2026-08-09) — accessibility, responsive, and a form
+redesign.** Three passes, all reviewed and approved incrementally
+before implementation, all verified against the real test suite and a
+live browser at each step:
+
+1. **Accessibility + responsive audit.** Fixed two real WCAG AA
+   contrast failures (a green text color, a form-input border, both
+   too light), added a visible focus ring across every interactive
+   element, made the three help tooltips keyboard-reachable, and
+   promoted two section labels to real `<h2>` headings. Audited both
+   pages down to 340px and up to 768px — no horizontal overflow
+   anywhere, including the result page's densest state. Added a
+   favicon and Open Graph metadata, neither of which existed before.
+2. **Hierarchy and token consistency pass.** Card section titles
+   (`<h2>`) now read as more important than small inline labels — they
+   didn't before, both used the same small-caps muted treatment.
+   Removed a hover-lift animation from cards that aren't actually
+   clickable (a false affordance). Consolidated four colors that had
+   drifted outside the `:root` token system back into it.
+3. **The form redesign — the bigger one.** The form no longer sits in
+   a white card floating on the page. It's now three numbered stages
+   (`01 Use case`, `02 Priorities`, `03 Budget`) laid directly on the
+   page canvas, two-column on desktop. See "Guiding principle" and the
+   new subsection below for the reasoning and what was deliberately
+   left out.
+
+All three passes: zero changes to `decision/` or the dataset, 62/62
+tests passing throughout.
+
+### The form redesign, in detail
+
+**The actual problem wasn't "the form isn't pretty enough."** It was
+structural: a single stacked column of label-above-input inside a
+white card is the generic shape of every SaaS signup form on the
+internet, independent of how polished the CSS is. No amount of color
+or shadow tuning fixes that — the fix had to be composition, not
+decoration. This is now written down as a standing rule in `AGENTS.md`
+("Visual polish is not always 'add more'") specifically so this
+diagnosis doesn't have to be rediscovered next time.
+
+**What changed:** the card wrapper is gone — the form sits on the page
+canvas, split into three `<section>`s with real numbered headings.
+Priorities moved ahead of Budget (previously Budget came first): the
+priorities ranking is what actually drives the Evaluator's output
+(first priority weighs most), Budget only filters candidates out, and
+placing Priorities right after Use Case puts it next to the pill
+buttons that already pre-fill it (`form.js`) — a relationship that
+existed in the code before this pass but wasn't visible in the layout.
+Desktop gets a two-column field layout (label column, control column)
+using the extra width the page now has; collapses to the original
+single stacked column below 640px.
+
+**Depth without shadows.** Canvas (`--bg`) and form inputs
+(`--input-bg`, new token) now sit at two distinct, deliberately close
+values instead of both defaulting to white — the same recessed-fill
+technique the result page's `.stat-card` already used against its
+parent `.card`. Border and text contrast were recomputed against the
+new values to keep the WCAG margins from the accessibility pass intact
+(`--border-strong` moved from `#8f8f99` to `#87878f` specifically for
+this reason — a lighter canvas would have quietly regressed the 3:1
+UI-component contrast fixed one pass earlier).
+
+**Explicitly considered and rejected, again:** glow, gradients beyond
+what already existed, glassmorphism, drop shadows, decorative
+animation. Not because they were untried — because the "instrument,
+not a landing page" framing (see Guiding principle below) already
+answers whether they belong, and the answer is still no. A technical
+micro-label pattern ("`INPUT`", "`CONTEXT`", "`CONSTRAINT`" next to
+every field) was proposed and scoped down to exactly one instance (a
+"Rank" label next to the Priorities badges, where it explains a real
+1/2/3 sequence) instead of applied broadly — the risk flagged at the
+time was that scattering that vocabulary everywhere starts reading as
+a backend admin panel, not a developer tool.
+
+## Original status note (2026-08-06)
 
 The functional-first phase is essentially done: the full flow (form →
 recommendation, including edge cases like no qualifying model) works,
