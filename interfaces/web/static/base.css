@@ -1,12 +1,13 @@
 :root {
   /* Color */
-  --bg: #fafafa;
+  --bg: #f8f9fb;
   --surface: #ffffff;
+  --input-bg: #eef0f6;
   --text: #16161f;
   --text-secondary: #3f3f46;
   --muted: #71717a;
   --border: #e4e4e7;
-  --border-strong: #8f8f99;
+  --border-strong: #87878f;
 
   --accent: #4f46e5;
   --accent-hover: #4338ca;

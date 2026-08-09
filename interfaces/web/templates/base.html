@@ -13,10 +13,11 @@
   <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
   <link rel="stylesheet" href="/static/base.css">
   <link rel="stylesheet" href="/static/forms.css">
+  <link rel="stylesheet" href="/static/decision-form.css">
   <link rel="stylesheet" href="/static/result.css">
   <link rel="stylesheet" href="/static/result-profile.css">
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
   <header class="site-header">
     <a class="brand" href="/">Model Compass</a>
     <p class="tagline">Developers don't need more information. They need better decisions.</p>

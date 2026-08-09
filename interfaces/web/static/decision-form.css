@@ -1,0 +1,121 @@
+/* Decision workspace: the form as a sequence of numbered stages, not a
+   card floating on the page. Layout/composition only -- field ids,
+   names, and form.js hooks are untouched. */
+
+body.page-index main {
+  max-width: 900px;
+}
+
+.decision-form {
+  margin-top: var(--space-2);
+}
+
+.decision-stage {
+  padding: var(--space-6) 0;
+}
+
+.decision-stage:first-child {
+  padding-top: 0;
+}
+
+.decision-stage + .decision-stage {
+  border-top: 1px solid var(--border);
+}
+
+.stage-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.stage-index {
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.stage-name {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+.decision-field {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.decision-field label {
+  margin: 0;
+}
+
+.decision-field-pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+.priority-row + .priority-row {
+  margin-top: var(--space-4);
+}
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: var(--text-xs);
+  margin-right: var(--space-2);
+  vertical-align: middle;
+}
+
+fieldset.priorities {
+  margin-top: var(--space-4);
+}
+
+fieldset.priorities legend {
+  font-weight: 400;
+  font-size: var(--text-xs);
+  color: var(--muted);
+  margin-bottom: var(--space-3);
+}
+
+.rank-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+@media (min-width: 640px) {
+  .decision-field {
+    grid-template-columns: 220px 1fr;
+    align-items: start;
+    gap: var(--space-4);
+  }
+
+  .decision-field-pair {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .decision-field-pair .decision-field {
+    grid-template-columns: 1fr;
+  }
+}

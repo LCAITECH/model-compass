@@ -44,8 +44,8 @@ select {
   font-size: var(--text-base);
   font-family: inherit;
   color: var(--text);
-  background: var(--surface);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  background: var(--input-bg);
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 input[type="text"]:focus,
@@ -53,6 +53,7 @@ input[type="number"]:focus,
 select:focus {
   outline: none;
   border-color: var(--accent);
+  background: var(--accent-soft);
   box-shadow: 0 0 0 4px var(--accent-soft);
 }
 
@@ -76,8 +77,10 @@ fieldset.priorities legend {
   border-radius: var(--radius-sm);
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
   color: var(--accent-contrast);
-  font-size: var(--text-base);
-  font-weight: 600;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
   transition: transform 0.18s ease, box-shadow 0.18s ease;
@@ -296,11 +299,6 @@ fieldset.priorities legend {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-soft);
-}
-
-.form-card {
-  border-color: var(--border-strong);
-  box-shadow: 0 2px 8px rgba(15, 15, 20, 0.06), 0 1px 3px rgba(15, 15, 20, 0.04);
 }
 
 /* Supported models: provider neutrality as a feature, not an afterthought */
