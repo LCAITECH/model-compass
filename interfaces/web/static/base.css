@@ -6,14 +6,14 @@
   --text-secondary: #3f3f46;
   --muted: #71717a;
   --border: #e4e4e7;
-  --border-strong: #d4d4d8;
+  --border-strong: #8f8f99;
 
   --accent: #4f46e5;
   --accent-hover: #4338ca;
   --accent-contrast: #ffffff;
   --accent-soft: #eef2ff;
 
-  --positive: #059669;
+  --positive: #047857;
   --positive-soft: #ecfdf5;
   --caution: #b45309;
   --caution-soft: #fffbeb;
@@ -190,4 +190,14 @@ main {
 
 .back-link:hover {
   color: var(--accent-hover);
+}
+
+/* Focus */
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }

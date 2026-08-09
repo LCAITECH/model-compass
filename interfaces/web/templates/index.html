@@ -50,7 +50,7 @@
 
     <label for="budget">
       Budget
-      <span class="help" title="Your estimated monthly API budget. More capable models usually cost more per token — but using different models for different tasks (routing) can reduce your total spend.">ⓘ</span>
+      <span class="help" tabindex="0" title="Your estimated monthly API budget. More capable models usually cost more per token — but using different models for different tasks (routing) can reduce your total spend." aria-label="Your estimated monthly API budget. More capable models usually cost more per token — but using different models for different tasks (routing) can reduce your total spend.">ⓘ</span>
     </label>
     <select id="budget" name="budget" required>
       <option value="" disabled selected>Choose a budget</option>
@@ -61,14 +61,14 @@
 
     <label for="monthly_budget_usd">
       Monthly budget in $ <span class="optional">(optional)</span>
-      <span class="help" title="If you enter a dollar amount, we'll show roughly how many tokens per month that buys with the recommended model — real math on real pricing, not an estimate of how many 'requests' that is.">ⓘ</span>
+      <span class="help" tabindex="0" title="If you enter a dollar amount, we'll show roughly how many tokens per month that buys with the recommended model — real math on real pricing, not an estimate of how many 'requests' that is." aria-label="If you enter a dollar amount, we'll show roughly how many tokens per month that buys with the recommended model — real math on real pricing, not an estimate of how many 'requests' that is.">ⓘ</span>
     </label>
     <input type="number" id="monthly_budget_usd" name="monthly_budget_usd" min="0" step="0.01" placeholder="e.g. 10">
 
     <fieldset class="priorities">
       <legend>
         Priorities <span class="optional">(most important first)</span>
-        <span class="help" title="If getting this wrong would be costly (production code, infrastructure, anything hard to undo), put reasoning or coding above cost. A stronger model that succeeds on the first try is often cheaper in practice than a cheaper one that needs several corrections.">ⓘ</span>
+        <span class="help" tabindex="0" title="If getting this wrong would be costly (production code, infrastructure, anything hard to undo), put reasoning or coding above cost. A stronger model that succeeds on the first try is often cheaper in practice than a cheaper one that needs several corrections." aria-label="If getting this wrong would be costly (production code, infrastructure, anything hard to undo), put reasoning or coding above cost. A stronger model that succeeds on the first try is often cheaper in practice than a cheaper one that needs several corrections.">ⓘ</span>
       </legend>
       {% for rank in [1, 2, 3] %}
       <label for="priority_{{ rank }}">
@@ -89,7 +89,7 @@
 </div>
 
 <div class="how-it-works">
-  <p class="eyebrow">How it works</p>
+  <h2 class="eyebrow">How it works</h2>
   <ol>
     <li>
       <span class="step-number">1</span>
@@ -113,6 +113,15 @@
       </div>
     </li>
   </ol>
+</div>
+
+<div class="supported-models">
+  <h2 class="eyebrow">Supported models from</h2>
+  <ul class="provider-row">
+    {% for provider in providers %}
+    <li>{{ provider }}</li>
+    {% endfor %}
+  </ul>
 </div>
 </div>
 {% endblock %}

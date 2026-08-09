@@ -298,3 +298,27 @@ fieldset.priorities legend {
   color: var(--accent);
   background: var(--accent-soft);
 }
+
+/* Supported models: provider neutrality as a feature, not an afterthought */
+
+.supported-models {
+  padding: var(--space-2) 0 var(--space-6);
+  text-align: center;
+}
+
+.provider-row {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+}
+
+.provider-row li {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
