@@ -315,3 +315,85 @@ Proposal documented, not decided. Needs the project owner's explicit
 go-ahead before touching `SCHEMA.md`, any YAML, or `decision/` — this
 file's job is to keep the reasoning from being lost until that
 decision happens, not to make it.
+
+---
+
+## Iteration #9
+
+**Observation**
+Meta Llama was researched as a dataset candidate (2026-08-10). Meta's
+official developer docs (`llama.developer.meta.com/docs/llama-api-deprecation`
+— confirmed via search-engine indexing, quoting the page directly:
+*"Meta is winding down Llama API on July 6, 2026, which has remained in
+public preview since launch. On that date the service shuts down and
+API requests will return a sunset response with redirect guidance."*)
+state the first-party Llama API was retired on **2026-07-06**.
+
+Direct confirmation of the current state: Meta's docs domain was
+restructured into "Meta Model API" (`ai.developer.meta.com`), the
+successor product. Its live Models page
+(`ai.developer.meta.com/docs/models`, fetched directly 2026-08-10)
+lists exactly three models — `muse-spark-1.1`, `muse-spark-1.2`,
+`muse-spark-1.2-contributor` — all from Meta's proprietary "Muse Spark"
+family. The page shows only Muse models and does not list any Llama
+model. Llama weights remain downloadable, and are servable only
+through third-party hosts (AWS Bedrock, Google Cloud Vertex AI, Azure
+AI, Groq, Together AI, Fireworks AI) — which fall under the same "no
+aggregators/third-party rehosts" rule that already blocks other
+candidates (Iteration #2).
+
+**Current decision**
+No schema change. This isn't the usual "no official source found yet"
+gap — Meta operated a first-party API, discontinued it, and replaced
+it with a product that serves a different, proprietary model family
+instead. Llama doesn't enter `dataset/models/` on this basis.
+
+**Status**
+Closed unless Meta reintroduces first-party, token-priced Llama
+access. If revisited, re-check `ai.developer.meta.com/docs/models`
+directly — this is a fast-moving product surface (it already changed
+URL structure and model lineup once during this research).
+
+---
+
+## Iteration #10
+
+**Observation**
+NVIDIA NIM was re-investigated (2026-08-10) against its own official
+docs, fetched directly:
+
+- **Day 0** (`docs.nvidia.com/nim/large-language-models/2.0.3/about-nim-llm/nim-offerings.html`):
+  *"NIMs that are validated to be functional on a small set of NVIDIA
+  GPUs and published within about 72 hours"* of a model's release.
+  Free, aimed at experimenting with newly released models.
+- **Certified** (same page): *"supports broad compatibility across the
+  NVIDIA hardware installed base, documented refresh cadence, CVE
+  handling"* — requires an NVIDIA AI Enterprise license. Aimed at
+  production/regulated use.
+- **Pricing**, quoted verbatim from NVIDIA's own FAQ
+  (`docs.api.nvidia.com/nim/docs/faq`, fetched directly): *"NIM is
+  available through a license of NVIDIA AI Enterprise for $4500 per
+  GPU per year or $1 per GPU per hour in the cloud."*
+- **No per-token pricing exists anywhere in NVIDIA's own docs**,
+  confirmed explicitly by the same FAQ: *"Pricing is based on the
+  number of GPUs, not the number of NIMs."* Checked specifically for
+  the hosted `build.nvidia.com` endpoints too — NVIDIA's own docs
+  describe only free access via the NVIDIA Developer Program for
+  prototyping, no token-priced tier.
+
+**Current decision**
+No schema change — confirms the same verdict as Iterations #7 and #8,
+now backed by direct quotes from NVIDIA's own docs rather than forum
+reports. NIM is a GPU-licensed infrastructure platform, not a model
+with a price per token — a fundamentally different data shape than
+`cost.input_per_million`/`output_per_million`. Already logged as its
+own future direction in `FEATURES.md` ("Self-Hosted / Infrastructure
+Cost," Planned Capabilities).
+
+**Status**
+Closed as a dataset candidate under this name. Note for whoever reads
+`FEATURES.md`: its "Self-Hosted / Infrastructure Cost" entry currently
+cites this investigation as "Iteration #8" — that's the Free Access
+iteration, not this one. That cross-reference is stale and should
+point here instead (not corrected in this change — flagged for a
+separate, explicitly-approved edit to `FEATURES.md`).

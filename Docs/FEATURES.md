@@ -202,9 +202,10 @@ phases of the [Roadmap](./ROADMAP.md).
   than `cost.input_per_million`/`output_per_million` — model to GPU
   requirement to GPU-hour price to operational cost — and forcing it
   into the existing token-cost fields would misrepresent a flat
-  infrastructure license as if it were a per-token API price. Noted
-  2026-08-09 during the free-access research pass (see
-  `IMPLEMENTATION_NOTES.md`, Iteration #8); not started, not scoped,
-  and explicitly not part of the `has_free_access` proposal in that
-  same iteration — this needs its own schema extension, decided
+  infrastructure license as if it were a per-token API price. First
+  noted 2026-08-09 during the free-access research pass, confirmed
+  against official NVIDIA docs 2026-08-10 (see
+  `IMPLEMENTATION_NOTES.md`, Iteration #10); not started, not scoped,
+  and explicitly not part of the `has_free_access` proposal from the
+  free-access research pass — this needs its own schema extension, decided
   separately, once (or if) it's worth pursuing.
