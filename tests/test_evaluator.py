@@ -51,16 +51,18 @@ def test_disqualifies_models_that_dont_support_the_language(models):
 
 
 def test_low_budget_only_admits_the_cheapest_cost_tier(models):
-    # Blended cost (input+output per million), ascending, all 19 models
+    # Blended cost (input+output per million), ascending, all 20 models
     # -- printed directly from the Evaluator rather than hand-calculated
     # (see HANDOFF.md on why, past 18 models): deepseek-v4-flash 0.42,
-    # gpt-5-nano 0.45, gpt-5-mini 2.25, gemini-2.5-flash 2.80,
-    # gemini-3.5-flash-lite 2.80, claude-haiku-4-5 6.00, mistral-large-3
-    # 8.00, gemini-3.6-flash 9.00, gemini-2.5-pro 11.25, gpt-5 11.25,
-    # claude-sonnet-5 12.00, gpt-4o 12.50, gemini-3.1-pro-preview 14.00,
-    # claude-sonnet-4-6 18.00, claude-opus-4-6/4-7/4-8/5 30.00 each,
-    # claude-fable-5 60.00. tier = rank*3//19: ranks 0-6 (the seven
-    # cheapest) land in "low" -- mistral-large-3 joined it this batch.
+    # gpt-5-nano 0.45, deepseek-v4-pro 1.305, gpt-5-mini 2.25,
+    # gemini-2.5-flash 2.80, gemini-3.5-flash-lite 2.80, claude-haiku-4-5
+    # 6.00, mistral-large-3 8.00, gemini-3.6-flash 9.00, gemini-2.5-pro
+    # 11.25, gpt-5 11.25, claude-sonnet-5 12.00, gpt-4o 12.50,
+    # gemini-3.1-pro-preview 14.00, claude-sonnet-4-6 18.00,
+    # claude-opus-4-6/4-7/4-8/5 30.00 each, claude-fable-5 60.00.
+    # tier = rank*3//20: ranks 0-6 (the seven cheapest) land in "low" --
+    # deepseek-v4-pro's low blended cost (cheap despite very_high
+    # reasoning/coding) bumped mistral-large-3 out of this tier.
     context = Context(
         use_case="High-volume low-cost bot",
         budget=BudgetLevel.LOW,
@@ -74,11 +76,11 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     assert qualifying == {
         "deepseek-v4-flash",
         "gpt-5-nano",
+        "deepseek-v4-pro",
         "gpt-5-mini",
         "gemini-2.5-flash",
         "gemini-3.5-flash-lite",
         "claude-haiku-4-5",
-        "mistral-large-3",
     }
 
 
@@ -117,30 +119,33 @@ def test_reasoning_priority_picks_the_strongest_reasoning_model(models):
 
 
 def test_priority_order_changes_the_winner(models):
-    # Budget=HIGH stopped demonstrating this once claude-fable-5 (blended
-    # cost 60.00) entered the dataset -- it stretches the cost
-    # normalization so much that a mid-priced, very-high-reasoning model
-    # (gemini-2.5-pro) wins both orderings, tested and confirmed directly
-    # against the Evaluator rather than assumed. Budget=LOW keeps the
-    # qualifying pool small enough that swapping priority order still
-    # changes the winner, which is the actual thing this test checks.
+    # deepseek-v4-pro (cheap, very_high reasoning and coding) now wins
+    # under budget=LOW regardless of COST/REASONING order -- it's close
+    # enough to Pareto-dominant on those two dimensions that swapping
+    # their priority no longer changes the winner, confirmed directly
+    # against the Evaluator rather than assumed. COST vs.
+    # CREATIVE_WRITING still demonstrates the thing this test actually
+    # checks, since deepseek-v4-pro is only rated `medium` there:
+    # budget=HIGH, cost-first still picks the cheapest model
+    # (deepseek-v4-flash), creative-writing-first picks a model that
+    # doesn't win on cost at all (gemini-2.5-pro).
     cost_first = Context(
         use_case="Bot",
-        budget=BudgetLevel.LOW,
-        priorities=(Priority.COST, Priority.REASONING),
+        budget=BudgetLevel.HIGH,
+        priorities=(Priority.COST, Priority.CREATIVE_WRITING),
         language="es",
     )
-    reasoning_first = Context(
+    creative_writing_first = Context(
         use_case="Bot",
-        budget=BudgetLevel.LOW,
-        priorities=(Priority.REASONING, Priority.COST),
+        budget=BudgetLevel.HIGH,
+        priorities=(Priority.CREATIVE_WRITING, Priority.COST),
         language="es",
     )
 
     cost_winner = evaluate(cost_first, models)[0].model.id
-    reasoning_winner = evaluate(reasoning_first, models)[0].model.id
+    creative_writing_winner = evaluate(creative_writing_first, models)[0].model.id
 
-    assert cost_winner != reasoning_winner
+    assert cost_winner != creative_writing_winner
 
 
 def test_disqualified_candidates_are_ranked_after_qualifying_ones(models):

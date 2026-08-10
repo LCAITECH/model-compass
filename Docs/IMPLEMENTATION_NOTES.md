@@ -397,3 +397,55 @@ cites this investigation as "Iteration #8" — that's the Free Access
 iteration, not this one. That cross-reference is stale and should
 point here instead (not corrected in this change — flagged for a
 separate, explicitly-approved edit to `FEATURES.md`).
+
+---
+
+## Iteration #11
+
+**Observation**
+While researching DeepSeek V4 Pro as a dataset candidate (2026-08-10),
+`capabilities.vision` produced conflicting signals depending on the
+source. Multiple third-party sites (`chat-deep.ai`, `mydeepseekapi.com`,
+`deepseek-v4pro.com`, and others — none on DeepSeek's own domain)
+claimed `deepseek-v4-pro` accepts `image_url` content and processes
+images. Four independent checks against DeepSeek's own official
+sources said the opposite:
+
+- The Chat Completions API reference (`api-docs.deepseek.com/api/create-chat-completion/`)
+  defines message `content` as string-only — no `image_url` or any
+  image content type in the schema.
+- The full navigation index of `api-docs.deepseek.com` (every Quick
+  Start and Guides link enumerated directly) contains no vision, image,
+  or multimodal guide at all.
+- The official model card (`huggingface.co/deepseek-ai/DeepSeek-V4-Pro`,
+  DeepSeek's own Hugging Face org, not a third party) never mentions
+  vision, image input, or multimodal capability — it describes the
+  model exclusively as text-generation (reasoning, coding, math,
+  long-context).
+- The Responses API guide (`api-docs.deepseek.com/guides/responses_api`)
+  states explicitly: *"Image and file inputs are not supported
+  (`input_image` parts do not cause an error, but are replaced with a
+  placeholder text)"* — the most direct evidence possible, since it
+  describes the actual documented behavior of sending an image (silently
+  dropped and replaced), not just silence on the topic.
+
+**Current decision**
+No schema change — this is a sourcing-discipline case, same category as
+Iteration #2 (aggregators) and Iteration #6 (Antigravity labeling): when
+official provider documentation and third-party sites disagree, the
+official source wins, full stop, even when several third-party sites
+independently repeat the same competing claim. `capabilities.vision`
+for `deepseek-v4-pro` is set to `false`, backed by explicit official
+confirmation (not merely an absence of a source) — this is a *resolved*
+objective fact, not a pending one.
+
+**Status**
+Resolved as `false`. If DeepSeek's own documentation ever adds an
+image-capable guide, an `image_url` content type to the Chat Completions
+or Responses API reference, or an updated model card mentioning vision,
+re-check this field then — third-party claims alone, however numerous,
+are not sufficient grounds to revisit it. Kept as its own iteration
+(not merged into a DeepSeek V4 Pro-specific note) because the pattern —
+official docs contradicting a cluster of consistent third-party
+claims — is reusable precedent for future dataset research, independent
+of this specific model.
