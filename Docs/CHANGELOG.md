@@ -19,6 +19,46 @@ public release to version against.
 
 ---
 
+## 2026-08-10 — v0.1.0
+
+**Added DeepSeek V4 Pro to the dataset — 19 to 20 models — and closed
+out two dataset-candidate investigations that had gone undocumented.**
+
+- **DeepSeek V4 Pro.** Researched against DeepSeek's own official docs
+  and its Hugging Face model repository only: 1M-token context, 384K
+  max output, $0.435 / $0.87 per million tokens (input / output),
+  MIT-licensed open weights. The one genuinely interesting question was
+  whether it supports image input — several non-official sites claimed
+  it does, but DeepSeek's own API reference, its full documentation
+  index, its Hugging Face model card, and its Responses API guide (the
+  most direct of the four: *"Image and file inputs are not supported...
+  replaced with a placeholder text"*) all agree it doesn't. Resolved as
+  a confirmed `false`, not left pending — the sourcing pattern itself
+  (official docs vs. a cluster of consistent third-party claims) is
+  logged as its own entry in `IMPLEMENTATION_NOTES.md`, since it's
+  useful precedent for future research, independent of this model.
+  Quality and ecosystem ratings were calibrated against DeepSeek V4
+  Flash's existing entry (flagship vs. flash tier) — not against
+  DeepSeek's own marketing language about the model, which is noted in
+  the sourcing but explicitly excluded as a basis for any editorial
+  rating, per this project's own rule.
+- **Meta Llama and NVIDIA NIM, formally logged as closed
+  non-candidates.** Both had been investigated in a prior session but
+  never written down anywhere — re-verified against official sources
+  before logging anything, rather than trusting the earlier informal
+  conclusion. Meta retired its first-party Llama API on 2026-07-06; its
+  successor product serves only its own proprietary "Muse Spark"
+  models today, confirmed directly against that product's live model
+  listing. NVIDIA NIM re-confirmed as a GPU-licensed hosting platform
+  with no per-token pricing anywhere in its own documentation
+  ($4,500/GPU/year or ~$1/GPU/hour, quoted directly from NVIDIA's own
+  FAQ) — same verdict as an earlier pass, now backed by direct quotes
+  instead of forum reports.
+- No changes to `decision/evaluator/`, `decision/explainer/`, or
+  `interfaces/web/` — this was a dataset and documentation pass only.
+
+Tests: 67 → 68.
+
 ## 2026-08-09 — v0.1.0 (2)
 
 **Added `has_free_access` — a strict, single-boolean answer to "can I use
