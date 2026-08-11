@@ -19,6 +19,61 @@ public release to version against.
 
 ---
 
+## 2026-08-10 (later same day) — v0.1.0
+
+**Added 6 candidate models — 20 to 26 — and formalized a new rule for
+how editorial quality ratings get calibrated.**
+
+- **Six models admitted**, each fully sourced against official
+  provider documentation with its own `docs/models/*.md` audit trail:
+  Gemini 2.5 Flash-Lite, Gemini 3.1 Flash-Lite, Gemini 3.5 Flash,
+  GPT-5.6 Sol (OpenAI's new flagship, replacing GPT-5), Claude Sonnet
+  4.5, and Claude Opus 4.5. All six came out of a dedicated research
+  branch (`research/model-candidates`, see
+  `Docs/CANDIDATE_RESEARCH_2026-08-10.md`) done in a prior session —
+  this pass was the field-by-field sourcing verification and the
+  actual admission, not new candidate hunting.
+- **New rule in `SCHEMA.md`/`CONTRIBUTING.md`: editorial calibration
+  must be evidence-based, not family-based.** A model no longer
+  inherits a lower or higher quality rating just because it's an
+  older generation or a cheaper tier than a sibling already in the
+  dataset — every rating needs a specific, sourced signal (a
+  knowledge-cutoff gap, a stated or missing capability, explicit
+  provider positioning language). Caught and corrected a real
+  overreach mid-session: an early pass had degraded Claude Sonnet
+  4.5's `creative_writing` rating alongside its reasoning/coding, with
+  no evidence that specifically touched writing quality — fixed before
+  it shipped.
+- **`gpt-5-6-sol`'s id** deliberately doesn't match OpenAI's own model
+  string (`gpt-5.6-sol`, with a dot) — converted to the project's
+  existing hyphen convention, documented in that model's own `.md`.
+- Also fixed the same day: `docs/models/deepseek-v4-pro.md`'s
+  `reasoning`/`coding` justification, which had been written using
+  the exact family-based reasoning the new rule now rules out. The
+  rating itself (`very_high`/`very_high`) didn't change — re-checking
+  against DeepSeek's own release announcement found real supporting
+  evidence ("World-Class Reasoning: beats all current open models...
+  rivaling top closed-source models") that the original write-up had
+  explicitly declined to use. `gemini-2.5-pro.md`'s justification is
+  now flagged as the weakest-sourced `very_high` rating left in the
+  catalog — noted for a future pass, not touched yet.
+- No changes to `decision/evaluator/`, `decision/explainer/`, or
+  `interfaces/web/` — dataset and documentation only.
+
+Tests: 68 → 74 (26-model dataset, plus new parametrized language
+coverage for the 6 additions).
+
+**Also this session, investigated but not yet implemented:** a
+product audit found that `budget` (Low/Medium/High) and a
+user-entered monthly dollar amount are structurally disconnected —
+the dollar figure only feeds the affordability calculator, never the
+recommendation itself, and budget tiers are relative to whatever's
+currently in the dataset rather than fixed price bands. A redesign
+(fixed price-per-token tiers, a mutually-exclusive custom-budget mode
+that never assumes a token-usage volume, and a more honest "lower-cost
+alternative" comparison) is designed but not built. Full detail in
+`HANDOFF.md`.
+
 ## 2026-08-10 — v0.1.0
 
 **Added DeepSeek V4 Pro to the dataset — 19 to 20 models — and closed
