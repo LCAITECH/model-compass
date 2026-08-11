@@ -19,6 +19,70 @@ public release to version against.
 
 ---
 
+## 2026-08-11 — v0.1.0
+
+**Shipped the Budget redesign, corrected 5 dataset calibration errors
+found by a real-evidence audit, and replaced "single winner" framing
+with an honest tie indicator when the recommendation is a close call.**
+
+- **Budget is now a fixed price band, not a moving target.** Cost tier
+  (Low/Medium/High/Very High) used to be computed as relative terciles
+  of whatever was currently in the dataset — a model could silently
+  drift between tiers just because other models were added, and "High"
+  budget didn't actually cap anything (the priciest model in the
+  catalog always qualified). Tiers are now fixed $/million-token bands
+  anchored to real price data, with a new top band (`Very High`) so
+  "High" means something again. Confirmed live: `budget=high` +
+  reasoning priority used to recommend the single most expensive model
+  in the dataset; it no longer does.
+- **Cost's influence on the ranking now scales with how loose the
+  budget is** — full weight at Low, down to 10% at Very High — but
+  only when Cost isn't the developer's own #1 priority, and never at
+  all under the new **Custom Budget** mode (a real dollar figure, kept
+  deliberately separate from the fixed tiers: it narrows the
+  affordability estimate shown after the fact, never the ranking
+  itself, since doing that honestly would require assuming a token
+  volume nobody provided).
+- **Lower-cost Alternative stopped suggesting worse models just because
+  they were cheap.** It now only proposes a cheaper option if it stays
+  within one quality tier of the recommendation on the priority that
+  actually matters, and says so explicitly with a side-by-side
+  comparison table instead of a single "you'd save X%" line.
+- **New: when two or more models are practically tied, the page says
+  so.** A four-level quality scale produces real ties more often than
+  not, and until now the UI still had to pick a single "winner" to
+  display — via a plain, meaningless tie-break (alphabetical model id).
+  Any model within 2% of the top score **and** within one quality tier
+  on every dimension is now shown as an "Also strong option" alongside
+  the recommendation, not silently folded into a false single-answer
+  framing. The 2% threshold wasn't picked by feel — it came out of an
+  audit across the full grid of every priority combination and budget
+  tier this project supports, checking exactly how often a looser or
+  tighter cutoff would start calling genuinely different models
+  "equivalent."
+- **Dataset calibration audit, evidence-based, per model, not by
+  feel.** A user-reported pattern ("one cheap model keeps winning")
+  turned into a full audit: every model whose quality rating had no
+  real citation behind it (8 of 26) got re-sourced against fresh
+  official documentation. Five ratings changed with real evidence
+  behind each one — two OpenAI/DeepSeek reasoning ratings moved up,
+  one Gemini instruction-following rating moved down, one DeepSeek
+  capability flag corrected, and one Mistral price fixed (a stale
+  $2.00/$6.00 that should have been $0.50/$1.50 — an out-of-date
+  number, not an opinion). The original "cheap model dominates" pattern
+  turned out not to be a scoring bug at all — controlled testing (same
+  context, only the budget tier changed) showed the ranking already
+  shifts in a sensible, budget-aware way; what looked like bias was
+  mostly the tie-break problem above wearing a different hat.
+- **A real frontend bug, found by hand-testing, fixed:** choosing
+  "I know my $ budget" and submitting the form silently did nothing.
+  The hidden tier dropdown was still marked required, and the browser
+  blocked the submission without being able to show an error on a
+  field the visitor couldn't see. Fixed with a small script that keeps
+  the two budget modes' required fields in sync.
+
+Tests: 74 → 103.
+
 ## 2026-08-10 (later same day) — v0.1.0
 
 **Added 6 candidate models — 20 to 26 — and formalized a new rule for

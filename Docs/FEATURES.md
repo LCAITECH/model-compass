@@ -32,6 +32,12 @@ recommends anything.
   data extraction, etc.) as a core input to the recommendation.
 - **Context Analysis** — considers the developer's real constraints:
   budget, expected volume, latency needs, and language requirements.
+  Budget can be expressed either as a fixed price tier (Low/Medium/High/
+  Very High, anchored to real $/million-token bands) or as a real
+  monthly dollar figure — the two are mutually exclusive: a dollar
+  figure narrows the affordability estimate shown alongside the
+  recommendation, never the ranking itself, since doing that honestly
+  would require assuming a token volume nobody provided.
 - **Requirement Prioritization** — lets the developer indicate what
   matters most for their case (e.g. cost over reasoning power, or
   speed over context length), rather than treating every variable
@@ -47,6 +53,13 @@ The core of the product: turning context into a decision.
 - **Alternative Recommendations** — never presents a single option in
   isolation. Every recommendation is shown alongside credible
   alternatives, so the developer can compare rather than just accept.
+- **Tie Detection ("Also Strong Options")** — a coarse, four-level
+  quality scale produces real ties more often than not; when another
+  qualifying model scores within 2% of the recommendation *and* stays
+  within one quality tier of it on every dimension (not just the
+  ranked priority), it's shown as a practically-tied "also strong"
+  option instead of being silently outranked by an arbitrary
+  tie-break. Honest about when the "winner" isn't a clear one.
 - **Trade-off Analysis** — makes explicit what is being given up by
   choosing the recommended model over another (e.g. lower cost in
   exchange for weaker reasoning), instead of presenting a decision as
@@ -122,7 +135,16 @@ phases of the [Roadmap](./ROADMAP.md).
 
   Not part of the MVP — noted here as a direction worth exploring
   once the dataset and engine are mature enough to support it
-  meaningfully.
+  meaningfully. **Partially addressed 2026-08-11** by Tie Detection
+  ("Also Strong Options," under Recommend, above) — a categorical
+  signal ("practically tied" vs. not), not a percentage. A numeric
+  score was considered and rejected for the same reason a "92%
+  confidence" badge would be: the underlying quality scale is only
+  four levels, and inventing a smooth number on top of a coarse
+  scale would be exactly the fabricated-precision problem this
+  project avoids elsewhere (see the ranking-transparency decision in
+  `HANDOFF.md`). This capability stays open for a genuinely different
+  kind of confidence signal, not superseded by Tie Detection.
 - **Recommendation History** — the ability to see how a recommendation
   for a given use case has changed over time, as models, pricing, and
   the dataset evolve. A long-term direction, not a near-term
