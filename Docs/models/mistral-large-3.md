@@ -1,7 +1,7 @@
 # Mistral Large 3
 
 Dataset entry: [`dataset/models/mistral-large-3.yaml`](../../dataset/models/mistral-large-3.yaml)
-Last verified: 2026-08-07
+Last verified: 2026-08-11 (Cost section only — see below; everything else last touched 2026-08-07)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -69,15 +69,20 @@ sourcing rule, rather than presenting a 404 lookup as confirmation.
 
 | Field                    | Value  |
 |----------------------------|--------|
-| `input_per_million`         | $2.00  |
-| `output_per_million`        | $6.00  |
+| `input_per_million`         | $0.50  |
+| `output_per_million`        | $1.50  |
 
-Partially confirmed: Mistral's pricing page FAQ gives "$2/M tokens in
-and $6/M tokens out" as a worked example for "Mistral Large," matching
-the dataset exactly. This example did not explicitly say "Large 3" by
-name, so treat this as a strong match rather than a fully independent
-reconfirmation — worth a direct check against the model card's own
-pricing line next time that page is reachable.
+**Corrected 2026-08-11 — the previous $2.00/$6.00 value was stale.**
+That figure came from a generic "Mistral Large" worked example on
+Mistral's pricing-page FAQ, never confirmed against this specific
+model's own card, since the model-card URL 404'd during the original
+2026-08-07 pass (see the dead-URL note preserved in Sources below).
+That URL now resolves — Mistral's own Large 3 model card
+(`docs.mistral.ai/models/model-cards/mistral-large-3-25-12`) states
+**$0.50 input / $1.50 output per million tokens**, a real current-price
+mismatch, not an editorial judgment call. This also moves
+`cost.blended` from $8.00 to $2.00 — from `CostTier.MEDIUM` to the
+`LOW`/`MEDIUM` boundary under the fixed cost-tier bands in `SCHEMA.md`.
 
 ## Ecosystem `[Editorial]`
 
@@ -107,16 +112,26 @@ publishes a model-by-model free-tier breakdown.
 ## Sources
 
 - [Mistral models overview](https://docs.mistral.ai/getting-started/models/models_overview/) — identity, license, version tag.
-- [Mistral pricing](https://mistral.ai/pricing) — cost fields (partial match, see note above).
-- `https://docs.mistral.ai/getting-started/models/model-cards/mistral-large-3-25-12` — attempted, returned HTTP 404 as of this pass. Left here so the next verification pass doesn't waste time rediscovering that this specific URL doesn't resolve.
+- [Mistral pricing](https://mistral.ai/pricing) — cost fields, 2026-08-07 pass (superseded, see below).
+- [Mistral Large 3 model card](https://docs.mistral.ai/models/model-cards/mistral-large-3-25-12) — corrected cost fields, 2026-08-11 pass. Note the path changed from
+  `docs.mistral.ai/getting-started/models/model-cards/...` (404 on
+  2026-08-07) to `docs.mistral.ai/models/model-cards/...` (resolves as
+  of 2026-08-11) — a site reorganization, not a typo in the earlier
+  pass.
 
-Accessed 2026-08-07, official Mistral documentation only.
+Accessed 2026-08-07 (identity, license, original cost estimate) and
+2026-08-11 (cost correction), official Mistral documentation only.
 
 ## Verification result
 
-License and pricing reasonably confirmed. **Operational fields
-(context window, max output) and all six capability flags were not
-independently reconfirmed this pass** — this is the model with the
-most open sourcing gaps of the five in the dataset right now. Nothing
-in the dataset entry was changed as a result; this is logged as a
-pending verification, not a correction.
+License confirmed 2026-08-07. **Operational fields (context window,
+max output) and all six capability flags were not independently
+reconfirmed** — this remains the model with the most open sourcing
+gaps in the dataset.
+
+**2026-08-11 cost correction** (part of a catalog-wide re-audit pass):
+the previously "partially confirmed" $2.00/$6.00 pricing was wrong —
+the actual model card, unreachable in the original pass, gives
+$0.50/$1.50. This is the only field touched this pass; quality
+ratings and the remaining sourcing gaps noted above are unchanged and
+still pending.

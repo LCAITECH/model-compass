@@ -1,7 +1,7 @@
 # Gemini 2.5 Pro
 
 Dataset entry: [`dataset/models/gemini-2.5-pro.yaml`](../../dataset/models/gemini-2.5-pro.yaml)
-Last verified: 2026-08-07
+Last verified: 2026-08-11 (Quality section re-audited; everything else last touched 2026-08-07)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -33,10 +33,10 @@ the sourcing rule it follows.
 
 | Field                    | Value       | Why |
 |---------------------------|-------------|-----|
-| `reasoning`                | `very_high` | Google's own flagship reasoning model in the 2.5 generation, positioned above 2.5 Flash. |
-| `coding`                   | `very_high` | Same reasoning; not benchmark-derived, per `SCHEMA.md`. |
-| `creative_writing`         | `high`      | Same ceiling reasoning as `gpt-5.md` — no model in this dataset is yet rated `very_high` here. |
-| `instruction_following`    | `very_high` | Consistent with flagship, tool-using positioning. |
+| `reasoning`                | `very_high` | **Re-evaluated 2026-08-11**, replacing the prior purely-positional justification (this was the weakest-sourced entry in the catalog). Google's own technical report: *"Gemini 2.5 Pro is our most capable model yet, achieving SoTA performance on frontier coding and reasoning benchmarks"* ([Gemini 2.5 technical report](https://storage.googleapis.com/deepmind-media/gemini/gemini_v2_5_report.pdf), p.1); also *"our most intelligent thinking model, exhibiting strong reasoning and code capabilities"* ([model card](https://ai.google.dev/gemini-api/docs/models/gemini-2.5-pro)). Value unchanged, now properly sourced. |
+| `coding`                   | `very_high` | Same technical report: *"excels at producing interactive web applications, is capable of codebase-level understanding."* Also Google Cloud's Vertex AI blog: *"now among the world's best models for coding"* ([source](https://cloud.google.com/blog/products/ai-machine-learning/gemini-2-5-pro-flash-on-vertex-ai)). Value unchanged, now properly sourced. |
+| `creative_writing`         | `high`      | Technical report, p.18: *"Gemini 2.5 Pro is not just a useful coding and writing assistant, but excels at a wide range of complex tasks, ranging from those relevant for education to creative expression."* Model-specific but a secondary mention among many capabilities, not a best-in-class writing claim — consistent with `high`, not `very_high`. Value unchanged, now properly sourced. |
+| `instruction_following`    | `high`      | **Changed 2026-08-11**, was `very_high`. No official Google source (ai.google.dev, blog.google, cloud.google.com, deepmind.google) makes an explicit best-in-class/flagship-tier instruction-following claim for this model specifically. The closest lead — *"we have focused on improving helpfulness / instruction following (IF)"* (technical report, p.21) — describes a generation-wide refusal-reduction effort (2.5 Pro and Flash together), not a superiority claim, and doesn't meet the bar the other three dimensions above do. |
 
 ## Languages
 
@@ -97,12 +97,23 @@ input, not standard usage — confirmed directly against
 
 - [Gemini 2.5 Pro model card](https://ai.google.dev/gemini-api/docs/models/gemini-2.5-pro) — capabilities, context window, max output, knowledge cutoff (January 2025).
 - [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost fields, including the 200k-token pricing tier.
+- [Gemini 2.5 technical report (PDF)](https://storage.googleapis.com/deepmind-media/gemini/gemini_v2_5_report.pdf) — quality dimension evidence, 2026-08-11 pass.
+- [Vertex AI: Gemini 2.5 Pro/Flash blog post](https://cloud.google.com/blog/products/ai-machine-learning/gemini-2-5-pro-flash-on-vertex-ai) — coding-positioning quote, 2026-08-11 pass.
 
-Both accessed 2026-08-07, official Google documentation only.
+Objective fields accessed 2026-08-07; Quality section re-accessed
+2026-08-11, official Google documentation only in both passes.
 
 ## Verification result
 
-New dataset entry, not a re-verification. All objective fields
-confirmed against official documentation. One real schema gap
-surfaced and logged (tiered pricing) rather than worked around
-silently.
+New dataset entry (2026-08-07), not a re-verification at that time.
+All objective fields confirmed against official documentation. One
+real schema gap surfaced and logged (tiered pricing) rather than
+worked around silently.
+
+**2026-08-11 re-audit** (this was flagged as the weakest-sourced
+Quality section in the entire 26-model catalog — every dimension's
+justification was purely positional, with no actual Google quote):
+`reasoning`, `coding`, and `creative_writing` all held up under fresh
+research and now carry real citations, values unchanged.
+`instruction_following` did not — no first-party source supports
+`very_high` specifically for this model, so it moved to `high`.

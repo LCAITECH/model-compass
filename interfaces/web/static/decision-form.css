@@ -104,6 +104,64 @@ fieldset.priorities legend {
   margin-bottom: var(--space-2);
 }
 
+.budget-mode-toggle {
+  display: inline-flex;
+  gap: var(--space-1);
+  margin-top: var(--space-4);
+  padding: var(--space-1);
+  background: var(--input-bg);
+  border-radius: var(--radius-sm);
+}
+
+.budget-mode-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.budget-mode-tab {
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.budget-mode-input:checked + .budget-mode-tab {
+  background: var(--surface);
+  color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.budget-mode-input:focus-visible + .budget-mode-tab {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Fixed tier is the default panel shown; Custom's panel only shows
+   once its radio is checked. :has() (not a sibling combinator) is
+   needed here because the radios live inside .budget-mode-toggle,
+   a different subtree than .decision-field-pair -- this lets the
+   panels stay ordinary siblings without coupling their markup to the
+   toggle's. Degrades safely without :has() support: Custom's panel
+   stays hidden and Fixed tier remains the visible, working default. */
+.budget-panel-custom {
+  display: none;
+}
+
+.decision-stage:has(#budget_mode_custom:checked) .budget-panel-tier {
+  display: none;
+}
+
+.decision-stage:has(#budget_mode_custom:checked) .budget-panel-custom {
+  display: grid;
+}
+
 @media (min-width: 640px) {
   .decision-field {
     grid-template-columns: 220px 1fr;

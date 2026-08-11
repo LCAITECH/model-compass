@@ -1,7 +1,7 @@
 # GPT-5 Mini
 
 Dataset entry: [`dataset/models/gpt-5-mini.yaml`](../../dataset/models/gpt-5-mini.yaml)
-Last verified: 2026-08-07
+Last verified: 2026-08-11 (quality.reasoning only — see Quality section below; everything else last touched 2026-08-07)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -33,10 +33,10 @@ the sourcing rule it follows.
 
 | Field                    | Value    | Why |
 |---------------------------|----------|-----|
-| `reasoning`                | `medium` | Positioned as the smaller, faster sibling of GPT-5 — reasoning capability, not the frontier tier. |
-| `coding`                   | `medium` | Same reasoning as above; not benchmark-derived, per `SCHEMA.md`. |
-| `creative_writing`         | `medium` | Mini-tier models generally trade stylistic depth for cost/latency. |
-| `instruction_following`    | `high`   | Mini-tier OpenAI models are commonly used for high-volume, structured tasks where reliable instruction following matters more than raw capability. |
+| `reasoning`                | `high`   | **Changed 2026-08-11**, was `medium`. The prior "not the frontier tier" justification was family-based, with no actual OpenAI quote — and turned out to be directly contradicted by one: OpenAI's own model card tagline reads *"Near-frontier intelligence for cost sensitive, low latency, high volume workloads"* (`developers.openai.com/api/docs/models/gpt-5-mini`). |
+| `coding`                   | `medium` | No first-party statement found addressing coding specifically (2026-08-11 re-audit) — the "near-frontier intelligence" tagline is general, not coding-scoped. Kept at `medium` as an explicitly unsourced editorial default, not re-derived from `reasoning`'s new evidence. |
+| `creative_writing`         | `medium` | No first-party statement found addressing this dimension (2026-08-11 re-audit). Unsourced editorial default. |
+| `instruction_following`    | `high`   | Confirmed 2026-08-11: *"GPT-5 mini is a faster, more cost-efficient version of GPT-5. It's great for well-defined tasks and precise prompts."* (same model card as above) — supports reliable instruction-following in structured contexts, consistent with `high`. |
 
 ## Languages
 
@@ -101,7 +101,18 @@ Both accessed 2026-08-07, official OpenAI documentation only. Note:
 
 ## Verification result
 
-No drift found in objective fields. `json_mode` and `languages` /
-`language_quality` are flagged above as not independently
+No drift found in objective fields (2026-08-07 pass). `json_mode` and
+`languages`/`language_quality` are flagged above as not independently
 reconfirmed — inherited from original dataset curation, not fabricated
-citations for this pass.
+citations for that pass.
+
+**2026-08-11 re-audit** (part of a catalog-wide pass re-checking every
+model whose `docs/models/*.md` justification was purely positional,
+per `SCHEMA.md`'s evidence-based calibration principle): `reasoning`
+changed from `medium` to `high`, directly contradicted by OpenAI's own
+"near-frontier intelligence" model-card language; `instruction_following`
+moved from an unsourced claim to a properly cited one (value unchanged,
+`high`). `coding` and `creative_writing` were checked but no
+dimension-specific first-party statement was found either way —
+unchanged, now explicitly flagged as unsourced rather than looking
+equally confirmed.

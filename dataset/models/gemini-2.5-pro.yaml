@@ -16,7 +16,7 @@ quality:
   reasoning: very_high
   coding: very_high
   creative_writing: high
-  instruction_following: very_high
+  instruction_following: high
 
 languages: [en, es, pt, fr, de, ja, zh, hi, ar, ru]
 language_quality:

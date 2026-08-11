@@ -5,7 +5,7 @@ decision/'s — Context itself stays a clean typed object with no idea
 an HTML form exists.
 """
 
-from decision.domain import BudgetLevel, Context, Priority
+from decision.domain import BudgetLevel, BudgetMode, Context, Priority
 
 _PRIORITY_RANKS = ("priority_1", "priority_2", "priority_3")
 
@@ -22,9 +22,21 @@ def context_from_form(form) -> Context:
         raise InvalidFormError("Choose a language.")
 
     try:
-        budget = BudgetLevel(form.get("budget", ""))
+        budget_mode = BudgetMode(form.get("budget_mode") or BudgetMode.TIER.value)
     except ValueError:
-        raise InvalidFormError("Choose a budget.")
+        raise InvalidFormError("Choose how you'd like to set your budget.")
+
+    if budget_mode == BudgetMode.TIER:
+        try:
+            budget = BudgetLevel(form.get("budget", ""))
+        except ValueError:
+            raise InvalidFormError("Choose a budget.")
+    else:
+        # Custom Budget never filters or weighs the ranking (see
+        # BudgetMode's docstring) -- there's no tier to validate here,
+        # whatever the (possibly stale, hidden) tier <select> holds is
+        # ignored.
+        budget = None
 
     priorities = []
     for field in _PRIORITY_RANKS:
@@ -43,6 +55,7 @@ def context_from_form(form) -> Context:
 
     return Context(
         use_case=(form.get("use_case") or "").strip(),
+        budget_mode=budget_mode,
         budget=budget,
         priorities=tuple(priorities),
         language=language,

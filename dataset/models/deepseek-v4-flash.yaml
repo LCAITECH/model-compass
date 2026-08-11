@@ -9,11 +9,11 @@ capabilities:
   audio: false
   image_generation: false
   tool_calling: true
-  structured_output: true
+  structured_output: false
   json_mode: true
 
 quality:
-  reasoning: medium
+  reasoning: high
   coding: high
   creative_writing: medium
   instruction_following: medium

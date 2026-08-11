@@ -1,7 +1,7 @@
 # DeepSeek V4 Flash
 
 Dataset entry: [`dataset/models/deepseek-v4-flash.yaml`](../../dataset/models/deepseek-v4-flash.yaml)
-Last verified: 2026-08-07
+Last verified: 2026-08-11 (quality.reasoning and capabilities.structured_output only — see Quality and Capabilities sections below; everything else last touched 2026-08-07)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -32,7 +32,7 @@ original curation.
 | `audio`                | false | Same as above — inherited. |
 | `image_generation`     | false | Same as above — inherited. |
 | `tool_calling`         | true  | Same as above — inherited. |
-| `structured_output`    | true  | Same as above — inherited. |
+| `structured_output`    | false | **Corrected 2026-08-11**, was `true`. Re-checked DeepSeek's JSON mode guide directly: it still reads "provide an example of the desired JSON format to guide the model," with no schema-enforcement language — the same gap already found for `deepseek-v4-pro` (whose `structured_output` was downgraded to `false` for the same reason), now reconfirmed for Flash with no model-specific exception found. |
 | `json_mode`            | true  | Same as above — inherited. |
 
 This pass confirmed the model's identity and pricing directly (see
@@ -47,10 +47,10 @@ verified, per this folder's sourcing rule.
 
 | Field                    | Value    | Why |
 |---------------------------|----------|-----|
-| `reasoning`                | `medium` | Flash-tier positioning (cost/latency-optimized) relative to DeepSeek's own Pro tier. |
+| `reasoning`                | `high`   | **Changed 2026-08-11**, was `medium`. Re-evaluated against `SCHEMA.md`'s evidence-based calibration principle — the original "flash-tier positioning" justification was family-based, exactly what that principle rules out. Official evidence found in the same V4 release announcement already cited for `deepseek-v4-pro.md` (`api-docs.deepseek.com/news/news260424/`): *"Reasoning capabilities closely approach V4-Pro."* Since V4 Pro is rated `very_high`, "closely approach" supports stepping Flash up to `high`, not leaving it at `medium` nor equalizing it to `very_high`. |
 | `coding`                   | `high`   | DeepSeek's models have a strong general reputation specifically for coding tasks; editorial judgment, not benchmark-derived. |
 | `creative_writing`         | `medium` | No strong signal either way; default mid-tier judgment for a flash/cost-optimized model. |
-| `instruction_following`    | `medium` | Same reasoning as `reasoning` — flash tier, not the flagship. |
+| `instruction_following`    | `medium` | No first-party statement found addressing this dimension specifically (2026-08-11 re-audit). Kept at `medium` as an explicitly unsourced editorial default — not re-derived from `reasoning`'s new evidence, since that citation ("closely approach V4-Pro") is scoped to reasoning, not instruction-following. |
 
 ## Languages
 
@@ -111,8 +111,18 @@ Both accessed 2026-08-07, official DeepSeek documentation only.
 
 ## Verification result
 
-Pricing, context window, and max output confirmed with no drift.
-License and all six capability flags were **not** independently
-reconfirmed this pass — flagged above as pending rather than presented
-as freshly verified. The dataset entry itself is unchanged; this is a
-sourcing gap to close next time, not evidence the values are wrong.
+Pricing, context window, and max output confirmed with no drift
+(2026-08-07 pass). License and the remaining five capability flags
+were **not** independently reconfirmed — flagged above as pending
+rather than presented as freshly verified.
+
+**2026-08-11 re-audit** (part of a catalog-wide pass re-checking every
+model whose `docs/models/*.md` justification was purely positional,
+per `SCHEMA.md`'s evidence-based calibration principle): `reasoning`
+changed from `medium` to `high` and `structured_output` changed from
+`true` to `false`, both against fresh official DeepSeek sources cited
+above. `coding`, `creative_writing`, and `instruction_following` were
+also checked this pass — no first-party prose was found either
+confirming or contradicting their current values, so they're
+unchanged and explicitly flagged as unsourced editorial judgment
+rather than silently left looking equally confirmed.

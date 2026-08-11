@@ -98,8 +98,15 @@
   <section class="decision-stage" aria-labelledby="stage-budget">
     <h2 id="stage-budget" class="stage-heading"><span class="stage-index">03</span><span class="stage-name">Budget</span></h2>
 
+    <div class="budget-mode-toggle" role="radiogroup" aria-label="How would you like to set your budget?">
+      <input type="radio" id="budget_mode_tier" name="budget_mode" value="tier" class="budget-mode-input" checked>
+      <label for="budget_mode_tier" class="budget-mode-tab">Fixed tier</label>
+      <input type="radio" id="budget_mode_custom" name="budget_mode" value="custom" class="budget-mode-input">
+      <label for="budget_mode_custom" class="budget-mode-tab">I know my $ budget</label>
+    </div>
+
     <div class="decision-field-pair">
-      <div class="decision-field">
+      <div class="decision-field budget-panel-tier">
         <div class="field-label">
           <label for="budget">
             Budget
@@ -110,17 +117,17 @@
           <select id="budget" name="budget" required>
             <option value="" disabled selected>Choose a budget</option>
             {% for b in budgets %}
-            <option value="{{ b.value }}">{{ b.value | capitalize }}</option>
+            <option value="{{ b.value }}">{{ b.value | replace('_', ' ') | capitalize }}</option>
             {% endfor %}
           </select>
         </div>
       </div>
 
-      <div class="decision-field">
+      <div class="decision-field budget-panel-custom">
         <div class="field-label">
           <label for="monthly_budget_usd">
-            Monthly budget in $ <span class="optional">(optional)</span>
-            <span class="help" tabindex="0" title="If you enter a dollar amount, we'll show roughly how many tokens per month that buys with the recommended model — real math on real pricing, not an estimate of how many 'requests' that is." aria-label="If you enter a dollar amount, we'll show roughly how many tokens per month that buys with the recommended model — real math on real pricing, not an estimate of how many 'requests' that is.">ⓘ</span>
+            Monthly budget in $
+            <span class="help" tabindex="0" title="A real dollar amount never filters or ranks models — we have no honest way to know how many tokens that buys without assuming your usage volume. It only shows, after the recommendation, roughly how many tokens per month that budget buys with the recommended model." aria-label="A real dollar amount never filters or ranks models — we have no honest way to know how many tokens that buys without assuming your usage volume. It only shows, after the recommendation, roughly how many tokens per month that budget buys with the recommended model.">ⓘ</span>
           </label>
         </div>
         <div class="field-control">

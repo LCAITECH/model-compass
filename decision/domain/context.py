@@ -8,6 +8,26 @@ class BudgetLevel(str, Enum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
+    VERY_HIGH = "very_high"
+
+
+class BudgetMode(str, Enum):
+    """Which of the two, mutually exclusive ways the developer expressed a budget.
+
+    TIER: a fixed price-per-token band (BudgetLevel) -- a hard filter on
+    qualification, and it dampens Cost's ranking weight (see
+    decision/evaluator/evaluator.py).
+
+    CUSTOM: a real dollar amount the developer has available per month.
+    Never filters and never dampens Cost's weight -- doing either would
+    require assuming a token volume the developer never provided (see
+    interfaces/web/affordability.py's docstring). It only feeds the
+    capacity calculator in interfaces/web/, which decision/ has no idea
+    exists.
+    """
+
+    TIER = "tier"
+    CUSTOM = "custom"
 
 
 class Priority(str, Enum):
@@ -29,6 +49,7 @@ class Priority(str, Enum):
 @dataclass(frozen=True)
 class Context:
     use_case: str
-    budget: BudgetLevel
+    budget_mode: BudgetMode
+    budget: BudgetLevel | None
     priorities: tuple[Priority, ...]
     language: str
