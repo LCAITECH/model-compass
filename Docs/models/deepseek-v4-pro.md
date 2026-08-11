@@ -39,8 +39,8 @@ entry currently has (see that file — license there is flagged
 
 | Field                    | Value       | Why |
 |---------------------------|-------------|-----|
-| `reasoning`                | `very_high` | Editorial judgment, calibrated relative to the model's own family: this is the flagship of the V4 line (1.6T total / 49B active parameters, vs. V4 Flash's 284B / 13B), the same kind of flagship-vs-flash step-up already reflected elsewhere in the dataset. Not derived from DeepSeek's own marketing language about the model, which is noted in the Sources below but explicitly not used as the basis for this rating, per `SCHEMA.md`. |
-| `coding`                   | `very_high` | Same flagship-tier calibration as `reasoning`. V4 Flash is already rated `high` at the smaller tier for coding — stepping the larger, flagship model up one level follows the project's own internal consistency, not a benchmark or provider claim. |
+| `reasoning`                | `very_high` | Re-evaluated 2026-08-10 against `SCHEMA.md`'s evidence-based calibration principle — the original justification here was family/parameter-count-based ("flagship of the V4 line"), exactly what that principle now rules out, so it was replaced rather than reused. Official evidence found on a re-read of the release announcement (previously listed as a source but explicitly *not* used as a basis): under the heading **"World-Class Reasoning,"** DeepSeek states *"Beats all current open models in Math/STEM/Coding, rivaling top closed-source models."* This is first-party positioning language, not a benchmark score — the actual benchmark figures on that page are only in chart images, never quoted or used here, consistent with `SCHEMA.md`'s ban on benchmark-derived ratings. "Rivaling" (not "beats") the closed-source frontier is read as supporting a shared `very_high` ceiling alongside the dataset's other frontier models, not a claim of outright superiority. |
+| `coding`                   | `very_high` | Same source, same re-evaluation: *"Beats all current open models in Math/STEM/Coding, rivaling top closed-source models"* plus a separate claim, *"Open-source SOTA in Agentic Coding benchmarks."* Same treatment as `reasoning` — the prose positioning is used, the chart-only benchmark figures are not. |
 | `creative_writing`         | `medium`    | No signal in either direction; consistent with V4 Flash's own rating — this is a reasoning/coding-focused family, not a rating downgrade specific to Pro. |
 | `instruction_following`    | `high`      | Stepped up one level from V4 Flash's `medium`, same flagship-tier calibration logic as `reasoning` and `coding` — a general capability judgment, not sourced from any specific claim. |
 
@@ -108,7 +108,7 @@ credit — confirmed directly, 2026-08-10.
 - [DeepSeek Chat Completions API reference](https://api-docs.deepseek.com/api/create-chat-completion/) — `content` schema (text-only), `tools`, `response_format` parameters.
 - [DeepSeek JSON Output guide](https://api-docs.deepseek.com/guides/json_mode) — confirms example-guided JSON mode, not strict schema.
 - [DeepSeek Responses API guide](https://api-docs.deepseek.com/guides/responses_api) — explicit confirmation that image/file inputs are unsupported.
-- [DeepSeek V4 Preview Release announcement](https://api-docs.deepseek.com/news/news260424/) — release date, parameter counts. Also contains DeepSeek's own marketing claims about relative performance; noted for context, not used as the basis for any `[Editorial]` rating above.
+- [DeepSeek V4 Preview Release announcement](https://api-docs.deepseek.com/news/news260424/) — release date, parameter counts, and (as of the 2026-08-10 re-evaluation) the "World-Class Reasoning" / coding positioning quotes now used as the basis for `quality.reasoning` and `quality.coding` above. Chart-only benchmark figures on the same page were not used, per `SCHEMA.md`'s ban on benchmark-derived ratings.
 - [DeepSeek-V4-Pro model card, Hugging Face](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro) — license (MIT), no vision/multimodal mention.
 - Full navigation index of `api-docs.deepseek.com` — confirmed no vision/image/audio guide exists anywhere in the docs.
 
@@ -123,3 +123,17 @@ New entry — no prior dataset version to compare against. Every
 listed above, including `vision` and `structured_output`, both
 resolved with direct evidence rather than left as pending (see
 Iteration #11 for the `vision` sourcing story specifically).
+
+**2026-08-10 addendum:** `quality.reasoning` and `quality.coding`
+re-evaluated against `SCHEMA.md`'s evidence-based calibration
+principle, prompted by a product audit of why this model kept
+outranking pricier flagships once `cost` entered the ranking. The
+original justification was family/parameter-count-based, which the
+principle now rules out — replaced with the official positioning
+language quoted above. **Both values stay `very_high`, unchanged** —
+the re-evaluation found the rating adequately supported by evidence
+that was already cited as a source but not previously used as the
+basis, not a case of an inflated rating. Same pass flagged
+`gemini-2.5-pro.md`'s `quality.*` justification as comparatively weak
+under this same principle — noted for a future session, not addressed
+here.
