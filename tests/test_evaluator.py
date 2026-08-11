@@ -51,18 +51,21 @@ def test_disqualifies_models_that_dont_support_the_language(models):
 
 
 def test_low_budget_only_admits_the_cheapest_cost_tier(models):
-    # Blended cost (input+output per million), ascending, all 20 models
+    # Blended cost (input+output per million), ascending, all 26 models
     # -- printed directly from the Evaluator rather than hand-calculated
     # (see HANDOFF.md on why, past 18 models): deepseek-v4-flash 0.42,
-    # gpt-5-nano 0.45, deepseek-v4-pro 1.305, gpt-5-mini 2.25,
-    # gemini-2.5-flash 2.80, gemini-3.5-flash-lite 2.80, claude-haiku-4-5
-    # 6.00, mistral-large-3 8.00, gemini-3.6-flash 9.00, gemini-2.5-pro
+    # gpt-5-nano 0.45, gemini-2.5-flash-lite 0.50, deepseek-v4-pro 1.305,
+    # gemini-3.1-flash-lite 1.75, gpt-5-mini 2.25, gemini-2.5-flash 2.80,
+    # gemini-3.5-flash-lite 2.80, claude-haiku-4-5 6.00, mistral-large-3
+    # 8.00, gemini-3.6-flash 9.00, gemini-3.5-flash 10.50, gemini-2.5-pro
     # 11.25, gpt-5 11.25, claude-sonnet-5 12.00, gpt-4o 12.50,
-    # gemini-3.1-pro-preview 14.00, claude-sonnet-4-6 18.00,
-    # claude-opus-4-6/4-7/4-8/5 30.00 each, claude-fable-5 60.00.
-    # tier = rank*3//20: ranks 0-6 (the seven cheapest) land in "low" --
-    # deepseek-v4-pro's low blended cost (cheap despite very_high
-    # reasoning/coding) bumped mistral-large-3 out of this tier.
+    # gemini-3.1-pro-preview 14.00, claude-sonnet-4-5/4-6 18.00 each,
+    # claude-opus-4-5/4-6/4-7/4-8/5 30.00 each, gpt-5-6-sol 35.00,
+    # claude-fable-5 60.00.
+    # tier = rank*3//26: ranks 0-8 (the nine cheapest) land in "low" --
+    # gemini-2.5-flash-lite and gemini-3.1-flash-lite's arrival (both
+    # cheaper than gpt-5-mini) pushed the tier boundary out to include
+    # claude-haiku-4-5, which wasn't in the low tier before.
     context = Context(
         use_case="High-volume low-cost bot",
         budget=BudgetLevel.LOW,
@@ -76,7 +79,9 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     assert qualifying == {
         "deepseek-v4-flash",
         "gpt-5-nano",
+        "gemini-2.5-flash-lite",
         "deepseek-v4-pro",
+        "gemini-3.1-flash-lite",
         "gpt-5-mini",
         "gemini-2.5-flash",
         "gemini-3.5-flash-lite",

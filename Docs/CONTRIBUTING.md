@@ -67,7 +67,13 @@ for why.
    based on public documentation and practical usage — not on
    benchmark scores. If you're not confident evaluating an editorial
    field for a given model, it's better to leave the contribution
-   incomplete and open a discussion than to guess.
+   incomplete and open a discussion than to guess. Calibration must be
+   evidence-based, not family-based — don't downgrade (or upgrade) a
+   rating just because a model is an older generation or a
+   smaller/cheaper tier than a sibling already in the dataset; point to
+   a specific sourced signal instead. See
+   [SCHEMA.md](./SCHEMA.md#objective-vs-editorial-attributes) for the
+   full principle and a worked example.
 5. Open a Pull Request with a clear description of the model being
    added.
 
