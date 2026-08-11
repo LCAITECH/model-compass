@@ -25,6 +25,40 @@
   {% endif %}
 </div>
 
+{% if recommendation.also_strong_options %}
+<div class="card also-strong-card">
+  <h2>{{ icons.swap() }}Also strong options</h2>
+  <p class="muted">
+    {{ recommendation.also_strong_options | length }} other qualifying model{{ 's' if recommendation.also_strong_options | length != 1 }}
+    scored within 2% of {{ recommendation.recommended.name }} and stayed within one quality tier of it
+    on every dimension — practically tied, not clearly behind.
+    {{ recommendation.recommended.name }} is listed first because of a deterministic tie-break, not
+    because it scored higher.
+  </p>
+  <div class="alternatives-grid">
+    {% for opt in recommendation.also_strong_options %}
+    <div class="card alternative-card">
+      <div class="alternative-header">
+        <span class="alt-name">{{ opt.model.name }}</span>
+        <span class="chip chip-positive">Practically tied</span>
+        {% if opt.model.cost.blended < recommendation.recommended.cost.blended %}
+        <span class="chip chip-muted">Cheaper</span>
+        {% elif opt.model.cost.blended > recommendation.recommended.cost.blended %}
+        <span class="chip chip-muted">More expensive</span>
+        {% endif %}
+      </div>
+      <span class="muted">#{{ opt.rank }} of {{ recommendation.total_qualifying }} — ${{ "%.2f"|format(opt.model.cost.input_per_million) }} / ${{ "%.2f"|format(opt.model.cost.output_per_million) }} per 1M tokens</span>
+      {% if opt.reasons %}
+      <ul class="standout-reasons">
+        {{ icons.item_list(opt.reasons, icons.check) }}
+      </ul>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
 {% if profile %}
 <div class="card">
   <h2>Quality profile</h2>
@@ -118,22 +152,72 @@
   </div>
   {% endif %}
 
-  {% if savings and not savings.is_cheapest %}
+  {% if savings and savings.comparison_rows %}
   <div class="savings-callout">
     <p class="savings-header">{{ icons.sparkle() }}<strong>You could spend less</strong></p>
     <p>
       <strong>{{ savings.model.name }}</strong> costs
       <strong>{{ savings.input_pct }}%</strong> less on input and
-      <strong>{{ savings.output_pct }}%</strong> less on output than {{ recommendation.recommended.name }} —
-      an exact price ratio, true for any usage volume.
+      <strong>{{ savings.output_pct }}%</strong> less on output than {{ recommendation.recommended.name }},
+      and stays within one quality tier on
+      {{ context.priorities[0].value.replace('_', ' ') }} — not just cheaper, a fair swap.
     </p>
-    {% if savings.input_capacity %}
-    <p class="muted">
-      At ${{ "%.2f"|format(budget_usd) }}/month, that's {{ "{:,}".format(savings.input_capacity) }} input
-      tokens or {{ "{:,}".format(savings.output_capacity) }} output tokens with {{ savings.model.name }},
-      instead of {{ "{:,}".format(input_capacity) }} / {{ "{:,}".format(output_capacity) }}.
-    </p>
-    {% endif %}
+    <div class="comparison-table-wrap">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th scope="col">&nbsp;</th>
+            <th scope="col">{{ recommendation.recommended.name }} (recommended)</th>
+            <th scope="col">{{ savings.model.name }} (lower-cost)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in savings.comparison_rows %}
+          <tr>
+            <th scope="row">{{ row.label }}</th>
+            <td>
+              <span class="quality-segments" aria-hidden="true">
+                {% for i in range(row.max_ordinal + 1) %}
+                <span class="segment{{ ' filled' if i <= row.recommended_ordinal else '' }}"></span>
+                {% endfor %}
+              </span>
+              {{ row.recommended_level | capitalize }}
+            </td>
+            <td>
+              <span class="quality-segments" aria-hidden="true">
+                {% for i in range(row.max_ordinal + 1) %}
+                <span class="segment{{ ' filled' if i <= row.alternative_ordinal else '' }}"></span>
+                {% endfor %}
+              </span>
+              {{ row.alternative_level | capitalize }}
+            </td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <th scope="row">Input price</th>
+            <td>${{ "%.2f"|format(recommendation.recommended.cost.input_per_million) }} / 1M</td>
+            <td>${{ "%.2f"|format(savings.model.cost.input_per_million) }} / 1M</td>
+          </tr>
+          <tr>
+            <th scope="row">Output price</th>
+            <td>${{ "%.2f"|format(recommendation.recommended.cost.output_per_million) }} / 1M</td>
+            <td>${{ "%.2f"|format(savings.model.cost.output_per_million) }} / 1M</td>
+          </tr>
+          {% if savings.input_capacity %}
+          <tr>
+            <th scope="row">Input capacity at ${{ "%.2f"|format(budget_usd) }}/mo</th>
+            <td>{{ "{:,}".format(input_capacity) }} tokens</td>
+            <td>{{ "{:,}".format(savings.input_capacity) }} tokens</td>
+          </tr>
+          <tr>
+            <th scope="row">Output capacity at ${{ "%.2f"|format(budget_usd) }}/mo</th>
+            <td>{{ "{:,}".format(output_capacity) }} tokens</td>
+            <td>{{ "{:,}".format(savings.output_capacity) }} tokens</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
     <p class="muted">
       It wasn't the recommendation because of the trade-offs above — this shows what switching
       would cost, not a suggestion to switch.
@@ -148,6 +232,16 @@
       choice among the models that fit your context.
     </p>
   </div>
+  {% elif savings and savings.filtered_by_quality %}
+  <div class="savings-callout savings-callout-muted">
+    <p class="savings-header">{{ icons.dash() }}<strong>No fair lower-cost swap</strong></p>
+    <p>
+      Cheaper models exist among the ones that qualify, but none stay within one quality
+      tier of <strong>{{ recommendation.recommended.name }}</strong> on
+      {{ context.priorities[0].value.replace('_', ' ') }} — the priority you ranked #1. Showing
+      one anyway would trade away exactly what you asked for, so nothing is shown here instead.
+    </p>
+  </div>
   {% endif %}
 
   {% if input_capacity %}
@@ -159,11 +253,11 @@
   {% endif %}
 </div>
 
-{% if recommendation.alternatives %}
+{% if other_alternatives %}
 <div>
   <h2 class="eyebrow section-eyebrow">{{ icons.swap() }}Alternatives</h2>
   <div class="alternatives-grid">
-    {% for alt in recommendation.alternatives %}
+    {% for alt in other_alternatives %}
     <div class="card alternative-card">
       <div class="alternative-header">
         <span class="alt-name">{{ alt.model.name }}</span>

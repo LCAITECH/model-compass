@@ -34,17 +34,19 @@ class Maturity(str, Enum):
 
 
 class CostTier(IntEnum):
-    """How a model's price compares to its peers in a given evaluation.
+    """Which fixed price band a model's blended cost falls into.
 
     Derived, not stored in the dataset — see SCHEMA.md's Cost section.
     The type lives here as shared vocabulary; the actual derivation
-    (relative to whichever models are being compared) stays in
-    decision/evaluator/, the only place that computes it.
+    (fixed $/million-token bands, anchored to Cost.blended, the same
+    for every evaluation regardless of which models are being compared)
+    stays in decision/evaluator/, the only place that computes it.
     """
 
     LOW = 0
     MEDIUM = 1
     HIGH = 2
+    VERY_HIGH = 3
 
 
 @dataclass(frozen=True)

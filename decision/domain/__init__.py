@@ -13,7 +13,7 @@ from decision.domain.ai_model import (
     QualityLevel,
 )
 from decision.domain.candidate import Candidate
-from decision.domain.context import BudgetLevel, Context, Priority
+from decision.domain.context import BudgetLevel, BudgetMode, Context, Priority
 from decision.domain.recommendation import Alternative, Exclusion, Outranked, Recommendation
 
 __all__ = [
@@ -21,6 +21,7 @@ __all__ = [
     "AIModel",
     "Alternative",
     "BudgetLevel",
+    "BudgetMode",
     "Candidate",
     "Capabilities",
     "Context",

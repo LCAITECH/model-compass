@@ -63,29 +63,75 @@ def _model_profile(model) -> dict:
     }
 
 
-def _savings_summary(recommendation, candidates, budget_usd) -> dict | None:
-    """Whether a cheaper qualifying model exists, and by how much.
+def _comparison_rows(recommended, alternative) -> list[dict]:
+    """Zips the two models' quality_profile() outputs into side-by-side rows."""
+    return [
+        {
+            "label": r["label"],
+            "recommended_level": r["level"],
+            "recommended_ordinal": r["ordinal"],
+            "alternative_level": a["level"],
+            "alternative_ordinal": a["ordinal"],
+            "max_ordinal": r["max_ordinal"],
+        }
+        for r, a in zip(quality_profile(recommended), quality_profile(alternative))
+    ]
+
+
+def _other_alternatives(recommendation):
+    """`alternatives`, minus whatever's already shown as an also-strong option.
+
+    also_strong_options isn't capped at MAX_ALTERNATIVES (see
+    decision/explainer/explainer.py), so it frequently contains the
+    same models as the top-ranked `alternatives` list -- rendering both
+    sections unfiltered would show the same model twice on the page,
+    once framed as "practically tied" and once as a plain alternative.
+    """
+    if not recommendation:
+        return ()
+    also_strong_ids = {opt.model.id for opt in recommendation.also_strong_options}
+    return tuple(alt for alt in recommendation.alternatives if alt.model.id not in also_strong_ids)
+
+
+def _savings_summary(recommendation, candidates, budget_usd, priority_1) -> dict | None:
+    """Whether a cheaper, still-fair-swap qualifying model exists, and how it compares.
 
     Always returns a dict when there's a recommendation -- silently
-    omitting this when the winner is already the cheapest option left
-    the UI unable to say *why* there was nothing to show, which read as
-    a gap rather than a (genuinely good) answer. `is_cheapest` lets the
-    template say so explicitly instead of just falling silent.
+    omitting this when there's nothing to show left the UI unable to
+    say *why*, which read as a gap rather than a (genuinely good or
+    genuinely non-existent) answer. Three distinct states, per
+    HANDOFF.md's "Rediseño de Budget":
+
+    - `is_cheapest`: no qualifying model is cheaper at all, full stop.
+    - `filtered_by_quality`: a cheaper model exists, but none stays
+      within one quality tier of the winner on `priority_1` (see
+      cheapest_qualifying_alternative's docstring) -- there IS
+      something cheaper, it's just not a fair comparison, and saying
+      "already the cheapest" here would be false.
+    - otherwise: a fair, cheaper alternative exists -- `comparison_rows`
+      carries the full side-by-side table, not just a savings percentage.
     """
     if not recommendation:
         return None
 
     qualifying_models = [c.model for c in candidates if c.qualifies]
-    cheaper = cheapest_qualifying_alternative(recommendation.recommended, qualifying_models)
-    if not cheaper:
-        return {"is_cheapest": True}
+    winner = recommendation.recommended
+    any_cheaper_exists = any(
+        m.cost.blended < winner.cost.blended for m in qualifying_models if m.id != winner.id
+    )
+    cheaper = cheapest_qualifying_alternative(winner, qualifying_models, priority_1)
 
-    input_pct, output_pct = cost_savings_pct(recommendation.recommended, cheaper)
+    if not cheaper:
+        return {"is_cheapest": not any_cheaper_exists, "filtered_by_quality": any_cheaper_exists}
+
+    input_pct, output_pct = cost_savings_pct(winner, cheaper)
     summary = {
         "is_cheapest": False,
+        "filtered_by_quality": False,
         "model": cheaper,
         "input_pct": round(input_pct),
         "output_pct": round(output_pct),
+        "comparison_rows": _comparison_rows(winner, cheaper),
     }
 
     if budget_usd:
@@ -126,7 +172,7 @@ async def recommend(request: Request):
         output_capacity = estimated_output_capacity(budget_usd, recommendation.recommended)
         input_capacity_pct, output_capacity_pct = capacity_bar_widths(input_capacity, output_capacity)
 
-    savings = _savings_summary(recommendation, candidates, budget_usd) if recommendation else None
+    savings = _savings_summary(recommendation, candidates, budget_usd, context.priorities[0]) if recommendation else None
 
     return templates.TemplateResponse(
         request,
@@ -141,5 +187,6 @@ async def recommend(request: Request):
             "input_capacity_pct": input_capacity_pct,
             "output_capacity_pct": output_capacity_pct,
             "savings": savings,
+            "other_alternatives": _other_alternatives(recommendation),
         },
     )

@@ -157,6 +157,25 @@ It's a derived value, computed by the Decision Engine from the raw
 prices above — this avoids the dataset going stale whenever pricing
 changes.
 
+The tier is a fixed $/million-token band over `cost.blended`
+(`input_per_million + output_per_million`), not a rank relative to
+whichever models happen to be loaded — a model's tier shouldn't drift
+just because other models were added to or removed from the catalog:
+
+| Tier | `cost.blended` |
+|---|---|
+| `low` | ≤ $2 |
+| `medium` | $2–10 |
+| `high` | $10–30 |
+| `very_high` | > $30 |
+
+These bands were chosen against the real distribution of the dataset's
+`cost.blended` values (natural gaps between clusters of models), not
+arbitrary round numbers — see `HANDOFF.md`, "Rediseño de Budget", for
+the data behind them. `BudgetLevel` (the developer's stated budget)
+mirrors these same four tiers, and acts as a hard ceiling: a model
+whose tier exceeds the chosen `BudgetLevel` doesn't qualify.
+
 ### Ecosystem
 
 | Field                       | Type | Category      | Allowed values |

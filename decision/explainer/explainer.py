@@ -20,6 +20,12 @@ from decision.explainer.errors import NoQualifyingModelsError
 
 MAX_ALTERNATIVES = 3
 
+# 2%: "practically tied" score gap for Also-strong-options -- see
+# HANDOFF.md's threshold sensitivity audit (2026-08-11) for why 2% and
+# not 1%/5%/10%. On its own it isn't sufficient (also see
+# _passes_quality_floor) -- it's a necessary, not a sufficient, condition.
+ALSO_STRONG_SCORE_GAP = 0.02
+
 _QUALITY_ATTR = {
     Priority.REASONING: "reasoning",
     Priority.CODING: "coding",
@@ -56,6 +62,7 @@ def explain(context: Context, candidates: list[Candidate]) -> Recommendation:
             Alternative(model=c.model, rank=rank, reasons=_standout_reasons(c.model, qualifying_models))
             for rank, c in enumerate(runners_up[:MAX_ALTERNATIVES], start=2)
         ),
+        also_strong_options=_also_strong_options(winner, runners_up, qualifying_models),
         outranked=tuple(
             Outranked(model=c.model, rank=rank, reasons=_outranked_reasons(context, c.model, qualifying_models))
             for rank, c in enumerate(runners_up[MAX_ALTERNATIVES:], start=MAX_ALTERNATIVES + 2)
@@ -198,6 +205,67 @@ def _standout_reasons(model: AIModel, qualifying: list[AIModel]) -> tuple[str, .
             reasons.append(f"Choose this if {_PRIORITY_LABEL[priority]} matters most to you")
 
     return tuple(reasons)
+
+
+def _passes_quality_floor(winner: AIModel, other: AIModel) -> bool:
+    """Never more than one quality tier below the winner, on ANY of the four dimensions.
+
+    Deliberately checks all four, not just the user's #1 priority --
+    a close weighted score alone doesn't mean a fair swap. Concrete
+    case from HANDOFF.md's sensitivity audit: with priority_1 =
+    context_window, gpt-5-6-sol and gemini-2.5-flash-lite land within
+    0.15% of each other (context_window dominates the weighting), but
+    are `very_high/very_high/high/very_high` vs.
+    `medium/medium/low/medium` -- an 8-tier cumulative gap. Score
+    closeness alone would have called that "practically tied"; it
+    isn't. Same principle already used for Lower-cost Alternative (see
+    interfaces/web/affordability.py), applied here to all four
+    dimensions instead of just priority_1, since Also-strong-options
+    isn't scoped to one dimension the way that feature is.
+    """
+    return all(
+        getattr(winner.quality, attr).ordinal - getattr(other.quality, attr).ordinal <= 1
+        for attr in _QUALITY_ATTR.values()
+    )
+
+
+def _also_strong_options(
+    winner: Candidate, runners_up: list[Candidate], qualifying_models: list[AIModel]
+) -> tuple[Alternative, ...]:
+    """Runners-up that are a practically-tied, fair swap for the winner.
+
+    Two independent conditions, both required (HANDOFF.md, "Also
+    strong options" sensitivity audit, 2026-08-11): within
+    ALSO_STRONG_SCORE_GAP of the winner's score, AND passing
+    _passes_quality_floor. Score closeness alone let through pairs
+    that weren't really equivalent (see that function's docstring) --
+    it's necessary, not sufficient.
+
+    Not capped at MAX_ALTERNATIVES -- a genuinely tied group can be
+    larger than the top-3 alternatives shown elsewhere, and capping it
+    here would silently drop real ties. `runners_up` is already
+    score-sorted descending, so the score gap only grows with rank --
+    safe to stop at the first candidate that fails the score
+    condition, since every later one would fail it too.
+    """
+    if winner.score <= 0:
+        return ()
+
+    also_strong = []
+    for rank, candidate in enumerate(runners_up, start=2):
+        gap = (winner.score - candidate.score) / winner.score
+        if gap > ALSO_STRONG_SCORE_GAP + 1e-9:  # float-rounding tolerance, not a looser threshold
+            break
+        if not _passes_quality_floor(winner.model, candidate.model):
+            continue
+        also_strong.append(
+            Alternative(
+                model=candidate.model,
+                rank=rank,
+                reasons=_standout_reasons(candidate.model, qualifying_models),
+            )
+        )
+    return tuple(also_strong)
 
 
 def _is_cheapest(model: AIModel, qualifying: list[AIModel]) -> bool:

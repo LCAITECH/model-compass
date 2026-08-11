@@ -67,5 +67,13 @@ class Recommendation:
     trade_offs: tuple[str, ...]
     total_qualifying: int
     alternatives: tuple[Alternative, ...]
+    # Alternatives that are a practically-tied, fair swap for the winner:
+    # within 2% of its score AND never more than one quality tier below
+    # it on any of the four quality dimensions -- both conditions
+    # required, score closeness alone isn't equivalence (see
+    # decision/explainer/explainer.py's _also_strong_options). Not
+    # capped at len(alternatives) -- a genuinely tied group can be
+    # larger than the top-3 shown there.
+    also_strong_options: tuple[Alternative, ...]
     outranked: tuple[Outranked, ...]
     excluded: tuple[Exclusion, ...]

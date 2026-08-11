@@ -13,7 +13,7 @@ capabilities:
   json_mode: true
 
 quality:
-  reasoning: medium
+  reasoning: high
   coding: medium
   creative_writing: medium
   instruction_following: high

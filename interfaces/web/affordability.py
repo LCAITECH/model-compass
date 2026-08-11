@@ -8,7 +8,14 @@ input is money (something every user actually knows), output is a
 derived token capacity, not the other way around.
 """
 
-from decision.domain import AIModel
+from decision.domain import AIModel, Priority
+
+_QUALITY_DIMENSION_ATTR: dict[Priority, str] = {
+    Priority.REASONING: "reasoning",
+    Priority.CODING: "coding",
+    Priority.CREATIVE_WRITING: "creative_writing",
+    Priority.INSTRUCTION_FOLLOWING: "instruction_following",
+}
 
 
 def estimated_input_capacity(budget_usd: float, model: AIModel) -> int:
@@ -67,8 +74,25 @@ def _pct_lower(from_price: float, to_price: float) -> float:
     return (from_price - to_price) / from_price * 100
 
 
-def cheapest_qualifying_alternative(recommended: AIModel, qualifying_models: list[AIModel]) -> AIModel | None:
-    """The cheapest qualifying model other than the winner, if any is actually cheaper.
+def cheapest_qualifying_alternative(
+    recommended: AIModel,
+    qualifying_models: list[AIModel],
+    priority_1: Priority | None = None,
+) -> AIModel | None:
+    """The cheapest qualifying model that's still a fair swap, if one is actually cheaper.
+
+    "Fair swap" (HANDOFF.md, "Rediseño de Budget"): when `priority_1` is
+    one of the four quality dimensions, an alternative doesn't qualify
+    just for being cheap -- it must stay within one quality tier of the
+    winner *on that specific dimension*, the one the developer said
+    matters most. Otherwise this would happily suggest "switch to a
+    much worse model and save money" for someone who explicitly ranked
+    quality above cost, which isn't a real alternative, just noise.
+
+    When `priority_1` isn't a quality dimension (COST or CONTEXT_WINDOW,
+    or no priority given), there's no quality tier to protect -- the
+    search falls back to the true cheapest qualifying model, same as
+    before this rule existed.
 
     Searches every qualifying candidate, not just the capped
     Recommendation.alternatives list -- the true cheapest option might
@@ -77,6 +101,14 @@ def cheapest_qualifying_alternative(recommended: AIModel, qualifying_models: lis
     others = [m for m in qualifying_models if m.id != recommended.id]
     if not others:
         return None
+
+    quality_attr = _QUALITY_DIMENSION_ATTR.get(priority_1)
+    if quality_attr is not None:
+        winner_ordinal = getattr(recommended.quality, quality_attr).ordinal
+        others = [m for m in others if winner_ordinal - getattr(m.quality, quality_attr).ordinal <= 1]
+        if not others:
+            return None
+
     cheapest = min(others, key=lambda m: m.cost.blended)
     return cheapest if cheapest.cost.blended < recommended.cost.blended else None
 

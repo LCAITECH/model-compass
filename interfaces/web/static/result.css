@@ -149,6 +149,19 @@
   color: var(--caution);
 }
 
+/* Also strong options: a deterministic tie-break isn't a clear win --
+   flagged with the same left-accent treatment as .tip, not the
+   celebratory green of .savings-callout, since the message here is
+   "don't over-trust the #1 spot", not good news. */
+
+.also-strong-card {
+  border-left: 3px solid var(--caution);
+}
+
+.also-strong-card .muted {
+  margin: 0 0 var(--space-5);
+}
+
 /* Alternatives: a grid of independent mini-cards, not a stacked list */
 
 .section-eyebrow {
