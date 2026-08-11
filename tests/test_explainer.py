@@ -87,14 +87,15 @@ def test_alternatives_are_capped(models):
 
 def test_alternatives_get_honest_standout_reasons_or_none(models):
     # Winner is deepseek-v4-flash (cheapest, blended 0.42). Alternatives
-    # ranked by cost among the rest: gpt-5-nano (0.45), deepseek-v4-pro
-    # (1.305), gpt-5-mini (2.25) -- deepseek-v4-pro's arrival bumped
-    # gemini-2.5-flash out of the top 3. deepseek-v4-pro genuinely
-    # stands out here: it's rated very_high on both reasoning and
-    # coding, ties for the best in the qualifying pool on each, so it
-    # gets real standout reasons unlike gpt-5-nano and gpt-5-mini, which
-    # have nothing left to stand out on among this many qualifying
-    # models.
+    # ranked by cost among the rest: gpt-5-nano (0.45),
+    # gemini-2.5-flash-lite (0.50), deepseek-v4-pro (1.305) --
+    # gemini-2.5-flash-lite's arrival (cheaper than deepseek-v4-pro)
+    # bumped gpt-5-mini out of the top 3 entirely. deepseek-v4-pro
+    # genuinely stands out here: it's rated very_high on both reasoning
+    # and coding, ties for the best in the qualifying pool on each, so
+    # it gets real standout reasons unlike gpt-5-nano and
+    # gemini-2.5-flash-lite, which have nothing left to stand out on
+    # among this many qualifying models.
     context = Context(
         use_case="Bot",
         budget=BudgetLevel.HIGH,
@@ -109,15 +110,17 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
     assert any("reasoning" in reason for reason in by_id["deepseek-v4-pro"].reasons)
     assert any("coding" in reason for reason in by_id["deepseek-v4-pro"].reasons)
     assert by_id["gpt-5-nano"].reasons == ()
-    assert by_id["gpt-5-mini"].reasons == ()
+    assert by_id["gemini-2.5-flash-lite"].reasons == ()
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
-    # Only mistral-large-3 supports "ko" -- none of the other 19 models
+    # Only mistral-large-3 supports "ko" -- none of the other 25 models
     # list it either, since every curated language list in this dataset
     # was inherited from a same-provider sibling, none of which support
     # "ko" (see Docs/models/*.md), including deepseek-v4-pro (inherits
-    # deepseek-v4-flash's curated language list).
+    # deepseek-v4-flash's curated language list) and the six candidates
+    # admitted 2026-08-10 (each inherits its nearest same-provider
+    # sibling's curated list).
     context = Context(
         use_case="Korean support assistant",
         budget=BudgetLevel.HIGH,
@@ -132,13 +135,19 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     assert recommendation.alternatives == ()
     assert {excl.model.id for excl in recommendation.excluded} == {
         "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-3.1-flash-lite",
+        "gemini-3.5-flash",
         "gpt-5-mini",
+        "gpt-5-6-sol",
         "claude-sonnet-5",
+        "claude-sonnet-4-5",
         "deepseek-v4-flash",
         "deepseek-v4-pro",
         "gpt-5",
         "gemini-2.5-pro",
         "claude-opus-5",
+        "claude-opus-4-5",
         "gpt-4o",
         "gpt-5-nano",
         "claude-haiku-4-5",
@@ -158,8 +167,8 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
 
 
 def test_total_qualifying_and_alternative_ranks(models):
-    # 20 models total, all support "es" and all fit a HIGH budget, so
-    # all 20 qualify. Alternatives are the winner's immediate runners-up
+    # 26 models total, all support "es" and all fit a HIGH budget, so
+    # all 26 qualify. Alternatives are the winner's immediate runners-up
     # (rank starts at 2, since the winner is implicitly rank 1).
     context = Context(
         use_case="High-volume low-cost bot",
@@ -171,16 +180,17 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.total_qualifying == 20
+    assert recommendation.total_qualifying == 26
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
 def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
-    # Same context as above. deepseek-v4-pro's arrival took the third
-    # alternative slot, which pushed gemini-2.5-flash into the outranked
-    # group -- it's now the first model past the top-3 alternatives
-    # (rank 5 of 20). Unlike the winner's trade_offs, its reasons
-    # include "Not the cheapest option" even though COST is the
+    # Same context as above. gemini-2.5-flash-lite's arrival (blended
+    # cost 0.50, cheaper than deepseek-v4-pro) took the third
+    # alternative slot, which pushed gemini-3.1-flash-lite (1.75) into
+    # the outranked group as the first model past the top-3
+    # alternatives (rank 5 of 26). Unlike the winner's trade_offs, its
+    # reasons include "Not the cheapest option" even though COST is the
     # prioritized dimension, because there's no positive "reasons" line
     # for it to contradict; omitting the cost gap would hide the actual
     # reason it lost, per _dimension_gaps' docstring.
@@ -194,11 +204,11 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 16  # 20 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 21))
+    assert len(recommendation.outranked) == 22  # 26 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 27))
 
     first = recommendation.outranked[0]
-    assert first.model.id == "gemini-2.5-flash"
+    assert first.model.id == "gemini-3.1-flash-lite"
     assert any("Not the cheapest" in reason for reason in first.reasons)
 
 

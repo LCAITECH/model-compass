@@ -50,6 +50,22 @@ based on the project's own editorial evaluation, informed by public
 documentation and practical usage. Benchmarks may provide additional
 context, but they are never the source of an editorial rating.
 
+**Calibration is evidence-based, not family-based.** A model does not
+inherit a lower — or higher — editorial rating simply because it is an
+older generation, a smaller/cheaper tier, or shares a naming family
+with an already-rated model. Every calibration must point to a
+specific, sourced signal: a knowledge-cutoff gap, a stated or missing
+capability (e.g. a deprecated or absent feature), an explicit provider
+statement of relative positioning — never the version number by
+itself. Two models one generation apart can carry identical ratings if
+no such signal exists between them (e.g. Claude Opus 4.7 and Opus 4.8
+in this dataset, rated identically despite being different releases,
+because their sourced knowledge-cutoff dates match). Conversely, when
+a signal exists but only affects part of a model's capability profile,
+the degradation should be scoped to the dimension the evidence
+actually supports, not applied uniformly across all four quality
+dimensions.
+
 ---
 
 ## Schema
