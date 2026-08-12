@@ -1,5 +1,5 @@
 from decision.domain import AccessRequirement, CloudProvider, RequirementKind
-from interfaces.web.access_labels import requirement_label
+from interfaces.web.access_labels import guide_ref_url, requirement_label
 
 
 def test_consumer_subscription_names_actual_plans_when_known():
@@ -34,3 +34,34 @@ def test_api_billing_linked_uses_fixed_label():
     requirement = AccessRequirement(kind=RequirementKind.API_BILLING_LINKED, value=None)
 
     assert requirement_label(requirement) == "an API key with billing set up"
+
+
+def test_guide_ref_url_points_at_the_curated_guide_section():
+    url = guide_ref_url("anthropic#direct-api")
+
+    assert url == (
+        "https://github.com/LCAITECH/model-compass/blob/main/"
+        "Docs/access-guides/anthropic.md#anthropicdirect-api"
+    )
+
+
+def test_guide_ref_url_matches_every_real_guide_ref():
+    """Every guide_ref in the dataset must resolve to a heading that
+    actually exists in its Docs/access-guides/{provider}.md file --
+    verified against GitHub's anchor-slug rule (drop non-alphanumeric
+    characters, no separator inserted for the removed '#')."""
+    import re
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    real_guide_refs = [
+        "anthropic#direct-api",
+        "openai#direct-api",
+        "google#direct-api",
+        "google#ai-studio",
+    ]
+    for guide_ref in real_guide_refs:
+        provider, _, anchor = guide_ref.partition("#")
+        guide_text = (root / "Docs" / "access-guides" / f"{provider}.md").read_text(encoding="utf-8")
+        assert re.search(rf"^## `{re.escape(guide_ref)}`$", guide_text, re.MULTILINE), guide_ref
+        assert guide_ref_url(guide_ref).endswith(f"{provider}.md#{provider}{anchor}")

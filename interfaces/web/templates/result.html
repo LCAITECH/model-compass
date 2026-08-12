@@ -59,10 +59,15 @@
         {% if entry.unmet_requirements %}
         <p class="muted">Requires: {{ entry.unmet_requirements | map('requirement_label', subscription_plan_names) | join(', ') }}</p>
         {% endif %}
+        {% if entry.route.economics.production_allowed is none %}
+        <p class="muted access-caveat">Production use not confirmed by official docs.</p>
+        {% elif not entry.route.economics.production_allowed %}
+        <p class="muted access-caveat">Not allowed for production use per official docs.</p>
+        {% endif %}
         {% if entry.route.evidence.caveat %}
         <p class="muted access-caveat">{{ entry.route.evidence.caveat }}</p>
         {% endif %}
-        <p class="access-evidence">Source: <a href="{{ entry.route.evidence.source_url }}" target="_blank" rel="noopener">official docs</a> — checked {{ entry.route.evidence.consulted_at }}</p>
+        <p class="access-evidence"><a href="{{ entry.route.access.guide_ref | guide_ref_url }}" target="_blank" rel="noopener">How to access</a> · Source: <a href="{{ entry.route.evidence.source_url }}" target="_blank" rel="noopener">official docs</a> — checked {{ entry.route.evidence.consulted_at }}</p>
       </div>
       {% endfor %}
     </div>

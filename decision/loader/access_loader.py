@@ -209,6 +209,12 @@ def _validate_requirements(requirements) -> list[str]:
             issues.append(f"requirement kind '{kind}' must not have a value")
         elif shape == "single_string" and not isinstance(value, str):
             issues.append(f"requirement kind '{kind}' requires a string value")
+        elif (
+            kind == RequirementKind.CLOUD_ACCOUNT.value
+            and isinstance(value, str)
+            and value not in _values(CloudProvider)
+        ):
+            issues.append(f"requirement kind '{kind}' has invalid cloud_account value '{value}'")
         elif shape == "string_list" and not (
             isinstance(value, list) and value and all(isinstance(v, str) for v in value)
         ):
@@ -233,6 +239,11 @@ def _validate_subscription(raw) -> list[str]:
         for surface in raw["surface_entitlements"]:
             if surface not in _values(Surface):
                 issues.append(f"invalid surface_entitlements entry '{surface}'")
+    if not (
+        isinstance(raw["documented_exclusions"], list)
+        and all(isinstance(item, str) for item in raw["documented_exclusions"])
+    ):
+        issues.append("documented_exclusions must be a list of strings")
     if raw["status"] not in _values(EvidenceStatus):
         issues.append(f"invalid status='{raw['status']}'")
 

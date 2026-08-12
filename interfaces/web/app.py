@@ -25,7 +25,7 @@ from decision.loader import (
     validate_subscription_references,
 )
 from interfaces.web.access_context_form import access_context_from_form
-from interfaces.web.access_labels import requirement_label
+from interfaces.web.access_labels import guide_ref_url, requirement_label
 from interfaces.web.affordability import (
     capacity_bar_widths,
     cheapest_qualifying_alternative,
@@ -49,6 +49,7 @@ app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 templates.env.filters["language_name"] = language_name
 templates.env.filters["requirement_label"] = requirement_label
+templates.env.filters["guide_ref_url"] = guide_ref_url
 
 models = load_dataset(DATASET_DIR)
 languages = sorted({language for model in models for language in model.languages})

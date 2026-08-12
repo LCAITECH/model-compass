@@ -18,4 +18,4 @@ evidence:
   source_url: https://ai.google.dev/gemini-api/docs/billing?hl=es-419
   consulted_at: "2026-08-11"
   status: confirmed
-  caveat: "Paid tier requiere Cloud Billing vinculada al proyecto; la cuota es por proyecto, no por API key."
+  caveat: "The paid tier requires Cloud Billing linked to the project; quota is scoped per project, not per API key."

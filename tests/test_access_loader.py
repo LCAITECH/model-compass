@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 import pytest
@@ -53,6 +54,29 @@ def test_real_subscription_references_are_valid():
     subscriptions = load_subscriptions(SUBSCRIPTIONS_DIR)
 
     validate_subscription_references(routes, subscriptions)  # must not raise
+
+
+def test_free_text_fields_stay_in_english():
+    # Model Compass has no i18n system -- every other dataset field
+    # (dataset/models/*.yaml) is English-only, and the web UI is
+    # English-only, so free-text fields here (evidence.caveat,
+    # documented_exclusions) must never ship in Spanish/Spanglish
+    # either. Regression for the ai-studio route's caveat, which
+    # originally shipped as "Restricciones de Google One indican...".
+    spanish_markers = re.compile(
+        r"\b(que|el|la|los|las|una|esta|está|cuenta|requiere|indican|vinculada|"
+        r"salvedad|facturado|cuotas|creditos|créditos|proyecto)\b",
+        re.IGNORECASE,
+    )
+
+    routes = load_access_routes(ACCESS_ROUTES_DIR)
+    for route in routes:
+        assert not spanish_markers.search(route.evidence.caveat), (route.route_id, route.evidence.caveat)
+
+    plans = load_subscriptions(SUBSCRIPTIONS_DIR)
+    for plan in plans:
+        for exclusion in plan.documented_exclusions:
+            assert not spanish_markers.search(exclusion), (plan.plan_id, exclusion)
 
 
 def test_gemini_ai_studio_route_requires_consumer_subscription():
@@ -114,6 +138,23 @@ def test_rejects_invalid_requirement_kind(tmp_path):
     assert "invalid requirement kind" in str(exc_info.value)
 
 
+def test_rejects_invalid_cloud_account_value(tmp_path):
+    routes_dir = tmp_path / "access_routes" / "anthropic"
+    routes_dir.mkdir(parents=True)
+    path = routes_dir / "broken.yaml"
+    path.write_text(
+        _MINIMAL_ROUTE.replace("REPLACE_ME", "claude-opus-5").replace(
+            "kind: api_billing_linked", "kind: cloud_account\n      value: digitalocean"
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(DatasetValidationError) as exc_info:
+        load_access_route_file(path)
+
+    assert "invalid cloud_account value" in str(exc_info.value)
+
+
 def test_rejects_subscription_missing_fields(tmp_path):
     subs_dir = tmp_path / "subscriptions" / "google"
     subs_dir.mkdir(parents=True)
@@ -125,6 +166,29 @@ def test_rejects_subscription_missing_fields(tmp_path):
 
     assert "missing required field" in str(exc_info.value)
 
+
+def test_rejects_subscription_with_non_list_documented_exclusions(tmp_path):
+    subs_dir = tmp_path / "subscriptions" / "google"
+    subs_dir.mkdir(parents=True)
+    path = subs_dir / "broken.yaml"
+    path.write_text(_MINIMAL_SUBSCRIPTION.replace("REPLACE_ME", '"no API billing"'), encoding="utf-8")
+
+    with pytest.raises(DatasetValidationError) as exc_info:
+        load_subscription_file(path)
+
+    assert "documented_exclusions must be a list of strings" in str(exc_info.value)
+
+
+_MINIMAL_SUBSCRIPTION = """
+provider: Google
+plan_name: Test Plan
+surface_entitlements: [playground_or_studio]
+documented_exclusions: REPLACE_ME
+region_scope: account_dependent
+source_url: https://example.com
+consulted_at: "2026-08-11"
+status: confirmed
+"""
 
 _MINIMAL_ROUTE = """
 provider: Anthropic
