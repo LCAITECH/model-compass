@@ -3,12 +3,15 @@ from pathlib import Path
 from decision.access import recommend_access
 from decision.domain import (
     AccessContext,
+    AccessRequirement,
     AccessRoute,
     Capability,
+    CloudProvider,
     Eligibility,
     Evidence,
     EvidenceStatus,
     Intensity,
+    RequirementKind,
     RouteEligibilityState,
     UseMode,
     WorkloadType,
@@ -144,12 +147,63 @@ def test_enterprise_governance_routes_are_never_shown():
     assert recommendation.routes == ()
 
 
+def test_cloud_account_requires_onboarding_without_declared_account():
+    """No cloud_hosted route exists in the sample dataset yet (spec 5.1 --
+    Bedrock/Vertex/Foundry were left out pending per-model_id evidence), so
+    this exercises the CLOUD_ACCOUNT branch with a synthetic route --
+    same pattern as _make_enterprise_route below.
+    """
+    model = MODELS["claude-opus-5"]
+    route = _make_cloud_hosted_route(model.id, provider_value="aws")
+
+    without_account = recommend_access(model, _context(), [route])
+    [entry] = without_account.routes
+    assert entry.state == RouteEligibilityState.REQUIRES_ONBOARDING
+    assert entry.unmet_requirements[0].value == CloudProvider.AWS
+
+    with_account = recommend_access(model, _context(cloud_accounts=(CloudProvider.AWS,)), [route])
+    [entry] = with_account.routes
+    assert entry.state == RouteEligibilityState.CURRENTLY_ELIGIBLE
+
+    with_wrong_account = recommend_access(model, _context(cloud_accounts=(CloudProvider.GCP,)), [route])
+    [entry] = with_wrong_account.routes
+    assert entry.state == RouteEligibilityState.REQUIRES_ONBOARDING
+
+
 def test_currently_eligible_routes_sort_before_requires_onboarding():
     model = MODELS["gemini-2.5-pro"]
     recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES)
 
     states = [entry.state for entry in recommendation.routes]
     assert states == sorted(states, key=lambda s: s != RouteEligibilityState.CURRENTLY_ELIGIBLE)
+
+
+def _make_cloud_hosted_route(model_id: str, provider_value: str) -> AccessRoute:
+    template = next(route for route in ROUTES if route.model_id == "claude-opus-5")
+    return AccessRoute(
+        route_id="fake-cloud-hosted-route",
+        provider="AWS",
+        model_id=model_id,
+        access=template.access.__class__(
+            surface=template.access.surface,
+            access_method="AWS Bedrock InvokeModel/Converse",
+            capabilities=(Capability.DEPLOY,),
+            guide_ref="aws-bedrock#claude",
+        ),
+        eligibility=Eligibility(
+            requirements=(
+                AccessRequirement(kind=RequirementKind.CLOUD_ACCOUNT, value=CloudProvider(provider_value)),
+            ),
+            region_scope=template.eligibility.region_scope,
+        ),
+        economics=template.economics,
+        evidence=Evidence(
+            source_url="https://example.com",
+            consulted_at="2026-08-11",
+            status=EvidenceStatus.CONFIRMED,
+            caveat="test fixture",
+        ),
+    )
 
 
 def _make_enterprise_route(model_id: str) -> AccessRoute:
