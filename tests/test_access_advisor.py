@@ -13,12 +13,11 @@ from decision.domain import (
     UseMode,
     WorkloadType,
 )
-from decision.loader import load_access_routes, load_dataset, load_subscriptions
+from decision.loader import load_access_routes, load_dataset
 
 ROOT = Path(__file__).resolve().parents[1]
 MODELS = {model.id: model for model in load_dataset(ROOT / "dataset" / "models")}
 ROUTES = load_access_routes(ROOT / "dataset" / "access_routes")
-SUBSCRIPTIONS = load_subscriptions(ROOT / "dataset" / "subscriptions")
 
 
 def _context(**overrides):
@@ -39,7 +38,7 @@ def _context(**overrides):
 
 def test_currently_eligible_when_requirement_met():
     model = MODELS["claude-opus-5"]
-    recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES, SUBSCRIPTIONS)
+    recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES)
 
     [entry] = recommendation.routes
     assert entry.state == RouteEligibilityState.CURRENTLY_ELIGIBLE
@@ -48,7 +47,7 @@ def test_currently_eligible_when_requirement_met():
 
 def test_requires_onboarding_when_requirement_declared_false():
     model = MODELS["claude-opus-5"]
-    recommendation = recommend_access(model, _context(has_api_billing=False), ROUTES, SUBSCRIPTIONS)
+    recommendation = recommend_access(model, _context(has_api_billing=False), ROUTES)
 
     [entry] = recommendation.routes
     assert entry.state == RouteEligibilityState.REQUIRES_ONBOARDING
@@ -58,7 +57,7 @@ def test_requires_onboarding_when_requirement_declared_false():
 def test_unknown_never_counts_as_satisfied():
     """None ("unknown") must behave exactly like an explicit False -- spec Part 5.2.1."""
     model = MODELS["claude-opus-5"]
-    recommendation = recommend_access(model, _context(has_api_billing=None), ROUTES, SUBSCRIPTIONS)
+    recommendation = recommend_access(model, _context(has_api_billing=None), ROUTES)
 
     [entry] = recommendation.routes
     assert entry.state == RouteEligibilityState.REQUIRES_ONBOARDING
@@ -67,7 +66,7 @@ def test_unknown_never_counts_as_satisfied():
 def test_consumer_subscription_matches_declared_plan():
     model = MODELS["gemini-2.5-pro"]
     recommendation = recommend_access(
-        model, _context(has_api_billing=True, subscriptions=("google-ai-pro",)), ROUTES, SUBSCRIPTIONS
+        model, _context(has_api_billing=True, subscriptions=("google-ai-pro",)), ROUTES
     )
 
     by_surface = {entry.route.access.surface.value: entry.state for entry in recommendation.routes}
@@ -77,7 +76,7 @@ def test_consumer_subscription_matches_declared_plan():
 
 def test_consumer_subscription_unmet_without_declared_plan():
     model = MODELS["gemini-2.5-pro"]
-    recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES, SUBSCRIPTIONS)
+    recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES)
 
     by_surface = {entry.route.access.surface.value: entry.state for entry in recommendation.routes}
     assert by_surface["direct_api"] == RouteEligibilityState.CURRENTLY_ELIGIBLE
@@ -86,7 +85,7 @@ def test_consumer_subscription_unmet_without_declared_plan():
 
 def test_summary_highlights_unique_confirmed_direct_api():
     model = MODELS["claude-opus-5"]
-    recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES, SUBSCRIPTIONS)
+    recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES)
 
     assert recommendation.summary.bucket_state == RouteEligibilityState.CURRENTLY_ELIGIBLE
     assert recommendation.summary.highlighted_route is not None
@@ -95,7 +94,7 @@ def test_summary_highlights_unique_confirmed_direct_api():
 
 def test_summary_falls_back_to_requires_onboarding_bucket():
     model = MODELS["claude-opus-5"]
-    recommendation = recommend_access(model, _context(has_api_billing=False), ROUTES, SUBSCRIPTIONS)
+    recommendation = recommend_access(model, _context(has_api_billing=False), ROUTES)
 
     assert recommendation.summary.bucket_state == RouteEligibilityState.REQUIRES_ONBOARDING
     assert recommendation.summary.highlighted_route is not None
@@ -120,7 +119,7 @@ def test_summary_shows_neutral_count_with_two_eligible_routes_neither_uniquely_d
     )
 
     recommendation = recommend_access(
-        model, _context(has_api_billing=True), [template, second_direct_api_route], SUBSCRIPTIONS
+        model, _context(has_api_billing=True), [template, second_direct_api_route]
     )
 
     assert recommendation.summary.bucket_size == 2
@@ -129,7 +128,7 @@ def test_summary_shows_neutral_count_with_two_eligible_routes_neither_uniquely_d
 
 def test_no_routes_for_a_model_returns_explicit_empty_state():
     model = MODELS["gpt-5-mini"]  # no access_routes entry exists for this id
-    recommendation = recommend_access(model, _context(), ROUTES, SUBSCRIPTIONS)
+    recommendation = recommend_access(model, _context(), ROUTES)
 
     assert recommendation.routes == ()
     assert recommendation.summary.bucket_state is None
@@ -140,14 +139,14 @@ def test_enterprise_governance_routes_are_never_shown():
     model = MODELS["claude-opus-5"]
     enterprise_route = _make_enterprise_route(model.id)
 
-    recommendation = recommend_access(model, _context(has_api_billing=True), [enterprise_route], SUBSCRIPTIONS)
+    recommendation = recommend_access(model, _context(has_api_billing=True), [enterprise_route])
 
     assert recommendation.routes == ()
 
 
 def test_currently_eligible_routes_sort_before_requires_onboarding():
     model = MODELS["gemini-2.5-pro"]
-    recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES, SUBSCRIPTIONS)
+    recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES)
 
     states = [entry.state for entry in recommendation.routes]
     assert states == sorted(states, key=lambda s: s != RouteEligibilityState.CURRENTLY_ELIGIBLE)

@@ -17,6 +17,7 @@ from pathlib import Path
 
 import yaml
 
+from decision.domain.access_context import CloudProvider
 from decision.domain.access_route import (
     Access,
     AccessRequirement,
@@ -163,9 +164,12 @@ def _validate_route(raw) -> list[str]:
 
     if access["surface"] not in _values(Surface):
         issues.append(f"invalid access.surface='{access['surface']}'")
-    for capability in access["capabilities"]:
-        if capability not in _values(Capability):
-            issues.append(f"invalid access.capabilities entry '{capability}'")
+    if not isinstance(access["capabilities"], list):
+        issues.append("access.capabilities must be a list")
+    else:
+        for capability in access["capabilities"]:
+            if capability not in _values(Capability):
+                issues.append(f"invalid access.capabilities entry '{capability}'")
 
     issues += _validate_requirements(eligibility["requirements"])
     if eligibility["region_scope"] not in _values(RegionScope):
@@ -223,9 +227,12 @@ def _validate_subscription(raw) -> list[str]:
     if issues:
         return issues
 
-    for surface in raw["surface_entitlements"]:
-        if surface not in _values(Surface):
-            issues.append(f"invalid surface_entitlements entry '{surface}'")
+    if not isinstance(raw["surface_entitlements"], list):
+        issues.append("surface_entitlements must be a list")
+    else:
+        for surface in raw["surface_entitlements"]:
+            if surface not in _values(Surface):
+                issues.append(f"invalid surface_entitlements entry '{surface}'")
     if raw["status"] not in _values(EvidenceStatus):
         issues.append(f"invalid status='{raw['status']}'")
 
@@ -234,6 +241,20 @@ def _validate_subscription(raw) -> list[str]:
 
 def _values(enum_cls):
     return {member.value for member in enum_cls}
+
+
+def _convert_requirement_value(kind: RequirementKind, raw_value):
+    """Converts a requirement's raw YAML value into the typed shape
+    AccessRequirement.value actually promises for that kind (see
+    RequirementKind's per-member comments in access_route.py) -- keeps
+    every consumer comparing against the same type instead of each
+    callsite (advisor.py, access_labels.py) doing its own conversion.
+    """
+    if kind == RequirementKind.CLOUD_ACCOUNT:
+        return CloudProvider(raw_value)
+    if kind == RequirementKind.CONSUMER_SUBSCRIPTION:
+        return tuple(raw_value)
+    return raw_value  # program_membership: str; api_billing_linked/gpu_infrastructure: None
 
 
 def _to_access_route(raw: dict, route_id: str) -> AccessRoute:
@@ -259,11 +280,7 @@ def _to_access_route(raw: dict, route_id: str) -> AccessRoute:
             requirements=tuple(
                 AccessRequirement(
                     kind=RequirementKind(entry["kind"]),
-                    value=(
-                        tuple(entry["value"])
-                        if RequirementKind(entry["kind"]) == RequirementKind.CONSUMER_SUBSCRIPTION
-                        else entry.get("value")
-                    ),
+                    value=_convert_requirement_value(RequirementKind(entry["kind"]), entry.get("value")),
                 )
                 for entry in eligibility["requirements"]
             ),

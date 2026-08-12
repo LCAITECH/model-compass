@@ -58,6 +58,7 @@ access_routes = load_access_routes(ACCESS_ROUTES_DIR)
 subscriptions = load_subscriptions(SUBSCRIPTIONS_DIR)
 validate_route_references(access_routes, models)
 validate_subscription_references(access_routes, subscriptions)
+subscription_plan_names = {plan.plan_id: plan.plan_name for plan in subscriptions}
 
 
 def _form_context(error: str | None = None) -> dict:
@@ -189,7 +190,7 @@ async def recommend(request: Request):
 
     access_context = access_context_from_form(form)
     access = (
-        recommend_access(recommendation.recommended, access_context, access_routes, subscriptions)
+        recommend_access(recommendation.recommended, access_context, access_routes)
         if recommendation
         else None
     )
@@ -218,5 +219,6 @@ async def recommend(request: Request):
             "savings": savings,
             "other_alternatives": _other_alternatives(recommendation),
             "access": access,
+            "subscription_plan_names": subscription_plan_names,
         },
     )

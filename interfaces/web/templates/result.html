@@ -57,7 +57,7 @@
           <span class="muted">({{ entry.route.provider }})</span>
         </div>
         {% if entry.unmet_requirements %}
-        <p class="muted">Requires: {{ entry.unmet_requirements | map('requirement_label') | join(', ') }}</p>
+        <p class="muted">Requires: {{ entry.unmet_requirements | map('requirement_label', subscription_plan_names) | join(', ') }}</p>
         {% endif %}
         {% if entry.route.evidence.caveat %}
         <p class="muted access-caveat">{{ entry.route.evidence.caveat }}</p>

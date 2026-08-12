@@ -11,9 +11,25 @@ AccessContext field for that opt-in was ever closed. Until that's
 decided, every route with Capability.ENTERPRISE_GOVERNANCE is
 unconditionally treated as NOT_AVAILABLE (excluded) -- the one behavior
 the spec unambiguously supports today.
+
+DEVIATION FROM THE SPEC'S LITERAL SIGNATURE, documented rather than
+silent: Part 5.3 closed `recommend_access(model, context, routes,
+subscriptions)`. In practice `subscriptions` (the SubscriptionPlan
+catalog) has no legitimate use inside this function -- consumer_
+subscription eligibility only needs `context.subscriptions` (what the
+user declared) against `requirement.value` (the plan_ids already
+denormalized onto the route by the loader); resolving those plan_ids to
+human-readable names is presentation, which belongs in interfaces/, not
+here (see interfaces/web/access_labels.py); and re-validating that a
+plan_id is real would duplicate validate_subscription_references(),
+contradicting 5.3's explicit rule that the advisor stays "dumb" and
+never re-checks what the loader already guaranteed. Keeping an
+always-unused parameter is worse than a small, justified signature
+correction -- so it was dropped. Flagged here instead of buried in a
+commit message.
 """
 
-from decision.domain.access_context import AccessContext, CloudProvider
+from decision.domain.access_context import AccessContext
 from decision.domain.access_recommendation import (
     AccessRecommendation,
     AccessSummary,
@@ -29,14 +45,12 @@ from decision.domain.access_route import (
     Surface,
 )
 from decision.domain.ai_model import AIModel
-from decision.domain.subscription import SubscriptionPlan
 
 
 def recommend_access(
     model: AIModel,
     context: AccessContext,
     routes: list[AccessRoute],
-    subscriptions: list[SubscriptionPlan],
 ) -> AccessRecommendation:
     model_routes = [route for route in routes if route.model_id == model.id]
 
@@ -74,7 +88,7 @@ def _is_satisfied(requirement: AccessRequirement, context: AccessContext) -> boo
     if requirement.kind == RequirementKind.API_BILLING_LINKED:
         return context.has_api_billing is True
     if requirement.kind == RequirementKind.CLOUD_ACCOUNT:
-        return CloudProvider(requirement.value) in context.cloud_accounts
+        return requirement.value in context.cloud_accounts
     if requirement.kind == RequirementKind.CONSUMER_SUBSCRIPTION:
         return any(plan_id in context.subscriptions for plan_id in requirement.value)
     if requirement.kind == RequirementKind.PROGRAM_MEMBERSHIP:
