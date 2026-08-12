@@ -13,10 +13,19 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from decision.domain import BudgetLevel, Priority
+from decision.access import recommend_access
+from decision.domain import BudgetLevel, CloudProvider, Intensity, Priority, UseMode, WorkloadType
 from decision.evaluator import evaluate
 from decision.explainer import NoQualifyingModelsError, explain
-from decision.loader import load_dataset
+from decision.loader import (
+    load_access_routes,
+    load_dataset,
+    load_subscriptions,
+    validate_route_references,
+    validate_subscription_references,
+)
+from interfaces.web.access_context_form import access_context_from_form
+from interfaces.web.access_labels import guide_ref_url, requirement_label
 from interfaces.web.affordability import (
     capacity_bar_widths,
     cheapest_qualifying_alternative,
@@ -32,15 +41,25 @@ from interfaces.web.use_cases import USE_CASES
 
 BASE_DIR = Path(__file__).resolve().parent
 DATASET_DIR = BASE_DIR.parent.parent / "dataset" / "models"
+ACCESS_ROUTES_DIR = BASE_DIR.parent.parent / "dataset" / "access_routes"
+SUBSCRIPTIONS_DIR = BASE_DIR.parent.parent / "dataset" / "subscriptions"
 
 app = FastAPI(title="Model Compass")
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 templates.env.filters["language_name"] = language_name
+templates.env.filters["requirement_label"] = requirement_label
+templates.env.filters["guide_ref_url"] = guide_ref_url
 
 models = load_dataset(DATASET_DIR)
 languages = sorted({language for model in models for language in model.languages})
 providers = sorted({model.provider for model in models})
+
+access_routes = load_access_routes(ACCESS_ROUTES_DIR)
+subscriptions = load_subscriptions(SUBSCRIPTIONS_DIR)
+validate_route_references(access_routes, models)
+validate_subscription_references(access_routes, subscriptions)
+subscription_plan_names = {plan.plan_id: plan.plan_name for plan in subscriptions}
 
 
 def _form_context(error: str | None = None) -> dict:
@@ -51,6 +70,11 @@ def _form_context(error: str | None = None) -> dict:
         "use_cases": USE_CASES,
         "providers": providers,
         "error": error,
+        "use_modes": list(UseMode),
+        "workload_types": list(WorkloadType),
+        "intensities": list(Intensity),
+        "cloud_providers": list(CloudProvider),
+        "subscription_plans": subscriptions,
     }
 
 
@@ -165,6 +189,13 @@ async def recommend(request: Request):
 
     profile = _model_profile(recommendation.recommended) if recommendation else None
 
+    access_context = access_context_from_form(form)
+    access = (
+        recommend_access(recommendation.recommended, access_context, access_routes)
+        if recommendation
+        else None
+    )
+
     budget_usd = parse_budget_usd(form.get("monthly_budget_usd"))
     input_capacity = output_capacity = input_capacity_pct = output_capacity_pct = None
     if recommendation and budget_usd:
@@ -188,5 +219,7 @@ async def recommend(request: Request):
             "output_capacity_pct": output_capacity_pct,
             "savings": savings,
             "other_alternatives": _other_alternatives(recommendation),
+            "access": access,
+            "subscription_plan_names": subscription_plan_names,
         },
     )

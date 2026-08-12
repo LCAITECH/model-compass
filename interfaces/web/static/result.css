@@ -204,6 +204,36 @@
   font-size: var(--text-sm);
 }
 
+/* Access Advisor */
+
+.access-routes-list {
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.access-route-row {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.access-route-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.access-route-row p {
+  margin: var(--space-1) 0 0;
+}
+
+.access-disclaimer {
+  margin-top: var(--space-3);
+}
+
 /* Excluded */
 
 details.excluded {
