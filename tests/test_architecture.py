@@ -33,19 +33,28 @@ def _assert_no_forbidden_imports(package_dir: Path, forbidden_prefixes: tuple[st
     assert not violations, "\n".join(violations)
 
 
+# decision/access/ is allowed to import decision/domain/ in general (per
+# spec Part 5.0/5.3), but never the scoring-only pieces: evaluator/ and
+# explainer/ themselves, plus domain.candidate/domain.recommendation --
+# the spec is explicit that recommend_access "never necesita candidate.py/
+# recommendation.py", even though they technically live under domain/.
+_FORBIDDEN_FOR_ACCESS = (
+    "decision.evaluator",
+    "decision.explainer",
+    "decision.domain.candidate",
+    "decision.domain.recommendation",
+)
+
+
 def test_decision_access_never_imports_evaluator_or_explainer():
-    _assert_no_forbidden_imports(
-        ROOT / "decision" / "access", ("decision.evaluator", "decision.explainer")
-    )
+    _assert_no_forbidden_imports(ROOT / "decision" / "access", _FORBIDDEN_FOR_ACCESS)
 
 
 def test_access_domain_types_never_import_evaluator_or_explainer():
     for filename in ("access_context.py", "access_route.py", "access_recommendation.py", "subscription.py"):
         path = ROOT / "decision" / "domain" / filename
         for module in _imported_modules(path):
-            assert not module.startswith(("decision.evaluator", "decision.explainer")), (
-                f"{filename} imports '{module}'"
-            )
+            assert not module.startswith(_FORBIDDEN_FOR_ACCESS), f"{filename} imports '{module}'"
 
 
 def test_decision_never_imports_interfaces():
