@@ -60,7 +60,28 @@ reach it, without ranking them against each other.**
 
 Full design history — including a route-ranking mechanism that was
 built, discussed, and deliberately reverted before implementation —
-lives in `Docs/ACCESS_ADVISOR_AUDIT_2026-08-11.md`.
+was written up in `ACCESS_ADVISOR_AUDIT_2026-08-11.md`, an internal
+research document that lives on its own research branch, not in this
+tree (same policy as this project's other research docs) — the
+code's own docstrings still cite it by Part number for context.
+
+**Post-review fixes, same session, before merge to `main`:** a second
+code-review pass found and fixed 4 real bugs missed by the first —
+access-route rows linked to raw evidence instead of the curated
+`docs/access-guides/` entry, a route's "not for production use" status
+was loaded but never shown, and two dataset fields (`cloud_account`,
+`documented_exclusions`) weren't validated against their expected
+shape, so bad data could corrupt silently or crash the app at boot
+instead of failing with a clear error. Manual QA also caught 6
+dataset fields (4 route caveats, 2 subscription exclusions) that had
+shipped in Spanish while the rest of the app is English-only — fixed,
+with a new test guarding against it recurring. Full test suite:
+139/139. **Known, deliberate gap, not a blocker:** only 3 of the 26
+models in the dataset have a documented access route today (Claude
+Opus 5, GPT-5, Gemini 2.5 Pro) — every other recommended model
+correctly shows "no documented access route yet" rather than a wrong
+answer. Widening that catalog is real, separate follow-up work, not
+part of this release.
 
 ---
 
