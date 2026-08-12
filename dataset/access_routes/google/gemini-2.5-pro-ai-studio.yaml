@@ -1,0 +1,22 @@
+provider: Google
+model_id: gemini-2.5-pro
+access:
+  surface: playground_or_studio
+  access_method: "Google AI Studio"
+  capabilities: [prototype, build]
+  guide_ref: google#ai-studio
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [google-ai-pro, google-ai-ultra]
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://support.google.com/googleone/answer/16105039?hl=en-en
+  consulted_at: "2026-08-11"
+  status: confirmed
+  caveat: "Restricciones de Google One indican que AI Studio hoy solo esta disponible para Pro/Ultra; una key pagada vinculada dentro de AI Studio cobra como uso de API aparte."

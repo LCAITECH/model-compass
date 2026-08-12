@@ -19,6 +19,51 @@ public release to version against.
 
 ---
 
+## 2026-08-11 — v0.1.0 (feature/access-advisor-v1)
+
+**Shipped Access Advisor v1 — after a recommendation, a separate "How
+can you access this model?" section shows the real, documented ways to
+reach it, without ranking them against each other.**
+
+- **New subsystem, `decision/access/`, that never touches the
+  recommendation.** `evaluate()`/`explain()` are unchanged; Access
+  Advisor runs after them, in `interfaces/web/app.py`, and only reads
+  `AIModel` — it can't import `decision/evaluator/` even by mistake,
+  by design (see `Docs/ACCESS_ADVISOR_AUDIT_2026-08-11.md`).
+- **Three access states, not a pass/fail gate:** a route is
+  `currently_eligible` (usable now), `requires_onboarding` (needs an
+  API key, a cloud account, a subscription, etc. — never hidden for
+  that), or excluded entirely only when it's an enterprise-only route.
+  Declaring "no AWS account" never removes Bedrock from the list — it
+  just says what's needed and links to how to get it.
+- **No ranking between equally-valid routes.** If a model has three
+  ways to reach it (its own API, AWS Bedrock, Google Cloud), Access
+  Advisor shows all of them grouped by state, never picks a "best
+  cloud" — that would be inventing a preference the evidence doesn't
+  support. The one exception: if exactly one *confirmed* direct API
+  route exists, it's named in a short "Recommended access" summary;
+  otherwise it's a neutral count with the full list one click away.
+- **New dataset catalogs**, separate from `dataset/models/`:
+  `dataset/access_routes/{provider}/{route_id}.yaml` and
+  `dataset/subscriptions/{provider}/{plan_id}.yaml`, each entry sourced
+  the same way as a model (URL, date, status) — started with 4 routes
+  (Anthropic, Google ×2, OpenAI) and 2 Google subscription plans as a
+  working sample, not a full catalog yet.
+- **New `docs/access-guides/`** — short, curated pointers to official
+  provider docs for each access method, deliberately not step-by-step
+  tutorials (`VISION.md`: "does not replace official provider
+  documentation").
+- Access-related questions (how you'd use the model, whether you have
+  billing/cloud accounts/subscriptions already) are optional fields
+  added to the form — skipping all of them still gets a full
+  recommendation, just without the access detail.
+
+Full design history — including a route-ranking mechanism that was
+built, discussed, and deliberately reverted before implementation —
+lives in `Docs/ACCESS_ADVISOR_AUDIT_2026-08-11.md`.
+
+---
+
 ## 2026-08-11 — v0.1.0
 
 **Shipped the Budget redesign, corrected 5 dataset calibration errors

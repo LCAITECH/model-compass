@@ -1,0 +1,9 @@
+provider: Google
+plan_name: Google AI Ultra
+surface_entitlements: [playground_or_studio, consumer_subscription]
+documented_exclusions:
+  - "No documenta creditos ni mejores cuotas de Gemini API -- el billing de API es independiente del plan"
+region_scope: account_dependent
+source_url: https://support.google.com/googleone/answer/16286513
+consulted_at: "2026-08-11"
+status: confirmed

@@ -137,6 +137,109 @@
     </div>
   </section>
 
+  <section class="decision-stage" aria-labelledby="stage-access">
+    <h2 id="stage-access" class="stage-heading"><span class="stage-index">04</span><span class="stage-name">Access <span class="optional">(optional)</span></span></h2>
+    <p class="muted">Answer any of this to also see how you could actually reach the recommended model — an API key, a cloud account, a subscription. Skip it and you'll still get a recommendation, just without the access details.</p>
+
+    <div class="decision-field-pair">
+      <div class="decision-field">
+        <div class="field-label"><label for="use_mode">How would you use it?</label></div>
+        <div class="field-control">
+          <select id="use_mode" name="use_mode">
+            {% for m in use_modes %}
+            <option value="{{ m.value }}">{{ m.value | replace('_', ' ') | capitalize }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="decision-field">
+        <div class="field-label"><label for="workload_type">What kind of workload?</label></div>
+        <div class="field-control">
+          <select id="workload_type" name="workload_type">
+            {% for w in workload_types %}
+            <option value="{{ w.value }}">{{ w.value | capitalize }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-field-pair">
+      <div class="decision-field">
+        <div class="field-label"><label for="intensity">Expected intensity</label></div>
+        <div class="field-control">
+          <select id="intensity" name="intensity">
+            {% for i in intensities %}
+            <option value="{{ i.value }}">{{ i.value | capitalize }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="decision-field">
+        <div class="field-label"><label for="country">Your country <span class="optional">(optional)</span></label></div>
+        <div class="field-control">
+          <input type="text" id="country" name="country" maxlength="2" placeholder="e.g. AR">
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-field-pair">
+      <div class="decision-field">
+        <div class="field-label"><label for="has_api_billing">Do you already have API billing set up (with any provider)?</label></div>
+        <div class="field-control">
+          <select id="has_api_billing" name="has_api_billing">
+            <option value="unknown" selected>Not sure / haven't checked</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <div class="decision-field">
+        <div class="field-label"><label for="has_gpu_infrastructure">GPU infrastructure available to run models yourself?</label></div>
+        <div class="field-control">
+          <select id="has_gpu_infrastructure" name="has_gpu_infrastructure">
+            <option value="unknown" selected>Not sure / haven't checked</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-field">
+      <div class="field-label"><label>Cloud accounts you already have</label></div>
+      <div class="field-control">
+        <div class="checkbox-row">
+          {% for c in cloud_providers %}
+          <label class="checkbox-pill"><input type="checkbox" name="cloud_accounts" value="{{ c.value }}"> {{ c.value | upper }}</label>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    {% if subscription_plans %}
+    <div class="decision-field">
+      <div class="field-label"><label>Subscriptions you already have</label></div>
+      <div class="field-control">
+        <div class="checkbox-row">
+          {% for plan in subscription_plans %}
+          <label class="checkbox-pill"><input type="checkbox" name="subscriptions" value="{{ plan.plan_id }}"> {{ plan.plan_name }}</label>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="decision-field">
+      <div class="field-label"><label>Developer programs you're a member of</label></div>
+      <div class="field-control">
+        <div class="checkbox-row">
+          <label class="checkbox-pill"><input type="checkbox" name="program_memberships" value="nvidia_developer_program"> NVIDIA Developer Program</label>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <button type="submit" class="primary-button">Get a recommendation</button>
 </form>
 

@@ -1,3 +1,30 @@
+from decision.domain.access_context import (
+    AccessContext,
+    CloudProvider,
+    Intensity,
+    UseMode,
+    WorkloadType,
+)
+from decision.domain.access_recommendation import (
+    AccessRecommendation,
+    AccessSummary,
+    RouteEligibilityState,
+    RouteEntry,
+)
+from decision.domain.access_route import (
+    AccessRequirement,
+    AccessRoute,
+    BillingScheme,
+    Capability,
+    Economics,
+    Eligibility,
+    Evidence,
+    EvidenceStatus,
+    QuotaScope,
+    RegionScope,
+    RequirementKind,
+    Surface,
+)
 from decision.domain.ai_model import (
     Access,
     AIModel,
@@ -15,20 +42,34 @@ from decision.domain.ai_model import (
 from decision.domain.candidate import Candidate
 from decision.domain.context import BudgetLevel, BudgetMode, Context, Priority
 from decision.domain.recommendation import Alternative, Exclusion, Outranked, Recommendation
+from decision.domain.subscription import SubscriptionPlan
 
 __all__ = [
     "Access",
     "AIModel",
+    "AccessContext",
+    "AccessRecommendation",
+    "AccessRequirement",
+    "AccessRoute",
+    "AccessSummary",
     "Alternative",
+    "BillingScheme",
     "BudgetLevel",
     "BudgetMode",
     "Candidate",
     "Capabilities",
+    "Capability",
+    "CloudProvider",
     "Context",
     "Cost",
     "CostTier",
+    "Economics",
     "Ecosystem",
+    "Eligibility",
+    "Evidence",
+    "EvidenceStatus",
     "Exclusion",
+    "Intensity",
     "IntegrationEase",
     "License",
     "Maturity",
@@ -37,5 +78,14 @@ __all__ = [
     "Priority",
     "Quality",
     "QualityLevel",
+    "QuotaScope",
     "Recommendation",
+    "RegionScope",
+    "RequirementKind",
+    "RouteEligibilityState",
+    "RouteEntry",
+    "SubscriptionPlan",
+    "Surface",
+    "UseMode",
+    "WorkloadType",
 ]

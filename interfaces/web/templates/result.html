@@ -25,6 +25,54 @@
   {% endif %}
 </div>
 
+{% if access %}
+<div class="card access-card">
+  <h2>{{ icons.key() }}How can you access this model?</h2>
+
+  {% if access.summary.bucket_state %}
+    <p class="eyebrow">Recommended access</p>
+    {% if access.summary.highlighted_route %}
+    <h3>{{ access.summary.highlighted_route.access.access_method }}</h3>
+    <span class="chip {{ 'chip-positive' if access.summary.bucket_state.value == 'currently_eligible' else 'chip-muted' }}">
+      {{ 'Available now' if access.summary.bucket_state.value == 'currently_eligible' else 'Requires onboarding' }}
+    </span>
+    {% else %}
+    <h3>{{ access.summary.bucket_size }} access option{{ 's' if access.summary.bucket_size != 1 }} available</h3>
+    {% endif %}
+  {% else %}
+    <p class="muted">No documented access route yet for this model — check the provider's official docs directly.</p>
+  {% endif %}
+
+  {% if access.routes %}
+  <details class="excluded">
+    <summary>{{ icons.swap() }}See all access options</summary>
+    <div class="access-routes-list">
+      {% for entry in access.routes %}
+      <div class="access-route-row">
+        <div class="access-route-header">
+          <span class="chip {{ 'chip-positive' if entry.state.value == 'currently_eligible' else 'chip-muted' }}">
+            {{ 'Available now' if entry.state.value == 'currently_eligible' else 'Requires onboarding' }}
+          </span>
+          <strong>{{ entry.route.access.access_method }}</strong>
+          <span class="muted">({{ entry.route.provider }})</span>
+        </div>
+        {% if entry.unmet_requirements %}
+        <p class="muted">Requires: {{ entry.unmet_requirements | map('requirement_label') | join(', ') }}</p>
+        {% endif %}
+        {% if entry.route.evidence.caveat %}
+        <p class="muted access-caveat">{{ entry.route.evidence.caveat }}</p>
+        {% endif %}
+        <p class="access-evidence">Source: <a href="{{ entry.route.evidence.source_url }}" target="_blank" rel="noopener">official docs</a> — checked {{ entry.route.evidence.consulted_at }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </details>
+  {% endif %}
+
+  <p class="muted access-disclaimer">Access and eligibility details can change — confirm current terms at the provider's official page before relying on this for production.</p>
+</div>
+{% endif %}
+
 {% if recommendation.also_strong_options %}
 <div class="card also-strong-card">
   <h2>{{ icons.swap() }}Also strong options</h2>
