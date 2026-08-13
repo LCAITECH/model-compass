@@ -1,0 +1,21 @@
+provider: DeepSeek
+model_id: deepseek-v4-pro
+access:
+  surface: direct_api
+  access_method: "API key (Chat Completions)"
+  capabilities: [prototype, build, automation]
+  guide_ref: deepseek#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: DeepSeek
+  billing_scheme: api_token
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://api-docs.deepseek.com/quick_start/pricing
+  consulted_at: "2026-08-13"
+  status: confirmed
+  caveat: "Billed by token usage on the DeepSeek Platform; the pricing page warns of scheduled price increases, so confirm current rates before production use."

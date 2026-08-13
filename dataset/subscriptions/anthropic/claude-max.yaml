@@ -1,0 +1,9 @@
+provider: Anthropic
+plan_name: Claude Max
+surface_entitlements: [consumer_subscription]
+documented_exclusions:
+  - "Does not document any credits or improved quotas for the Anthropic API -- API billing is independent of this plan"
+region_scope: account_dependent
+source_url: https://claude.com/pricing
+consulted_at: "2026-08-13"
+status: confirmed

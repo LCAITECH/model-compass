@@ -1,0 +1,22 @@
+provider: Anthropic
+model_id: claude-haiku-4-5
+access:
+  surface: cloud_hosted
+  access_method: "Amazon Bedrock (Converse/InvokeModel API)"
+  capabilities: [prototype, build, deploy, automation]
+  guide_ref: anthropic#aws-bedrock
+eligibility:
+  requirements:
+    - kind: cloud_account
+      value: aws
+  region_scope: region_dependent
+economics:
+  billing_owner: Amazon Web Services
+  billing_scheme: cloud_paygo
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html
+  consulted_at: "2026-08-13"
+  status: confirmed
+  caveat: "Billed through AWS, not Anthropic directly; model access must be requested per-model in the Bedrock console before first use, and availability is region-dependent."

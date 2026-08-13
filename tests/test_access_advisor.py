@@ -39,9 +39,17 @@ def _context(**overrides):
     return AccessContext(**defaults)
 
 
+def _direct_api_route_only(model_id):
+    # claude-opus-5 now has multiple real routes (direct API + cloud_hosted
+    # patterns from the catalog expansion) -- these tests are about
+    # single-route eligibility-state behavior, not the multi-route bucket
+    # logic (covered separately below), so isolate the one direct_api route.
+    return [route for route in ROUTES if route.model_id == model_id and route.access.surface.value == "direct_api"]
+
+
 def test_currently_eligible_when_requirement_met():
     model = MODELS["claude-opus-5"]
-    recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES)
+    recommendation = recommend_access(model, _context(has_api_billing=True), _direct_api_route_only(model.id))
 
     [entry] = recommendation.routes
     assert entry.state == RouteEligibilityState.CURRENTLY_ELIGIBLE
@@ -50,7 +58,7 @@ def test_currently_eligible_when_requirement_met():
 
 def test_requires_onboarding_when_requirement_declared_false():
     model = MODELS["claude-opus-5"]
-    recommendation = recommend_access(model, _context(has_api_billing=False), ROUTES)
+    recommendation = recommend_access(model, _context(has_api_billing=False), _direct_api_route_only(model.id))
 
     [entry] = recommendation.routes
     assert entry.state == RouteEligibilityState.REQUIRES_ONBOARDING
@@ -60,7 +68,7 @@ def test_requires_onboarding_when_requirement_declared_false():
 def test_unknown_never_counts_as_satisfied():
     """None ("unknown") must behave exactly like an explicit False -- spec Part 5.2.1."""
     model = MODELS["claude-opus-5"]
-    recommendation = recommend_access(model, _context(has_api_billing=None), ROUTES)
+    recommendation = recommend_access(model, _context(has_api_billing=None), _direct_api_route_only(model.id))
 
     [entry] = recommendation.routes
     assert entry.state == RouteEligibilityState.REQUIRES_ONBOARDING
@@ -130,8 +138,13 @@ def test_summary_shows_neutral_count_with_two_eligible_routes_neither_uniquely_d
 
 
 def test_no_routes_for_a_model_returns_explicit_empty_state():
-    model = MODELS["gpt-5-mini"]  # no access_routes entry exists for this id
-    recommendation = recommend_access(model, _context(), ROUTES)
+    # Every real model now has at least one route (26/26 coverage), so
+    # exclude gpt-5-mini's own routes from the catalog handed to the
+    # advisor -- still proves the empty-state path with real route data
+    # for other models present, not just an empty list.
+    model = MODELS["gpt-5-mini"]
+    other_routes = [route for route in ROUTES if route.model_id != model.id]
+    recommendation = recommend_access(model, _context(), other_routes)
 
     assert recommendation.routes == ()
     assert recommendation.summary.bucket_state is None

@@ -1,0 +1,22 @@
+provider: Anthropic
+model_id: claude-opus-4-7
+access:
+  surface: cloud_hosted
+  access_method: "Microsoft Foundry (Claude Messages API)"
+  capabilities: [prototype, build, deploy, automation]
+  guide_ref: anthropic#azure-foundry
+eligibility:
+  requirements:
+    - kind: cloud_account
+      value: azure
+  region_scope: region_dependent
+economics:
+  billing_owner: Microsoft Azure
+  billing_scheme: cloud_paygo
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/how-to/use-foundry-models-claude
+  consulted_at: "2026-08-13"
+  status: confirmed
+  caveat: "Billed via Azure Marketplace subscription, not Anthropic directly; requires a paid Azure subscription with an active pay-as-you-go billing method in a supported region -- student/free-trial/sponsored-credit-only subscriptions don't qualify."

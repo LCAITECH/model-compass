@@ -1,0 +1,22 @@
+provider: Google
+model_id: gemini-3.1-pro-preview
+access:
+  surface: playground_or_studio
+  access_method: "Google AI Studio"
+  capabilities: [prototype, build]
+  guide_ref: google#ai-studio
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [google-ai-pro, google-ai-ultra]
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://support.google.com/googleone/answer/16105039?hl=en-en
+  consulted_at: "2026-08-11"
+  status: confirmed
+  caveat: "Google One's terms indicate AI Studio access is currently limited to Pro/Ultra subscribers; a paid API key linked inside AI Studio is billed separately as API usage. This model has no free tier (unlike several other Gemini models in this dataset), so this subscription path and the direct API route are its only two documented ways in."

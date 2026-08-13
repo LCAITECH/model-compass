@@ -1,0 +1,21 @@
+provider: Mistral
+model_id: mistral-large-3
+access:
+  surface: self_hosted
+  access_method: "Self-hosted open weights (vLLM or equivalent inference engine)"
+  capabilities: [prototype, build, deploy]
+  guide_ref: mistral#self-hosted
+eligibility:
+  requirements:
+    - kind: gpu_infrastructure
+  region_scope: global
+economics:
+  billing_owner: "You (infrastructure cost, no Mistral billing)"
+  billing_scheme: gpu_license
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://huggingface.co/mistralai/Mistral-Large-3-675B-Instruct-2512
+  consulted_at: "2026-08-13"
+  status: confirmed
+  caveat: "Apache 2.0 license, no Mistral account or billing required -- but this is a 675B-parameter (41B active) mixture-of-experts model; the vendor-documented minimum is a single node with 8xH200 (FP8) or 8xH100/A100 (NVFP4) GPUs."
