@@ -2,7 +2,7 @@ provider: Anthropic
 model_id: claude-fable-5
 access:
   surface: direct_api
-  access_method: "API key (Messages API)"
+  access_method: "API key (Messages API), also usable via Claude Code"
   capabilities: [prototype, build, automation]
   guide_ref: anthropic#direct-api
 eligibility:
@@ -18,4 +18,4 @@ evidence:
   source_url: https://platform.claude.com/docs/en/about-claude/pricing
   consulted_at: "2026-08-11"
   status: confirmed
-  caveat: "Direct API access is billed at standard per-token pricing, independent of any Claude Pro/Max consumer subscription; a separate, unstable consumer-subscription path also exists for this model (see docs/models/claude-fable-5.md) and is deliberately not modeled as a route in this pass."
+  caveat: "Direct API access is billed at standard per-token pricing, independent of any Claude Pro/Max consumer subscription; see the separate claude-fable-5-claude-subscription route for the subscription path, and anthropic#aws-bedrock/gcp-vertex/azure-foundry for the cloud-platform routes -- all confirmed on Anthropic's Transparency Hub (anthropic.com/transparency, updated 2026-07-23)."

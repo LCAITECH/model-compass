@@ -1,0 +1,22 @@
+provider: Anthropic
+model_id: claude-fable-5
+access:
+  surface: consumer_subscription
+  access_method: "Claude.ai or Claude Code, signed in with a Claude subscription"
+  capabilities: [prototype, build]
+  guide_ref: anthropic#claude-subscription
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [claude-pro, claude-max]
+  region_scope: account_dependent
+economics:
+  billing_owner: Anthropic
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://claude.com/pricing
+  consulted_at: "2026-08-13"
+  status: confirmed
+  caveat: "Fable 5 access draws from the plan's shared weekly usage limit ('usage credits'), not unlimited or per-token access; the exact quota split has changed multiple times in recent months per Anthropic's own pricing page footnotes, so confirm current terms before relying on this. Team Standard/Premium plans likely follow the same pattern but weren't independently confirmed this pass."

@@ -15,7 +15,25 @@ consumer plan.
 3. Generate an API key.
 4. Follow the official docs for your first call: [Claude Platform home](https://platform.claude.com/docs/en/home).
 
+This same API key also works with [Claude Code](https://code.claude.com/docs/en/overview)
+(the terminal/IDE/desktop coding tool) -- Claude Code isn't a separate
+billing path, it's a client that authenticates with either this API
+key or a Claude subscription (see `anthropic#claude-subscription`
+below).
+
 Source: [Pricing](https://platform.claude.com/docs/en/about-claude/pricing), consulted 2026-08-11.
+
+## `anthropic#claude-subscription`
+
+Claude.ai and Claude Code can both be used under a paid Claude
+subscription instead of an API key -- usage draws from the plan's
+shared weekly limit ("usage credits"), not per-token billing.
+
+1. Subscribe to Claude Pro or Claude Max at [claude.com/pricing](https://claude.com/pricing).
+2. Sign in to [Claude.ai](https://claude.ai/) or [Claude Code](https://code.claude.com/docs/en/overview) with that account -- no separate API key needed for this path.
+3. Model availability and the exact usage-credit split per model change over time; check the pricing page's comparison table for current terms.
+
+Source: [Pricing](https://claude.com/pricing), consulted 2026-08-13.
 
 ## `anthropic#aws-bedrock`
 
