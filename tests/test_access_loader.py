@@ -24,10 +24,13 @@ MODELS_DIR = ROOT / "dataset" / "models"
 def test_loads_all_real_access_routes():
     routes = load_access_routes(ACCESS_ROUTES_DIR)
 
-    # 4 from v1 + 23 base-pattern routes added in the catalog expansion
-    # (ACCESS_CATALOG_COVERAGE_RESEARCH_2026-08-12.md's implementation
-    # contract) -- one direct_api route per previously-uncovered model.
-    assert len(routes) == 27
+    # 4 from v1 + 23 base-pattern + 29 secondary-pattern routes, all from
+    # the catalog expansion (ACCESS_CATALOG_COVERAGE_RESEARCH_2026-08-12.md's
+    # implementation contract): one direct_api route per previously-
+    # uncovered model (base), plus Bedrock/Vertex/Foundry for 9 Claude
+    # models, AI Studio subscription for gemini-3.1-pro-preview, and
+    # Mistral self-hosted (secondary).
+    assert len(routes) == 56
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
     assert len(model_ids_with_direct_api) == 26

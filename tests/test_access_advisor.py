@@ -39,9 +39,17 @@ def _context(**overrides):
     return AccessContext(**defaults)
 
 
+def _direct_api_route_only(model_id):
+    # claude-opus-5 now has multiple real routes (direct API + cloud_hosted
+    # patterns from the catalog expansion) -- these tests are about
+    # single-route eligibility-state behavior, not the multi-route bucket
+    # logic (covered separately below), so isolate the one direct_api route.
+    return [route for route in ROUTES if route.model_id == model_id and route.access.surface.value == "direct_api"]
+
+
 def test_currently_eligible_when_requirement_met():
     model = MODELS["claude-opus-5"]
-    recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES)
+    recommendation = recommend_access(model, _context(has_api_billing=True), _direct_api_route_only(model.id))
 
     [entry] = recommendation.routes
     assert entry.state == RouteEligibilityState.CURRENTLY_ELIGIBLE
@@ -50,7 +58,7 @@ def test_currently_eligible_when_requirement_met():
 
 def test_requires_onboarding_when_requirement_declared_false():
     model = MODELS["claude-opus-5"]
-    recommendation = recommend_access(model, _context(has_api_billing=False), ROUTES)
+    recommendation = recommend_access(model, _context(has_api_billing=False), _direct_api_route_only(model.id))
 
     [entry] = recommendation.routes
     assert entry.state == RouteEligibilityState.REQUIRES_ONBOARDING
@@ -60,7 +68,7 @@ def test_requires_onboarding_when_requirement_declared_false():
 def test_unknown_never_counts_as_satisfied():
     """None ("unknown") must behave exactly like an explicit False -- spec Part 5.2.1."""
     model = MODELS["claude-opus-5"]
-    recommendation = recommend_access(model, _context(has_api_billing=None), ROUTES)
+    recommendation = recommend_access(model, _context(has_api_billing=None), _direct_api_route_only(model.id))
 
     [entry] = recommendation.routes
     assert entry.state == RouteEligibilityState.REQUIRES_ONBOARDING
