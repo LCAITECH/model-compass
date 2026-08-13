@@ -449,3 +449,69 @@ are not sufficient grounds to revisit it. Kept as its own iteration
 official docs contradicting a cluster of consistent third-party
 claims — is reusable precedent for future dataset research, independent
 of this specific model.
+
+---
+
+## Iteration #12
+
+**Observation**
+While researching the access catalog coverage patterns
+(`research/access-catalog-coverage-2026-08-12`) and implementing them
+(`feature/access-catalog-expansion`, merged 2026-08-13), three real
+gaps surfaced in `decision/domain/access_route.py`'s closed
+vocabulary, none blocking the 52+ routes actually shipped:
+
+1. **Google AI Studio's free tier has no fitting `RequirementKind`.**
+   6 of the 8 Gemini models in the dataset have
+   `access.has_free_access: true` and are usable in AI Studio with
+   just a Google account — no billing, no subscription, no gate at
+   all. Every current `RequirementKind`
+   (`api_billing_linked`/`cloud_account`/`consumer_subscription`/
+   `program_membership`/`gpu_infrastructure`) implies some kind of
+   gate the user has to clear; modeling ungated free access as
+   `consumer_subscription` (the way the existing paid AI Studio route
+   does for `gemini-2.5-pro`/`gemini-3.1-pro-preview`) would misrepresent
+   it as requiring a subscription it doesn't need.
+2. **Vertex AI's relationship to the plain Gemini API route is
+   unconfirmed.** `docs/models/*.md`'s Access sections and Google's
+   own partner-models pages bundle "Google AI Studio and Vertex AI"
+   together without distinguishing billing/quota mechanics. The
+   catalog currently has no Vertex-specific route for any Gemini
+   model (only for the 9 Claude models, where Vertex's partner-model
+   docs are unambiguous) — adding one would need a real sourcing pass
+   against Vertex's own Gemini documentation, not an inference from
+   the Gemini API pricing page.
+3. **Claude Fable 5's consumer-subscription access is confirmed but
+   still genuinely volatile.** The route now exists
+   (`claude-fable-5-claude-subscription.yaml`, added same session
+   after reopening an earlier exclusion — see Iteration below and
+   `HANDOFF.md`), sourced to `claude.com/pricing`'s comparison table.
+   But that source's own numbers (Free/Pro/Max usage-credit split)
+   had already changed at least three times in the month before this
+   pass, per an earlier session's research, and Team Standard/Premium
+   plans were never independently confirmed to follow the same
+   pattern — the route's `evidence.caveat` flags both, but this is a
+   route that needs its own re-verification cadence, not a one-time
+   entry that silently goes stale.
+
+**Current decision**
+No `SCHEMA.md`/`decision/domain/` change for any of the three — same
+discipline as every other entry in this log: don't edit the schema
+reactively, log the friction, and only propose a change once it's
+recurred independently 2-3 times. #1 and #2 are each single
+occurrences so far. #3 doesn't need a schema change at all, just
+disciplined re-sourcing on a cadence this project doesn't currently
+have a mechanism for (no scheduled dataset re-verification exists
+yet, for any field).
+
+**Status**
+Open, none blocking. #1 (AI Studio free tier) is the most likely to
+recur — the dataset has 6 Gemini models today that would qualify for
+it, so it's the one closest to hitting the "2-3 times" bar for a real
+schema proposal (e.g. a `RequirementKind.NONE`/ungated marker, or a
+dedicated `Surface` distinction between gated and ungated
+`playground_or_studio` access) if another provider's free-tier
+playground access comes up in future research. #2 (Vertex
+distinctness for Gemini) and #3 (Fable 5 re-verification cadence) stay
+exactly as flagged until someone does the dedicated sourcing pass —
+not improvised here.
