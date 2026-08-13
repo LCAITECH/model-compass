@@ -130,8 +130,13 @@ def test_summary_shows_neutral_count_with_two_eligible_routes_neither_uniquely_d
 
 
 def test_no_routes_for_a_model_returns_explicit_empty_state():
-    model = MODELS["gpt-5-mini"]  # no access_routes entry exists for this id
-    recommendation = recommend_access(model, _context(), ROUTES)
+    # Every real model now has at least one route (26/26 coverage), so
+    # exclude gpt-5-mini's own routes from the catalog handed to the
+    # advisor -- still proves the empty-state path with real route data
+    # for other models present, not just an empty list.
+    model = MODELS["gpt-5-mini"]
+    other_routes = [route for route in ROUTES if route.model_id != model.id]
+    recommendation = recommend_access(model, _context(), other_routes)
 
     assert recommendation.routes == ()
     assert recommendation.summary.bucket_state is None

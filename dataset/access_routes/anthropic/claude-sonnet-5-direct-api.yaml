@@ -1,0 +1,21 @@
+provider: Anthropic
+model_id: claude-sonnet-5
+access:
+  surface: direct_api
+  access_method: "API key (Messages API)"
+  capabilities: [prototype, build, automation]
+  guide_ref: anthropic#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Anthropic
+  billing_scheme: api_token
+  quota_scope: organization
+  production_allowed: true
+evidence:
+  source_url: https://platform.claude.com/docs/en/about-claude/pricing
+  consulted_at: "2026-08-11"
+  status: confirmed
+  caveat: "Billed by monthly usage; new accounts may start below the standard rate-limit tier."

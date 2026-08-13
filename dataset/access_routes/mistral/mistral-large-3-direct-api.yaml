@@ -1,0 +1,21 @@
+provider: Mistral
+model_id: mistral-large-3
+access:
+  surface: direct_api
+  access_method: "API key (La Plateforme)"
+  capabilities: [prototype, build, automation]
+  guide_ref: mistral#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Mistral
+  billing_scheme: api_token
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://mistral.ai/pricing
+  consulted_at: "2026-08-13"
+  status: confirmed
+  caveat: "Mistral's API console offers a general free tier for trying models, but no official source confirms Mistral Large 3 specifically is included in it -- this route assumes paid billing, same no-inference rule as docs/models/mistral-large-3.md."

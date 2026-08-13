@@ -1,0 +1,21 @@
+provider: OpenAI
+model_id: gpt-4o
+access:
+  surface: direct_api
+  access_method: "API key (Responses/Chat Completions)"
+  capabilities: [prototype, build, automation]
+  guide_ref: openai#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: OpenAI
+  billing_scheme: api_token
+  quota_scope: organization
+  production_allowed: true
+evidence:
+  source_url: https://help.openai.com/en/articles/8156019-is-api-usage-included-in-chatgpt-subscriptions-even-if-i-have-a-paid-chatgpt-account
+  consulted_at: "2026-08-11"
+  status: confirmed
+  caveat: "API service is billed and managed separately from ChatGPT -- requires its own payment method under API billing."

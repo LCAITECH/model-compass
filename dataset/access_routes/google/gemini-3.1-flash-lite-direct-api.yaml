@@ -1,0 +1,21 @@
+provider: Google
+model_id: gemini-3.1-flash-lite
+access:
+  surface: direct_api
+  access_method: "API key (Gemini API)"
+  capabilities: [prototype, build, automation]
+  guide_ref: google#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: api_token
+  quota_scope: project
+  production_allowed: true
+evidence:
+  source_url: https://ai.google.dev/gemini-api/docs/billing?hl=es-419
+  consulted_at: "2026-08-11"
+  status: confirmed
+  caveat: "The paid tier requires Cloud Billing linked to the project; a rate-limited free tier also exists for this model outside the paid path (see docs/models/gemini-3.1-flash-lite.md)."
