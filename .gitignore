@@ -9,6 +9,8 @@ venv/
 HANDOFF.md
 AGENTS.md
 INCIDENT_LOG.md
+handoff_template.md
+cierres sesiones/
 
 # Local tool config (e.g. machine-specific paths for the dev server).
 .claude/
