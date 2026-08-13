@@ -102,6 +102,41 @@ place.
   reasoning and the same recommendation. Results come from explicit
   rules and curated data, not from an AI model's opinion.
 
+### Access
+
+A recommendation is only useful if the developer can actually reach
+the model. Access Advisor answers a distinct question from
+Recommend/Explain above — not "which model", but "how do I actually
+get it, given my situation" — and never influences the ranking
+itself.
+
+- **Access Advisor** — after a recommendation, shows every officially
+  documented way to reach that specific model (direct API, a cloud
+  platform like Bedrock/Vertex/Azure Foundry, a consumer subscription,
+  a playground, self-hosting), grouped by eligibility state rather
+  than ranked against each other: `currently_eligible` (usable now
+  given what the developer declared), `requires_onboarding` (needs an
+  API key, cloud account, or subscription — never hidden, just marked
+  as a gap), or excluded entirely (enterprise-only routes, until an
+  explicit opt-in is designed). Declaring "no AWS account" never
+  removes Bedrock from the list, it just says what's missing.
+- **Documented-route discipline** — "can be done in practice" isn't
+  the bar; a route only enters the catalog with an official source URL,
+  a confirmed status, and the exact dataset model id (never a family
+  or sibling standing in). MCP-based or third-party-integration access
+  is deliberately excluded until it clears the same bar — this
+  distinction (verifiable vs. merely possible) is what keeps the
+  advisor trustworthy as the catalog grows.
+- **26/26 model coverage** — every model in the dataset has at least
+  one documented access route (60 routes total as of 2026-08-13, up
+  from 4 at launch), reached through 10 reusable access-pattern
+  templates rather than 60 independent research efforts. Claude Fable
+  5 is the catalog's most complex case: 5 real routes across 3
+  distinct surfaces (direct API, three cloud platforms, a consumer
+  subscription), each with its own eligibility and economics — proof
+  the advisor models "how you'd actually get this" rather than a
+  simple yes/no per model.
+
 ---
 
 ## Planned Capabilities
