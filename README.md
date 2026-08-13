@@ -37,6 +37,40 @@ Model Compass exists to answer one question directly:
 
 **"What model should I use for this?"**
 
+## See it in action
+
+![Model Compass — recommendation form](Docs/images/form.png)
+
+### 1. Tell Model Compass what you need
+
+Use case, priorities ranked by what matters most, and a budget — as
+much or as little detail as you have.
+
+### 2. Get a recommendation with explainable trade-offs
+
+![Model Compass — recommendation result](Docs/images/result.png)
+
+Never just a model name — the reasons behind it, and what you're
+giving up by not picking something else.
+
+### 3. See how to access the recommended model
+
+![Model Compass — Access Advisor](Docs/images/access-advisor.png)
+
+Access Advisor shows every documented route to the model — what's
+available right now, what needs onboarding, and a link to the exact
+steps.
+
+### 4. Compare the economics
+
+![Model Compass — pricing comparison](Docs/images/economics.png)
+
+When a fair lower-cost alternative exists, Model Compass shows the
+real trade-off side by side — not just "this is cheaper."
+
+*Real screenshots from the app running locally against the live
+dataset — not mockups.*
+
 ## Why Model Compass?
 
 Model Compass focuses on decision making rather than information retrieval.
@@ -49,45 +83,6 @@ Every recommendation can be understood, reviewed, and reproduced.
 
 No leaderboards. No hidden heuristics. No affiliate links. Just
 explainable recommendations.
-
-## How it works
-
-**Input**
-
-```
-Use case    Telegram Community Bot
-Budget      Low
-Priority    Lowest Cost
-Language    Spanish
-```
-
-**Output**
-
-```
-────────────────────────────────
-Recommended model
-
-Gemini 2.5 Flash
-
-Reason
-✓ Lowest operational cost
-✓ Excellent Spanish support
-✓ Great latency
-✓ Strong function calling
-
-Trade-offs
-• Not the strongest reasoning model
-• Better suited for high-volume applications
-
-Alternatives
-GPT-5 Mini
-Claude Sonnet
-────────────────────────────────
-```
-
-*This illustrates the interaction — the exact wording and ranking logic
-may differ slightly from a live run. Try it yourself locally, see
-[Getting Started](#getting-started) below.*
 
 ## Getting Started
 
