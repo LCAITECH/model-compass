@@ -266,3 +266,32 @@ phases of the [Roadmap](./ROADMAP.md).
   and explicitly not part of the `has_free_access` proposal from the
   free-access research pass — this needs its own schema extension, decided
   separately, once (or if) it's worth pursuing.
+- **Static Model Comparator** — pick two or more models from the
+  dataset and see their specs, pricing, and editorial ratings side by
+  side, on demand, without a recommendation context driving the
+  comparison. A natural extension of what already exists in
+  `interfaces/web/app.py`'s `_comparison_rows()` (today only used to
+  compare the recommended model against one cheaper alternative inside
+  a result page) into its own standalone view. Noted 2026-08-17,
+  prompted by reviewing a third-party AI playground (IBM watsonx) for
+  ideas — this is the one piece of that playground's UI that's
+  actually just the dataset, no live execution involved, so it's safe
+  under every existing principle. Not started, not scoped.
+- **Live multi-provider playground** — run one prompt against several
+  models at once and compare real responses, with per-run cost and
+  latency measured live, plus an automatic "best model for this task"
+  verdict scored by quality/instruction-following/cost/speed. This is
+  the rest of that same third-party playground's idea, and it is
+  **explicitly not a Model Compass feature** as the project is
+  currently scoped — it requires the exact things `HANDOFF.md`'s
+  founding principles rule out: calling provider inference APIs
+  directly (Model Compass "never runs its own benchmarks nor calls
+  inference APIs"), holding the developer's API keys for every
+  provider being compared, non-deterministic results depending on live
+  API latency/availability, and — for the automatic quality verdict —
+  an AI model judging another AI model's output, which is the same
+  "no AI opinion in the recommendation loop" line the project has held
+  since Fase 1. Building this honestly would mean forking into a
+  genuinely different product (a multi-provider inference playground),
+  not extending this one. Logged here only so the idea isn't lost, not
+  as a roadmap item.
