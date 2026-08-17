@@ -515,3 +515,120 @@ playground access comes up in future research. #2 (Vertex
 distinctness for Gemini) and #3 (Fable 5 re-verification cadence) stay
 exactly as flagged until someone does the dedicated sourcing pass —
 not improvised here.
+
+---
+
+## Iteration #13
+
+**Observation**
+While auditing Gemini 3.7 Flash as a dataset candidate (2026-08-13,
+not yet admitted — see below), its official model card
+(`deepmind.google/models/model-cards/gemini-3-7-flash/`, published
+2026-08-13) disclosed, in a footnote on its benchmark pricing table,
+that **Gemini 3.6 Flash's own price is introductory and expires on a
+known date**: *"For 3.6 and 3.7 Flash, introductory price expires on
+December 31, 2026. Starting January 1, 2027, $1.50/1M input tokens and
+$7.50/1M output tokens will apply."* Current price for both: $0.75
+input / $3.75 output.
+
+`gemini-3.6-flash.yaml` (loaded 2026-08-07) had `$1.50`/`$7.50` — the
+correct price *at the time*, sourced directly against Google's pricing
+page before the promotional rate took effect, not a sourcing error.
+The price genuinely changed under the entry. Corrected in this same
+session to $0.75/$3.75 (the current live price), with the 2027-01-01
+reversion documented in prose in
+[`docs/models/gemini-3.6-flash.md`](../docs/models/gemini-3.6-flash.md#cost-objective).
+
+This is a different shape of friction than Iteration #5 (which is
+about multiple simultaneous prices for different request types on the
+*same* date). Here there's one price, but it has a **known future
+expiration and a known future replacement value** — a time axis, not a
+request-type axis. `SCHEMA.md`'s `cost.*` fields have no way to
+represent "current value" vs. "future value + effective date"; a
+single dataset entry can only ever state one number, which is
+correct today and will silently become wrong on 2027-01-01 unless
+someone remembers to revisit it.
+
+**Current decision**
+No schema change — first occurrence of this specific pattern, same
+2-3-occurrences discipline as every other entry here. `cost.*` keeps
+storing the current live price; the expiration date and future value
+live in that model's `docs/models/*.md` Cost section, in prose, the
+same convention Iteration #5 already established for pricing nuance
+that doesn't fit a single number.
+
+**Status**
+Observation, one occurrence. Also flags a process gap with no owner
+yet: nothing in this project re-checks a *stable, already-loaded*
+model's pricing after admission — the only reason this was caught is
+that researching an unrelated candidate model (3.7 Flash) happened to
+surface it via a comparison table on the candidate's own model card.
+If this recurs (another loaded model turns out to have introductory
+pricing with a known expiry), worth proposing an explicit
+`cost.effective_until` / `cost.reverts_to` pair to `SCHEMA.md` at that
+point — not proposed now, first occurrence only.
+
+---
+
+## Iteration #14
+
+**Observation**
+Two related pieces of friction surfaced while admitting Gemini 3.7
+Flash (2026-08-13):
+
+1. **Editorial provenance metadata was proposed for `quality.*`/
+   `ecosystem.*`** — instead of a plain enum (`reasoning: very_high`),
+   a structured object per field (`value`/`basis`/`confidence`), so the
+   dataset itself answers "why does this model have this rating"
+   without reading `docs/models/`. Rejected for this pass, not because
+   the goal is wrong, but because it's a `SCHEMA.md` shape change
+   affecting all 26 already-loaded models plus unknown blast radius in
+   `decision/evaluator/` (does it read `quality.reasoning` as a plain
+   enum today? not checked), raised from a single case. Same discipline
+   as every other entry here: the existing convention — plain enum in
+   the YAML, a "Why" column in that model's `docs/models/{id}.md`
+   Quality/Ecosystem tables — already gives the same traceability
+   without a schema change, and was used for this entry instead (see
+   `docs/models/gemini-3.7-flash.md`).
+2. **Third-party AI-generated "audits" of official model cards are not
+   a valid source, confirmed with a concrete counter-example, not just
+   in principle.** One such audit's content — labeled by the auditing
+   tool used (Gemini 3.1 Pro, via its web interface), not by which
+   model the claim was about — stated that Gemini 3.1 Pro (the
+   product, same name as the auditing tool, coincidentally) has a
+   `~2M`-token context window. This project's own
+   `dataset/models/gemini-3.1-pro-preview.yaml` already had
+   `context_window: 1048576` (1M), sourced independently in an earlier
+   session. To settle it with current, not just previously-recorded,
+   evidence, Gemini 3.1 Pro's own official model card
+   (`deepmind.google/models/model-cards/gemini-3-1-pro/`) was re-fetched
+   directly in this same session (2026-08-13): *"a token context window
+   of up to 1M."* Explicit, current, primary-source confirmation — the
+   `~2M` figure is wrong, not merely uncorroborated, and the error is
+   scoped to that one specific claim, not a judgment that the audit
+   tool or its other findings are broadly unreliable.
+   Cross-checking multiple independent AI-generated audits against
+   each other ("4 audits agree") was proposed as a way to build
+   confidence before loading data. Rejected: multiple LLMs summarizing
+   the same underlying official page are not independent evidence of
+   anything — they share the same failure mode (hallucinating specific
+   numbers) and can agree with each other while being wrong, the way
+   this context-window figure would have if it had gone unchecked. Same
+   category as Iteration #11 (official source wins over any number of
+   agreeing third parties, no matter how many).
+
+**Current decision**
+No `SCHEMA.md` change for #1 — logged as a real proposal, not
+implemented, pending either a second independent occurrence or a
+deliberate look at `decision/evaluator/`'s actual handling of
+`quality.*` before committing to a shape change. For #2, no process
+change needed — this project's existing sourcing rule (official docs
+only) already covers AI-generated summaries; this is a confirmation of
+why that rule holds, same as Iteration #2's aggregator finding.
+
+**Status**
+#1 open, revisit if a second, independently-motivated case for
+provenance metadata comes up (or before scoring `decision/evaluator/`
+impact deliberately). #2 closed as a confirmation, not a new
+finding, kept as its own iteration for the concrete counter-example
+(reusable precedent, same reasoning as Iteration #11).

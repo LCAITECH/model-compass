@@ -29,11 +29,13 @@ def test_loads_all_real_access_routes():
     # implementation contract), + 4 more reopening the claude-fable-5
     # exclusion once Anthropic's own Transparency Hub (and AWS/GCP/Azure's
     # own docs) confirmed it on Bedrock/Vertex/Foundry/Claude subscription
-    # -- see HANDOFF.md, session 12.
-    assert len(routes) == 60
+    # -- see HANDOFF.md, session 12. + 1 more (gemini-3.7-flash's
+    # direct_api route, same pattern as the rest of the Gemini family)
+    # admitted 2026-08-13.
+    assert len(routes) == 61
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
-    assert len(model_ids_with_direct_api) == 26
+    assert len(model_ids_with_direct_api) == 27
 
 
 def test_loads_all_real_subscriptions():

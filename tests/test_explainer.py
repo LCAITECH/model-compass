@@ -130,10 +130,10 @@ def test_alternatives_are_capped(models):
 
 
 def test_also_strong_options_is_not_capped_at_max_alternatives(models):
-    # budget=high, priority=reasoning: 7 models are within 2% of
-    # claude-opus-4-7's score AND pass the quality floor -- more than
-    # the 3-item cap on `alternatives`. Confirms also_strong_options
-    # isn't silently truncated to that cap.
+    # budget=high, priority=reasoning: 8 models (as of gemini-3.7-flash's
+    # admission, 2026-08-13) are within 2% of claude-opus-4-7's score AND
+    # pass the quality floor -- more than the 3-item cap on `alternatives`.
+    # Confirms also_strong_options isn't silently truncated to that cap.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -147,7 +147,7 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
 
     assert recommendation.recommended.id == "claude-opus-4-7"
     assert len(recommendation.alternatives) == 3
-    assert len(recommendation.also_strong_options) == 7
+    assert len(recommendation.also_strong_options) == 8
     assert {a.model.id for a in recommendation.also_strong_options} == {
         "claude-opus-4-8",
         "claude-opus-5",
@@ -155,9 +155,10 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
         "deepseek-v4-pro",
         "gemini-2.5-pro",
         "gemini-3.1-pro-preview",
+        "gemini-3.7-flash",
         "gpt-5",
     }
-    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 9))  # score-sorted, contiguous
+    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 10))  # score-sorted, contiguous
 
 
 def test_also_strong_options_excludes_close_score_but_unfair_quality_gap(models):
@@ -271,13 +272,14 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
-    # Only mistral-large-3 supports "ko" -- none of the other 25 models
+    # Only mistral-large-3 supports "ko" -- none of the other 26 models
     # list it either, since every curated language list in this dataset
     # was inherited from a same-provider sibling, none of which support
     # "ko" (see Docs/models/*.md), including deepseek-v4-pro (inherits
-    # deepseek-v4-flash's curated language list) and the six candidates
+    # deepseek-v4-flash's curated language list), the six candidates
     # admitted 2026-08-10 (each inherits its nearest same-provider
-    # sibling's curated list).
+    # sibling's curated list), and gemini-3.7-flash (admitted
+    # 2026-08-13, inherits gemini-3.6-flash's curated list).
     context = Context(
         use_case="Korean support assistant",
         budget_mode=BudgetMode.TIER,
@@ -317,6 +319,7 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "claude-sonnet-4-6",
         "claude-fable-5",
         "gemini-3.1-pro-preview",
+        "gemini-3.7-flash",
     }
     assert all(
         any("language" in reason for reason in excl.reasons)
@@ -325,11 +328,13 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
 
 
 def test_total_qualifying_and_alternative_ranks(models):
-    # 26 models total, all support "es", but budget=HIGH is a fixed
-    # <=$30 cost tier now (SCHEMA.md's Cost section) -- it excludes
-    # gpt-5-6-sol ($35) and claude-fable-5 ($60), so 24 qualify.
-    # Alternatives are the winner's immediate runners-up (rank starts
-    # at 2, since the winner is implicitly rank 1).
+    # 27 models total (as of gemini-3.7-flash's admission, 2026-08-13),
+    # all support "es", but budget=HIGH is a fixed <=$30 cost tier now
+    # (SCHEMA.md's Cost section) -- it excludes gpt-5-6-sol ($35) and
+    # claude-fable-5 ($60), so 25 qualify. Alternatives are the winner's
+    # immediate runners-up (rank starts at 2, since the winner is
+    # implicitly rank 1); gemini-3.7-flash's blended cost ($4.50) isn't
+    # cheap enough to displace any of the top-3 alternatives here.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -341,17 +346,17 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.total_qualifying == 24
+    assert recommendation.total_qualifying == 25
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
 def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
-    # Same context as above (24 qualifying, see
+    # Same context as above (25 qualifying, see
     # test_total_qualifying_and_alternative_ranks). gemini-2.5-flash-lite
     # (blended cost 0.50, cheaper than deepseek-v4-pro) took the third
     # alternative slot, which pushed gemini-3.1-flash-lite (1.75) into
     # the outranked group as the first model past the top-3
-    # alternatives (rank 5 of 24). Unlike the winner's trade_offs, its
+    # alternatives (rank 5 of 25). Unlike the winner's trade_offs, its
     # reasons include "Not the cheapest option" even though COST is the
     # prioritized dimension, because there's no positive "reasons" line
     # for it to contradict; omitting the cost gap would hide the actual
@@ -367,8 +372,8 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 20  # 24 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 25))
+    assert len(recommendation.outranked) == 21  # 25 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 26))
 
     first = recommendation.outranked[0]
     assert first.model.id == "gemini-3.1-flash-lite"

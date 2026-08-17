@@ -19,6 +19,57 @@ public release to version against.
 
 ---
 
+## 2026-08-13 — Gemini 3.7 Flash admitted + Gemini 3.6 Flash pricing correction
+
+**Added the newest Google Gemini model to the dataset, and fixed a real
+pricing bug found on an already-shipped one while researching it.**
+
+- **`gemini-3.6-flash.yaml` had a stale price.** Its `cost.*` was
+  $1.50/$7.50 — correct when it was loaded (2026-08-07), but Google
+  quietly moved it to an introductory rate ($0.75/$3.75, reverting to
+  $1.50/$7.50 on 2027-01-01) at some point before 2026-08-13. Caught
+  incidentally while researching Gemini 3.7 Flash's own model card,
+  which discloses 3.6 Flash's current price in its comparison
+  benchmark table. Corrected; the expiration date and future value are
+  documented in prose in `docs/models/gemini-3.6-flash.md` (no
+  `SCHEMA.md` field exists for a time-limited price — see
+  `IMPLEMENTATION_NOTES.md`, Iteration #13).
+- **Gemini 3.7 Flash added** (26→27 models) — Google's newest Flash
+  model, published the same day as this entry (2026-08-13), based on
+  Gemini 3.6 Flash with algorithmic reasoning improvements. Same
+  introductory-pricing pattern as 3.6 Flash. All `[Objective]` fields
+  sourced directly against the model's official model card and the
+  Gemini API's function-calling/structured-output reference docs
+  (neither of which state capability flags directly on the card
+  itself). `[Editorial]` fields (`quality.*`, `ecosystem.maturity`)
+  set by the project, not inherited from any benchmark score or
+  third-party audit — see `docs/models/gemini-3.7-flash.md` for the
+  full reasoning per field. `ecosystem.maturity: experimental`,
+  specifically, because the model doesn't appear yet in Google's
+  public Gemini API models catalog as a labeled stable/preview entry —
+  a new editorial principle (maturity requires public documentation
+  evidence, not just technical availability) applied here for the
+  first time.
+- Added its `direct_api` access route (Google AI Studio / Gemini API),
+  same pattern as the rest of the Gemini family — 60→61 routes,
+  27/27 models with at least one confirmed route. `evidence.source_url`
+  points to the model's own model card (model-specific confirmation of
+  Gemini API distribution), not the generic Gemini API billing page —
+  the billing page covers eligibility/economics mechanics only, noted
+  in the route's `evidence.caveat` instead.
+- Reviewed and explicitly rejected third-party AI-generated "audits" of
+  official model cards as a data source, including a concrete
+  counter-example: one such audit claimed a ~2M context window for
+  Gemini 3.1 Pro, contradicted by that model's own official model card
+  (re-fetched directly, 2026-08-13: "up to 1M"), matching this
+  project's already-sourced entry — see `IMPLEMENTATION_NOTES.md`,
+  Iteration #14.
+- Test fixtures depending on dataset size/composition updated to match
+  (`test_loader.py`, `test_explainer.py`, `test_access_loader.py`) —
+  142/142 tests passing.
+
+---
+
 ## 2026-08-13 — v0.1.0 (feature/access-catalog-expansion)
 
 **Grew the Access Advisor catalog from 3/26 to 26/26 model coverage,

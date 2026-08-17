@@ -20,6 +20,7 @@ EXPECTED_IDS = {
     "gpt-5-nano",
     "claude-haiku-4-5",
     "gemini-3.6-flash",
+    "gemini-3.7-flash",
     "gemini-3.5-flash-lite",
     "claude-opus-4-8",
     "claude-opus-4-7",
@@ -40,7 +41,7 @@ EXPECTED_IDS = {
 def test_loads_all_real_models():
     models = load_dataset(DATASET_DIR)
 
-    assert len(models) == 26
+    assert len(models) == 27
     assert all(isinstance(model, AIModel) for model in models)
     assert {model.id for model in models} == EXPECTED_IDS
 

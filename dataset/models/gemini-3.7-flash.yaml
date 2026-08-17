@@ -1,7 +1,7 @@
-id: gemini-3.6-flash
-name: Gemini 3.6 Flash
+id: gemini-3.7-flash
+name: Gemini 3.7 Flash
 provider: Google
-version: "3.6"
+version: "3.7"
 license: proprietary
 
 capabilities:
@@ -13,8 +13,8 @@ capabilities:
   json_mode: true
 
 quality:
-  reasoning: high
-  coding: high
+  reasoning: very_high
+  coding: very_high
   creative_writing: medium
   instruction_following: high
 
@@ -41,7 +41,7 @@ cost:
 
 ecosystem:
   integration_ease: high
-  maturity: stable
+  maturity: experimental
 
 access:
   has_free_access: true

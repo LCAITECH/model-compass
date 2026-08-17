@@ -1,0 +1,21 @@
+provider: Google
+model_id: gemini-3.7-flash
+access:
+  surface: direct_api
+  access_method: "API key (Gemini API)"
+  capabilities: [prototype, build, automation]
+  guide_ref: google#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: api_token
+  quota_scope: project
+  production_allowed: true
+evidence:
+  source_url: https://deepmind.google/models/model-cards/gemini-3-7-flash/
+  consulted_at: "2026-08-13"
+  status: confirmed
+  caveat: "Model-specific distribution via 'Gemini API' confirmed directly on this model's own official model card (Distribution section). Billing/eligibility mechanics (Cloud Billing linkage, free-tier-outside-paid-path) sourced separately from https://ai.google.dev/gemini-api/docs/billing?hl=es-419 -- generic across the Gemini API, not model-specific, so not used as the primary evidence.source_url. Pricing reflects an introductory rate expiring 2026-12-31 (see docs/models/gemini-3.7-flash.md, Cost section)."

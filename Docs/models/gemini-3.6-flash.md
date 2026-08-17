@@ -1,7 +1,9 @@
 # Gemini 3.6 Flash
 
 Dataset entry: [`dataset/models/gemini-3.6-flash.yaml`](../../dataset/models/gemini-3.6-flash.yaml)
-Last verified: 2026-08-07
+Last verified: 2026-08-13 (cost only — see Cost section for the
+introductory-price correction; other fields last verified 2026-08-07/09
+as noted below)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -68,16 +70,29 @@ Gemini 2.5 Flash/Pro.
 
 | Field                    | Value  |
 |----------------------------|--------|
-| `input_per_million`         | $1.50  |
-| `output_per_million`        | $7.50  |
+| `input_per_million`         | $0.75  |
+| `output_per_million`        | $3.75  |
 
-Confirmed directly against Google's pricing page. Notably cheaper than
-Gemini 2.5 Flash's blended cost ($2.80 vs. $9.00) despite being a
-newer generation — worth double-checking on a future pass in case this
-reflects an early-release promotional rate rather than durable
-pricing; nothing in the source page flagged it as introductory, but
-that's exactly the kind of thing Claude Sonnet 5's entry shows can
-happen without obvious warning on the page itself.
+**Introductory price, with a confirmed expiration date.** The
+[Gemini 3.7 Flash model card](https://deepmind.google/models/model-cards/gemini-3-7-flash/)
+(published 2026-08-13) states explicitly, in its benchmark pricing
+table footnote: *"For 3.6 and 3.7 Flash, introductory price expires on
+December 31, 2026. Starting January 1, 2027, $1.50/1M input tokens and
+$7.50/1M output tokens will apply."* — confirming both the current
+price above and the future one.
+
+This is exactly the risk flagged in this file's previous pass
+(2026-08-07): the original entry recorded $1.50/$7.50, sourced
+correctly at the time against Google's pricing page, before the price
+drop to the introductory rate took effect. The dataset's single
+`cost.*` number always reflects the *current* price, not a future one
+— when this model's price reverts to $1.50/$7.50 on 2027-01-01, this
+entry needs a follow-up correction back. Logged as a new pattern in
+`IMPLEMENTATION_NOTES.md` (time-limited/expiring pricing, distinct
+from Iteration #5's per-request-type granularity) since `SCHEMA.md`
+has no field for an expiration date — the schema stores one number,
+and the expiry nuance lives here in prose, same convention as every
+other pricing wrinkle in this file.
 
 ## Ecosystem `[Editorial]`
 
@@ -149,6 +164,7 @@ the Paid Tier explicitly states the opposite).
 ## Sources
 
 - [Gemini 3.6 Flash model card](https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash) — capabilities, context window, max output.
+- [Gemini 3.7 Flash model card](https://deepmind.google/models/model-cards/gemini-3-7-flash/) — current (2026-08-13) introductory pricing and 2027-01-01 reversion date for Gemini 3.6 Flash, disclosed in its comparison benchmark table.
 - [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost fields, free/paid tier data-policy distinction.
 - [Gemini API rate limits](https://ai.google.dev/gemini-api/docs/rate-limits) — RPM/TPM/RPD definitions and per-project/per-model behavior.
 - [Gemini API billing](https://ai.google.dev/gemini-api/docs/billing) — Free vs. Paid Tier requirements.
