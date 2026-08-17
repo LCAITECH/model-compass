@@ -53,6 +53,72 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Free-text detection: a deterministic keyword match against the
+  // same 14 use-case categories (interfaces/web/use_case_matcher.py),
+  // shown as a dismissible suggestion. Never applied automatically --
+  // priorities only change if the developer clicks "Use these
+  // priorities", same as picking a pill or the dropdown.
+  const suggestionBox = document.getElementById("use-case-suggestion");
+  let suggestionRequestId = 0;
+  let suggestionDebounce;
+
+  function renderSuggestion(data) {
+    if (!suggestionBox) return;
+
+    if (data.category) {
+      const labels = data.priorities
+        .map((value) => value.replace(/_/g, " "))
+        .join(" and ");
+      suggestionBox.innerHTML = "";
+      suggestionBox.append(`Detected: ${data.category} → prioritize ${labels}. `);
+      const acceptButton = document.createElement("button");
+      acceptButton.type = "button";
+      acceptButton.className = "use-case-suggestion-accept";
+      acceptButton.textContent = "Use these priorities";
+      acceptButton.addEventListener("click", () => {
+        data.priorities.forEach((value, index) => {
+          const select = document.getElementById(`priority_${index + 1}`);
+          if (select) select.value = value;
+        });
+      });
+      suggestionBox.append(acceptButton);
+      suggestionBox.hidden = false;
+    } else if (data.tied_categories.length > 1) {
+      suggestionBox.textContent =
+        `Detected multiple possible use cases (${data.tied_categories.join(", ")}) — choose your priorities manually.`;
+      suggestionBox.hidden = false;
+    } else {
+      suggestionBox.hidden = true;
+      suggestionBox.textContent = "";
+    }
+  }
+
+  // 3 chars is the shortest real keyword in use_case_matcher.py
+  // ("sql", "rag") -- anything shorter can never match, so skip the
+  // round trip instead of firing a request that's guaranteed empty.
+  const MIN_SUGGESTION_LENGTH = 3;
+
+  if (useCaseField && suggestionBox) {
+    useCaseField.addEventListener("input", () => {
+      clearTimeout(suggestionDebounce);
+      const text = useCaseField.value;
+      if (text.trim().length < MIN_SUGGESTION_LENGTH) {
+        suggestionBox.hidden = true;
+        suggestionBox.textContent = "";
+        return;
+      }
+      suggestionDebounce = setTimeout(() => {
+        const requestId = ++suggestionRequestId;
+        fetch(`/use-case-suggestion?text=${encodeURIComponent(text)}`)
+          .then((response) => (response.ok ? response.json() : null))
+          .then((data) => {
+            if (data && requestId === suggestionRequestId) renderSuggestion(data);
+          })
+          .catch(() => {});
+      }, 400);
+    });
+  }
+
   const demoButton = document.getElementById("demo-button");
   if (demoButton) {
     demoButton.addEventListener("click", () => {

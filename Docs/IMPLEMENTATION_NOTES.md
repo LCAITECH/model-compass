@@ -632,3 +632,100 @@ provenance metadata comes up (or before scoring `decision/evaluator/`
 impact deliberately). #2 closed as a confirmation, not a new
 finding, kept as its own iteration for the concrete counter-example
 (reusable precedent, same reasoning as Iteration #11).
+
+---
+
+## Iteration #15
+
+**Observation**
+`Context.use_case` (free text) has never influenced the recommendation
+— `decision/explainer/explainer.py` only interpolates it verbatim into
+the opening reason sentence. `FEATURES.md`'s "Use Case Analysis" Core
+Capability ("interprets the type of application the developer is
+building... as a core input to the recommendation") has never actually
+been implemented; this gap was flagged but not addressed at the close
+of Fase 9 (`HANDOFF.md`).
+
+An architecture discussion (2026-08-17) considered how to close this
+gap. Two options were rejected outright, both for the same reason —
+they'd make the recommendation non-deterministic or fabricate
+precision the input doesn't support:
+- **LLM-in-the-loop classification** of the free text at request time.
+  Breaks `Deterministic Results` (same input, same output, always) and
+  the standing rule that `decision/` never reasons with AI. Also a
+  direct operating-cost concern raised by the user (unbounded per-
+  request inference spend, no budget to absorb it at scale).
+- **Silent keyword classification that directly influences the
+  ranking.** Matching a handful of keywords in free text and treating
+  the result as ground truth for scoring would be exactly the
+  fabricated-confidence problem this project has declined everywhere
+  else (Iteration #14's AI-audit rejection, the "92% confidence" badge
+  rejected in `FEATURES.md`'s Recommendation Confidence section) — a
+  guess about intent presented as understood intent.
+
+**Current decision**
+Built a deterministic keyword matcher
+([`interfaces/web/use_case_matcher.py`](../interfaces/web/use_case_matcher.py))
+that never touches `decision/`, at the same architectural tier as the
+pre-existing `interfaces/web/use_cases.py` preset shortcuts (whose 8
+categories it reuses and extends to 14 — see the table in
+`use_case_matcher.py`). Rules, not inference:
+
+- Each of the 14 categories has a curated list of specific keyword
+  phrases (multi-word wherever possible; bare single words kept only
+  when unambiguous in this domain, e.g. `telegram`, `sql`, `rag`,
+  `django`). No phrase is repeated across categories — enforced by
+  `test_no_keyword_phrase_is_shared_across_categories`, not just
+  discipline at edit time, since a shared phrase would force a
+  permanent tie wherever it appears.
+- Score = count of distinct matching phrases per category (word/phrase-
+  boundary regex, never substring). A category is only suggested if it
+  has a **unique** maximum score; a real tie between two or more
+  categories returns no winner and the tied category names instead, so
+  the UI can say *why* nothing was suggested rather than going quiet.
+- Served via a new read-only endpoint (`GET /use-case-suggestion`,
+  `interfaces/web/app.py`) that the free-text field calls (debounced,
+  `interfaces/web/static/form.js`), rendering a dismissible suggestion
+  the developer must explicitly accept (`Use these priorities` button)
+  before any `priority_N` `<select>` changes — same "always editable,
+  never silently applied" pattern the existing preset pills/dropdown
+  already use. `Context.use_case` itself is untouched; the suggestion
+  only ever pre-fills `priority_N` selects, exactly like a preset pill.
+
+This is the first of two ambition levels discussed and explicitly
+deferred: promoting the matched category to a real `Context` field that
+`decision/evaluator/` can weigh (not just a UI pre-fill suggestion)
+would close `FEATURES.md`'s promise more completely, but needs its own
+scoping pass — schema shape, evaluator impact, and how a wrong
+match then differs from a wrong priority `decision/` can't itself
+audit. Not started.
+
+**Status**
+Level 1 shipped: 157/157 tests green, 14 categories, verified live via
+the dev server (`/use-case-suggestion` returns the correct JSON for a
+unique match, a real tie, and no match; the accept button correctly
+pre-fills the priority selects; no console errors). Level 2
+(structured `Context` input) logged as the next real candidate if this
+proves valuable in practice, same "second occurrence" gate as
+Iteration #14's provenance-metadata proposal — not decided, not
+scoped.
+
+**Follow-up (same day, live user testing)**
+Manually testing the shipped feature against a real phrase ("i have a
+trading community with a bot") correctly produced no suggestion —
+by design, since none of the 14 categories had crypto/trading
+vocabulary and the bare word "bot" was deliberately excluded as too
+generic. Not a bug, but a real dataset gap: added a 15th category,
+**Crypto / trading bot** (`Priority.COST`, `Priority.REASONING` —
+chosen over Instruction Following on the reasoning that following
+market logic/signals matters more here than a generic support bot's
+instruction-following need), with keywords `crypto`, `trading bot`,
+`crypto community`, `crypto trading`, `defi`. Deliberately not folded
+into the existing "Telegram / WhatsApp bot" category (same surface,
+different priorities) to avoid fabricating a priority match without
+evidence either way had it been forced under Cost + Instruction
+Following. A genuinely ambiguous phrase like "telegram trading bot"
+now correctly reports a real tie between the two categories rather
+than guessing which one the developer meant. 159/159 tests green
+(added `test_crypto_trading_bot_match` and
+`test_telegram_crypto_bot_is_a_real_tie`).

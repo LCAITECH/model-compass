@@ -30,6 +30,14 @@ recommends anything.
 - **Use Case Analysis** — interprets the type of application the
   developer is building (chatbot, content generation, code assistant,
   data extraction, etc.) as a core input to the recommendation.
+  **Partially addressed 2026-08-17** by a deterministic keyword matcher
+  over the free-text field (`interfaces/web/use_case_matcher.py`, 14
+  categories) that suggests priorities the developer must explicitly
+  accept — never an automatic, always-on input to the ranking itself,
+  since that would require either an LLM in the loop (breaks
+  determinism) or silent keyword-to-ranking inference (fabricates
+  confidence the plain-text input doesn't support). See
+  `IMPLEMENTATION_NOTES.md`, Iteration #15.
 - **Context Analysis** — considers the developer's real constraints:
   budget, expected volume, latency needs, and language requirements.
   Budget can be expressed either as a fixed price tier (Low/Medium/High/

@@ -9,7 +9,7 @@ this whole package were deleted.
 from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -37,6 +37,7 @@ from interfaces.web.affordability import (
 from interfaces.web.context_form import InvalidFormError, context_from_form
 from interfaces.web.languages import language_name
 from interfaces.web.model_profile import best_for, less_suited_for, quality_profile
+from interfaces.web.use_case_matcher import match_use_case
 from interfaces.web.use_cases import USE_CASES
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -54,6 +55,8 @@ templates.env.filters["guide_ref_url"] = guide_ref_url
 models = load_dataset(DATASET_DIR)
 languages = sorted({language for model in models for language in model.languages})
 providers = sorted({model.provider for model in models})
+
+use_case_priorities = {label: priorities for label, priorities in USE_CASES}
 
 access_routes = load_access_routes(ACCESS_ROUTES_DIR)
 subscriptions = load_subscriptions(SUBSCRIPTIONS_DIR)
@@ -168,6 +171,25 @@ def _savings_summary(recommendation, candidates, budget_usd, priority_1) -> dict
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     return templates.TemplateResponse(request, "index.html", _form_context())
+
+
+@app.get("/use-case-suggestion", response_class=JSONResponse)
+def use_case_suggestion(text: str = ""):
+    """Deterministic keyword suggestion for the free-text use case field.
+
+    A read-only lookup, not a decision -- the client shows it as a
+    dismissible suggestion and only pre-fills priorities if the
+    developer explicitly accepts it. Priorities never come from
+    decision/ here; they're the same static USE_CASES pairing the
+    preset dropdown already uses.
+    """
+    result = match_use_case(text)
+    priorities = use_case_priorities.get(result.category, ()) if result.category else ()
+    return {
+        "category": result.category,
+        "priorities": [p.value for p in priorities],
+        "tied_categories": list(result.tied_categories),
+    }
 
 
 @app.post("/recommend", response_class=HTMLResponse)

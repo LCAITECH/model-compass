@@ -37,6 +37,36 @@ def test_recommend_renders_a_recommendation_for_a_valid_context():
     assert "DeepSeek V4 Flash" in response.text
 
 
+def test_use_case_suggestion_returns_a_unique_match():
+    response = client.get("/use-case-suggestion", params={"text": "a customer support helpdesk"})
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "category": "Customer support",
+        "priorities": ["instruction_following", "cost"],
+        "tied_categories": [],
+    }
+
+
+def test_use_case_suggestion_returns_tied_categories_and_no_category():
+    response = client.get(
+        "/use-case-suggestion", params={"text": "python script for data analysis"}
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["category"] is None
+    assert body["priorities"] == []
+    assert set(body["tied_categories"]) == {"Python development", "Data analysis"}
+
+
+def test_use_case_suggestion_returns_nothing_for_unrelated_text():
+    response = client.get("/use-case-suggestion", params={"text": "lorem ipsum dolor"})
+
+    assert response.status_code == 200
+    assert response.json() == {"category": None, "priorities": [], "tied_categories": []}
+
+
 def test_recommend_shows_no_match_when_nothing_qualifies():
     response = client.post(
         "/recommend",
