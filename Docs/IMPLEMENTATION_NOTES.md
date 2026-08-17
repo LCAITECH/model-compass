@@ -729,3 +729,38 @@ now correctly reports a real tie between the two categories rather
 than guessing which one the developer meant. 159/159 tests green
 (added `test_crypto_trading_bot_match` and
 `test_telegram_crypto_bot_is_a_real_tie`).
+
+**Second follow-up (same day, requested evolution of the matcher)**
+User asked whether `use_case` detection could get "smarter." Scoped
+down explicitly before touching code, same discipline as the original
+design conversation: no LLM (cost, determinism — same reasons as
+before), and specifically **no automatic stemming/fuzzy matching** —
+user's own call, preferring hand-curated phrases per variant
+("chatbot" *and* "chatbots" as two separate dictionary entries) over a
+generic pluralization rule, on the reasoning that an explicit phrase
+list stays auditable at a glance while a stemming rule's behavior
+doesn't. Also confirmed staying English-only for now, same as the
+original scoping decision — not revisited.
+
+Added ~50 phrases across all 15 categories: plurals (`chatbot(s)`,
+`sql quer(y/ies)`, `readme(s)`, `docstring(s)`, etc.), verb-form
+variants (`refactor`/`refactoring`, `translate`/`translating`), and a
+few missing synonyms per category (`help desk` alongside `helpdesk`,
+`copywriter` alongside `copywriting`, `vector database` alongside
+`vector search`). The no-shared-phrase invariant
+(`test_no_keyword_phrase_is_shared_across_categories`) caught zero
+collisions on this pass — ran clean on the first attempt. Added
+`test_plural_variant_matches_same_as_singular` covering four of the
+new entries as a representative sample, not each individually (each
+phrase update doesn't need to double as a golden test in
+`test_web.py`; unit-level coverage in `test_use_case_matcher.py` is
+where phrase-level correctness belongs, per the existing test split in
+that file).
+
+**Status**
+Both follow-ups shipped same day as the original feature. 160/160
+tests green, verified live against the restarted dev server for two
+of the new plural entries (`chatbots`, `readmes`). "Level 2" (making
+the matched category a real `decision/evaluator/` input, discussed
+again when this evolution was proposed) stays explicitly deferred —
+the user chose to scope this round to dictionary breadth only.

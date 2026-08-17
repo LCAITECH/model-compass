@@ -51,6 +51,13 @@ ever calling an AI model to read it.**
   "Telegram / WhatsApp bot" rather than folding in its keywords, since
   the two categories weigh different priorities and merging them would
   have meant guessing which one actually applies.
+- **Dictionary widened** (~50 phrases across all 15 categories) after
+  the user asked for the detection to get "smarter" — scoped down to
+  hand-curated plurals and verb-form variants (`chatbot`/`chatbots`,
+  `refactor`/`refactoring`) rather than automatic stemming, and stayed
+  English-only. Same reasoning as the LLM rejection above: a stemming
+  rule is less auditable at a glance than an explicit phrase list, and
+  this project favors the latter every time.
 - See `IMPLEMENTATION_NOTES.md`, Iteration #15 for the full rejected-
   alternatives reasoning and why this is deliberately scoped as a
   first step, not the whole feature `FEATURES.md` describes.

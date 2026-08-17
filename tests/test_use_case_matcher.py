@@ -99,3 +99,13 @@ def test_telegram_crypto_bot_is_a_real_tie():
     result = match_use_case("telegram trading bot")
     assert result.category is None
     assert set(result.tied_categories) == {"Telegram / WhatsApp bot", "Crypto / trading bot"}
+
+
+def test_plural_variant_matches_same_as_singular():
+    # Plurals/variants are curated as their own explicit phrases, not
+    # handled by stemming -- each one needs its own test to prove it's
+    # actually in the dictionary, not just assumed to match.
+    assert match_use_case("we need chatbots for our team").category == "Telegram / WhatsApp bot"
+    assert match_use_case("writing unit testing for this module").category == "Test generation"
+    assert match_use_case("generating readmes for every repo").category == "Technical documentation"
+    assert match_use_case("managing crypto communities").category == "Crypto / trading bot"
