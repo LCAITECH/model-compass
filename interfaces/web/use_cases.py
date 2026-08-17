@@ -18,4 +18,10 @@ USE_CASES = [
     ("Data analysis", (Priority.REASONING, Priority.CODING)),
     ("Agentic workflow", (Priority.REASONING, Priority.CODING)),
     ("Code review", (Priority.CODING, Priority.REASONING)),
+    ("RAG / Document Q&A", (Priority.CONTEXT_WINDOW, Priority.REASONING)),
+    ("Research & summarization", (Priority.REASONING, Priority.CONTEXT_WINDOW)),
+    ("SQL / database work", (Priority.CODING, Priority.REASONING)),
+    ("Test generation", (Priority.CODING, Priority.INSTRUCTION_FOLLOWING)),
+    ("Technical documentation", (Priority.INSTRUCTION_FOLLOWING, Priority.CREATIVE_WRITING)),
+    ("Translation / localization", (Priority.INSTRUCTION_FOLLOWING, Priority.COST)),
 ]

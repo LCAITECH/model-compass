@@ -57,6 +57,30 @@ body.page-index main {
   margin: 0;
 }
 
+.use-case-suggestion {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.use-case-suggestion-accept {
+  margin-left: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.use-case-suggestion-accept:hover,
+.use-case-suggestion-accept:focus-visible {
+  background: var(--accent);
+  color: var(--surface);
+}
+
 .decision-field-pair {
   display: grid;
   grid-template-columns: 1fr;

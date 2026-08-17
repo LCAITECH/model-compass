@@ -19,6 +19,36 @@ public release to version against.
 
 ---
 
+## 2026-08-17 — Use case detection (keyword-based, not AI)
+
+**The free-text "use case" field now actually does something — without
+ever calling an AI model to read it.**
+
+- Previously, typing a use case (e.g. "customer support chatbot") did
+  nothing beyond being echoed back in the explanation text — it never
+  affected which priorities got weighed. Closing that gap with an LLM
+  was considered and rejected: it would make the recommendation
+  non-deterministic (same input could produce different results) and
+  add real, unbounded API cost per request. Silent keyword matching
+  that fed straight into the ranking was rejected too — that would be
+  guessing at intent and presenting it as understood fact, the same
+  fabricated-confidence problem this project has declined everywhere
+  else.
+- Instead: a plain-rules keyword matcher (14 categories, expanded from
+  the 8 existing use-case shortcuts) scans the free text as you type
+  and, when there's a single clear match, suggests the priorities that
+  category usually needs — shown openly ("Detected: Customer support →
+  prioritize instruction following and cost") with a button to accept
+  it, never applied automatically. If two categories tie, it says so
+  instead of guessing which one you meant. `decision/` is untouched —
+  this lives entirely in the web interface, same tier as the existing
+  preset pills.
+- See `IMPLEMENTATION_NOTES.md`, Iteration #15 for the full rejected-
+  alternatives reasoning and why this is deliberately scoped as a
+  first step, not the whole feature `FEATURES.md` describes.
+
+---
+
 ## 2026-08-13 — Gemini 3.7 Flash admitted + Gemini 3.6 Flash pricing correction
 
 **Added the newest Google Gemini model to the dataset, and fixed a real
