@@ -34,7 +34,7 @@ ever calling an AI model to read it.**
   guessing at intent and presenting it as understood fact, the same
   fabricated-confidence problem this project has declined everywhere
   else.
-- Instead: a plain-rules keyword matcher (14 categories, expanded from
+- Instead: a plain-rules keyword matcher (15 categories, expanded from
   the 8 existing use-case shortcuts) scans the free text as you type
   and, when there's a single clear match, suggests the priorities that
   category usually needs — shown openly ("Detected: Customer support →
@@ -43,6 +43,14 @@ ever calling an AI model to read it.**
   instead of guessing which one you meant. `decision/` is untouched —
   this lives entirely in the web interface, same tier as the existing
   preset pills.
+- **Crypto / trading bot** added as its own 15th category (`Cost` +
+  `Reasoning`) after live testing turned up a real gap: "trading
+  community with a bot" correctly produced no suggestion (by design —
+  the bare word "bot" was deliberately excluded as too generic), but
+  the underlying use case genuinely wasn't covered. Kept separate from
+  "Telegram / WhatsApp bot" rather than folding in its keywords, since
+  the two categories weigh different priorities and merging them would
+  have meant guessing which one actually applies.
 - See `IMPLEMENTATION_NOTES.md`, Iteration #15 for the full rejected-
   alternatives reasoning and why this is deliberately scoped as a
   first step, not the whole feature `FEATURES.md` describes.

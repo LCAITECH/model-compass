@@ -24,4 +24,5 @@ USE_CASES = [
     ("Test generation", (Priority.CODING, Priority.INSTRUCTION_FOLLOWING)),
     ("Technical documentation", (Priority.INSTRUCTION_FOLLOWING, Priority.CREATIVE_WRITING)),
     ("Translation / localization", (Priority.INSTRUCTION_FOLLOWING, Priority.COST)),
+    ("Crypto / trading bot", (Priority.COST, Priority.REASONING)),
 ]

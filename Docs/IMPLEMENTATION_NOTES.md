@@ -701,11 +701,31 @@ match then differs from a wrong priority `decision/` can't itself
 audit. Not started.
 
 **Status**
-Level 1 (this iteration) shipped: 157/157 tests green, 14 categories,
-verified live via the dev server (`/use-case-suggestion` returns the
-correct JSON for a unique match, a real tie, and no match; the accept
-button correctly pre-fills the priority selects; no console errors).
-Level 2 (structured `Context` input) logged as the next real candidate
-if this proves valuable in practice, same "second occurrence" gate as
+Level 1 shipped: 157/157 tests green, 14 categories, verified live via
+the dev server (`/use-case-suggestion` returns the correct JSON for a
+unique match, a real tie, and no match; the accept button correctly
+pre-fills the priority selects; no console errors). Level 2
+(structured `Context` input) logged as the next real candidate if this
+proves valuable in practice, same "second occurrence" gate as
 Iteration #14's provenance-metadata proposal — not decided, not
 scoped.
+
+**Follow-up (same day, live user testing)**
+Manually testing the shipped feature against a real phrase ("i have a
+trading community with a bot") correctly produced no suggestion —
+by design, since none of the 14 categories had crypto/trading
+vocabulary and the bare word "bot" was deliberately excluded as too
+generic. Not a bug, but a real dataset gap: added a 15th category,
+**Crypto / trading bot** (`Priority.COST`, `Priority.REASONING` —
+chosen over Instruction Following on the reasoning that following
+market logic/signals matters more here than a generic support bot's
+instruction-following need), with keywords `crypto`, `trading bot`,
+`crypto community`, `crypto trading`, `defi`. Deliberately not folded
+into the existing "Telegram / WhatsApp bot" category (same surface,
+different priorities) to avoid fabricating a priority match without
+evidence either way had it been forced under Cost + Instruction
+Following. A genuinely ambiguous phrase like "telegram trading bot"
+now correctly reports a real tie between the two categories rather
+than guessing which one the developer meant. 159/159 tests green
+(added `test_crypto_trading_bot_match` and
+`test_telegram_crypto_bot_is_a_real_tie`).

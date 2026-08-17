@@ -121,6 +121,13 @@ USE_CASE_KEYWORDS: dict[str, tuple[str, ...]] = {
         "translate text",
         "multilingual content",
     ),
+    "Crypto / trading bot": (
+        "crypto",
+        "trading bot",
+        "crypto community",
+        "crypto trading",
+        "defi",
+    ),
 }
 
 

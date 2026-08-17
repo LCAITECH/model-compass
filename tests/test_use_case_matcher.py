@@ -85,3 +85,17 @@ def test_word_boundary_prevents_substring_false_positive():
     # "chatbot" must not match inside an unrelated longer word.
     result = match_use_case("chatbotany research project")
     assert result.category is None
+
+
+def test_crypto_trading_bot_match():
+    result = match_use_case("building a trading bot for our crypto community")
+    assert result.category == "Crypto / trading bot"
+
+
+def test_telegram_crypto_bot_is_a_real_tie():
+    # Genuinely ambiguous: it's both a Telegram bot and a trading bot --
+    # "telegram" (Telegram / WhatsApp bot) and "trading bot" (Crypto /
+    # trading bot) each score 1, so neither wins by design.
+    result = match_use_case("telegram trading bot")
+    assert result.category is None
+    assert set(result.tied_categories) == {"Telegram / WhatsApp bot", "Crypto / trading bot"}
