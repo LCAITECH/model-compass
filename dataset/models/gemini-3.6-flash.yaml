@@ -38,6 +38,10 @@ operational:
 cost:
   input_per_million: 0.75
   output_per_million: 3.75
+  effective_until: "2026-12-31"
+  reverts_to:
+    input_per_million: 1.50
+    output_per_million: 7.50
 
 ecosystem:
   integration_ease: high

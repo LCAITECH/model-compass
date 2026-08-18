@@ -168,6 +168,47 @@ def test_free_access_chip_not_shown_above_low_budget():
     assert "Read access docs" not in response.text
 
 
+def test_pricing_shows_introductory_price_reversion_note():
+    # budget=medium, priority_1=reasoning, priority_2=context_window ->
+    # gemini-3.7-flash wins (verified against a real evaluate()/
+    # explain() run, not guessed). It has cost.effective_until set
+    # (see dataset/models/gemini-3.7-flash.yaml), so the Pricing card
+    # should surface the reversion date and post-reversion price.
+    response = client.post(
+        "/recommend",
+        data={
+            "use_case": "",
+            "language": "en",
+            "budget": "medium",
+            "priority_1": "reasoning",
+            "priority_2": "context_window",
+        },
+    )
+
+    assert response.status_code == 200
+    assert "Gemini 3.7 Flash" in response.text
+    assert "Introductory price, in effect until 2026-12-31" in response.text
+    assert "$1.50 input" in response.text
+    assert "$7.50 output" in response.text
+
+
+def test_pricing_omits_reversion_note_for_models_without_one():
+    # Same free-access-chip winner as the tests above (gemini-2.5-flash-lite),
+    # which has no cost.effective_until -- the note must not appear.
+    response = client.post(
+        "/recommend",
+        data={
+            "use_case": "",
+            "language": "en",
+            "budget": "low",
+            "priority_1": "context_window",
+        },
+    )
+
+    assert response.status_code == 200
+    assert "Introductory price" not in response.text
+
+
 def test_recommend_accepts_custom_budget_mode_without_a_tier():
     # budget_mode=custom never filters by cost (see BudgetMode's
     # docstring) -- claude-fable-5 ($60 blended) can win here purely on

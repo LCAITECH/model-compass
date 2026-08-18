@@ -63,6 +63,24 @@ def test_gemini_2_5_flash_has_free_access():
     assert model.access.has_free_access is True
 
 
+def test_gemini_3_6_flash_has_introductory_price_reversion():
+    model = load_model_file(DATASET_DIR / "gemini-3.6-flash.yaml")
+
+    assert model.cost.input_per_million == 0.75
+    assert model.cost.effective_until == "2026-12-31"
+    assert model.cost.reverts_to.input_per_million == 1.50
+    assert model.cost.reverts_to.output_per_million == 7.50
+
+
+def test_claude_sonnet_5_has_no_price_reversion():
+    # Most models never had an introductory price -- both fields
+    # should stay None rather than defaulting to something fabricated.
+    model = load_model_file(DATASET_DIR / "claude-sonnet-5.yaml")
+
+    assert model.cost.effective_until is None
+    assert model.cost.reverts_to is None
+
+
 @pytest.mark.parametrize("model_id", sorted(EXPECTED_IDS))
 def test_language_quality_mirrors_languages(model_id):
     model = load_model_file(DATASET_DIR / f"{model_id}.yaml")
@@ -291,3 +309,83 @@ access:
         load_model_file(path)
 
     assert "access.has_free_access must be a boolean" in str(exc_info.value)
+
+
+def _minimal_cost_yaml(cost_block: str) -> str:
+    return f"""
+id: broken
+name: Broken
+provider: Test
+version: "1"
+license: proprietary
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+quality:
+  reasoning: high
+  coding: high
+  creative_writing: high
+  instruction_following: high
+languages: [en]
+language_quality:
+  en: high
+operational:
+  context_window: 1000
+  max_output: 1000
+cost:
+{cost_block}
+ecosystem:
+  integration_ease: high
+  maturity: stable
+access:
+  has_free_access: false
+"""
+
+
+def test_rejects_effective_until_without_reverts_to(tmp_path):
+    content = _minimal_cost_yaml(
+        "  input_per_million: 1.0\n  output_per_million: 1.0\n  effective_until: \"2027-01-01\"\n"
+    )
+    path = tmp_path / "broken.yaml"
+    path.write_text(content, encoding="utf-8")
+
+    with pytest.raises(DatasetValidationError) as exc_info:
+        load_model_file(path)
+
+    assert "cost.effective_until and cost.reverts_to must both be present or both absent" in str(
+        exc_info.value
+    )
+
+
+def test_rejects_reverts_to_without_effective_until(tmp_path):
+    content = _minimal_cost_yaml(
+        "  input_per_million: 1.0\n  output_per_million: 1.0\n"
+        "  reverts_to:\n    input_per_million: 2.0\n    output_per_million: 2.0\n"
+    )
+    path = tmp_path / "broken.yaml"
+    path.write_text(content, encoding="utf-8")
+
+    with pytest.raises(DatasetValidationError) as exc_info:
+        load_model_file(path)
+
+    assert "cost.effective_until and cost.reverts_to must both be present or both absent" in str(
+        exc_info.value
+    )
+
+
+def test_rejects_invalid_effective_until_date(tmp_path):
+    content = _minimal_cost_yaml(
+        "  input_per_million: 1.0\n  output_per_million: 1.0\n  effective_until: \"not-a-date\"\n"
+        "  reverts_to:\n    input_per_million: 2.0\n    output_per_million: 2.0\n"
+    )
+    path = tmp_path / "broken.yaml"
+    path.write_text(content, encoding="utf-8")
+
+    with pytest.raises(DatasetValidationError) as exc_info:
+        load_model_file(path)
+
+    assert "cost.effective_until must be an ISO date string" in str(exc_info.value)

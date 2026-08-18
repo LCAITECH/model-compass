@@ -175,6 +175,14 @@
     </div>
   </div>
 
+  {% if recommendation.recommended.cost.effective_until %}
+  <p class="muted cost-caveat">
+    Introductory price, in effect until {{ recommendation.recommended.cost.effective_until }} —
+    reverts to ${{ "%.2f"|format(recommendation.recommended.cost.reverts_to.input_per_million) }} input /
+    ${{ "%.2f"|format(recommendation.recommended.cost.reverts_to.output_per_million) }} output per 1M tokens afterward.
+  </p>
+  {% endif %}
+
   {% if context.budget.value == 'low' and recommendation.recommended.access.has_free_access %}
   <div class="chip-row-with-link">
     <span class="chip chip-positive">{{ icons.check() }}Free access also documented — see this model's Access notes for limits</span>

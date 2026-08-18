@@ -558,15 +558,41 @@ same convention Iteration #5 already established for pricing nuance
 that doesn't fit a single number.
 
 **Status**
-Observation, one occurrence. Also flags a process gap with no owner
-yet: nothing in this project re-checks a *stable, already-loaded*
-model's pricing after admission — the only reason this was caught is
-that researching an unrelated candidate model (3.7 Flash) happened to
-surface it via a comparison table on the candidate's own model card.
-If this recurs (another loaded model turns out to have introductory
-pricing with a known expiry), worth proposing an explicit
-`cost.effective_until` / `cost.reverts_to` pair to `SCHEMA.md` at that
-point — not proposed now, first occurrence only.
+Observation, one occurrence at the time this was first written.
+
+**Update (2026-08-17) — schema change implemented**
+User asked for this to be surfaced honestly in the web UI (the
+Pricing card on a result page), not just documented in prose — a
+concrete product need that closes the "if this recurs" condition
+above, since both `gemini-3.6-flash` and `gemini-3.7-flash` already
+carry this exact pattern (same expiration date, same reverted price).
+Added `cost.effective_until` (ISO date string) and
+`cost.reverts_to.{input,output}_per_million` to `SCHEMA.md`/
+`decision/domain/ai_model.py` (`CostReversion`, new), both optional
+and both required together — enforced in `decision/loader/loader.py`
+(`cost.effective_until and cost.reverts_to must both be present or
+both absent`). Display-only by design: `Cost.blended` and every
+ranking/tiering path keep reading the current `input_per_million`/
+`output_per_million` exactly as before; `decision/evaluator/` never
+sees `reverts_to`. `interfaces/web/templates/result.html`'s Pricing
+card now shows "Introductory price, in effect until 2026-12-31 —
+reverts to $1.50 input / $7.50 output per 1M tokens afterward" for
+both models, absent for every other model in the dataset. The
+`docs/models/*.md` prose note stays as-is (human-readable context),
+now backed by structured data instead of being the only place this
+lived.
+
+167/167 tests green (added `test_gemini_3_6_flash_has_introductory_price_reversion`,
+`test_claude_sonnet_5_has_no_price_reversion`, three loader validation-error
+tests, and two `test_web.py` tests covering the note's presence/absence).
+
+**Still unresolved, unchanged by this update:** nothing re-checks
+`effective_until` automatically. When 2027-01-01 passes,
+`gemini-3.6-flash.yaml`/`gemini-3.7-flash.yaml` still need a manual
+edit to move `reverts_to.*` into `input_per_million`/
+`output_per_million` and clear both `effective_until` and
+`reverts_to` — this schema change makes the fact visible to users, it
+doesn't automate the eventual correction.
 
 ---
 

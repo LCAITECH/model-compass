@@ -74,9 +74,25 @@ class Operational:
 
 
 @dataclass(frozen=True)
+class CostReversion:
+    """The price a model's cost.* reverts to once an introductory rate expires.
+
+    Display-only -- decision/evaluator/ never reads this. Ranking and
+    tiering always use the model's current, live cost.* fields, exactly
+    as before this existed; a future price change isn't something the
+    engine should react to today.
+    """
+
+    input_per_million: float
+    output_per_million: float
+
+
+@dataclass(frozen=True)
 class Cost:
     input_per_million: float
     output_per_million: float
+    effective_until: str | None = None
+    reverts_to: CostReversion | None = None
 
     @property
     def blended(self) -> float:
@@ -84,7 +100,9 @@ class Cost:
 
         An intermediate derived figure, not stored in the dataset (see
         SCHEMA.md's Cost section) — used to rank and tier models by
-        price without picking one of input/output alone.
+        price without picking one of input/output alone. Always uses
+        the current input/output_per_million, never reverts_to -- see
+        that field's docstring.
         """
         return self.input_per_million + self.output_per_million
 

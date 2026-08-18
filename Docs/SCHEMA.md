@@ -151,6 +151,20 @@ of the model, which it is not.
 |--------------------------------|--------|---------------|--------------|
 | `cost.input_per_million`     | number | `[Objective]` | USD cost per million input tokens. |
 | `cost.output_per_million`    | number | `[Objective]` | USD cost per million output tokens. |
+| `cost.effective_until`       | date (ISO 8601 string), optional | `[Objective]` | Last day the current price above is guaranteed to hold, when the provider has published a known expiration for an introductory rate. Absent for a model with an ordinary, non-time-limited price. |
+| `cost.reverts_to.input_per_million` | number, optional | `[Objective]` | USD/million input tokens the price reverts to once `effective_until` passes. Required together with `effective_until` — never one without the other. |
+| `cost.reverts_to.output_per_million` | number, optional | `[Objective]` | USD/million output tokens the price reverts to once `effective_until` passes. |
+
+`cost.effective_until`/`cost.reverts_to` are **display-only** — the
+Decision Engine always ranks and tiers on the current
+`input_per_million`/`output_per_million` above, never on the future
+reverted price. First added 2026-08-17 (`gemini-3.6-flash`,
+`gemini-3.7-flash`) after both models' current price turned out to be
+a temporary introductory rate with a provider-published expiration
+date; see `Docs/IMPLEMENTATION_NOTES.md`, Iteration #13. Nothing in
+this project re-checks these fields automatically once
+`effective_until` passes — updating `cost.*` back to the reverted
+price on that date is still a manual dataset edit.
 
 Cost tier (e.g. "low-cost", "premium") is not stored in the dataset.
 It's a derived value, computed by the Decision Engine from the raw

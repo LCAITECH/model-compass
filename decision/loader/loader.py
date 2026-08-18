@@ -8,6 +8,7 @@ resolves the open question noted in ARCHITECTURE.md ("Dataset
 validation ... To be resolved when loader/ is implemented").
 """
 
+from datetime import date
 from pathlib import Path
 
 import yaml
@@ -17,6 +18,7 @@ from decision.domain.ai_model import (
     AIModel,
     Capabilities,
     Cost,
+    CostReversion,
     Ecosystem,
     IntegrationEase,
     License,
@@ -136,6 +138,23 @@ def _validate(raw, path: Path) -> list[str]:
     if not _is_non_negative_number(cost.get("output_per_million")):
         issues.append("cost.output_per_million must be a non-negative number")
 
+    has_effective_until = "effective_until" in cost
+    has_reverts_to = "reverts_to" in cost
+    if has_effective_until != has_reverts_to:
+        issues.append("cost.effective_until and cost.reverts_to must both be present or both absent")
+    elif has_effective_until:
+        if not _is_iso_date(cost["effective_until"]):
+            issues.append("cost.effective_until must be an ISO date string (YYYY-MM-DD)")
+        reverts_to = cost["reverts_to"]
+        if not isinstance(reverts_to, dict) or not _is_non_negative_number(
+            reverts_to.get("input_per_million")
+        ):
+            issues.append("cost.reverts_to.input_per_million must be a non-negative number")
+        if not isinstance(reverts_to, dict) or not _is_non_negative_number(
+            reverts_to.get("output_per_million")
+        ):
+            issues.append("cost.reverts_to.output_per_million must be a non-negative number")
+
     ecosystem = raw["ecosystem"]
     if ecosystem.get("integration_ease") not in _values(IntegrationEase):
         issues.append(f"invalid ecosystem.integration_ease='{ecosystem.get('integration_ease')}'")
@@ -161,9 +180,21 @@ def _is_non_negative_number(value) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool) and value >= 0
 
 
+def _is_iso_date(value) -> bool:
+    if not isinstance(value, str):
+        return False
+    try:
+        date.fromisoformat(value)
+        return True
+    except ValueError:
+        return False
+
+
 def _to_ai_model(raw: dict) -> AIModel:
     quality = raw["quality"]
     ecosystem = raw["ecosystem"]
+    cost = raw["cost"]
+    reverts_to = cost.get("reverts_to")
 
     return AIModel(
         id=raw["id"],
@@ -183,7 +214,12 @@ def _to_ai_model(raw: dict) -> AIModel:
             lang: QualityLevel(level) for lang, level in raw["language_quality"].items()
         },
         operational=Operational(**raw["operational"]),
-        cost=Cost(**raw["cost"]),
+        cost=Cost(
+            input_per_million=cost["input_per_million"],
+            output_per_million=cost["output_per_million"],
+            effective_until=cost.get("effective_until"),
+            reverts_to=CostReversion(**reverts_to) if reverts_to else None,
+        ),
         ecosystem=Ecosystem(
             integration_ease=IntegrationEase(ecosystem["integration_ease"]),
             maturity=Maturity(ecosystem["maturity"]),

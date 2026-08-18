@@ -19,6 +19,33 @@ public release to version against.
 
 ---
 
+## 2026-08-17 — Introductory-price expiration shown on the Pricing card
+
+**If a model's current price is temporary, the recommendation page
+now says so — instead of that fact living only in internal docs.**
+
+- `gemini-3.6-flash` and `gemini-3.7-flash` both currently price at
+  $0.75/$3.75 per million tokens (input/output), an introductory rate
+  that reverts to $1.50/$7.50 on 2027-01-01, per Google's own pricing
+  table (see `IMPLEMENTATION_NOTES.md`, Iteration #13). That fact
+  existed only as prose in `docs/models/*.md` until now — the web
+  interface never surfaced it.
+- Added two new optional dataset fields, `cost.effective_until` and
+  `cost.reverts_to.{input,output}_per_million` (documented in
+  `SCHEMA.md`), required together and validated by the loader.
+  **Display-only**: the Decision Engine's ranking and cost-tier logic
+  keep using the current price exactly as before — a future price
+  change is never something the engine reacts to today.
+- The recommendation's Pricing card now shows, only for models that
+  have it: "Introductory price, in effect until 2026-12-31 — reverts
+  to $1.50 input / $7.50 output per 1M tokens afterward."
+- Nothing automates the eventual correction — on 2027-01-01, both
+  YAML files still need a manual edit to move the reverted price into
+  `input_per_million`/`output_per_million` and clear the two new
+  fields. This change makes the fact visible, not self-updating.
+
+---
+
 ## 2026-08-17 — Use case detection (keyword-based, not AI)
 
 **The free-text "use case" field now actually does something — without
