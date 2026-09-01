@@ -1,7 +1,7 @@
-id: claude-sonnet-5
-name: Claude Sonnet 5
+id: claude-fable-5-1
+name: Claude Fable 5.1
 provider: Anthropic
-version: "5"
+version: "5.1"
 license: proprietary
 
 capabilities:
@@ -15,7 +15,7 @@ capabilities:
 quality:
   reasoning: very_high
   coding: very_high
-  creative_writing: high
+  creative_writing: very_high
   instruction_following: very_high
 
 languages: [en, es, pt, fr, de, ja, zh, hi, ar, ru]
@@ -35,12 +35,9 @@ operational:
   context_window: 1000000
   max_output: 128000
 
-# $2 / $10 is now Anthropic's standard price, not introductory. The
-# previously scheduled 2026-09-01 hike to $3 / $15 will not occur, per
-# Anthropic's own pricing page (confirmed 2026-08-27).
 cost:
-  input_per_million: 2.00
-  output_per_million: 10.00
+  input_per_million: 10.00
+  output_per_million: 50.00
 
 ecosystem:
   integration_ease: high

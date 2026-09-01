@@ -303,3 +303,27 @@ phases of the [Roadmap](./ROADMAP.md).
   genuinely different product (a multi-provider inference playground),
   not extending this one. Logged here only so the idea isn't lost, not
   as a roadmap item.
+- **Repricing / Catalog Drift Notifications** — surface when a
+  provider changes a price, ships a new model, deprecates an old one,
+  or lets an introductory rate expire, instead of relying on someone
+  remembering to re-check. Noted 2026-08-27, prompted directly by that
+  same day's catalog refresh, where four dataset fields (GPT-5.6 Sol,
+  Claude Sonnet 5, DeepSeek V4 Flash/Pro pricing) had drifted silently
+  since their last verification, and the existing 2027-01-01 Gemini
+  Flash reversion reminder (`SCHEMA.md`'s `cost.effective_until`) has
+  no tracking mechanism at all today, just a date in a comment. The
+  real tension, not yet resolved: the project's own standing rule
+  against using third-party AI audits as a data source
+  (`IMPLEMENTATION_NOTES.md`, Iteration #14) still applies in full —
+  an external tip (from Grok or anywhere else) can only ever be a
+  pointer to go re-check, never something a notification pipeline
+  ingests and trusts directly. So this isn't really an
+  "auto-update" feature; closer to (a) a tracked list of known
+  future drift points (introductory-price expirations, deprecation
+  dates already on a provider's own lifecycle page) the project could
+  check on a schedule, plus (b) a manual intake channel for an
+  external tip that always routes through the same direct-source
+  verification done for this session's refresh before touching the
+  dataset. Not started, not scoped — needs a decision on where (a)
+  would even run from, given the project has no server-side scheduler
+  today.

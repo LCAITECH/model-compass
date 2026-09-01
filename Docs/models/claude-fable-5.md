@@ -1,12 +1,30 @@
 # Claude Fable 5
 
 Dataset entry: [`dataset/models/claude-fable-5.yaml`](../../dataset/models/claude-fable-5.yaml)
-Last verified: 2026-08-07
+Last verified: 2026-08-07 (see also the 2026-09-01 lifecycle note below
+— no dataset field changed)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
 
 ---
+
+## Superseded, still Active (2026-09-01)
+
+Claude Fable 5.1 launched 2026-09-01 (see
+[`claude-fable-5-1.md`](claude-fable-5-1.md)) as Anthropic's now-
+recommended model for the same use cases Fable 5 was built for,
+matching this model's own headline price ($10/$50) with cheaper
+prompt caching. **Fable 5 itself has not changed** — same price, and
+confirmed `Active` (not `Legacy` or `Deprecated`) on Anthropic's own
+model-deprecations lifecycle page, read directly 2026-09-01, with the
+same "Not sooner than June 9, 2027" retirement date as before. A tip
+from a third-party AI audit (Grok) this same day described Fable 5 as
+having moved to a "legacy" status — that specific claim did not match
+Anthropic's own lifecycle table when checked directly, so it wasn't
+adopted; only the (correct, independently confirmed) part of the tip —
+that Fable 5.1 exists and Fable 5 is still live at an unchanged price
+— is reflected here. No dataset field changed for this entry.
 
 ## Access
 

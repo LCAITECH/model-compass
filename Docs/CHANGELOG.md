@@ -19,6 +19,76 @@ public release to version against.
 
 ---
 
+## 2026-09-01 — Claude Fable 5.1 admitted (28th model)
+
+**Anthropic shipped Claude Fable 5.1 today, replacing Claude Fable 5
+as the recommended top-tier model — admitted the same day, with one
+access route deliberately left out.**
+
+- New dataset entry `claude-fable-5-1`: same headline price as Fable 5
+  ($10/$50 per million input/output tokens), but a 75% cheaper
+  prompt-cache read rate ($0.25/MTok vs. $1.00/MTok) — Anthropic's own
+  numbers put that at roughly 25% cheaper for typical workloads, up to
+  roughly 45% for highly agentic ones. Quality ratings kept identical
+  to Fable 5 (already at this dataset's ceiling on every dimension) —
+  no evidence found to justify treating 5.1 as strictly better on any
+  specific axis, so none was fabricated.
+- Four access routes confirmed and added (direct API, Claude
+  subscription, AWS Bedrock, Microsoft Foundry). **Google Cloud Vertex
+  was not added** — Google's own Claude-on-Vertex documentation still
+  only mentions Fable 5, not 5.1, as of today. Same kind of
+  documentation lag already seen with Gemini 3.7 Flash's launch; the
+  route will be added once Google's own page confirms it, not before.
+- Claude Fable 5 stays in the catalog, unchanged, confirmed `Active`
+  (not `Legacy`) on Anthropic's own lifecycle page — a third-party tip
+  that suggested otherwise didn't hold up under direct verification
+  (`Docs/IMPLEMENTATION_NOTES.md`, Iteration #16).
+- Sourced from a Grok tip, same as the 2026-08-27 refresh below — the
+  tip pointed at the right announcement, but every field was
+  independently re-confirmed against Anthropic's, AWS's, and
+  Microsoft's own documentation before anything was added, and one of
+  the tip's specific claims (Fable 5 going "legacy") turned out to be
+  wrong on direct verification.
+
+---
+
+## 2026-08-27 — Catalog pricing refresh (GPT-5.6 Sol, Claude Sonnet 5, DeepSeek V4)
+
+**Four pricing facts had drifted since their last verification — all
+re-checked directly against each provider's live docs before touching
+the dataset.**
+
+- **GPT-5.6 Sol** dropped to promotional pricing on 2026-08-21: $4.00
+  input / $20.00 output per million tokens, guaranteed at least through
+  2026-11-21, then reverting to the standard $5.00/$30.00. Uses the
+  `cost.effective_until`/`cost.reverts_to` fields (`SCHEMA.md`) for the
+  first time on a non-Google model.
+- **Claude Sonnet 5**'s scheduled 2026-09-01 price hike to $3.00/$15.00
+  has been cancelled by Anthropic — $2.00/$10.00 is now the permanent
+  standard price, not introductory. No dataset value changed, only the
+  stale "hike coming" note in `docs/models/claude-sonnet-5.md`.
+- **DeepSeek V4 Flash and V4 Pro**'s dataset prices ($0.14/$0.28 and
+  $0.435/$0.87) were stale — DeepSeek has since split every rate into
+  peak and off-peak tiers, and the old numbers matched neither. Updated
+  to the peak rate ($0.44/$1.32 and $1.32/$3.96), the conservative
+  choice between the two; off-peak is documented in
+  `docs/models/deepseek-v4-flash.md` / `deepseek-v4-pro.md`.
+- **Claude Haiku 4.5**'s retirement status re-checked: still `Active`,
+  no retirement sooner than 2026-10-15. No dataset change — recorded in
+  `docs/models/claude-haiku-4-5.md` only, `SCHEMA.md` has no lifecycle
+  field.
+- Also re-verified: `dataset/subscriptions/google/google-ai-ultra.yaml`
+  (no change — plan terms and quota multipliers still match).
+
+A third-party AI-generated audit (Grok) proposed most of these same
+corrections with cited URLs. Per this project's standing rule against
+using third-party AI audits as a data source (`IMPLEMENTATION_NOTES.md`,
+Iteration #14), none of its output was copied — every field above was
+independently re-confirmed by reading the cited page directly before
+any dataset edit.
+
+---
+
 ## 2026-08-17 — Introductory-price expiration shown on the Pricing card
 
 **If a model's current price is temporary, the recommendation page

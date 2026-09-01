@@ -1,7 +1,8 @@
 # DeepSeek V4 Pro
 
 Dataset entry: [`dataset/models/deepseek-v4-pro.yaml`](../../dataset/models/deepseek-v4-pro.yaml)
-Last verified: 2026-08-10
+Last verified: 2026-08-27 (Cost only — see Cost section; everything
+else last touched 2026-08-10)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -68,21 +69,22 @@ cost fields below.
 
 ## Cost `[Objective]`
 
-| Field                    | Value  |
-|----------------------------|--------|
-| `input_per_million`         | $0.435 |
-| `output_per_million`        | $0.87  |
+| Field                    | Peak (used in `cost.*`) | Off-peak |
+|----------------------------|--------|--------|
+| `input_per_million`         | $1.32  | $0.66  |
+| `output_per_million`        | $3.96  | $1.98  |
 
-Confirmed directly against DeepSeek's official Models & Pricing page
-(cache-miss rate — the price a typical first request hits). A
-cache-hit input rate of $0.003625/M also exists but isn't captured by
-`SCHEMA.md`, same known granularity gap as
+**Corrected 2026-08-27**, was $0.435/$0.87 — a stale value that
+matched neither of DeepSeek's two current tiers. Same friction and
+same resolution as `deepseek-v4-flash.md`'s Cost section (read there
+for the full explanation): DeepSeek now splits every rate into peak
+(01:00-04:00 and 06:00-10:00 UTC, Mon-Fri) and off-peak (half the peak
+rate), re-confirmed 2026-08-27 directly against the live pricing page.
+Peak stored in `cost.*` as the conservative "typical" value, per the
+project owner's explicit choice this session. A cache-hit input rate
+also exists at each tier (peak $0.044/off-peak $0.022) and isn't
+captured by `SCHEMA.md`, same known granularity gap as
 [IMPLEMENTATION_NOTES.md, Iteration #5](../IMPLEMENTATION_NOTES.md#iteration-5).
-
-DeepSeek's own pricing page states a general price increase is planned
-"in the near future" without a firm date, same open warning already
-noted on `deepseek-v4-flash`'s entry — worth re-checking sooner than
-most models next time this file is revisited.
 
 ## Ecosystem `[Editorial]`
 
@@ -137,3 +139,9 @@ basis, not a case of an inflated rating. Same pass flagged
 `gemini-2.5-pro.md`'s `quality.*` justification as comparatively weak
 under this same principle — noted for a future session, not addressed
 here.
+
+**2026-08-27 re-audit (Cost only):** the previously-flagged "increase
+planned, no firm date" had already happened — DeepSeek's pricing page
+now shows a peak/off-peak split with no $0.435/$0.87 rate anywhere.
+Corrected as described in the Cost section above. No other field
+re-checked this pass.

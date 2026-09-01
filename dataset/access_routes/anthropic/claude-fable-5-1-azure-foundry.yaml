@@ -1,0 +1,22 @@
+provider: Anthropic
+model_id: claude-fable-5-1
+access:
+  surface: cloud_hosted
+  access_method: "Microsoft Foundry (Claude Messages API)"
+  capabilities: [prototype, build, deploy, automation]
+  guide_ref: anthropic#azure-foundry
+eligibility:
+  requirements:
+    - kind: cloud_account
+      value: azure
+  region_scope: region_dependent
+economics:
+  billing_owner: Microsoft Azure
+  billing_scheme: cloud_paygo
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/claude-models
+  consulted_at: "2026-09-01"
+  status: confirmed
+  caveat: "Billed via Azure Marketplace subscription, not Anthropic directly; requires a paid Azure subscription with an active pay-as-you-go billing method in a supported region -- student/free-trial/sponsored-credit-only subscriptions don't qualify. Microsoft's own Claude-models-in-Foundry concepts page explicitly lists claude-fable-5-1, read directly 2026-09-01, noting it uses different watermarking (double-key) than claude-fable-5 (single-key)."

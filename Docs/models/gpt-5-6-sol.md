@@ -1,7 +1,8 @@
 # GPT-5.6 Sol
 
 Dataset entry: [`dataset/models/gpt-5-6-sol.yaml`](../../dataset/models/gpt-5-6-sol.yaml)
-Last verified: 2026-08-10
+Last verified: 2026-08-27 (Cost only — see Cost section; other fields
+last verified 2026-08-10 as noted below)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows. Admitted from
@@ -87,18 +88,29 @@ same style of nuance already noted for `gpt-5`/`gpt-5-mini`'s
 
 ## Cost `[Objective]`
 
-| Field                    | Value   |
-|----------------------------|---------|
-| `input_per_million`         | $5.00   |
-| `output_per_million`        | $30.00  |
+| Field                    | Value (through at least 2026-11-21) | Reverts to |
+|----------------------------|------------------------------|----------------------------|
+| `input_per_million`         | $4.00                        | $5.00                      |
+| `output_per_million`        | $20.00                       | $30.00                     |
 
-Confirmed directly against `developers.openai.com/api/docs/pricing`,
-standard/short-context tier. Additional tiers not represented in the
-schema: cached input $0.50/M, cache writes $6.25/M, batch $2.50/$15.00,
-and a premium long-context rate (2x input/1.5x output) above 272K
-input tokens — same tiered-pricing friction already logged in
-`IMPLEMENTATION_NOTES.md` Iteration #5, standard tier used here
-consistent with every other entry in this catalog.
+**Promotional pricing, re-confirmed 2026-08-27.** OpenAI dropped
+GPT-5.6 Sol's price on 2026-08-21; `developers.openai.com/api/docs/pricing`
+states directly: "GPT-5.6 Sol's promotional pricing is available at
+least through November 21, 2026." Read directly in-browser, not via
+summarization tooling, against the live pricing table (standard,
+short-context tier: $4.00/$20.00 shown explicitly next to `gpt-5.6-sol`).
+The dataset entry now uses `cost.effective_until`/`cost.reverts_to`
+(`SCHEMA.md`, added 2026-08-17 for `gemini-3.6-flash`/`gemini-3.7-flash`,
+first applied to an OpenAI model here) instead of overwriting
+`cost.*` with a bare number — same display-only pattern, same
+manual-correction caveat once the date passes.
+
+Additional tiers not represented in the schema: cached input $0.40/M,
+cache writes $5.00/M, long-context (short vs. long context split, a
+different axis from the promo/standard split above) $8.00/$40.00 —
+same tiered-pricing friction already logged in `IMPLEMENTATION_NOTES.md`
+Iteration #5, standard short-context tier used here consistent with
+every other entry in this catalog.
 
 ## Ecosystem `[Editorial]`
 
@@ -149,3 +161,7 @@ documentation. `json_mode` and `languages`/`language_quality` flagged
 as inherited/curated, same recurring gap as `gpt-5`. `id` naming
 resolved by explicit project convention (dot → hyphen), documented
 above.
+
+**2026-08-27 re-audit (Cost only):** price drop to $4.00/$20.00
+confirmed directly against the live OpenAI pricing page; no other
+field re-checked this pass.

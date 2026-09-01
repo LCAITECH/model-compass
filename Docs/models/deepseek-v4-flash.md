@@ -1,7 +1,9 @@
 # DeepSeek V4 Flash
 
 Dataset entry: [`dataset/models/deepseek-v4-flash.yaml`](../../dataset/models/deepseek-v4-flash.yaml)
-Last verified: 2026-08-11 (quality.reasoning and capabilities.structured_output only — see Quality and Capabilities sections below; everything else last touched 2026-08-07)
+Last verified: 2026-08-27 (Cost only — see Cost section; quality.reasoning
+and capabilities.structured_output last touched 2026-08-11, everything
+else 2026-08-07)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -71,17 +73,24 @@ Length: 1M", "Max Output: 384K").
 
 ## Cost `[Objective]`
 
-| Field                    | Value  |
-|----------------------------|--------|
-| `input_per_million`         | $0.14  |
-| `output_per_million`        | $0.28  |
+| Field                    | Peak (used in `cost.*`) | Off-peak |
+|----------------------------|--------|--------|
+| `input_per_million`         | $0.44  | $0.22  |
+| `output_per_million`        | $1.32  | $0.66  |
 
-Confirmed directly against DeepSeek's Models & Pricing page (cache-miss
-input rate; a cache-hit rate of $0.0028/M also exists but isn't
-captured by the schema). DeepSeek's own docs state a general price
-increase is planned "in the near future" without a firm date — worth
-re-checking sooner than the other three models next time this file is
-revisited.
+**Corrected 2026-08-27**, was $0.14/$0.28 — a stale value that matched
+neither of DeepSeek's two current tiers. DeepSeek's pricing page
+(re-confirmed 2026-08-27, read directly, not via summarization tooling)
+now splits every rate by time of day: peak (01:00-04:00 and 06:00-10:00
+UTC, Mon-Fri) and off-peak (all other hours, exactly half the peak
+rate) — a different axis from Iteration #5's per-request-type
+granularity, but the same underlying friction (one `cost.*` number,
+multiple simultaneous real prices). Peak is stored in `cost.*` as the
+conservative "typical" value, per the project owner's explicit choice
+this session; off-peak is documented here in prose only, same
+convention Iteration #5 already established. A cache-hit input rate
+also exists at each tier (peak $0.014/off-peak $0.007) and isn't
+captured by the schema either.
 
 ## Ecosystem `[Editorial]`
 
@@ -115,6 +124,12 @@ Pricing, context window, and max output confirmed with no drift
 (2026-08-07 pass). License and the remaining five capability flags
 were **not** independently reconfirmed — flagged above as pending
 rather than presented as freshly verified.
+
+**2026-08-27 re-audit (Cost only):** the previously-flagged "increase
+planned, no firm date" had already happened — DeepSeek's pricing page
+now shows a peak/off-peak split with no $0.14/$0.28 rate anywhere.
+Corrected as described in the Cost section above. No other field
+re-checked this pass.
 
 **2026-08-11 re-audit** (part of a catalog-wide pass re-checking every
 model whose `docs/models/*.md` justification was purely positional,

@@ -1,7 +1,9 @@
 # Claude Haiku 4.5
 
 Dataset entry: [`dataset/models/claude-haiku-4-5.yaml`](../../dataset/models/claude-haiku-4-5.yaml)
-Last verified: 2026-08-07
+Last verified: 2026-08-07 (see also the 2026-08-27 retirement-lifecycle
+note below — no dataset field changed, `SCHEMA.md` has no lifecycle
+field)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -87,9 +89,20 @@ Console docs describe only a one-time starter credit for new accounts,
 not continuous free access — doesn't meet the strict bar defined in
 `SCHEMA.md`'s Access section.
 
+## Lifecycle (informational — not a schema field)
+
+`claude-haiku-4-5-20251001` is listed `Active` on Anthropic's model
+deprecations page, with a tentative retirement date of "Not sooner
+than October 15, 2026" — confirmed directly, 2026-08-27, against
+`platform.claude.com/docs/en/about-claude/model-deprecations`. No
+deprecation has been announced. `SCHEMA.md` has no lifecycle/retirement
+field, so this is recorded here in prose only, same convention as
+every other fact that doesn't map to a schema field.
+
 ## Sources
 
 - [Claude models overview](https://platform.claude.com/docs/en/docs/about-claude/models/overview) — pricing, context window, max output, capabilities, thinking-mode positioning, knowledge cutoff (reliable: Feb 2025; training: Jul 2025).
+- [Claude model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations) — lifecycle status and tentative retirement date (accessed 2026-08-27).
 
 Accessed 2026-08-07, official Anthropic documentation only — same page
 already used for `claude-sonnet-5.md`/`claude-opus-5.md`, since all
@@ -100,3 +113,7 @@ current Claude models are documented on one comparison table.
 New dataset entry. Objective fields confirmed. `structured_output` and
 `json_mode` flagged as not independently reconfirmed, same gap as the
 other Claude entries in this catalog.
+
+**2026-08-27 re-audit (lifecycle only):** confirmed `Active`, no
+retirement scheduled before October 15, 2026 at the earliest. No
+dataset field affected.

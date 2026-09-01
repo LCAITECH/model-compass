@@ -343,24 +343,28 @@ def test_recommend_rejects_tier_mode_without_a_budget():
 
 
 def test_recommend_shows_also_strong_options_when_practically_tied():
-    # Customer support, creative_writing#1/instruction_following#2,
-    # budget=low: deepseek-v4-pro and mistral-large-3 are an exact
-    # score tie (see HANDOFF.md's "cost leakage" investigation) --
-    # DeepSeek wins the deterministic alphabetical tie-break, Mistral
-    # should show up as an also-strong option, not silently vanish.
+    # Customer support, reasoning#1/coding#2, budget=low: deepseek-v4-flash
+    # and mistral-large-3 are an exact score tie (0.6667 == 0.6667).
+    # Previously this scenario used deepseek-v4-pro/creative_writing --
+    # the 2026-08-27 catalog refresh corrected deepseek-v4-pro's stale
+    # price, pushing its $5.28 blended cost out of the "low" budget
+    # tier entirely (see Docs/CHANGELOG.md), so it no longer qualifies
+    # here. deepseek-v4-flash wins this pair's deterministic
+    # alphabetical tie-break; mistral-large-3 should show up as an
+    # also-strong option, not silently vanish.
     response = client.post(
         "/recommend",
         data={
             "use_case": "Customer support",
             "language": "en",
             "budget": "low",
-            "priority_1": "creative_writing",
-            "priority_2": "instruction_following",
+            "priority_1": "reasoning",
+            "priority_2": "coding",
         },
     )
 
     assert response.status_code == 200
-    assert "DeepSeek V4 Pro" in response.text
+    assert "DeepSeek V4 Flash" in response.text
     assert "Also strong options" in response.text
     assert "Mistral Large 3" in response.text
     assert "practically tied" in response.text.lower()
@@ -368,15 +372,16 @@ def test_recommend_shows_also_strong_options_when_practically_tied():
 
 def test_also_strong_options_are_not_duplicated_in_the_alternatives_section():
     # Same scenario as above. Mistral Large 3 must appear once (in
-    # "Also strong options"), not a second time in "Alternatives".
+    # "Also strong options"), not a second time in "Alternatives" --
+    # even though it also holds alternative rank 2 internally.
     response = client.post(
         "/recommend",
         data={
             "use_case": "Customer support",
             "language": "en",
             "budget": "low",
-            "priority_1": "creative_writing",
-            "priority_2": "instruction_following",
+            "priority_1": "reasoning",
+            "priority_2": "coding",
         },
     )
 
@@ -406,32 +411,45 @@ def test_alternatives_section_is_omitted_when_every_alternative_is_also_strong()
 
 
 def test_recommend_omits_also_strong_options_when_the_winner_is_unmatched():
-    # budget=very_high, same priorities: claude-fable-5 wins outright,
+    # budget=medium, reasoning#1/cost#2: gemini-3.7-flash wins outright,
     # no exact or practical tie -- no also-strong-options card, and the
     # ordinary "Alternatives" section (unfiltered) should render.
+    # Previously this used creative_writing/instruction_following at
+    # budget=very_high with claude-fable-5 as the outright winner, but
+    # claude-fable-5-1's 2026-09-01 admission (identical quality tiers
+    # and cost to claude-fable-5, see Docs/CHANGELOG.md) turned that
+    # into an exact tie between the two Fable versions, so it no longer
+    # demonstrates an "unmatched winner" case.
     response = client.post(
         "/recommend",
         data={
             "use_case": "Customer support",
             "language": "en",
-            "budget": "very_high",
-            "priority_1": "creative_writing",
-            "priority_2": "instruction_following",
+            "budget": "medium",
+            "priority_1": "reasoning",
+            "priority_2": "cost",
         },
     )
 
     assert response.status_code == 200
-    assert "Claude Fable 5" in response.text
+    assert "Gemini 3.7 Flash" in response.text
     assert "Also strong options" not in response.text
-    assert "Claude Opus 4.7" in response.text  # a real, unfiltered alternative
+    assert "DeepSeek V4 Pro" in response.text  # a real, unfiltered alternative
 
 
 def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_routes():
-    # budget=high, reasoning+context_window -> gemini-2.5-pro wins (see
-    # test_evaluator.py's dual-priority matrix). It has two real access
-    # routes: direct-api (production_allowed=true) and ai-studio
-    # (production_allowed=false) -- the only route in the sample dataset
-    # exercising that branch. Each row must link to access.guide_ref
+    # budget=high, creative_writing+cost -> gemini-2.5-pro wins. Previously
+    # reasoning+context_window produced this winner, but the 2026-08-27
+    # catalog refresh corrected gpt-5-6-sol's stale $35 blended price to
+    # OpenAI's live promotional $24 (see Docs/CHANGELOG.md), which now
+    # both qualifies under budget=high and has the largest context
+    # window (1,050,000 vs. Gemini 2.5 Pro's 1,048,576) -- so that
+    # priority pair now picks gpt-5-6-sol instead. Re-verified against a
+    # real run of the engine that creative_writing+cost still picks
+    # gemini-2.5-pro, which has two real access routes: direct-api
+    # (production_allowed=true) and ai-studio (production_allowed=false)
+    # -- the only route in the sample dataset exercising that branch.
+    # Each row must link to access.guide_ref
     # (ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 3.5), never bare evidence,
     # and the ai-studio row must warn it isn't for production use.
     response = client.post(
@@ -440,8 +458,8 @@ def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_rou
             "use_case": "",
             "language": "en",
             "budget": "high",
-            "priority_1": "reasoning",
-            "priority_2": "context_window",
+            "priority_1": "creative_writing",
+            "priority_2": "cost",
         },
     )
 

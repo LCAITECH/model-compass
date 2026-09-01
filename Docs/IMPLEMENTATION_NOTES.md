@@ -790,3 +790,48 @@ of the new plural entries (`chatbots`, `readmes`). "Level 2" (making
 the matched category a real `decision/evaluator/` input, discussed
 again when this evolution was proposed) stays explicitly deferred —
 the user chose to scope this round to dictionary breadth only.
+
+---
+
+## Iteration #16
+
+**Observation**
+Admitting Claude Fable 5.1 (2026-09-01, GA the same day) from a Grok
+tip surfaced two things worth recording, distinct from Iteration #14's
+"Grok is not a source" finding (which still held — the tip was used
+only as a pointer to go verify, same as every prior Grok tip this
+project has received):
+
+1. **A specific factual claim in the tip didn't survive direct
+   verification.** The tip described `claude-fable-5` as moving to a
+   `"legacy_still_available"` status once 5.1 shipped. Anthropic's own
+   model-deprecations lifecycle page, read directly the same day, lists
+   `claude-fable-5` as `Active` — not `Legacy` — with an unchanged
+   retirement date. Not adopted; `docs/models/claude-fable-5.md` notes
+   the correction rather than the original claim. Second concrete
+   instance of a Grok tip containing a real (if narrow) factual error,
+   after Iteration #14's context-window case — same pattern, different
+   field.
+2. **New model access surfaces don't all confirm on the same day.**
+   Direct API, consumer subscription, AWS Bedrock, and Microsoft
+   Foundry all explicitly listed Claude Fable 5.1 by name when checked
+   2026-09-01 (the GA day itself). Google Cloud's Claude-on-Vertex
+   partner-models page did not — it still only described Claude Fable
+   5, no mention of 5.1 anywhere on the page. Same category of
+   documentation lag as Gemini 3.7 Flash's `maturity: experimental`
+   finding (Fase 9), but applied here to one access route instead of
+   the whole model: `claude-fable-5-1-gcp-vertex.yaml` was not created
+   this pass, rather than fabricating a route on the assumption that
+   "it'll surely work the same as Fable 5."
+
+**Current decision**
+No process change — both findings confirm existing rules (reject
+Grok-as-source; don't infer an access route without seeing it
+documented) rather than requiring a new one. Recorded so a future
+session doesn't need to re-discover that Grok tips can be
+narrowly wrong even when mostly right, and that a model's access
+surfaces can go GA on different, provider-independent schedules.
+
+**Status**
+Closed. Revisit `claude-fable-5-1`'s Vertex access if/when Google's
+partner-models page is updated to mention it.

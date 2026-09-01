@@ -5,5 +5,10 @@ documented_exclusions:
   - "Does not document any credits or improved quotas for the Gemini API -- API billing is independent of this plan"
 region_scope: account_dependent
 source_url: https://support.google.com/googleone/answer/16286513
-consulted_at: "2026-08-11"
+consulted_at: "2026-08-27"
 status: confirmed
+# Re-verified 2026-08-27: page still confirms 5x/20x Gemini/Antigravity
+# quota vs. AI Pro, no Gemini API credits or quota. US list price
+# unchanged ($100 = 5x, $200 = 20x). Argentina SKU pricing is not on
+# this page (maintainer-observed in-account, not a citable source) —
+# not stored as a schema field, kept out of the structured data.

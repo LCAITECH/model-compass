@@ -1,0 +1,22 @@
+provider: Anthropic
+model_id: claude-fable-5-1
+access:
+  surface: consumer_subscription
+  access_method: "Claude.ai or Claude Code, signed in with a Claude subscription"
+  capabilities: [prototype, build]
+  guide_ref: anthropic#claude-subscription
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [claude-pro, claude-max]
+  region_scope: account_dependent
+economics:
+  billing_owner: Anthropic
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://www.anthropic.com/claude/fable
+  consulted_at: "2026-09-01"
+  status: confirmed
+  caveat: "Confirmed directly on Anthropic's own Fable marketing page: 'available to Pro, Max, Team, and Enterprise users.' Access draws from the plan's shared usage limit, not unlimited or per-token access -- the exact quota split has changed multiple times for the Fable line per Anthropic's own pricing-page footnotes (see claude-fable-5-claude-subscription's caveat), so confirm current terms before relying on this. Team Standard/Premium and Enterprise tiers weren't independently confirmed beyond this page's own listing."

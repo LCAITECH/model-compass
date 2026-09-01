@@ -32,9 +32,13 @@ operational:
   context_window: 1000000
   max_output: 384000
 
+# Peak-hours rate (01:00-04:00 and 06:00-10:00 UTC, Mon-Fri) per
+# DeepSeek's official pricing page — the stale $0.435/$0.87 previously
+# here matched neither current tier. Off-peak (all other hours) is
+# half this: $0.66/$1.98. Source: https://api-docs.deepseek.com/quick_start/pricing
 cost:
-  input_per_million: 0.435
-  output_per_million: 0.87
+  input_per_million: 1.32
+  output_per_million: 3.96
 
 ecosystem:
   integration_ease: medium

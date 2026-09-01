@@ -58,13 +58,14 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     # (input+output per million), not a rank relative to the loaded
     # dataset -- see SCHEMA.md's Cost section for the exact bands.
     # "low" is blended <= $2. Of all 26 models, blended cost ascending:
-    # deepseek-v4-flash 0.42, gpt-5-nano 0.45, gemini-2.5-flash-lite
-    # 0.50, deepseek-v4-pro 1.305, gemini-3.1-flash-lite 1.75,
-    # mistral-large-3 2.00 (corrected 2026-08-11 -- see
-    # Docs/models/mistral-large-3.md, was a stale $2.00/$6.00 = $8.00
-    # blended, actual model card gives $0.50/$1.50) -- all <= $2, so
-    # all six qualify. gpt-5-mini is next at 2.25, just over the $2
+    # gpt-5-nano 0.45, gemini-2.5-flash-lite 0.50, gemini-3.1-flash-lite
+    # 1.75, deepseek-v4-flash 1.76, mistral-large-3 2.00 -- all <= $2,
+    # so all five qualify. gpt-5-mini is next at 2.25, just over the $2
     # ceiling, so it lands in "medium" and doesn't qualify here.
+    # deepseek-v4-pro moved out of this tier in the 2026-08-27 catalog
+    # refresh: its stale $0.435/$0.87 ($1.305 blended) was corrected to
+    # the official peak rate $1.32/$3.96 ($5.28 blended), landing it in
+    # "medium" instead -- see Docs/CHANGELOG.md, 2026-08-27.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -77,11 +78,10 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     qualifying = {c.model.id for c in candidates if c.qualifies}
 
     assert qualifying == {
-        "deepseek-v4-flash",
         "gpt-5-nano",
         "gemini-2.5-flash-lite",
-        "deepseek-v4-pro",
         "gemini-3.1-flash-lite",
+        "deepseek-v4-flash",
         "mistral-large-3",
     }
 
@@ -89,8 +89,14 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
 def test_high_budget_excludes_the_very_high_cost_tier(models):
     # "high" is a hard ceiling at CostTier.HIGH (blended <= $30) -- the
     # fourth tier, "very_high" (> $30), exists precisely so that "high"
-    # budget stops meaning "no cost filter at all". Only gpt-5-6-sol
-    # ($35) and claude-fable-5 ($60) are priced above $30 today.
+    # budget stops meaning "no cost filter at all". claude-fable-5 and
+    # claude-fable-5-1 ($60 blended each) are priced above $30 today --
+    # 5.1 was admitted 2026-09-01 at the same headline price as 5.
+    # gpt-5-6-sol used to be excluded too at its stale $5.00/$30.00 ($35
+    # blended), but the 2026-08-27 catalog refresh corrected it to
+    # OpenAI's live promotional price $4.00/$20.00 ($24 blended, in
+    # effect at least through 2026-11-21) -- see Docs/CHANGELOG.md,
+    # 2026-08-27 -- which now qualifies under this $30 ceiling.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -102,7 +108,7 @@ def test_high_budget_excludes_the_very_high_cost_tier(models):
     candidates = evaluate(context, models)
     disqualified_ids = {c.model.id for c in candidates if not c.qualifies}
 
-    assert disqualified_ids == {"gpt-5-6-sol", "claude-fable-5"}
+    assert disqualified_ids == {"claude-fable-5", "claude-fable-5-1"}
 
 
 def test_very_high_budget_admits_every_language_qualifying_model(models):
@@ -212,14 +218,17 @@ def test_cost_weight_is_never_dampened_under_custom_budget():
     assert _dampen_cost_weight(context, weights) == weights
 
 
-def test_deepseek_v4_pro_still_wins_on_reasoning_even_with_cost_dampened(models):
-    # HANDOFF.md "Finding 1": with the tested dampening curve, this
-    # extreme case (Reasoning#1, Cost#2, budget=High) still picks
-    # deepseek-v4-pro -- its price gap to the competition is wide
-    # enough that even a lightly-weighted Cost still tips the balance.
-    # Confirmed as correct-given-the-data (see HANDOFF.md Parte C), not
-    # patched around by hand-tuning the dampening numbers for this one
-    # case -- this test documents and locks in that decision.
+def test_gemini_3_7_flash_wins_on_reasoning_even_with_cost_dampened(models):
+    # HANDOFF.md "Finding 1" originally documented deepseek-v4-pro
+    # winning this extreme case (Reasoning#1, Cost#2, budget=High)
+    # because its price gap to the competition was wide enough that
+    # even a lightly-weighted Cost still tipped the balance. The
+    # 2026-08-27 catalog refresh corrected deepseek-v4-pro's stale
+    # price ($0.435/$0.87, a $1.305 blended gap that no longer exists)
+    # to the official peak rate ($1.32/$3.96, $5.28 blended) -- see
+    # Docs/CHANGELOG.md, 2026-08-27 -- closing that gap and moving the
+    # win to gemini-3.7-flash instead, confirmed by re-running
+    # evaluate() against the corrected dataset, not guessed.
     context = Context(
         use_case="Complex agentic workflow",
         budget_mode=BudgetMode.TIER,
@@ -230,10 +239,14 @@ def test_deepseek_v4_pro_still_wins_on_reasoning_even_with_cost_dampened(models)
 
     candidates = evaluate(context, models)
 
-    assert candidates[0].model.id == "deepseek-v4-pro"
+    assert candidates[0].model.id == "gemini-3.7-flash"
 
 
 def test_cost_priority_picks_the_cheapest_qualifying_model(models):
+    # gpt-5-nano ($0.45 blended) is cheaper than deepseek-v4-flash
+    # since the 2026-08-27 catalog refresh corrected the latter's stale
+    # $0.14/$0.28 price ($0.42 blended) to the official peak rate
+    # $0.44/$1.32 ($1.76 blended) -- see Docs/CHANGELOG.md, 2026-08-27.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -244,20 +257,23 @@ def test_cost_priority_picks_the_cheapest_qualifying_model(models):
 
     candidates = evaluate(context, models)
 
-    assert candidates[0].model.id == "deepseek-v4-flash"
+    assert candidates[0].model.id == "gpt-5-nano"
 
 
 def test_reasoning_priority_picks_the_strongest_reasoning_model(models):
-    # Seven models now share the top reasoning rating (very_high):
-    # claude-fable-5, claude-opus-4-7, claude-opus-4-8, claude-opus-5,
-    # claude-sonnet-5, gemini-2.5-pro, gpt-5. The quality scale is
-    # intentionally coarse (SCHEMA.md), so ties are expected, not a
-    # bug -- the Evaluator breaks them deterministically by dataset
-    # load order (alphabetical by id, see loader.py), and
-    # "claude-fable-5" sorts first among the tied models. budget=VERY_HIGH
-    # (not HIGH) because claude-fable-5's $60 blended cost puts it in
-    # CostTier.VERY_HIGH -- a "high" budget correctly excludes it now
-    # that CostTier is a fixed price band, not a relative tercile.
+    # Eight models now share the top reasoning rating (very_high):
+    # claude-fable-5, claude-fable-5-1, claude-opus-4-7, claude-opus-4-8,
+    # claude-opus-5, claude-sonnet-5, gemini-2.5-pro, gpt-5. The quality
+    # scale is intentionally coarse (SCHEMA.md), so ties are expected,
+    # not a bug -- the Evaluator breaks them deterministically by
+    # dataset load order (loader.py sorts filenames, not `id` values;
+    # these usually agree, but not here: "claude-fable-5-1.yaml" sorts
+    # before "claude-fable-5.yaml" because "-" (0x2D) is less than "."
+    # (0x2E) in a plain string sort, so the file with the longer name
+    # loads first). budget=VERY_HIGH (not HIGH) because both Fable
+    # entries' $60 blended cost puts them in CostTier.VERY_HIGH -- a
+    # "high" budget correctly excludes both now that CostTier is a
+    # fixed price band, not a relative tercile.
     context = Context(
         use_case="Complex agentic workflow",
         budget_mode=BudgetMode.TIER,
@@ -268,7 +284,7 @@ def test_reasoning_priority_picks_the_strongest_reasoning_model(models):
 
     candidates = evaluate(context, models)
 
-    assert candidates[0].model.id == "claude-fable-5"
+    assert candidates[0].model.id == "claude-fable-5-1"
 
 
 def test_priority_order_changes_the_winner(models):

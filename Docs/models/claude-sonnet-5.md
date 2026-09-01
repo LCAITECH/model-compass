@@ -1,24 +1,13 @@
 # Claude Sonnet 5
 
 Dataset entry: [`dataset/models/claude-sonnet-5.yaml`](../../dataset/models/claude-sonnet-5.yaml)
-Last verified: 2026-08-07
+Last verified: 2026-08-27 (Cost only — see Cost section; other fields
+last verified 2026-08-07 as noted below)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
 
 ---
-
-## ⚠ Pricing changes in 3 weeks
-
-The dataset's `cost` values are Anthropic's **introductory pricing**,
-valid only **through August 31, 2026**. Standard pricing of $3 / $15
-per million input/output tokens takes effect **September 1, 2026** —
-confirmed directly on Anthropic's own pricing page, not a guess. This
-was already flagged as a comment in the YAML file itself, but it's
-worth restating here loudly: this is not a hypothetical future drift,
-it's a known, dated, already-scheduled one. Whoever picks up this
-project next should update the dataset entry on or shortly after
-2026-09-01.
 
 ## Identity
 
@@ -70,14 +59,20 @@ table.
 
 ## Cost `[Objective]`
 
-| Field                    | Value (through 2026-08-31) | Value (from 2026-09-01) |
-|----------------------------|------------------------------|----------------------------|
-| `input_per_million`         | $2.00                        | $3.00                       |
-| `output_per_million`        | $10.00                       | $15.00                      |
+| Field                    | Value  |
+|----------------------------|--------|
+| `input_per_million`         | $2.00  |
+| `output_per_million`        | $10.00 |
 
-Confirmed directly against Anthropic's pricing page. The dataset
-currently holds the introductory-pricing values — see the warning at
-the top of this document.
+**No longer introductory pricing.** The $2.00/$10.00 rate, originally
+launched as a temporary introductory price through 2026-08-31 (see
+Verification result below), is now Anthropic's standard price.
+`platform.claude.com/docs/en/about-claude/pricing` states directly:
+"The $2/$10 per million input/output token pricing for Claude Sonnet
+5... is now the standard price. The previously scheduled increase to
+$3/$15 per million input/output tokens on September 1, 2026 will not
+occur." Confirmed 2026-08-27, read directly against the live pricing
+table, not via summarization tooling.
 
 ## Ecosystem `[Editorial]`
 
@@ -114,7 +109,11 @@ Both accessed 2026-08-07, official Anthropic documentation only. Note:
 ## Verification result
 
 No drift found in objective fields that are currently in effect
-(introductory pricing, context window, max output). One drift is
-already scheduled and known: pricing changes 2026-09-01 (see warning
-above). `structured_output` and `json_mode` are flagged as not
-independently reconfirmed this pass.
+(introductory pricing, context window, max output). `structured_output`
+and `json_mode` are flagged as not independently reconfirmed this pass.
+
+**2026-08-27 re-audit (Cost only):** the 2026-09-01 price hike to
+$3/$15 that this file previously flagged as scheduled has been
+cancelled by Anthropic — $2/$10 is now the permanent standard price,
+confirmed directly against the live pricing page. No other field
+re-checked this pass.
