@@ -411,30 +411,31 @@ def test_alternatives_section_is_omitted_when_every_alternative_is_also_strong()
 
 
 def test_recommend_omits_also_strong_options_when_the_winner_is_unmatched():
-    # budget=medium, reasoning#1/cost#2: gemini-3.7-flash wins outright,
-    # no exact or practical tie -- no also-strong-options card, and the
-    # ordinary "Alternatives" section (unfiltered) should render.
-    # Previously this used creative_writing/instruction_following at
-    # budget=very_high with claude-fable-5 as the outright winner, but
-    # claude-fable-5-1's 2026-09-01 admission (identical quality tiers
-    # and cost to claude-fable-5, see Docs/CHANGELOG.md) turned that
-    # into an exact tie between the two Fable versions, so it no longer
-    # demonstrates an "unmatched winner" case.
+    # budget=low, reasoning#1/instruction_following#2: mistral-large-3
+    # wins outright, no exact or practical tie -- no also-strong-options
+    # card, and the ordinary "Alternatives" section (unfiltered) should
+    # render. This scenario has already been replaced twice by new
+    # admissions turning the previous winner into a tie: first
+    # claude-fable-5-1 (2026-09-01) tied claude-fable-5 on
+    # creative_writing/instruction_following, then gemini-3.8-flash
+    # (2026-09-02) tied gemini-3.7-flash on reasoning/cost. mistral-large-3
+    # has no same-family sibling in this dataset, so it's a more durable
+    # pick for "outright winner" going forward.
     response = client.post(
         "/recommend",
         data={
             "use_case": "Customer support",
             "language": "en",
-            "budget": "medium",
+            "budget": "low",
             "priority_1": "reasoning",
-            "priority_2": "cost",
+            "priority_2": "instruction_following",
         },
     )
 
     assert response.status_code == 200
-    assert "Gemini 3.7 Flash" in response.text
+    assert "Mistral Large 3" in response.text
     assert "Also strong options" not in response.text
-    assert "DeepSeek V4 Pro" in response.text  # a real, unfiltered alternative
+    assert "DeepSeek V4 Flash" in response.text  # a real, unfiltered alternative
 
 
 def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_routes():

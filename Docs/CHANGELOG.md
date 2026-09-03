@@ -19,6 +19,39 @@ public release to version against.
 
 ---
 
+## 2026-09-02 — Gemini 3.8 Flash admitted (29th model)
+
+**Google's third Flash release in six weeks, admitted the same day it
+shipped — with its maturity rating and free-access field both
+defaulted conservatively for lack of public confirmation, not
+guessed.**
+
+- New dataset entry `gemini-3.8-flash`: same introductory price as
+  Gemini 3.7 Flash ($0.75/$3.75 per million input/output tokens,
+  expiring 2026-12-31, reverting to $1.50/$7.50), sourced from Google's
+  own announcement blog post — the model card that normally carries
+  this pricing table doesn't have one this time, and the generic
+  pricing page doesn't list the model yet either.
+- `maturity: experimental` and `access.has_free_access: false`, both
+  because the model isn't yet listed on the pages that would confirm
+  otherwise (`ai.google.dev/gemini-api/docs/models` for maturity,
+  the pricing/rate-limits pages for free access). Notably,
+  `gemini-3.7-flash` — admitted three weeks ago under the same
+  `experimental` reasoning — still isn't listed there either,
+  confirming this isn't a one-off call (`Docs/IMPLEMENTATION_NOTES.md`,
+  Iteration #17).
+- **Gemini 3.8 Flash Cyber, the cybersecurity-specialized sibling
+  announced the same day, was not admitted** — invite-only access
+  (Google's "Fairwind Program"), no public price anywhere. Same bar
+  every other invite-only, unpriced model in this catalog has already
+  failed to clear.
+- Sourced from a Grok tip, same discipline as every prior one this
+  project has received: the tip pointed at the right announcement, but
+  every field was independently re-confirmed against Google's own
+  documentation before anything was added.
+
+---
+
 ## 2026-09-01 — Claude Fable 5.1 admitted (28th model)
 
 **Anthropic shipped Claude Fable 5.1 today, replacing Claude Fable 5

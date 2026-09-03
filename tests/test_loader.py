@@ -28,6 +28,7 @@ EXPECTED_IDS = {
     "claude-sonnet-4-6",
     "claude-fable-5",
     "claude-fable-5-1",
+    "gemini-3.8-flash",
     "gemini-3.1-pro-preview",
     "deepseek-v4-pro",
     "gemini-2.5-flash-lite",
@@ -42,7 +43,7 @@ EXPECTED_IDS = {
 def test_loads_all_real_models():
     models = load_dataset(DATASET_DIR)
 
-    assert len(models) == 28  # claude-fable-5-1 admitted 2026-09-01
+    assert len(models) == 29  # gemini-3.8-flash admitted 2026-09-02
     assert all(isinstance(model, AIModel) for model in models)
     assert {model.id for model in models} == EXPECTED_IDS
 

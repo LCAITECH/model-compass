@@ -835,3 +835,50 @@ surfaces can go GA on different, provider-independent schedules.
 **Status**
 Closed. Revisit `claude-fable-5-1`'s Vertex access if/when Google's
 partner-models page is updated to mention it.
+
+---
+
+## Iteration #17
+
+**Observation**
+Admitting Gemini 3.8 Flash (2026-09-02, GA the same day, again from a
+Grok tip used only as a pointer) reinforced two already-established
+patterns with fresh evidence, rather than raising anything new:
+
+1. **Which official page actually has the pricing is model-specific,
+   not consistent even within one provider's own Flash line.**
+   `gemini-3.7-flash`'s price came from its model card (Iteration #13);
+   `gemini-3.8-flash`'s model card has no pricing table at all — the
+   number and its expiration footnote live only in Google's
+   announcement blog post. The generic Gemini Developer API pricing
+   page (`ai.google.dev/gemini-api/docs/pricing`) doesn't list this
+   model either, confirmed by checking the raw HTML, not just the
+   rendered text (which has its own extraction quirks on that page's
+   table markup, unrelated to this finding). Same lesson as every
+   prior iteration here: check the specific page for the specific
+   field, don't assume yesterday's source still applies today.
+2. **`gemini-3.7-flash` still isn't in the Gemini API models catalog**
+   (`ai.google.dev/gemini-api/docs/models`), three weeks after its own
+   `maturity: experimental` call (Fase 9) was made on exactly that
+   absence. `gemini-3.8-flash` isn't there either, so it got the same
+   `experimental` rating for the same reason. Confirms the maturity
+   principle wasn't a one-off judgment call for a single new-that-day
+   model — it's holding as a real, checkable, recurring signal.
+
+Also declined to admit **Gemini 3.8 Flash Cyber**, the cybersecurity-
+specialized sibling announced the same day: invite-only (Google's
+"Fairwind Program"), no public price on either the announcement blog
+or the pricing page. Same bar every other invite-only/unpriced model
+in this catalog has failed to clear (Claude Mythos 5/5.1, Gemini 3.5
+Flash Cyber) — not a new decision, a repeated application of one.
+
+**Current decision**
+No process change. Both findings confirm existing rules rather than
+requiring new ones — recorded so a future session sees the maturity
+principle has now held up on a second independent case, not just the
+one it was invented for.
+
+**Status**
+Closed. Revisit `gemini-3.8-flash`'s `maturity` and
+`access.has_free_access` once it appears in the Gemini API models
+catalog and/or pricing/rate-limits pages.

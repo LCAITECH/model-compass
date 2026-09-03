@@ -35,11 +35,12 @@ def test_loads_all_real_access_routes():
     # subscription, AWS Bedrock, Microsoft Foundry) admitted 2026-09-01 --
     # Google Cloud Vertex deliberately not added, its own partner-models
     # page didn't yet mention 5.1 when checked (IMPLEMENTATION_NOTES.md,
-    # Iteration #16).
-    assert len(routes) == 65
+    # Iteration #16). + 1 more (gemini-3.8-flash's direct_api route, same
+    # pattern as the rest of the Gemini family) admitted 2026-09-02.
+    assert len(routes) == 66
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
-    assert len(model_ids_with_direct_api) == 28
+    assert len(model_ids_with_direct_api) == 29
 
 
 def test_loads_all_real_subscriptions():
