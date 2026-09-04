@@ -89,14 +89,16 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
 def test_high_budget_excludes_the_very_high_cost_tier(models):
     # "high" is a hard ceiling at CostTier.HIGH (blended <= $30) -- the
     # fourth tier, "very_high" (> $30), exists precisely so that "high"
-    # budget stops meaning "no cost filter at all". claude-fable-5 and
-    # claude-fable-5-1 ($60 blended each) are priced above $30 today --
-    # 5.1 was admitted 2026-09-01 at the same headline price as 5.
-    # gpt-5-6-sol used to be excluded too at its stale $5.00/$30.00 ($35
-    # blended), but the 2026-08-27 catalog refresh corrected it to
-    # OpenAI's live promotional price $4.00/$20.00 ($24 blended, in
-    # effect at least through 2026-11-21) -- see Docs/CHANGELOG.md,
-    # 2026-08-27 -- which now qualifies under this $30 ceiling.
+    # budget stops meaning "no cost filter at all". claude-fable-5,
+    # claude-fable-5-1, and gpt-6-astra ($60 blended each) are priced
+    # above $30 today -- 5.1 was admitted 2026-09-01 at the same
+    # headline price as 5, and gpt-6-astra (2026-09-04) landed at the
+    # same $10/$50 blended cost independently. gpt-5-6-sol used to be
+    # excluded too at its stale $5.00/$30.00 ($35 blended), but the
+    # 2026-08-27 catalog refresh corrected it to OpenAI's live
+    # promotional price $4.00/$20.00 ($24 blended, in effect at least
+    # through 2026-11-21) -- see Docs/CHANGELOG.md, 2026-08-27 -- which
+    # now qualifies under this $30 ceiling.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -108,7 +110,7 @@ def test_high_budget_excludes_the_very_high_cost_tier(models):
     candidates = evaluate(context, models)
     disqualified_ids = {c.model.id for c in candidates if not c.qualifies}
 
-    assert disqualified_ids == {"claude-fable-5", "claude-fable-5-1"}
+    assert disqualified_ids == {"claude-fable-5", "claude-fable-5-1", "gpt-6-astra"}
 
 
 def test_very_high_budget_admits_every_language_qualifying_model(models):

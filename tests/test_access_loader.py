@@ -36,11 +36,14 @@ def test_loads_all_real_access_routes():
     # Google Cloud Vertex deliberately not added, its own partner-models
     # page didn't yet mention 5.1 when checked (IMPLEMENTATION_NOTES.md,
     # Iteration #16). + 1 more (gemini-3.8-flash's direct_api route, same
-    # pattern as the rest of the Gemini family) admitted 2026-09-02.
-    assert len(routes) == 66
+    # pattern as the rest of the Gemini family) admitted 2026-09-02. + 1
+    # more (gpt-6-astra's direct_api route, gated by the first real use of
+    # RequirementKind.PROGRAM_MEMBERSHIP in this catalog) admitted
+    # 2026-09-04 (IMPLEMENTATION_NOTES.md, Iteration #18).
+    assert len(routes) == 67
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
-    assert len(model_ids_with_direct_api) == 29
+    assert len(model_ids_with_direct_api) == 30
 
 
 def test_loads_all_real_subscriptions():

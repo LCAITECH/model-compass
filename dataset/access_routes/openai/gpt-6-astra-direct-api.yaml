@@ -1,0 +1,22 @@
+provider: OpenAI
+model_id: gpt-6-astra
+access:
+  surface: direct_api
+  access_method: "API key (Responses API), gated to Trusted Access Program members today"
+  capabilities: [prototype, build, automation]
+  guide_ref: openai#direct-api
+eligibility:
+  requirements:
+    - kind: program_membership
+      value: openai_trusted_access_program
+  region_scope: account_dependent
+economics:
+  billing_owner: OpenAI
+  billing_scheme: api_token
+  quota_scope: organization
+  production_allowed: true
+evidence:
+  source_url: https://developers.openai.com/api/docs/models/gpt-6-astra
+  consulted_at: "2026-09-04"
+  status: confirmed
+  caveat: "GPT-6 Astra is on OpenAI's standard Flagship pricing table (not a separate limited-access tier), but its own model page states plainly: 'GPT-6 Astra is rolling out today for enterprises in our Trusted Access Program, with access through API and our Plus, Pro, Business and Enterprise plans coming in the coming days.' Modeled here as the first real use of RequirementKind.PROGRAM_MEMBERSHIP in this catalog -- for a developer without Trusted Access Program membership, this route is REQUIRES_ONBOARDING, never CURRENTLY_ELIGIBLE, until OpenAI's own page confirms broader plan-based access has actually shipped (not merely announced as imminent). No separate route added yet for the announced Plus/Pro/Business/Enterprise access -- revisit once that access exists, not when it's promised."

@@ -882,3 +882,55 @@ one it was invented for.
 Closed. Revisit `gemini-3.8-flash`'s `maturity` and
 `access.has_free_access` once it appears in the Gemini API models
 catalog and/or pricing/rate-limits pages.
+
+---
+
+## Iteration #18
+
+**Observation**
+GPT-6 Astra (OpenAI, admitted 2026-09-04 from a Grok tip) didn't fit
+either of this catalog's two existing access patterns. It isn't a
+permanently invite-only research program like Claude Mythos 5/5.1 or
+Gemini 3.8 Flash Cyber (all three never admitted to the dataset at
+all) — its price is public, on the standard Flagship pricing table.
+But it also isn't ordinary self-serve access like every other model
+currently in this catalog: OpenAI's own model page states it's
+"rolling out today for enterprises in our Trusted Access Program, with
+access through API and our Plus, Pro, Business and Enterprise plans
+coming in the coming days" — a real gate, with broader access
+announced but not yet documented as live.
+
+`RequirementKind.PROGRAM_MEMBERSHIP` has existed in the closed
+vocabulary (`decision/domain/access_route.py`) since Fase 7, with
+working eligibility logic in `decision/access/advisor.py` and even a
+form checkbox in `interfaces/web/templates/index.html` (for the NVIDIA
+Developer Program) — but no access route in this catalog had ever
+actually used it. NVIDIA NIM itself was researched and logged as a
+non-candidate (Iteration #8), so the checkbox has sat unused since
+Fase 7.
+
+**Current decision**
+Asked the project owner directly rather than assuming either "exclude
+it, same as Mythos/Cyber" or "admit it as ordinary self-serve access."
+Decided: **admit the model, model the real gate honestly** using
+`program_membership` — the first real exercise of that requirement
+kind. A route with an unmet `program_membership` requirement resolves
+to `REQUIRES_ONBOARDING`, never `CURRENTLY_ELIGIBLE` or excluded
+outright, which is the accurate state for a developer without Trusted
+Access Program membership today. Added a second form checkbox
+("OpenAI Trusted Access Program") alongside the existing NVIDIA one so
+the route is actually reachable through the web form, not just
+theoretically expressible in YAML. No separate route added for the
+announced-but-not-yet-live Plus/Pro/Business/Enterprise access — an
+announcement isn't documentation of something that exists yet, same
+discipline as every other "coming soon" claim this catalog has
+declined to get ahead of.
+
+**Status**
+Closed. `program_membership` now has a real, working example beyond
+its original design intent. Revisit `gpt-6-astra`'s route if/when
+OpenAI's own documentation confirms broader plan-based access has
+actually shipped — add a second route then, don't upgrade this one in
+place (the Trusted Access Program path and a future Plus/Pro path
+would have different eligibility requirements, not the same route with
+a relaxed gate).

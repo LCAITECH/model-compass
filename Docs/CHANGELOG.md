@@ -19,6 +19,43 @@ public release to version against.
 
 ---
 
+## 2026-09-04 — GPT-6 Astra admitted (30th model), with an honest access gate
+
+**OpenAI's new flagship is public-priced but not yet self-serve —
+instead of excluding it or pretending the gate doesn't exist, this
+release models it directly for the first time.**
+
+- New dataset entry `gpt-6-astra`: OpenAI's own system card calls it
+  "the most capable model we have ever broadly deployed." Quality
+  ratings kept identical to `gpt-5-6-sol` on reasoning/coding (already
+  at this dataset's ceiling), with stronger direct evidence this time
+  for `instruction_following` (roughly half the alignment-flag rate of
+  its predecessor across 54,000+ internal tasks).
+- **Access is the real story.** OpenAI's own model page: "rolling out
+  today for enterprises in our Trusted Access Program, with access
+  through API and our Plus, Pro, Business and Enterprise plans coming
+  in the coming days." That's neither "excluded, invite-only" (this
+  catalog's existing rule for Claude Mythos 5/5.1 and Gemini 3.8 Flash
+  Cyber) nor ordinary self-serve access. Asked directly rather than
+  assumed: admit the model, and model the gate honestly using
+  `RequirementKind.PROGRAM_MEMBERSHIP` — a piece of the schema that's
+  existed since Fase 7 but had never actually been used by a route
+  until now. A developer without Trusted Access Program membership
+  sees this route as "requires onboarding," never "currently
+  eligible" or hidden entirely.
+- Added a matching "OpenAI Trusted Access Program" checkbox to the web
+  form (`interfaces/web/templates/index.html`), next to the existing
+  (also previously unused) NVIDIA Developer Program one, so the new
+  route is actually reachable, not just theoretically valid YAML.
+- No route added yet for the announced Plus/Pro/Business/Enterprise
+  access — that's a promise, not documentation of something live.
+  Revisit once OpenAI's own pages confirm it shipped.
+- Sourced from a Grok tip, same discipline as every prior one: every
+  field independently re-confirmed against OpenAI's own model page,
+  pricing page, and system card before anything was added.
+
+---
+
 ## 2026-09-02 — Gemini 3.8 Flash admitted (29th model)
 
 **Google's third Flash release in six weeks, admitted the same day it

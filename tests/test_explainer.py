@@ -289,7 +289,7 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
-    # Only mistral-large-3 supports "ko" -- none of the other 28 models
+    # Only mistral-large-3 supports "ko" -- none of the other 29 models
     # list it either, since every curated language list in this dataset
     # was inherited from a same-provider sibling, none of which support
     # "ko" (see Docs/models/*.md), including deepseek-v4-pro (inherits
@@ -297,9 +297,10 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     # admitted 2026-08-10 (each inherits its nearest same-provider
     # sibling's curated list), gemini-3.7-flash (admitted 2026-08-13,
     # inherits gemini-3.6-flash's curated list), claude-fable-5-1
-    # (admitted 2026-09-01, inherits claude-fable-5's curated list), and
+    # (admitted 2026-09-01, inherits claude-fable-5's curated list),
     # gemini-3.8-flash (admitted 2026-09-02, inherits gemini-3.7-flash's
-    # curated list).
+    # curated list), and gpt-6-astra (admitted 2026-09-04, inherits
+    # gpt-5-6-sol's curated list).
     context = Context(
         use_case="Korean support assistant",
         budget_mode=BudgetMode.TIER,
@@ -342,6 +343,7 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "gemini-3.1-pro-preview",
         "gemini-3.7-flash",
         "gemini-3.8-flash",
+        "gpt-6-astra",
     }
     assert all(
         any("language" in reason for reason in excl.reasons)
