@@ -1,3 +1,4 @@
+from conftest import ROOT
 from decision.domain import AccessRequirement, CloudProvider, RequirementKind
 from interfaces.web.access_labels import guide_ref_url, requirement_label
 
@@ -46,22 +47,24 @@ def test_guide_ref_url_points_at_the_curated_guide_section():
 
 
 def test_guide_ref_url_matches_every_real_guide_ref():
-    """Every guide_ref in the dataset must resolve to a heading that
-    actually exists in its Docs/access-guides/{provider}.md file --
-    verified against GitHub's anchor-slug rule (drop non-alphanumeric
-    characters, no separator inserted for the removed '#')."""
-    import re
-    from pathlib import Path
+    """Every guide_ref actually used in dataset/access_routes/ must resolve
+    to a heading that actually exists in its Docs/access-guides/{provider}.md
+    file -- verified against GitHub's anchor-slug rule (drop non-alphanumeric
+    characters, no separator inserted for the removed '#').
 
-    root = Path(__file__).resolve().parents[1]
-    real_guide_refs = [
-        "anthropic#direct-api",
-        "openai#direct-api",
-        "google#direct-api",
-        "google#ai-studio",
-    ]
+    Derived from a real load_access_routes() run rather than a hardcoded
+    list, so this stays complete as new guide_refs are added to the dataset
+    instead of silently covering only the ones that existed when this test
+    was written.
+    """
+    import re
+
+    from conftest import ACCESS_ROUTES_DIR
+    from decision.loader import load_access_routes
+
+    real_guide_refs = {route.access.guide_ref for route in load_access_routes(ACCESS_ROUTES_DIR)}
     for guide_ref in real_guide_refs:
         provider, _, anchor = guide_ref.partition("#")
-        guide_text = (root / "Docs" / "access-guides" / f"{provider}.md").read_text(encoding="utf-8")
+        guide_text = (ROOT / "Docs" / "access-guides" / f"{provider}.md").read_text(encoding="utf-8")
         assert re.search(rf"^## `{re.escape(guide_ref)}`$", guide_text, re.MULTILINE), guide_ref
         assert guide_ref_url(guide_ref).endswith(f"{provider}.md#{provider}{anchor}")

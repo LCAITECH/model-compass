@@ -30,6 +30,31 @@ document.addEventListener("DOMContentLoaded", () => {
     syncBudgetRequired(); // covers a bfcache/back-navigation restore with Custom already checked
   }
 
+  // A priority picked at one rank shouldn't be pickable at another --
+  // silently keeping only the first occurrence (decision logic, see
+  // interfaces/web/context_form.py) is a fallback for a no-JS
+  // submission, not something a JS-enabled visitor should ever be able
+  // to trigger by picking the same value twice.
+  const prioritySelects = ["priority_1", "priority_2", "priority_3"]
+    .map((id) => document.getElementById(id))
+    .filter(Boolean);
+
+  function syncPriorityOptions() {
+    const chosen = prioritySelects.map((select) => select.value);
+    prioritySelects.forEach((select, index) => {
+      Array.from(select.options).forEach((option) => {
+        if (!option.value) return; // the "—" placeholder always stays pickable
+        const chosenElsewhere = chosen.some((value, otherIndex) => otherIndex !== index && value === option.value);
+        option.disabled = chosenElsewhere;
+      });
+    });
+  }
+
+  if (prioritySelects.length === 3) {
+    prioritySelects.forEach((select) => select.addEventListener("change", syncPriorityOptions));
+    syncPriorityOptions(); // covers a bfcache/back-navigation restore
+  }
+
   function applyUseCase(label, prioritiesCsv) {
     if (useCaseField) useCaseField.value = label;
     const priorities = (prioritiesCsv || "").split(",").filter(Boolean);
@@ -37,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const select = document.getElementById(`priority_${index + 1}`);
       if (select) select.value = value;
     });
+    syncPriorityOptions();
   }
 
   if (preset) {
@@ -80,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const select = document.getElementById(`priority_${index + 1}`);
           if (select) select.value = value;
         });
+        syncPriorityOptions();
       });
       suggestionBox.append(acceptButton);
       suggestionBox.hidden = false;

@@ -1,4 +1,4 @@
-"""Human-readable text for RequirementKind -- interfaces/'s job, not decision/'s.
+"""Human-readable text for RequirementKind, plus a general snake_case->label helper.
 
 decision/access/ only knows the closed vocabulary (RequirementKind); how
 to phrase "you need this" to a person is presentation, same split as
@@ -30,6 +30,11 @@ def requirement_label(requirement, plan_names: dict[str, str] | None = None) -> 
     if requirement.kind == RequirementKind.CLOUD_ACCOUNT and requirement.value:
         return f"a {requirement.value.value.upper()} account"
     return _LABELS[requirement.kind]
+
+
+def humanize(value: str) -> str:
+    """Turns a snake_case enum value into a readable label ("very_high" -> "Very high")."""
+    return value.replace("_", " ").capitalize()
 
 
 def guide_ref_url(guide_ref: str) -> str:

@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from decision.access import recommend_access
-from decision.domain import BudgetLevel, CloudProvider, Intensity, Priority, UseMode, WorkloadType
+from decision.domain import BudgetLevel, CloudProvider, Intensity, Priority, UseMode, WorkloadType, language_name
 from decision.evaluator import evaluate
 from decision.explainer import NoQualifyingModelsError, explain
 from decision.loader import (
@@ -25,7 +25,7 @@ from decision.loader import (
     validate_subscription_references,
 )
 from interfaces.web.access_context_form import access_context_from_form
-from interfaces.web.access_labels import guide_ref_url, requirement_label
+from interfaces.web.access_labels import guide_ref_url, humanize, requirement_label
 from interfaces.web.affordability import (
     capacity_bar_widths,
     cheapest_qualifying_alternative,
@@ -35,7 +35,6 @@ from interfaces.web.affordability import (
     parse_budget_usd,
 )
 from interfaces.web.context_form import InvalidFormError, context_from_form
-from interfaces.web.languages import language_name
 from interfaces.web.model_profile import best_for, less_suited_for, quality_profile
 from interfaces.web.use_case_matcher import match_use_case
 from interfaces.web.use_cases import USE_CASES
@@ -51,6 +50,7 @@ templates = Jinja2Templates(directory=BASE_DIR / "templates")
 templates.env.filters["language_name"] = language_name
 templates.env.filters["requirement_label"] = requirement_label
 templates.env.filters["guide_ref_url"] = guide_ref_url
+templates.env.filters["humanize"] = humanize
 
 models = load_dataset(DATASET_DIR)
 languages = sorted({language for model in models for language in model.languages})

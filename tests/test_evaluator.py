@@ -1,18 +1,8 @@
-from pathlib import Path
-
 import pytest
 
 from decision.domain import BudgetLevel, BudgetMode, Context, Priority
 from decision.evaluator import evaluate
 from decision.evaluator.evaluator import _dampen_cost_weight
-from decision.loader import load_dataset
-
-DATASET_DIR = Path(__file__).resolve().parents[1] / "dataset" / "models"
-
-
-@pytest.fixture(scope="module")
-def models():
-    return load_dataset(DATASET_DIR)
 
 
 def by_id(candidates, model_id):

@@ -41,7 +41,8 @@ from decision.domain.ai_model import (
     QualityLevel,
 )
 from decision.domain.candidate import Candidate
-from decision.domain.context import BudgetLevel, BudgetMode, Context, Priority
+from decision.domain.context import QUALITY_DIMENSION_ATTR, BudgetLevel, BudgetMode, Context, Priority
+from decision.domain.languages import language_name
 from decision.domain.recommendation import Alternative, Exclusion, Outranked, Recommendation
 from decision.domain.subscription import SubscriptionPlan
 
@@ -78,6 +79,7 @@ __all__ = [
     "Operational",
     "Outranked",
     "Priority",
+    "QUALITY_DIMENSION_ATTR",
     "Quality",
     "QualityLevel",
     "QuotaScope",
@@ -90,4 +92,5 @@ __all__ = [
     "Surface",
     "UseMode",
     "WorkloadType",
+    "language_name",
 ]

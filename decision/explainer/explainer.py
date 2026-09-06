@@ -14,7 +14,8 @@ logic already picked.
 
 from decision.domain.ai_model import AIModel
 from decision.domain.candidate import Candidate
-from decision.domain.context import Context, Priority
+from decision.domain.context import QUALITY_DIMENSION_ATTR, Context, Priority
+from decision.domain.languages import language_name
 from decision.domain.recommendation import Alternative, Exclusion, Outranked, Recommendation
 from decision.explainer.errors import NoQualifyingModelsError
 
@@ -26,12 +27,7 @@ MAX_ALTERNATIVES = 3
 # _passes_quality_floor) -- it's a necessary, not a sufficient, condition.
 ALSO_STRONG_SCORE_GAP = 0.02
 
-_QUALITY_ATTR = {
-    Priority.REASONING: "reasoning",
-    Priority.CODING: "coding",
-    Priority.CREATIVE_WRITING: "creative_writing",
-    Priority.INSTRUCTION_FOLLOWING: "instruction_following",
-}
+_QUALITY_ATTR = QUALITY_DIMENSION_ATTR
 
 _PRIORITY_LABEL = {
     Priority.COST: "cost",
@@ -132,7 +128,7 @@ def _priority_reason(priority: Priority, winner: AIModel, qualifying: list[AIMod
 
 def _language_reason(context: Context, winner: AIModel) -> str:
     level = winner.language_quality[context.language].value.replace("_", " ")
-    return f"Supports {context.language} with {level} quality"
+    return f"Supports {language_name(context.language)} with {level} quality"
 
 
 def _dimension_gaps(model: AIModel, qualifying: list[AIModel]) -> dict[Priority, str]:

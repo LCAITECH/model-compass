@@ -9,6 +9,7 @@ still produces a usable, if uncertain, AccessContext.
 """
 
 from decision.domain import AccessContext, CloudProvider, Intensity, UseMode, WorkloadType
+from decision.loader import enum_values
 
 _TRI_STATE = {"yes": True, "no": False, "unknown": None, "": None}
 
@@ -22,7 +23,7 @@ def access_context_from_form(form) -> AccessContext:
         subscriptions=tuple(form.getlist("subscriptions")),
         has_api_billing=_tri_state(form.get("has_api_billing")),
         cloud_accounts=tuple(
-            CloudProvider(value) for value in form.getlist("cloud_accounts") if value in _values(CloudProvider)
+            CloudProvider(value) for value in form.getlist("cloud_accounts") if value in enum_values(CloudProvider)
         ),
         program_memberships=tuple(form.getlist("program_memberships")),
         has_gpu_infrastructure=_tri_state(form.get("has_gpu_infrastructure")),
@@ -38,7 +39,3 @@ def _enum_or_default(enum_cls, raw, default):
 
 def _tri_state(raw) -> bool | None:
     return _TRI_STATE.get((raw or "").strip().lower(), None)
-
-
-def _values(enum_cls):
-    return {member.value for member in enum_cls}

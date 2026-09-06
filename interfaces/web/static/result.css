@@ -57,10 +57,10 @@
 }
 
 .pill .icon {
+  /* color already inherits from .pill -- no need to restate it here. */
   width: 0.9em;
   height: 0.9em;
   margin-top: 0;
-  color: var(--accent);
 }
 
 .pill-muted {

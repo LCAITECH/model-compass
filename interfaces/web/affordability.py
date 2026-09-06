@@ -8,14 +8,7 @@ input is money (something every user actually knows), output is a
 derived token capacity, not the other way around.
 """
 
-from decision.domain import AIModel, Priority
-
-_QUALITY_DIMENSION_ATTR: dict[Priority, str] = {
-    Priority.REASONING: "reasoning",
-    Priority.CODING: "coding",
-    Priority.CREATIVE_WRITING: "creative_writing",
-    Priority.INSTRUCTION_FOLLOWING: "instruction_following",
-}
+from decision.domain import QUALITY_DIMENSION_ATTR, AIModel, Priority
 
 
 def estimated_input_capacity(budget_usd: float, model: AIModel) -> int:
@@ -102,7 +95,7 @@ def cheapest_qualifying_alternative(
     if not others:
         return None
 
-    quality_attr = _QUALITY_DIMENSION_ATTR.get(priority_1)
+    quality_attr = QUALITY_DIMENSION_ATTR.get(priority_1)
     if quality_attr is not None:
         winner_ordinal = getattr(recommended.quality, quality_attr).ordinal
         others = [m for m in others if winner_ordinal - getattr(m.quality, quality_attr).ordinal <= 1]

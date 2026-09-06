@@ -46,6 +46,20 @@ class Priority(str, Enum):
     CONTEXT_WINDOW = "context_window"
 
 
+# The four Priority members that map straight onto an AIModel.quality
+# attribute of the same name -- COST and CONTEXT_WINDOW don't, since
+# they read from Cost/Operational instead. Shared by decision/explainer/
+# (phrasing a reason) and interfaces/web/affordability.py (the fair-swap
+# quality-tier check), so it lives on the domain type both reference
+# rather than being redefined in each.
+QUALITY_DIMENSION_ATTR: dict[Priority, str] = {
+    Priority.REASONING: "reasoning",
+    Priority.CODING: "coding",
+    Priority.CREATIVE_WRITING: "creative_writing",
+    Priority.INSTRUCTION_FOLLOWING: "instruction_following",
+}
+
+
 @dataclass(frozen=True)
 class Context:
     use_case: str

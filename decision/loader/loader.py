@@ -27,6 +27,7 @@ from decision.domain.ai_model import (
     Quality,
     QualityLevel,
 )
+from decision.loader._util import enum_values
 from decision.loader.errors import DatasetValidationError
 
 REQUIRED_TOP_LEVEL_FIELDS = (
@@ -95,7 +96,7 @@ def _validate(raw, path: Path) -> list[str]:
     if raw["id"] != path.stem:
         issues.append(f"id '{raw['id']}' does not match filename '{path.stem}'")
 
-    if raw["license"] not in _values(License):
+    if raw["license"] not in enum_values(License):
         issues.append(f"invalid license '{raw['license']}'")
 
     capabilities = raw["capabilities"]
@@ -109,7 +110,7 @@ def _validate(raw, path: Path) -> list[str]:
     for field in REQUIRED_QUALITY_DIMENSIONS:
         if field not in quality:
             issues.append(f"missing quality.{field}")
-        elif quality[field] not in _values(QualityLevel):
+        elif quality[field] not in enum_values(QualityLevel):
             issues.append(f"invalid quality.{field}='{quality[field]}'")
 
     languages = set(raw["languages"])
@@ -123,7 +124,7 @@ def _validate(raw, path: Path) -> list[str]:
         if extra:
             issues.append(f"language_quality has entries not in languages: {sorted(extra)}")
     for lang, level in language_quality.items():
-        if level not in _values(QualityLevel):
+        if level not in enum_values(QualityLevel):
             issues.append(f"invalid language_quality.{lang}='{level}'")
 
     operational = raw["operational"]
@@ -156,9 +157,9 @@ def _validate(raw, path: Path) -> list[str]:
             issues.append("cost.reverts_to.output_per_million must be a non-negative number")
 
     ecosystem = raw["ecosystem"]
-    if ecosystem.get("integration_ease") not in _values(IntegrationEase):
+    if ecosystem.get("integration_ease") not in enum_values(IntegrationEase):
         issues.append(f"invalid ecosystem.integration_ease='{ecosystem.get('integration_ease')}'")
-    if ecosystem.get("maturity") not in _values(Maturity):
+    if ecosystem.get("maturity") not in enum_values(Maturity):
         issues.append(f"invalid ecosystem.maturity='{ecosystem.get('maturity')}'")
 
     access = raw["access"]
@@ -166,10 +167,6 @@ def _validate(raw, path: Path) -> list[str]:
         issues.append("access.has_free_access must be a boolean")
 
     return issues
-
-
-def _values(enum_cls):
-    return {member.value for member in enum_cls}
 
 
 def _is_positive_int(value) -> bool:

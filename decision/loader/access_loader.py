@@ -35,6 +35,7 @@ from decision.domain.access_route import (
 )
 from decision.domain.ai_model import AIModel
 from decision.domain.subscription import SubscriptionPlan
+from decision.loader._util import enum_values
 from decision.loader.errors import DatasetValidationError
 
 REQUIRED_ROUTE_FIELDS = ("provider", "model_id", "access", "eligibility", "economics", "evidence")
@@ -162,28 +163,28 @@ def _validate_route(raw) -> list[str]:
     if issues:
         return issues
 
-    if access["surface"] not in _values(Surface):
+    if access["surface"] not in enum_values(Surface):
         issues.append(f"invalid access.surface='{access['surface']}'")
     if not isinstance(access["capabilities"], list):
         issues.append("access.capabilities must be a list")
     else:
         for capability in access["capabilities"]:
-            if capability not in _values(Capability):
+            if capability not in enum_values(Capability):
                 issues.append(f"invalid access.capabilities entry '{capability}'")
 
     issues += _validate_requirements(eligibility["requirements"])
-    if eligibility["region_scope"] not in _values(RegionScope):
+    if eligibility["region_scope"] not in enum_values(RegionScope):
         issues.append(f"invalid eligibility.region_scope='{eligibility['region_scope']}'")
 
-    if economics["billing_scheme"] not in _values(BillingScheme):
+    if economics["billing_scheme"] not in enum_values(BillingScheme):
         issues.append(f"invalid economics.billing_scheme='{economics['billing_scheme']}'")
-    if economics["quota_scope"] not in _values(QuotaScope):
+    if economics["quota_scope"] not in enum_values(QuotaScope):
         issues.append(f"invalid economics.quota_scope='{economics['quota_scope']}'")
     production_allowed = economics["production_allowed"]
     if not (isinstance(production_allowed, bool) or production_allowed == "not_determined"):
         issues.append("economics.production_allowed must be a boolean or 'not_determined'")
 
-    if evidence["status"] not in _values(EvidenceStatus):
+    if evidence["status"] not in enum_values(EvidenceStatus):
         issues.append(f"invalid evidence.status='{evidence['status']}'")
 
     return issues
@@ -199,7 +200,7 @@ def _validate_requirements(requirements) -> list[str]:
             issues.append(f"invalid requirement entry: {entry}")
             continue
         kind = entry["kind"]
-        if kind not in _values(RequirementKind):
+        if kind not in enum_values(RequirementKind):
             issues.append(f"invalid requirement kind '{kind}'")
             continue
 
@@ -212,7 +213,7 @@ def _validate_requirements(requirements) -> list[str]:
         elif (
             kind == RequirementKind.CLOUD_ACCOUNT.value
             and isinstance(value, str)
-            and value not in _values(CloudProvider)
+            and value not in enum_values(CloudProvider)
         ):
             issues.append(f"requirement kind '{kind}' has invalid cloud_account value '{value}'")
         elif shape == "string_list" and not (
@@ -237,21 +238,17 @@ def _validate_subscription(raw) -> list[str]:
         issues.append("surface_entitlements must be a list")
     else:
         for surface in raw["surface_entitlements"]:
-            if surface not in _values(Surface):
+            if surface not in enum_values(Surface):
                 issues.append(f"invalid surface_entitlements entry '{surface}'")
     if not (
         isinstance(raw["documented_exclusions"], list)
         and all(isinstance(item, str) for item in raw["documented_exclusions"])
     ):
         issues.append("documented_exclusions must be a list of strings")
-    if raw["status"] not in _values(EvidenceStatus):
+    if raw["status"] not in enum_values(EvidenceStatus):
         issues.append(f"invalid status='{raw['status']}'")
 
     return issues
-
-
-def _values(enum_cls):
-    return {member.value for member in enum_cls}
 
 
 def _convert_requirement_value(kind: RequirementKind, raw_value):

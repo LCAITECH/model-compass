@@ -6,14 +6,10 @@ at least one confirmed route -- not the exact route count, so this stays
 meaningful as secondary-pattern routes are added on top of the base 23.
 """
 
-from pathlib import Path
-
+from conftest import ACCESS_ROUTES_DIR
+from conftest import DATASET_DIR as MODELS_DIR
 from decision.domain import EvidenceStatus
 from decision.loader import load_access_routes, load_dataset
-
-ROOT = Path(__file__).resolve().parents[1]
-ACCESS_ROUTES_DIR = ROOT / "dataset" / "access_routes"
-MODELS_DIR = ROOT / "dataset" / "models"
 
 
 def test_every_model_has_at_least_one_confirmed_route():

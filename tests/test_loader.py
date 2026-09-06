@@ -1,11 +1,8 @@
-from pathlib import Path
-
 import pytest
 
+from conftest import DATASET_DIR
 from decision.domain import AIModel, License, QualityLevel
 from decision.loader import DatasetValidationError, load_dataset, load_model_file
-
-DATASET_DIR = Path(__file__).resolve().parents[1] / "dataset" / "models"
 
 EXPECTED_IDS = {
     "gemini-2.5-flash",

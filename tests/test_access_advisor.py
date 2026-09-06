@@ -1,5 +1,4 @@
-from pathlib import Path
-
+from conftest import ACCESS_ROUTES_DIR, DATASET_DIR
 from decision.access import recommend_access
 from decision.domain import (
     AccessContext,
@@ -18,9 +17,8 @@ from decision.domain import (
 )
 from decision.loader import load_access_routes, load_dataset
 
-ROOT = Path(__file__).resolve().parents[1]
-MODELS = {model.id: model for model in load_dataset(ROOT / "dataset" / "models")}
-ROUTES = load_access_routes(ROOT / "dataset" / "access_routes")
+MODELS = {model.id: model for model in load_dataset(DATASET_DIR)}
+ROUTES = load_access_routes(ACCESS_ROUTES_DIR)
 
 
 def _context(**overrides):

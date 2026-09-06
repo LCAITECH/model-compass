@@ -118,10 +118,9 @@
 }
 
 .savings-header .icon {
-  width: 1.1em;
-  height: 1.1em;
+  /* width/height/color already match .icon's base and .savings-header's
+     inherited color -- only margin-top actually differs from the default. */
   margin-top: 0;
-  color: var(--positive);
 }
 
 .savings-callout p {

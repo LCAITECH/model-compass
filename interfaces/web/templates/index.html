@@ -87,7 +87,7 @@
           <select id="priority_{{ rank }}" name="priority_{{ rank }}">
             <option value="">—</option>
             {% for p in priorities %}
-            <option value="{{ p.value }}">{{ p.value | replace('_', ' ') | capitalize }}</option>
+            <option value="{{ p.value }}">{{ p.value | humanize }}</option>
             {% endfor %}
           </select>
         </div>
@@ -118,7 +118,7 @@
           <select id="budget" name="budget" required>
             <option value="" disabled selected>Choose a budget</option>
             {% for b in budgets %}
-            <option value="{{ b.value }}">{{ b.value | replace('_', ' ') | capitalize }}</option>
+            <option value="{{ b.value }}">{{ b.value | humanize }}</option>
             {% endfor %}
           </select>
         </div>
@@ -148,7 +148,7 @@
         <div class="field-control">
           <select id="use_mode" name="use_mode">
             {% for m in use_modes %}
-            <option value="{{ m.value }}">{{ m.value | replace('_', ' ') | capitalize }}</option>
+            <option value="{{ m.value }}">{{ m.value | humanize }}</option>
             {% endfor %}
           </select>
         </div>

@@ -10,7 +10,7 @@ boundary added alongside it since the mechanism is identical.
 import ast
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+from conftest import ROOT
 
 
 def _imported_modules(path: Path) -> set[str]:

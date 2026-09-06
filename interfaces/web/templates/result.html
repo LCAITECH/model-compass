@@ -170,7 +170,7 @@
       <span class="label">Cost tier</span>
       <span class="value">
         <span class="tier-dot tier-{{ recommendation.cost_tier.name | lower }}"></span>
-        {{ recommendation.cost_tier.name | capitalize }}
+        {{ recommendation.cost_tier.name | humanize }}
       </span>
     </div>
   </div>

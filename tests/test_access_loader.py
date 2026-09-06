@@ -1,8 +1,9 @@
 import re
-from pathlib import Path
 
 import pytest
 
+from conftest import ACCESS_ROUTES_DIR, SUBSCRIPTIONS_DIR
+from conftest import DATASET_DIR as MODELS_DIR
 from decision.domain import AccessRoute, RequirementKind, SubscriptionPlan
 from decision.loader import (
     DatasetValidationError,
@@ -14,11 +15,6 @@ from decision.loader import (
     validate_route_references,
     validate_subscription_references,
 )
-
-ROOT = Path(__file__).resolve().parents[1]
-ACCESS_ROUTES_DIR = ROOT / "dataset" / "access_routes"
-SUBSCRIPTIONS_DIR = ROOT / "dataset" / "subscriptions"
-MODELS_DIR = ROOT / "dataset" / "models"
 
 
 def test_loads_all_real_access_routes():

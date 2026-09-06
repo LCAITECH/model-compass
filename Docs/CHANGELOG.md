@@ -19,6 +19,20 @@ public release to version against.
 
 ---
 
+## 2026-09-06 — Full codebase audit: two display bugs fixed, silent priority duplication closed, dead-line-limit cleanup
+
+**A full functional/visual audit of the web form (every priority combination, every budget mode, the access checkboxes) surfaced two real display bugs and a UX gap that unit tests alone hadn't caught — all three are fixed, alongside a round of pure code deduplication that changed no behavior.**
+
+- **Fixed:** the Cost tier card showed "Very_high" instead of "Very high" for the top budget tier — `result.html` was missing the `replace('_', ' ')` step the rest of the templates already used before `capitalize`. Now handled by a shared Jinja `humanize` filter, also applied to the three other templates that had the same pattern inlined.
+- **Fixed:** the "why this model" reasoning showed the raw ISO code ("Supports en with...") instead of the language's name ("Supports English with..."). `language_name()` moved from `interfaces/web/languages.py` into `decision/domain/languages.py` so `decision/explainer/` can use it directly, without `decision/` importing from `interfaces/`.
+- **Fixed:** picking the same priority at two different ranks (e.g. Cost at #1 and #2) used to be silently deduplicated with zero feedback. The web form now disables an already-picked priority in the other two dropdowns as soon as it's chosen, so the ambiguous state can't be created from the UI at all. The silent-dedup fallback in `context_form.py` stays for a no-JS submission.
+- **Confirmed, not changed:** GPT-6 Astra's `program_membership` access gate (see 2026-09-04 below) works correctly end-to-end — verified this time with real clicks in the browser, not just a direct function call. But under its current quality ratings it can never actually become the #1 recommendation, so a real user has no path in the live UI to ever see that access requirement rendered. Documented as a known, honest limitation of the current dataset, not a bug to fix.
+- **Refactor, no behavior change:** a triplicated `_values()` helper (renamed `enum_values`) consolidated into `decision/loader/_util.py`; the `Priority -> quality attribute` mapping that `decision/explainer/` and `interfaces/web/affordability.py` each redefined separately is now one `QUALITY_DIMENSION_ATTR` constant on `decision/domain/context.py`; `tests/conftest.py` centralizes the `models`/`make_model`/`client`/`candidate_factory` fixtures and path constants that were duplicated or inlined across 8 test files.
+- **Fixed the 400-line ceiling violation** (`AGENTS.md`) in the two files that had crossed it: `tests/test_web.py` (489 lines) split into `test_web_core.py` / `test_web_budget.py` / `test_web_savings.py` / `test_web_alternatives.py`; `tests/test_explainer.py` (460 lines) split into `test_explainer_reasons.py` / `test_explainer_also_strong.py` / `test_explainer_alternatives_outranked.py`. Same 170 tests, same coverage, regrouped by responsibility.
+- **Left alone, deliberately:** the CSS icon-size duplication across 8 selectors in 3 stylesheets — fixing it properly means touching every icon macro plus ~14 template call sites for a purely cosmetic, zero-bug-risk cleanup, not worth the blast radius; the NVIDIA Developer Program checkbox, kept in case NVIDIA NIM gets admitted to the dataset someday.
+
+---
+
 ## 2026-09-04 — GPT-6 Astra admitted (30th model), with an honest access gate
 
 **OpenAI's new flagship is public-priced but not yet self-serve —
