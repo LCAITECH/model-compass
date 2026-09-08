@@ -934,3 +934,67 @@ actually shipped — add a second route then, don't upgrade this one in
 place (the Trusted Access Program path and a future Plus/Pro path
 would have different eligibility requirements, not the same route with
 a relaxed gate).
+
+## Iteration #19
+
+**Observation**
+Three days after Iteration #18 closed, a Grok tip (2026-09-07)
+reported that OpenAI removed the Trusted Access Program rollout
+paragraph from `developers.openai.com/api/docs/pricing`. Verified
+directly, same discipline as every prior tip: the paragraph is gone
+from the pricing page, this model's own page, and the models index —
+all three, live. GPT-6 Astra is now presented as the default
+recommended flagship model with no access caveat anywhere, and its
+rate-limits table lists standard usage tiers (Tier 1-5) identical in
+shape to every other self-serve OpenAI model in this catalog. Prices
+unchanged ($10/$50 short, $20/$75 long).
+
+This isn't the scenario Iteration #18's closing note anticipated
+("OpenAI's own documentation confirms broader plan-based access has
+actually shipped" via Plus/Pro/Business/Enterprise) — there's no
+mention of ChatGPT-plan-based access anywhere in what changed. What
+actually happened: the *direct API route's own gate* was lifted.
+OpenAI never published a reason; the tip and this project's own
+re-verification only confirm the "before" and "after" states, not
+why.
+
+**Current decision**
+Edited `dataset/access_routes/openai/gpt-6-astra-direct-api.yaml` in
+place — `eligibility.requirements` changed from `program_membership`
+(`openai_trusted_access_program`) to `api_billing_linked`, matching
+`gpt-5-6-sol`'s own direct-api route exactly. This does *not*
+contradict Iteration #18's "add a second route, don't upgrade this
+one in place" guidance: that guidance was specifically about a
+*different, future* consumer-subscription surface (Plus/Pro/Business/
+Enterprise via ChatGPT plans) potentially appearing *alongside* the
+still-gated API route. What happened instead is the API route's own
+condition changed — same `surface: direct_api`, same access method,
+one different requirement. Editing in place is the accurate
+representation; adding a second `direct_api` route for the exact same
+surface would have been the actual duplication.
+
+Verified directly with `recommend_access()`, both directions:
+`has_api_billing=True` with no `program_memberships` now resolves to
+`CURRENTLY_ELIGIBLE`; holding `openai_trusted_access_program` in
+`program_memberships` with no billing info still resolves to
+`REQUIRES_ONBOARDING` — the membership genuinely has zero effect on
+this route anymore.
+
+This reopens the same question Iteration #18 raised about the NVIDIA
+Developer Program checkbox, now for both: the "OpenAI Trusted Access
+Program" checkbox (`interfaces/web/templates/index.html`) has no
+access route backing it again. `RequirementKind.PROGRAM_MEMBERSHIP`
+is back to zero real usages in the catalog, same as before Iteration
+#18 — it had exactly one working example for three days.
+
+**Status**
+Closed. The route fix is applied and verified. Asked the project
+owner directly about the checkbox rather than assuming: keep it,
+same reasoning as the NVIDIA Developer Program checkbox — OpenAI
+could gate another future model with Trusted Access Program again,
+and the mechanism (`RequirementKind.PROGRAM_MEMBERSHIP`) is proven to
+work end-to-end now, not just theoretical. Unlike NVIDIA (which never
+had a real admitted candidate), this program did have one real,
+working route for three days (2026-09-04 to 2026-09-07) — that's
+signal the pattern is worth keeping reachable, not evidence it's
+dead weight.

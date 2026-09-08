@@ -2,13 +2,12 @@ provider: OpenAI
 model_id: gpt-6-astra
 access:
   surface: direct_api
-  access_method: "API key (Responses API), gated to Trusted Access Program members today"
+  access_method: "API key (Responses/Chat Completions)"
   capabilities: [prototype, build, automation]
   guide_ref: openai#direct-api
 eligibility:
   requirements:
-    - kind: program_membership
-      value: openai_trusted_access_program
+    - kind: api_billing_linked
   region_scope: account_dependent
 economics:
   billing_owner: OpenAI
@@ -17,6 +16,6 @@ economics:
   production_allowed: true
 evidence:
   source_url: https://developers.openai.com/api/docs/models/gpt-6-astra
-  consulted_at: "2026-09-04"
+  consulted_at: "2026-09-07"
   status: confirmed
-  caveat: "GPT-6 Astra is on OpenAI's standard Flagship pricing table (not a separate limited-access tier), but its own model page states plainly: 'GPT-6 Astra is rolling out today for enterprises in our Trusted Access Program, with access through API and our Plus, Pro, Business and Enterprise plans coming in the coming days.' Modeled here as the first real use of RequirementKind.PROGRAM_MEMBERSHIP in this catalog -- for a developer without Trusted Access Program membership, this route is REQUIRES_ONBOARDING, never CURRENTLY_ELIGIBLE, until OpenAI's own page confirms broader plan-based access has actually shipped (not merely announced as imminent). No separate route added yet for the announced Plus/Pro/Business/Enterprise access -- revisit once that access exists, not when it's promised."
+  caveat: "As of 2026-09-04, this route required Trusted Access Program membership (RequirementKind.PROGRAM_MEMBERSHIP) -- OpenAI's own model page stated the Plus/Pro/Business/Enterprise rollout was 'coming in the coming days.' Re-verified 2026-09-07 against the pricing page, this model's own page, and the models index: the Trusted Access Program rollout paragraph is gone from all three, GPT-6 Astra is now presented as the default flagship model with no access caveat, and its rate-limits table lists standard usage tiers (Tier 1-5) identical in shape to every other self-serve model -- no program-membership tier listed anywhere. Treated as ordinary self-serve API access now, same requirement as gpt-5-6-sol's own direct-api route. API service is billed and managed separately from ChatGPT -- requires its own payment method under API billing."

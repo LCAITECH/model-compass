@@ -19,6 +19,17 @@ public release to version against.
 
 ---
 
+## 2026-09-07 — GPT-6 Astra's Trusted Access Program gate lifted, three days after admission
+
+**The gate this catalog modeled honestly on 2026-09-04 didn't last long — OpenAI opened the model up to ordinary self-serve API access, and the route now says so.**
+
+- Re-verified against `developers.openai.com/api/docs/pricing`, GPT-6 Astra's own model page, and the models index — all three, live, on a Grok tip. The Trusted Access Program rollout paragraph present three days ago is gone from every one of them; the model is now presented as the default recommended flagship with no access caveat, and its rate-limits table lists standard usage tiers identical in shape to every other self-serve OpenAI model. Prices unchanged.
+- `dataset/access_routes/openai/gpt-6-astra-direct-api.yaml` updated in place: `RequirementKind.PROGRAM_MEMBERSHIP` → `RequirementKind.API_BILLING_LINKED`, the same requirement as `gpt-5-6-sol`'s own direct-api route. Verified both directions with `recommend_access()`: billing info alone now resolves to `CURRENTLY_ELIGIBLE`; holding the Trusted Access Program membership without billing info still correctly resolves to `REQUIRES_ONBOARDING` — the membership genuinely no longer matters to this route.
+- This isn't the "Plus/Pro/Business/Enterprise access ships" scenario the admission entry anticipated (see 2026-09-04 below) — there's no subscription-plan angle here. The direct API route's own gate was lifted; edited in place rather than adding a parallel route, since it's the same surface with one changed requirement, not a second access method. Full reasoning in `Docs/IMPLEMENTATION_NOTES.md`, Iteration #19.
+- The "OpenAI Trusted Access Program" checkbox has no access route behind it again — `RequirementKind.PROGRAM_MEMBERSHIP` is back to zero real usages, same as before this model's admission. Kept, not removed: same reasoning as the NVIDIA Developer Program checkbox (OpenAI could gate a future model the same way again), and unlike NVIDIA, this program did have one real, working route for three days — that's signal, not dead weight.
+
+---
+
 ## 2026-09-06 — Full codebase audit: two display bugs fixed, silent priority duplication closed, dead-line-limit cleanup
 
 **A full functional/visual audit of the web form (every priority combination, every budget mode, the access checkboxes) surfaced two real display bugs and a UX gap that unit tests alone hadn't caught — all three are fixed, alongside a round of pure code deduplication that changed no behavior.**

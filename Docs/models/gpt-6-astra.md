@@ -1,7 +1,8 @@
 # GPT-6 Astra
 
 Dataset entry: [`dataset/models/gpt-6-astra.yaml`](../../dataset/models/gpt-6-astra.yaml)
-Last verified: 2026-09-04
+Last verified: 2026-09-07 (access route only — see "Access note" below;
+all other fields last verified 2026-09-04, unchanged since)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows. Admitted from a tip in a third-party
@@ -14,42 +15,65 @@ this project has received (`IMPLEMENTATION_NOTES.md`, Iterations #14,
 
 ---
 
-## Access note — first real use of `program_membership`
+## Access note — Trusted Access Program gate lifted (2026-09-07)
+
+**Update, 2026-09-07:** the gate described below no longer applies.
+Re-verified against `developers.openai.com/api/docs/pricing`, this
+model's own page, and the models index (all three, live): the Trusted
+Access Program rollout paragraph is gone from every one of them, GPT-6
+Astra is now presented as the default flagship model with no access
+caveat, and its rate-limits table lists standard usage tiers (Tier
+1-5) identical in shape to every other self-serve model — no
+program-membership tier anywhere. `dataset/access_routes/openai/gpt-6-astra-direct-api.yaml`
+now uses `RequirementKind.API_BILLING_LINKED`, the same requirement as
+`gpt-5-6-sol`'s own direct-api route, not `PROGRAM_MEMBERSHIP` anymore.
+Verified directly with `recommend_access()`: `has_api_billing=True`
+now resolves to `CURRENTLY_ELIGIBLE` regardless of
+`program_memberships`; holding the Trusted Access Program membership
+without billing info still correctly resolves to
+`REQUIRES_ONBOARDING` — the checkbox has no effect on this route
+anymore. See `IMPLEMENTATION_NOTES.md`, Iteration #19.
+
+Per Iteration #18's own closing note ("add a second route [for
+Plus/Pro/Business/Enterprise], don't upgrade this one in place"): that
+guidance was about a *future, separate* consumer-subscription surface
+possibly appearing later, not about the direct-API route's own gate
+being lifted. This is the second case, not the first — the same
+`surface: direct_api` route just no longer requires program
+membership, so it was edited in place rather than left stale next to
+a new one.
+
+The rest of this section is kept as written on 2026-09-04, for the
+historical record of what the gate actually looked like and why it
+was modeled the way it was:
 
 GPT-6 Astra's price is public and it sits on OpenAI's standard
 Flagship pricing table, not a separate limited-access tier — but its
-own model page states plainly: *"GPT-6 Astra is rolling out today for
+own model page stated plainly: *"GPT-6 Astra is rolling out today for
 enterprises in our Trusted Access Program, with access through API and
 our Plus, Pro, Business and Enterprise plans coming in the coming
-days."* This doesn't match either of this catalog's two prior
-patterns cleanly: it isn't a permanently invite-only research program
+days."* This didn't match either of this catalog's two prior
+patterns cleanly: it wasn't a permanently invite-only research program
 (Claude Mythos 5/5.1, Gemini 3.8 Flash Cyber — never admitted at all),
-and it isn't ordinary self-serve API access either (every other model
+and it wasn't ordinary self-serve API access either (every other model
 in this dataset).
 
 **Decision (explicit, asked of the project owner rather than assumed):**
 admit the model, and model the real gate honestly instead of pretending
-it doesn't exist — `dataset/access_routes/openai/gpt-6-astra-direct-api.yaml`
-uses `RequirementKind.PROGRAM_MEMBERSHIP` (`SCHEMA.md`/`decision/domain/access_route.py`),
-the first access route in this catalog to actually use that
-requirement kind since it was added to the closed vocabulary (Fase 7).
-For a developer without Trusted Access Program membership, Access
-Advisor correctly reports this route as `REQUIRES_ONBOARDING`, never
-`CURRENTLY_ELIGIBLE` — the recommendation engine itself never sees or
-reacts to this, per the hard architectural boundary between
-`decision/` and `decision/access/`.
+it doesn't exist — the route used `RequirementKind.PROGRAM_MEMBERSHIP`
+(`SCHEMA.md`/`decision/domain/access_route.py`), the first access
+route in this catalog to actually use that requirement kind since it
+was added to the closed vocabulary (Fase 7). For a developer without
+Trusted Access Program membership, Access Advisor correctly reported
+this route as `REQUIRES_ONBOARDING`, never `CURRENTLY_ELIGIBLE`.
 
-A new checkbox ("OpenAI Trusted Access Program") was added to the web
+A checkbox ("OpenAI Trusted Access Program") was added to the web
 form's "Developer programs you're a member of" section
 (`interfaces/web/templates/index.html`), alongside the existing NVIDIA
-Developer Program one, so this route is actually reachable/testable —
-without it, `program_memberships` could never contain the value the
-route checks for.
-
-**No separate route was added for the "coming in the coming days"
-Plus/Pro/Business/Enterprise access** — that's an announced intention,
-not a documented, currently-real access path. Revisit once OpenAI's
-own page confirms it has actually shipped.
+Developer Program one, so the route was actually reachable/testable.
+That checkbox now has no route behind it — same open question as the
+NVIDIA one (see `IMPLEMENTATION_NOTES.md`, Iteration #19, for the
+disposition decided).
 
 ## Identity
 
@@ -137,10 +161,12 @@ checked, so no `cost.effective_until`/`reverts_to` fields were added.
 
 ## Access
 
-See the Access note at the top of this document for the full reasoning.
-One route: direct API, gated by `program_membership` (Trusted Access
-Program) until OpenAI's own documentation confirms broader Plus/Pro/
-Business/Enterprise access has actually shipped, not merely announced.
+See the Access note at the top of this document for the full
+reasoning and the 2026-09-07 update. One route: direct API,
+`api_billing_linked` (ordinary self-serve, same as `gpt-5-6-sol`'s
+own direct-api route) as of 2026-09-07 — was gated by
+`program_membership` (Trusted Access Program) from 2026-09-04 until
+then.
 
 **Free access (`access.has_free_access`):** `false`. No free tier
 mentioned anywhere checked; the model's own rate-limits table
@@ -148,18 +174,23 @@ explicitly lists "Free: Not supported."
 
 ## Sources
 
-- [GPT-6 Astra model page](https://developers.openai.com/api/docs/models/gpt-6-astra) — capabilities, context window, max output, features, tools, rate limits, access-rollout statement.
-- [OpenAI API pricing](https://developers.openai.com/api/docs/pricing) — cost fields, confirms Astra is on the standard Flagship table (not a separate limited tier), access-rollout banner repeated verbatim.
+- [GPT-6 Astra model page](https://developers.openai.com/api/docs/models/gpt-6-astra) — capabilities, context window, max output, features, tools, rate limits; re-checked 2026-09-07, no access caveat present anymore.
+- [OpenAI API pricing](https://developers.openai.com/api/docs/pricing) — cost fields, confirms Astra is on the standard Flagship table; re-checked 2026-09-07, the Trusted Access Program banner present on 2026-09-04 is gone.
+- [OpenAI models index](https://developers.openai.com/api/docs/models) — checked 2026-09-07: GPT-6 Astra listed as the default recommended flagship, no access caveat.
 - [GPT-6 Astra system card](https://deploymentsafety.openai.com/gpt-6-astra) — flagship framing ("most capable model we have ever broadly deployed"), alignment/robustness evidence used for `instruction_following`, published 2026-09-03 (first-party OpenAI subdomain).
 
-Accessed 2026-09-04, official OpenAI documentation only.
+Accessed 2026-09-04 (model admission); access route re-verified
+2026-09-07. Official OpenAI documentation only, both times.
 
 ## Verification result
 
-New dataset entry. Objective fields confirmed against official
-documentation. `json_mode` and `languages`/`language_quality` flagged
-as inherited/curated, same recurring gap as every other OpenAI entry.
-Access modeled honestly as a real gate (`program_membership`,
+New dataset entry (2026-09-04). Objective fields confirmed against
+official documentation. `json_mode` and `languages`/`language_quality`
+flagged as inherited/curated, same recurring gap as every other OpenAI
+entry. Access was initially modeled as a real gate (`program_membership`,
 `REQUIRES_ONBOARDING` by default) rather than either excluding the
-model outright or pretending self-serve access already exists — an
-explicit decision from the project owner, not assumed.
+model outright or pretending self-serve access already existed — an
+explicit decision from the project owner, not assumed. That gate was
+lifted by OpenAI three days later (2026-09-07) and the route was
+updated to reflect it — see the Access note above and
+`IMPLEMENTATION_NOTES.md` Iteration #19.
