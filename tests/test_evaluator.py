@@ -25,7 +25,8 @@ def test_every_model_gets_a_candidate(models):
 
 
 def test_disqualifies_models_that_dont_support_the_language(models):
-    # Only mistral-large-3 lists "ko" among its supported languages.
+    # Only mistral-large-3 and qwen3.8-max (admitted 2026-09-08) list
+    # "ko" among their supported languages.
     context = Context(
         use_case="Korean support assistant",
         budget_mode=BudgetMode.TIER,
@@ -37,7 +38,7 @@ def test_disqualifies_models_that_dont_support_the_language(models):
     candidates = evaluate(context, models)
     qualifying = [c for c in candidates if c.qualifies]
 
-    assert [c.model.id for c in qualifying] == ["mistral-large-3"]
+    assert {c.model.id for c in qualifying} == {"mistral-large-3", "qwen3.8-max"}
     other = by_id(candidates, "gemini-2.5-flash")
     assert not other.qualifies
     assert any("language" in reason for reason in other.disqualified_reasons)

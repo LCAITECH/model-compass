@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-09-08 — Qwen3.8-Max admitted (31st model, first Alibaba Cloud entry); Muse Spark 1.3 held back on a real sourcing gap
+
+**Two OpenRouter listings from a Grok tip, evaluated independently against each provider's own documentation — one cleared the bar, one didn't, for a reason worth understanding rather than working around.**
+
+- **Qwen3.8-Max admitted.** First Alibaba Cloud entry in this catalog. Confirmed directly on Alibaba Cloud Model Studio's own model page: vision input, 1,000,000-token context window, 131,072 max output, $2.00/$6.00 per 1M tokens on the International (Singapore) pricing scope (the China/Beijing scope is materially cheaper but requires a Mainland China account). One access route: ordinary self-serve API billing, no program-membership gate like `gpt-6-astra` had.
+- **A real complication surfaced and was resolved deliberately, not by assumption**: Alibaba also ships a separately-released open-weights checkpoint (`Qwen/Qwen3.8-2.4T-A95B` on Hugging Face) under overlapping "Qwen3.8-Max" naming — text-only, no vision, a smaller context window than the hosted API. Different model ID, different capabilities, per `SCHEMA.md`'s own rule for when something is a separate entry. Admitted only the hosted API product this pass; the open-weights variant is flagged as an open question for a possible second entry later, not folded in or silently skipped. Full reasoning in `Docs/IMPLEMENTATION_NOTES.md`, Iteration #20.
+- **Meta Muse Spark 1.3 was not admitted.** Everything else checked out — real product (Meta Model API, first-party, OpenAI/Anthropic-SDK-compatible), $1.25/$4.25 per 1M tokens confirmed on Meta's own pricing page (matching the tip exactly), 1,048,576-token context window confirmed on multiple official pages. But every official page checked publishes exactly one combined context-window figure and never a distinct output-token ceiling — one page states outright that all three Muse Spark versions "share... a 1,048,576-token context window." `SCHEMA.md` requires `context_window` and `max_output` as two separate fields; a third-party aggregator's specific number for the latter (943,718) appears nowhere in Meta's own docs and wasn't used. Logged as a genuine open question rather than guessed — `Docs/IMPLEMENTATION_NOTES.md`, Iteration #21.
+
+---
+
 ## 2026-09-07 — GPT-6 Astra's Trusted Access Program gate lifted, three days after admission
 
 **The gate this catalog modeled honestly on 2026-09-04 didn't last long — OpenAI opened the model up to ordinary self-serve API access, and the route now says so.**

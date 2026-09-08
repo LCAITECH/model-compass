@@ -998,3 +998,99 @@ had a real admitted candidate), this program did have one real,
 working route for three days (2026-09-04 to 2026-09-07) — that's
 signal the pattern is worth keeping reachable, not evidence it's
 dead weight.
+
+## Iteration #20
+
+**Observation**
+A Grok tip (2026-09-08) mentioned Qwen3.8-Max and Meta Muse Spark 1.3
+listings on OpenRouter — an aggregator, never a source per this
+project's dataset discipline, and the tip explicitly said so itself
+("OpenRouter not in Compass providers — optional note only"). The
+project owner asked to add whichever of these could genuinely be
+added on its own merits, evaluated independently against each
+provider's own official documentation, not the OpenRouter listing.
+
+Researching Qwen3.8-Max surfaced a real complication: Alibaba ships
+*two different things* under overlapping "Qwen3.8-Max" naming --
+the hosted API product (`qwen3.8-max`, Alibaba Cloud Model Studio:
+vision input, 1,000,000-token context) and a separately-released
+open-weights checkpoint (`Qwen/Qwen3.8-2.4T-A95B` on Hugging Face,
+under a custom `qwen3.8-max` license, text-only, no vision, a
+smaller context window). Per `SCHEMA.md`'s own rule ("does the
+provider's own API documentation assign it a distinct model ID?"),
+these are two different model IDs with two different capability
+sets, not one model reachable two ways.
+
+**Current decision**
+Admitted only the hosted API product as `dataset/models/qwen3.8-max.yaml`
+(first Alibaba Cloud entry in this catalog), with one direct-API
+access route (`api_billing_linked`, ordinary self-serve — no program
+gate found, unlike `gpt-6-astra`'s history). Pricing: International
+(Singapore) scope ($2.00/$6.00), since Alibaba Cloud prices per
+region and the cheaper China (Beijing) scope requires a Mainland
+China account. Did **not** add a second entry or a self-hosted route
+for the open-weights checkpoint this pass — its different, lower
+capability set would misrepresent either this entry (if folded in)
+or a self-hosted route built against it (if added under this
+model_id). Left as an explicit open question for the project owner
+(`docs/models/qwen3.8-max.md`) rather than resolved by assumption
+either way.
+
+Full docs at `docs/models/qwen3.8-max.md`; new access guide at
+`Docs/access-guides/alibaba.md`.
+
+**Status**
+Open on one point: whether the open-weights checkpoint
+(`Qwen/Qwen3.8-2.4T-A95B`) is worth a second dataset entry later, with
+its own accurate (lower) capability set and a self-hosted access
+route. Not blocking — the API entry stands on its own regardless of
+that decision. Muse Spark 1.3 evaluation is covered separately (see
+Iteration #21) — it hit a different, harder blocker and was not
+admitted this pass.
+
+## Iteration #21
+
+**Observation**
+Evaluating Meta Muse Spark 1.3 (see Iteration #20 for how this came
+up) confirmed it's a real, well-documented product — Meta Model API
+(`ai.developer.meta.com`), first-party, OpenAI-SDK- and
+Anthropic-Messages-compatible, standard tier priced at $1.25/$4.25
+per 1M tokens (confirmed on the official pricing page, matching the
+tip exactly), 1,048,576-token context window (confirmed on multiple
+official pages).
+
+`SCHEMA.md` requires `operational.context_window` and
+`operational.max_output` as two separate positive integers. Every
+official Meta Model API page checked (the models overview, the
+individual model page, the getting-started guide, the chat
+completions feature/API-reference pages) publishes exactly one
+combined figure -- "a 1,048,576-token context window" -- and never a
+distinct output-token ceiling. One page states plainly that all three
+Muse Spark IDs "share... a 1,048,576-token context window," reinforcing
+that this is the only number Meta documents, not an oversight on one
+page. A third-party aggregator claims a specific max-output figure
+(943,718 tokens), but that number appears nowhere in Meta's own
+documentation and this project's sourcing discipline treats aggregator
+figures as unusable for `[Objective]` fields, full stop -- doubly so
+here, since Meta's own docs suggest there may not even be a distinct
+output cap to source (a shared input+output budget, not a split one).
+
+**Current decision**
+Did not admit `muse-spark-1.3` this pass. Writing a fabricated or
+aggregator-sourced `max_output` value would violate this project's
+core rule against fabricating precision the engine doesn't actually
+have -- worse here than a normal missing-field gap, because the
+underlying reality (a combined token budget) may not map onto
+`SCHEMA.md`'s two-separate-integers shape at all, not just be
+undocumented. Flagged to the project owner rather than guessed.
+
+**Status**
+Open. Needs a decision from the project owner on how to proceed --
+options include: (a) treat `max_output` as equal to `context_window`
+with an explicit caveat that Meta doesn't split the budget, (b) hold
+`muse-spark-1.3` until Meta publishes a distinct figure, or (c) some
+other resolution. Not a `SCHEMA.md` migration on its own (see
+`AGENTS.md`'s "wait for the same friction to recur 2-3 times" rule) --
+this is the first time a provider's documented limits genuinely don't
+split into `context_window`/`max_output`, so it's logged here, not
+proposed as a schema change yet.

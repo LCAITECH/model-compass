@@ -1,0 +1,21 @@
+provider: Alibaba Cloud
+model_id: qwen3.8-max
+access:
+  surface: direct_api
+  access_method: "API key (Model Studio, DashScope/OpenAI-compatible endpoints)"
+  capabilities: [prototype, build, automation]
+  guide_ref: alibaba#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Alibaba Cloud
+  billing_scheme: api_token
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://www.alibabacloud.com/help/en/model-studio/qwen3-8-max
+  consulted_at: "2026-09-08"
+  status: confirmed
+  caveat: "Pricing here is the International (Singapore) scope, confirmed on the model's own page -- Alibaba Cloud Model Studio prices per region, and the China (Beijing) scope is materially cheaper but requires a Mainland China account and is not eligible for the new-user free quota either way (free quota is Beijing-scope only). International scope used as the one reachable from a standard account, same rationale as picking one tier for any other multi-region/multi-tier provider in this dataset."

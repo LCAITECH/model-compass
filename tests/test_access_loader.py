@@ -35,11 +35,14 @@ def test_loads_all_real_access_routes():
     # pattern as the rest of the Gemini family) admitted 2026-09-02. + 1
     # more (gpt-6-astra's direct_api route, gated by the first real use of
     # RequirementKind.PROGRAM_MEMBERSHIP in this catalog) admitted
-    # 2026-09-04 (IMPLEMENTATION_NOTES.md, Iteration #18).
-    assert len(routes) == 67
+    # 2026-09-04 (IMPLEMENTATION_NOTES.md, Iteration #18), later relaxed to
+    # api_billing_linked on 2026-09-07 (Iteration #19, same route, not a new
+    # one). + 1 more (qwen3.8-max's direct_api route, first Alibaba Cloud
+    # entry in this catalog) admitted 2026-09-08.
+    assert len(routes) == 68
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
-    assert len(model_ids_with_direct_api) == 30
+    assert len(model_ids_with_direct_api) == 31
 
 
 def test_loads_all_real_subscriptions():

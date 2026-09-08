@@ -1,0 +1,53 @@
+id: qwen3.8-max
+name: Qwen3.8-Max
+provider: Alibaba Cloud
+version: "3.8"
+license: proprietary
+
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+
+quality:
+  reasoning: very_high
+  coding: very_high
+  creative_writing: medium
+  instruction_following: high
+
+languages: [en, zh, es, fr, de, ja, ko, ar, ru, pt]
+language_quality:
+  en: very_high
+  zh: very_high
+  es: high
+  fr: high
+  de: high
+  ja: medium
+  ko: medium
+  ar: medium
+  ru: medium
+  pt: high
+
+operational:
+  context_window: 1000000
+  max_output: 131072
+
+# International (Singapore) scope pricing, USD -- Alibaba Cloud Model
+# Studio prices per-region (the China/Beijing scope is materially
+# cheaper but requires a Mainland China account). International scope
+# used here as the one reachable from a standard account, same
+# rationale as picking a single tier for any other multi-tier
+# provider in this dataset. Source: https://www.alibabacloud.com/help/en/model-studio/qwen3-8-max
+cost:
+  input_per_million: 2.00
+  output_per_million: 6.00
+
+ecosystem:
+  integration_ease: high
+  maturity: stable
+
+access:
+  has_free_access: false

@@ -36,7 +36,8 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
-    # Only mistral-large-3 supports "ko" -- none of the other 29 models
+    # Only mistral-large-3 and qwen3.8-max (admitted 2026-09-08, first
+    # Alibaba Cloud entry) support "ko" -- none of the other 29 models
     # list it either, since every curated language list in this dataset
     # was inherited from a same-provider sibling, none of which support
     # "ko" (see Docs/models/*.md), including deepseek-v4-pro (inherits
@@ -47,7 +48,9 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     # (admitted 2026-09-01, inherits claude-fable-5's curated list),
     # gemini-3.8-flash (admitted 2026-09-02, inherits gemini-3.7-flash's
     # curated list), and gpt-6-astra (admitted 2026-09-04, inherits
-    # gpt-5-6-sol's curated list).
+    # gpt-5-6-sol's curated list). qwen3.8-max is a new provider with no
+    # sibling to inherit from -- its language list is independently
+    # curated (Docs/models/qwen3.8-max.md), and happens to include "ko".
     context = Context(
         use_case="Korean support assistant",
         budget_mode=BudgetMode.TIER,
@@ -60,7 +63,7 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     recommendation = explain(context, candidates)
 
     assert recommendation.recommended.id == "mistral-large-3"
-    assert recommendation.alternatives == ()
+    assert [alt.model.id for alt in recommendation.alternatives] == ["qwen3.8-max"]
     assert {excl.model.id for excl in recommendation.excluded} == {
         "gemini-2.5-flash",
         "gemini-2.5-flash-lite",
@@ -99,16 +102,17 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
 
 
 def test_total_qualifying_and_alternative_ranks(models):
-    # 29 models total, all support "es", budget=HIGH is a fixed <=$30
+    # 30 models total, all support "es", budget=HIGH is a fixed <=$30
     # cost tier (SCHEMA.md's Cost section) -- it excludes claude-fable-5
-    # and claude-fable-5-1 ($60 blended each), so 27 qualify. gpt-5-6-sol
+    # and claude-fable-5-1 ($60 blended each), so 28 qualify. gpt-5-6-sol
     # used to be excluded too at its stale $35 blended price; the
     # 2026-08-27 catalog refresh corrected it to OpenAI's live
     # promotional price ($24 blended, see Docs/CHANGELOG.md), which now
     # qualifies. Alternatives are the winner's (gpt-5-nano's) immediate
     # runners-up (rank starts at 2, since the winner is implicitly rank
-    # 1); neither gpt-5-6-sol's $24 blended cost nor gemini-3.8-flash's
-    # $4.50 blended cost is cheap enough to displace any of the top-3
+    # 1); neither gpt-5-6-sol's $24 blended cost, gemini-3.8-flash's
+    # $4.50 blended cost, nor qwen3.8-max's $4.00 blended cost (admitted
+    # 2026-09-08) is cheap enough to displace any of the top-3
     # alternatives here.
     context = Context(
         use_case="High-volume low-cost bot",
@@ -121,16 +125,16 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.total_qualifying == 27
+    assert recommendation.total_qualifying == 28
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
 def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
-    # Same context as above (27 qualifying, see
+    # Same context as above (28 qualifying, see
     # test_total_qualifying_and_alternative_ranks). The top-3
     # alternatives (gemini-2.5-flash-lite, gemini-3.1-flash-lite,
     # deepseek-v4-flash) leave mistral-large-3 ($2.00 blended) as the
-    # first model past them, into the outranked group (rank 5 of 27).
+    # first model past them, into the outranked group (rank 5 of 28).
     # Unlike the winner's trade_offs, its reasons include "Not the
     # cheapest option" even though COST is the prioritized dimension,
     # because there's no positive "reasons" line for it to contradict;
@@ -147,8 +151,8 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 23  # 27 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 28))
+    assert len(recommendation.outranked) == 24  # 28 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 29))
 
     first = recommendation.outranked[0]
     assert first.model.id == "mistral-large-3"

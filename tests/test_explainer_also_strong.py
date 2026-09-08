@@ -34,6 +34,8 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
     # qualifies and scores close enough to also count as also-strong.
     # gemini-3.8-flash joined the same way at its 2026-09-02 admission,
     # rated very_high on reasoning like gemini-3.7-flash before it.
+    # qwen3.8-max joined the same way at its 2026-09-08 admission, also
+    # rated very_high on reasoning.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -47,7 +49,7 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
 
     assert recommendation.recommended.id == "claude-opus-4-7"
     assert len(recommendation.alternatives) == 3
-    assert len(recommendation.also_strong_options) == 10
+    assert len(recommendation.also_strong_options) == 11
     assert {a.model.id for a in recommendation.also_strong_options} == {
         "claude-opus-4-8",
         "claude-opus-5",
@@ -59,8 +61,9 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
         "gemini-3.8-flash",
         "gpt-5",
         "gpt-5-6-sol",
+        "qwen3.8-max",
     }
-    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 12))  # score-sorted, contiguous
+    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 13))  # score-sorted, contiguous
 
 
 def test_also_strong_options_excludes_close_score_but_unfair_quality_gap(models):
