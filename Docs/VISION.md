@@ -72,6 +72,15 @@ It exposes the trade-offs behind every recommendation.
   confidence scores, and quality scoring for a mix of models are only
   ever shown when the engine can actually derive them — never guessed
   to fill a visual gap.
+- Does not cover media-generation models (image, video, music/audio
+  generation) — text/code LLMs only. Decided explicitly (2026-09-09)
+  when Gemini Omni Flash (video) and Lyria 3.5 (music) came up as
+  candidates: `SCHEMA.md`'s quality dimensions (reasoning, coding,
+  creative writing, instruction following) and per-token cost model
+  don't describe what a video/music model actually offers or how it's
+  priced (typically per-second or per-generation, not per input/output
+  token) — this isn't a sourcing gap to work around, it's a different
+  category of tool this project doesn't recommend.
 
 ## What a recommendation looks like
 
