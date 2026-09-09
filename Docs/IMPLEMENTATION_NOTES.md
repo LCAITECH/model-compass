@@ -1085,12 +1085,13 @@ underlying reality (a combined token budget) may not map onto
 undocumented. Flagged to the project owner rather than guessed.
 
 **Status**
-Open. Needs a decision from the project owner on how to proceed --
-options include: (a) treat `max_output` as equal to `context_window`
-with an explicit caveat that Meta doesn't split the budget, (b) hold
-`muse-spark-1.3` until Meta publishes a distinct figure, or (c) some
-other resolution. Not a `SCHEMA.md` migration on its own (see
-`AGENTS.md`'s "wait for the same friction to recur 2-3 times" rule) --
-this is the first time a provider's documented limits genuinely don't
-split into `context_window`/`max_output`, so it's logged here, not
-proposed as a schema change yet.
+Closed. Asked the project owner directly: hold `muse-spark-1.3` out of
+the dataset entirely rather than treat `max_output` as equal to
+`context_window` with a caveat. Revisit if Meta publishes a distinct
+output-token figure on its own documentation (not an aggregator), or
+if some other first-party source confirms one (e.g. an API error
+message that states a real ceiling). Not a `SCHEMA.md` migration on
+its own (see `AGENTS.md`'s "wait for the same friction to recur 2-3
+times" rule) -- this is the first time a provider's documented limits
+genuinely don't split into `context_window`/`max_output`, so it's
+logged here, not proposed as a schema change yet.
