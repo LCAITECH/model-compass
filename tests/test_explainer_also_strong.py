@@ -35,7 +35,9 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
     # gemini-3.8-flash joined the same way at its 2026-09-02 admission,
     # rated very_high on reasoning like gemini-3.7-flash before it.
     # qwen3.8-max joined the same way at its 2026-09-08 admission, also
-    # rated very_high on reasoning.
+    # rated very_high on reasoning. claude-sonnet-5-5 and claude-opus-5-5
+    # joined at their 2026-10-04 admission, same very_high profile as their
+    # predecessors.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -49,11 +51,13 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
 
     assert recommendation.recommended.id == "claude-opus-4-7"
     assert len(recommendation.alternatives) == 3
-    assert len(recommendation.also_strong_options) == 11
+    assert len(recommendation.also_strong_options) == 13
     assert {a.model.id for a in recommendation.also_strong_options} == {
         "claude-opus-4-8",
         "claude-opus-5",
+        "claude-opus-5-5",
         "claude-sonnet-5",
+        "claude-sonnet-5-5",
         "deepseek-v4-pro",
         "gemini-2.5-pro",
         "gemini-3.1-pro-preview",
@@ -63,7 +67,7 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
         "gpt-5-6-sol",
         "qwen3.8-max",
     }
-    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 13))  # score-sorted, contiguous
+    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 15))  # score-sorted, contiguous
 
 
 def test_also_strong_options_excludes_close_score_but_unfair_quality_gap(models):

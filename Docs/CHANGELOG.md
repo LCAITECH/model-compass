@@ -19,6 +19,18 @@ public release to version against.
 
 ---
 
+## 2026-10-04 — Claude Sonnet 5.5 and Claude Opus 5.5 admitted (33 models); Gemini 4 not yet admissible
+
+**Two new Claude models are in, both confirmed on Anthropic's own pages and on each cloud's own documentation; the "Gemini 4" announcement turned out to be one gated model with no public API yet.**
+
+- **Claude Sonnet 5.5** (released 2026-09-28): $2.00/$10.00 per million tokens, 1M-token context, 128K max output, vision and tool calling. Same price as Sonnet 5, standard rate with no introductory pricing.
+- **Claude Opus 5.5** (released 2026-09-22): $4.00/$20.00, same 1M/128K limits — 20% cheaper than Opus 5, and Anthropic's overview now points to it as the default starting model. Quality ratings for both mirror their predecessors: the evidence supports the scale's existing ceiling, not a rating above it.
+- Four access routes each (direct API, AWS Bedrock, Google Vertex, Microsoft Foundry), every cloud checked against its own documentation rather than just Anthropic's model page. No Claude-subscription route: Anthropic names no plan tier.
+- **Gemini 4 Argon is not admitted.** It's a single model, announced 2026-09-30 and rolling out only to trusted cyber defenders; it isn't in Google's model catalog or pricing page and has no model id. No other Gemini 4 variant exists in any Google source.
+- Noted, not acted on: `claude-sonnet-4-5` is now deprecated (retires 2026-11-30), `gpt-5`'s current snapshot retires 2026-12-11, and DeepSeek released V4.1-Flash. See `Docs/IMPLEMENTATION_NOTES.md`, Iteration #22.
+
+---
+
 ## 2026-09-08 — Qwen3.8-Max admitted (31st model, first Alibaba Cloud entry); Muse Spark 1.3 held back on a real sourcing gap
 
 **Two OpenRouter listings from a Grok tip, evaluated independently against each provider's own documentation — one cleared the bar, one didn't, for a reason worth understanding rather than working around.**

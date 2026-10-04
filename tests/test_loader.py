@@ -36,13 +36,15 @@ EXPECTED_IDS = {
     "claude-opus-4-5",
     "gpt-6-astra",
     "qwen3.8-max",
+    "claude-sonnet-5-5",
+    "claude-opus-5-5",
 }
 
 
 def test_loads_all_real_models():
     models = load_dataset(DATASET_DIR)
 
-    assert len(models) == 31  # qwen3.8-max admitted 2026-09-08 (first Alibaba Cloud entry)
+    assert len(models) == 33  # claude-sonnet-5-5 and claude-opus-5-5 admitted 2026-10-04 (after qwen3.8-max, 2026-09-08)
     assert all(isinstance(model, AIModel) for model in models)
     assert {model.id for model in models} == EXPECTED_IDS
 

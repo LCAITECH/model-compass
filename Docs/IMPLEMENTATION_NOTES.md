@@ -1095,3 +1095,51 @@ its own (see `AGENTS.md`'s "wait for the same friction to recur 2-3
 times" rule) -- this is the first time a provider's documented limits
 genuinely don't split into `context_window`/`max_output`, so it's
 logged here, not proposed as a schema change yet.
+
+## Iteration #22
+
+**Observation**
+On 2026-10-04 the project owner reported new models (Claude Sonnet 5.5,
+Claude Opus 5.5, "Gemini 4"); four research agents were sent out
+(read-only), and every field going into the dataset was then re-read
+by hand on the provider's own pages, since the agents read through a
+page summarizer. Findings:
+
+- Claude Sonnet 5.5 and Claude Opus 5.5 are real, Active, and priced
+  at standard rates ($2/$10 and $4/$20, no introductory pricing).
+  Admitted, with four routes each (direct API, Bedrock, Vertex,
+  Foundry), each confirmed on the cloud's own documentation, not just
+  Anthropic's model page (the rule applied to Claude Fable 5.1's
+  Vertex route in Iteration #16). No Claude-subscription route:
+  Anthropic's pages mention the Claude apps but name no plan tier.
+- "Gemini 4" is a single model, Gemini 4 Argon, announced 2026-09-30
+  and rolling out only to trusted cyber defenders (Fairwind Program).
+  It is absent from Google's model catalog, pricing page and
+  deprecations page; no model id exists, and the blog's "1 million
+  token limit" is ambiguous between context window and output cap. No
+  Gemini 4 Pro/Flash/Flash-Lite exists in any Google source.
+
+**Current decision**
+Admitted the two Claude models. Did **not** admit Gemini 4 Argon: it
+has neither a public catalog entry nor the objective fields the schema
+requires, and the same rule that excluded the invite-only cyber models
+applies. Quality ratings for both Claude models mirror their
+predecessors (`claude-sonnet-5`, `claude-opus-5`) — the evidence
+supports the existing ceiling, not a rating above it.
+
+**Status**
+Open, deliberately not acted on in this pass (project owner scoped the
+work to the two Claude admissions):
+
+- Gemini 4 Argon — revisit when it appears in
+  `ai.google.dev/gemini-api/docs/models` with a model id and limits.
+- `claude-sonnet-4-5` is deprecated (2026-09-30, retires 2026-11-30,
+  replacement `claude-sonnet-5-5`); `claude-haiku-4-5` retirement is
+  "not sooner than 2026-10-15"; `gpt-5`'s current snapshot shuts down
+  2026-12-11 per OpenAI's deprecations page. Whether to remove or flag
+  deprecated entries is a catalog-policy decision not yet made.
+- DeepSeek V4.1-Flash (released 2026-09-10, vision, new Flash price)
+  and the `deepseek-v4-pro` redirect to it from 2026-09-14 need a
+  hands-on check of DeepSeek's own pages before any dataset change.
+- Candidates not yet researched to the dataset bar: GPT-6.1 Sol, GPT-6
+  Luna, GPT-5.6 Terra/Luna, Qwen3.8-Flash, Qwen3.7-Plus/Flash.
