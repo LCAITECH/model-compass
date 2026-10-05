@@ -16,6 +16,6 @@ economics:
   production_allowed: true
 evidence:
   source_url: https://api-docs.deepseek.com/quick_start/pricing
-  consulted_at: "2026-08-13"
+  consulted_at: "2026-10-05"
   status: confirmed
-  caveat: "Billed by token usage on the DeepSeek Platform; the pricing page warns of scheduled price increases, so confirm current rates before production use."
+  caveat: "Billed by token usage on the DeepSeek Platform at deepseek-flash (V4.1-Flash) rates; peak/off-peak and cache-hit tiers apply — confirm current rates on the pricing page before production use."
