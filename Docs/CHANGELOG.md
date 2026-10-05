@@ -1,1 +1,1 @@
-@/workspace/model-compass/Docs/CHANGELOG.md
+PLACEHOLDER
