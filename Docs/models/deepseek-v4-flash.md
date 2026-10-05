@@ -1,9 +1,7 @@
-# DeepSeek V4 Flash
+# DeepSeek V4.1 Flash
 
 Dataset entry: [`dataset/models/deepseek-v4-flash.yaml`](../../dataset/models/deepseek-v4-flash.yaml)
-Last verified: 2026-08-27 (Cost only — see Cost section; quality.reasoning
-and capabilities.structured_output last touched 2026-08-11, everything
-else 2026-08-07)
+Last verified: 2026-10-05 (Cost + vision — V4.1-Flash pricing and vision flag)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -15,9 +13,9 @@ the sourcing rule it follows.
 | Field      | Value                |
 |------------|------------------------|
 | `id`       | `deepseek-v4-flash`    |
-| `name`     | DeepSeek V4 Flash      |
+| `name`     | DeepSeek V4.1 Flash    |
 | `provider` | DeepSeek                |
-| `version`  | `V4`                    |
+| `version`  | `V4.1`                  |
 | `license`  | `open-weights`          |
 
 Not independently reconfirmed this pass: the exact license
@@ -30,7 +28,7 @@ original curation.
 
 | Field                | Value | Notes |
 |-----------------------|-------|-------|
-| `vision`               | false | Not independently reconfirmed this pass — inherited from original curation. |
+| `vision`               | true  | **Corrected 2026-10-05**, was `false`. DeepSeek Models & Pricing table lists Vision ✓ for `deepseek-flash` (DeepSeek-V4.1-Flash). Legacy ids `deepseek-v4-flash` / `deepseek-v4-flash-vision-exp` still accepted; requests are served by V4.1-Flash. |
 | `audio`                | false | Same as above — inherited. |
 | `image_generation`     | false | Same as above — inherited. |
 | `tool_calling`         | true  | Same as above — inherited. |
@@ -73,24 +71,19 @@ Length: 1M", "Max Output: 384K").
 
 ## Cost `[Objective]`
 
-| Field                    | Peak (used in `cost.*`) | Off-peak |
+| Field                    | Peak cache-miss (used in `cost.*`) | Off-peak |
 |----------------------------|--------|--------|
-| `input_per_million`         | $0.44  | $0.22  |
-| `output_per_million`        | $1.32  | $0.66  |
+| `input_per_million`         | $0.30  | $0.15  |
+| `output_per_million`        | $1.20  | $0.60  |
 
-**Corrected 2026-08-27**, was $0.14/$0.28 — a stale value that matched
-neither of DeepSeek's two current tiers. DeepSeek's pricing page
-(re-confirmed 2026-08-27, read directly, not via summarization tooling)
-now splits every rate by time of day: peak (01:00-04:00 and 06:00-10:00
-UTC, Mon-Fri) and off-peak (all other hours, exactly half the peak
-rate) — a different axis from Iteration #5's per-request-type
-granularity, but the same underlying friction (one `cost.*` number,
-multiple simultaneous real prices). Peak is stored in `cost.*` as the
-conservative "typical" value, per the project owner's explicit choice
-this session; off-peak is documented here in prose only, same
-convention Iteration #5 already established. A cache-hit input rate
-also exists at each tier (peak $0.014/off-peak $0.007) and isn't
-captured by the schema either.
+**Corrected 2026-10-05**, was $0.44/$1.32 — that matched an older Flash
+tier before DeepSeek-V4.1-Flash (`deepseek-flash`) became the served
+model. Official Models & Pricing (fetched 2026-10-05): peak cache-miss
+$0.30/$1.20, off-peak half ($0.15/$0.60). Peak hours unchanged
+(01:00-04:00 and 06:00-10:00 UTC, Mon-Fri, excluding Chinese public
+holidays). Cache-hit input also exists (peak $0.006 / off-peak $0.003)
+and isn't captured by the schema. Peak cache-miss stays in `cost.*` as
+the conservative typical value, same convention as 2026-08-27.
 
 ## Ecosystem `[Editorial]`
 
@@ -116,7 +109,7 @@ pricing docs (same page cited below) make no mention of any free tier
 - [DeepSeek Models & Pricing](https://api-docs.deepseek.com/quick_start/pricing) — cost fields, context window, max output.
 - [DeepSeek List Models API](https://api-docs.deepseek.com/api/list-models) — confirmed `deepseek-v4-flash` is a currently listed model ID.
 
-Both accessed 2026-08-07, official DeepSeek documentation only.
+Pricing/models page re-fetched 2026-10-05 for V4.1-Flash rates and vision; earlier passes 2026-08-07 / 2026-08-27. Official DeepSeek documentation only.
 
 ## Verification result
 
@@ -141,3 +134,9 @@ also checked this pass — no first-party prose was found either
 confirming or contradicting their current values, so they're
 unchanged and explicitly flagged as unsourced editorial judgment
 rather than silently left looking equally confirmed.
+
+**2026-10-05 re-audit (Cost + vision):** DeepSeek's Models & Pricing
+page now lists `deepseek-flash` as DeepSeek-V4.1-Flash with Vision ✓
+and peak cache-miss $0.30/$1.20. Legacy `deepseek-v4-flash` is still
+accepted but retired as a distinct model. Dataset `cost.*` and
+`capabilities.vision` updated accordingly.
