@@ -1,0 +1,22 @@
+provider: Anthropic
+model_id: claude-sonnet-4-5
+access:
+  surface: cloud_hosted
+  access_method: "Google Cloud Vertex AI (Model Garden, Partner Models)"
+  capabilities: [prototype, build, deploy, automation]
+  guide_ref: anthropic#gcp-vertex
+eligibility:
+  requirements:
+    - kind: cloud_account
+      value: gcp
+  region_scope: region_dependent
+economics:
+  billing_owner: Google Cloud
+  billing_scheme: cloud_paygo
+  quota_scope: project
+  production_allowed: true
+evidence:
+  source_url: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-claude
+  consulted_at: "2026-08-13"
+  status: confirmed
+  caveat: "Billed through Google Cloud, not Anthropic directly; requires Cloud Billing linked to the project, and the model must be enabled in Vertex AI's Model Garden."
