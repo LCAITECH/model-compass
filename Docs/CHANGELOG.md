@@ -1,1 +1,1 @@
-file:///workspace/model-compass/Docs/CHANGELOG.md
+@/workspace/model-compass/Docs/CHANGELOG.md
