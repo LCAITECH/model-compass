@@ -22,7 +22,7 @@ def test_recommend_renders_a_recommendation_for_a_valid_context(client):
 
     assert response.status_code == 200
     assert "Recommended model" in response.text
-    assert "DeepSeek V4 Flash" in response.text
+    assert "DeepSeek V4.1 Flash" in response.text
 
 
 def test_use_case_suggestion_returns_a_unique_match(client):
