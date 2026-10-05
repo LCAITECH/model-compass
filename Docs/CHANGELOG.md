@@ -1,1 +1,1 @@
-x
+${file:/workspace/model-compass/Docs/CHANGELOG.md}
