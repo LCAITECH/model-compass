@@ -24,7 +24,7 @@ def test_recommend_shows_also_strong_options_when_practically_tied(client):
     )
 
     assert response.status_code == 200
-    assert "DeepSeek V4 Flash" in response.text
+    assert "DeepSeek V4.1 Flash" in response.text
     assert "Also strong options" in response.text
     assert "Mistral Large 3" in response.text
     assert "practically tied" in response.text.lower()
@@ -95,7 +95,7 @@ def test_recommend_omits_also_strong_options_when_the_winner_is_unmatched(client
     assert response.status_code == 200
     assert "Mistral Large 3" in response.text
     assert "Also strong options" not in response.text
-    assert "DeepSeek V4 Flash" in response.text  # a real, unfiltered alternative
+    assert "DeepSeek V4.1 Flash" in response.text  # a real, unfiltered alternative
 
 
 def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_routes(client):

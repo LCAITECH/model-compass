@@ -1,11 +1,11 @@
 id: deepseek-v4-flash
-name: DeepSeek V4 Flash
+name: DeepSeek V4.1 Flash
 provider: DeepSeek
-version: "V4"
+version: "V4.1"
 license: open-weights
 
 capabilities:
-  vision: false
+  vision: true
   audio: false
   image_generation: false
   tool_calling: true
@@ -32,13 +32,14 @@ operational:
   context_window: 1000000
   max_output: 384000
 
-# Peak-hours rate (01:00-04:00 and 06:00-10:00 UTC, Mon-Fri) per
-# DeepSeek's official pricing page — the stale $0.14/$0.28 previously
-# here matched neither current tier. Off-peak (all other hours) is
-# half this: $0.22/$0.66. Source: https://api-docs.deepseek.com/quick_start/pricing
+# Peak cache-miss rate (01:00-04:00 and 06:00-10:00 UTC, Mon-Fri) per
+# DeepSeek's official pricing page for deepseek-flash (V4.1-Flash).
+# Off-peak is half: $0.15/$0.60. Legacy id deepseek-v4-flash still
+# accepted; requests are served by V4.1-Flash at Flash prices.
+# Source: https://api-docs.deepseek.com/quick_start/pricing (2026-10-05)
 cost:
-  input_per_million: 0.44
-  output_per_million: 1.32
+  input_per_million: 0.30
+  output_per_million: 1.20
 
 ecosystem:
   integration_ease: medium

@@ -54,7 +54,7 @@ def test_recommend_shows_real_savings_when_a_cheaper_option_exists(client):
     assert response.status_code == 200
     assert "You could spend less" in response.text
     assert "Already the cheapest option" not in response.text
-    assert "DeepSeek V4 Flash" in response.text
+    assert "DeepSeek V4.1 Flash" in response.text
 
 
 def test_free_access_chip_shown_for_low_budget_winner_with_free_access(client):

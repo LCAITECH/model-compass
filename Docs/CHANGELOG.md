@@ -19,6 +19,13 @@ public release to version against.
 
 ---
 
+## 2026-10-05 — DeepSeek V4.1 Flash price/vision fix; Claude Sonnet 4.5 lifecycle noted
+
+**Urgent catalog corrections from the daily provider audit against official docs.**
+
+- **DeepSeek Flash** (`deepseek-v4-flash`): cost updated peak cache-miss **$0.30 / $1.20** (was $0.44/$1.32); `capabilities.vision` set to `true`; display name/version aligned to DeepSeek-V4.1-Flash. Official page still accepts the legacy id `deepseek-v4-flash` but serves V4.1-Flash. Source: https://api-docs.deepseek.com/quick_start/pricing
+- **Claude Sonnet 4.5** stays in the active dataset. Anthropic deprecated it 2026-09-30 (retires 2026-11-30, replacement `claude-sonnet-5-5`). Lifecycle documented in `Docs/models/claude-sonnet-4-5.md`; removal vs flag remains the open catalog-policy question in `IMPLEMENTATION_NOTES.md` Iteration #22. Source: https://docs.anthropic.com/en/docs/about-claude/model-deprecations
+
 ## 2026-10-04 — Claude Sonnet 5.5 and Claude Opus 5.5 admitted (33 models); Gemini 4 not yet admissible
 
 **Two new Claude models are in, both confirmed on Anthropic's own pages and on each cloud's own documentation; the "Gemini 4" announcement turned out to be one gated model with no public API yet.**

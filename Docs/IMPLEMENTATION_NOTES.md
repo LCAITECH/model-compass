@@ -1133,13 +1133,12 @@ work to the two Claude admissions):
 
 - Gemini 4 Argon — revisit when it appears in
   `ai.google.dev/gemini-api/docs/models` with a model id and limits.
-- `claude-sonnet-4-5` is deprecated (2026-09-30, retires 2026-11-30,
-  replacement `claude-sonnet-5-5`); `claude-haiku-4-5` retirement is
-  "not sooner than 2026-10-15"; `gpt-5`'s current snapshot shuts down
-  2026-12-11 per OpenAI's deprecations page. Whether to remove or flag
-  deprecated entries is a catalog-policy decision not yet made.
-- DeepSeek V4.1-Flash (released 2026-09-10, vision, new Flash price)
-  and the `deepseek-v4-pro` redirect to it from 2026-09-14 need a
-  hands-on check of DeepSeek's own pages before any dataset change.
+- `claude-sonnet-4-5` — **Docs lifecycle noted 2026-10-05** (deprecated
+  2026-09-30, retires 2026-11-30, replacement `claude-sonnet-5-5`).
+  Entry remains in `dataset/models/`; remove-vs-flag policy still open.
+  Also open: `claude-haiku-4-5` ("not sooner than 2026-10-15") and
+  `gpt-5` snapshot shutdown 2026-12-11.
+- DeepSeek V4.1-Flash — **acted on 2026-10-05:** `deepseek-v4-flash`
+  cost + vision updated against DeepSeek's own Models & Pricing page.
 - Candidates not yet researched to the dataset bar: GPT-6.1 Sol, GPT-6
   Luna, GPT-5.6 Terra/Luna, Qwen3.8-Flash, Qwen3.7-Plus/Flash.
