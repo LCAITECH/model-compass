@@ -1,12 +1,25 @@
 # GPT-5 Nano
 
 Dataset entry: [`dataset/models/gpt-5-nano.yaml`](../../dataset/models/gpt-5-nano.yaml)
-Last verified: 2026-08-07
+Last verified: 2026-08-07 (objective fields); lifecycle updated 2026-10-07
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
 
+
 ---
+
+## Lifecycle
+
+| Field | Value |
+|-------|--------|
+| Pinned snapshot | `gpt-5-nano-2025-08-07` |
+| Status | Scheduled shutdown |
+| Shutdown date | 2026-12-11 |
+| Recommended replacement | `gpt-5.6-luna` (catalog `gpt-5-6-luna`; newer Luna also in catalog: `gpt-6-luna`) |
+
+Source: [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) (fetched 2026-10-07). Per Iteration #22, YAML stays in the active dataset; lifecycle noted here only.
+
 
 ## Identity
 

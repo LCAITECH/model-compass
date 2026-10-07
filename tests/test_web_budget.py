@@ -58,12 +58,11 @@ def test_recommend_shows_real_savings_when_a_cheaper_option_exists(client):
 
 
 def test_free_access_chip_shown_for_low_budget_winner_with_free_access(client):
-    # Budget=low is a fixed <=$2 cost tier now (see SCHEMA.md's Cost
-    # section), not a relative tercile -- with priority=context_window,
-    # gemini-2.5-flash-lite and gemini-3.1-flash-lite tie for the
-    # largest context window among the five qualifying models, and
-    # gemini-2.5-flash-lite wins the tie by dataset load order. It has
-    # access.has_free_access=True (see docs/models/gemini-2.5-flash-lite.md).
+    # Budget=low is a fixed <=$2 cost tier (SCHEMA.md). Pure
+    # context_window now picks gpt-5-6-luna (1.05M, no free access)
+    # after the 2026-10-07 admissions. context_window + cost restores
+    # gemini-2.5-flash-lite (1,048,576 context, $0.50 blended, free
+    # access) as the winner so this chip assertion stays meaningful.
     response = client.post(
         "/recommend",
         data={
@@ -71,6 +70,7 @@ def test_free_access_chip_shown_for_low_budget_winner_with_free_access(client):
             "language": "en",
             "budget": "low",
             "priority_1": "context_window",
+            "priority_2": "cost",
         },
     )
 

@@ -1128,17 +1128,46 @@ predecessors (`claude-sonnet-5`, `claude-opus-5`) — the evidence
 supports the existing ceiling, not a rating above it.
 
 **Status**
-Open, deliberately not acted on in this pass (project owner scoped the
-work to the two Claude admissions):
+Partially closed by the 2026-10-05 and 2026-10-07 catalog passes:
 
-- Gemini 4 Argon — revisit when it appears in
+- Gemini 4 Argon — still open; revisit when it appears in
   `ai.google.dev/gemini-api/docs/models` with a model id and limits.
 - `claude-sonnet-4-5` — **Docs lifecycle noted 2026-10-05** (deprecated
   2026-09-30, retires 2026-11-30, replacement `claude-sonnet-5-5`).
-  Entry remains in `dataset/models/`; remove-vs-flag policy still open.
-  Also open: `claude-haiku-4-5` ("not sooner than 2026-10-15") and
-  `gpt-5` snapshot shutdown 2026-12-11.
-- DeepSeek V4.1-Flash — **acted on 2026-10-05:** `deepseek-v4-flash`
-  cost + vision updated against DeepSeek's own Models & Pricing page.
-- Candidates not yet researched to the dataset bar: GPT-6.1 Sol, GPT-6
-  Luna, GPT-5.6 Terra/Luna, Qwen3.8-Flash, Qwen3.7-Plus/Flash.
+  Entry remains in `dataset/models/`; **remove-vs-flag policy still open**.
+- `claude-haiku-4-5` — **Docs lifecycle refreshed 2026-10-07:** still
+  Active; floor "not sooner than 2026-10-15" is not a formal deprecation.
+- `gpt-5` / mini / nano snapshots + `gpt-4o-2024-05-13` — **Docs
+  lifecycle noted 2026-10-07** (shutdowns 2026-12-11 and 2026-10-23).
+- `gemini-3.1-flash-lite` — **Docs lifecycle noted 2026-10-07**
+  (shutdown 2027-05-07, replacement `gemini-3.5-flash-lite`).
+- DeepSeek V4.1-Flash — **acted on 2026-10-05.**
+- GPT-6.1 Sol, GPT-6 Luna, GPT-5.6 Terra/Luna — **admitted 2026-10-07**
+  (see Iteration #23). Still open as candidates: Qwen3.8-Flash,
+  Qwen3.7-Plus/Flash.
+
+## Iteration #23
+
+**Observation**
+2026-10-06/07 daily audits flagged `gemini-3.8-flash` free-tier drift
+and four missing OpenAI models (GPT-6.1 Sol, GPT-6 Luna, GPT-5.6 Terra,
+GPT-5.6 Luna). Re-read every objective field on the providers' own
+pages (pricing + per-model docs + deprecations), not via aggregators.
+
+**Current decision**
+- Flipped `gemini-3.8-flash` `access.has_free_access` to `true` once
+  `ai.google.dev/gemini-api/docs/pricing` listed Free Tier "Free of
+  charge" for that model id (was correctly `false` at 2026-09-02
+  admission when the pricing page omitted it).
+- Admitted the four OpenAI models with one `api_billing_linked`
+  direct-API route each. Dataset ids: `gpt-6-1-sol` (API `gpt-6.1-sol`),
+  `gpt-6-luna`, `gpt-5-6-terra`, `gpt-5-6-luna`. Did **not** admit the
+  older `gpt-6-sol` alias this pass — its model page defers to 6.1 Sol
+  and the Flagship pricing table lists `gpt-6.1-sol`.
+- Lifecycle prose only for Gemini 3.1 Flash-Lite, GPT-5 family
+  snapshots, gpt-4o-2024-05-13, and Haiku 4.5 refresh — YAML not
+  removed (Iteration #22 remove-vs-flag still open).
+
+**Status**
+Closed for the scoped audit items. Catalog policy (remove vs flag
+deprecated/scheduled-shutdown entries) remains open under #22.

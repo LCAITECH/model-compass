@@ -1,0 +1,21 @@
+provider: OpenAI
+model_id: gpt-5-6-terra
+access:
+  surface: direct_api
+  access_method: "API key (Responses/Chat Completions)"
+  capabilities: [prototype, build, automation]
+  guide_ref: openai#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: OpenAI
+  billing_scheme: api_token
+  quota_scope: organization
+  production_allowed: true
+evidence:
+  source_url: https://developers.openai.com/api/docs/models/gpt-5.6-terra
+  consulted_at: "2026-10-07"
+  status: confirmed
+  caveat: "Ordinary self-serve API access — rate-limits table lists standard usage tiers; Free tier is 'Not supported' on the model page. API service is billed and managed separately from ChatGPT and requires its own payment method under API billing."

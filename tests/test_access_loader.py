@@ -42,10 +42,12 @@ def test_loads_all_real_access_routes():
     # and claude-opus-5-5: direct API, AWS Bedrock, Google Vertex, Microsoft
     # Foundry each) admitted 2026-10-04, every cloud confirmed on its own
     # official docs, not just Anthropic's model page.
-    assert len(routes) == 76
+    # + 4 more (gpt-6-1-sol, gpt-6-luna, gpt-5-6-terra, gpt-5-6-luna direct_api)
+    # admitted 2026-10-07.
+    assert len(routes) == 80
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
-    assert len(model_ids_with_direct_api) == 33
+    assert len(model_ids_with_direct_api) == 37
 
 
 def test_loads_all_real_subscriptions():

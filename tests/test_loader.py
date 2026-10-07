@@ -38,13 +38,17 @@ EXPECTED_IDS = {
     "qwen3.8-max",
     "claude-sonnet-5-5",
     "claude-opus-5-5",
+    "gpt-6-1-sol",
+    "gpt-6-luna",
+    "gpt-5-6-terra",
+    "gpt-5-6-luna",
 }
 
 
 def test_loads_all_real_models():
     models = load_dataset(DATASET_DIR)
 
-    assert len(models) == 33  # claude-sonnet-5-5 and claude-opus-5-5 admitted 2026-10-04 (after qwen3.8-max, 2026-09-08)
+    assert len(models) == 37  # +gpt-6-1-sol, gpt-6-luna, gpt-5-6-terra, gpt-5-6-luna (2026-10-07)
     assert all(isinstance(model, AIModel) for model in models)
     assert {model.id for model in models} == EXPECTED_IDS
 
@@ -62,6 +66,12 @@ def test_claude_sonnet_5_fields_round_trip():
 
 def test_gemini_2_5_flash_has_free_access():
     model = load_model_file(DATASET_DIR / "gemini-2.5-flash.yaml")
+
+    assert model.access.has_free_access is True
+
+
+def test_gemini_3_8_flash_has_free_access():
+    model = load_model_file(DATASET_DIR / "gemini-3.8-flash.yaml")
 
     assert model.access.has_free_access is True
 

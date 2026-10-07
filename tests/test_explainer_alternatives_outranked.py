@@ -6,18 +6,12 @@ from decision.explainer import explain
 
 
 def test_alternatives_get_honest_standout_reasons_or_none(models):
-    # Winner is gpt-5-nano ($0.45 blended, cheapest in the dataset since
-    # the 2026-08-27 catalog refresh corrected deepseek-v4-flash's stale
-    # price -- see Docs/CHANGELOG.md -- which also pushed deepseek-v4-flash
-    # itself down into the alternatives, and pushed the previous
-    # deepseek-v4-pro/gpt-5-nano standouts out of this budget=MEDIUM
-    # context entirely). Alternatives ranked by cost among the rest:
-    # gemini-2.5-flash-lite (0.50), gemini-3.1-flash-lite (1.75),
-    # deepseek-v4-flash (1.76) -- all three genuinely stand out on a
-    # dimension the winner doesn't: the two Flash-Lite models tie for
-    # the largest context window in this qualifying pool, and
-    # deepseek-v4-flash is the only one rated above `low` on creative
-    # writing.
+    # Winner is gpt-5-nano ($0.45 blended). After 2026-10-07 admissions,
+    # alternatives by cost: gemini-2.5-flash-lite (0.50), gpt-6-luna
+    # (0.60), gpt-5-6-luna (1.40). The two Luna models stand out on
+    # context window (1.05M vs nano's 400K). gemini-2.5-flash-lite may
+    # or may not get a standout line depending on tie-break detail —
+    # assert the Luna context-window reasons that are stable.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -30,9 +24,9 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
     recommendation = explain(context, candidates)
     by_id = {alt.model.id: alt for alt in recommendation.alternatives}
 
-    assert any("context window" in reason for reason in by_id["gemini-2.5-flash-lite"].reasons)
-    assert any("context window" in reason for reason in by_id["gemini-3.1-flash-lite"].reasons)
-    assert any("creative writing" in reason for reason in by_id["deepseek-v4-flash"].reasons)
+    assert set(by_id) == {"gemini-2.5-flash-lite", "gpt-6-luna", "gpt-5-6-luna"}
+    assert any("context window" in reason for reason in by_id["gpt-6-luna"].reasons)
+    assert any("context window" in reason for reason in by_id["gpt-5-6-luna"].reasons)
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
@@ -72,6 +66,8 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "gemini-3.5-flash",
         "gpt-5-mini",
         "gpt-5-6-sol",
+        "gpt-5-6-terra",
+        "gpt-5-6-luna",
         "claude-sonnet-5",
         "claude-sonnet-4-5",
         "deepseek-v4-flash",
@@ -97,6 +93,8 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "gemini-3.7-flash",
         "gemini-3.8-flash",
         "gpt-6-astra",
+        "gpt-6-1-sol",
+        "gpt-6-luna",
     }
     assert all(
         any("language" in reason for reason in excl.reasons)
@@ -128,16 +126,16 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.total_qualifying == 30
+    assert recommendation.total_qualifying == 34  # 37 models - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra)
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
 def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
-    # Same context as above (30 qualifying, see
+    # Same context as above (34 qualifying, see
     # test_total_qualifying_and_alternative_ranks). The top-3
-    # alternatives (gemini-2.5-flash-lite, gemini-3.1-flash-lite,
-    # deepseek-v4-flash) leave mistral-large-3 ($2.00 blended) as the
-    # first model past them, into the outranked group (rank 5 of 30).
+    # alternatives (gemini-2.5-flash-lite, gpt-6-luna, gpt-5-6-luna)
+    # leave deepseek-v4-flash as the first model past them, into the
+    # outranked group (rank 5 of 34).
     # Unlike the winner's trade_offs, its reasons include "Not the
     # cheapest option" even though COST is the prioritized dimension,
     # because there's no positive "reasons" line for it to contradict;
@@ -154,11 +152,11 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 26  # 30 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 31))
+    assert len(recommendation.outranked) == 30  # 34 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 35))
 
     first = recommendation.outranked[0]
-    assert first.model.id == "mistral-large-3"
+    assert first.model.id == "deepseek-v4-flash"
     assert any("Not the cheapest" in reason for reason in first.reasons)
 
 
