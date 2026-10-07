@@ -19,6 +19,20 @@ public release to version against.
 
 ---
 
+## 2026-10-07 — Gemini 3.8 Flash free tier; four OpenAI models admitted; lifecycle docs
+
+**Daily audit follow-through (2026-10-06 and 2026-10-07) against official provider docs only.**
+
+- **`gemini-3.8-flash`:** `access.has_free_access` flipped to `true`. Google's Gemini Developer API pricing page now lists Free Tier "Free of charge" for this model id (input/output/caching). Source: https://ai.google.dev/gemini-api/docs/pricing
+- **Admitted (4):** `gpt-6-1-sol` ($2/$10, API id `gpt-6.1-sol`), `gpt-6-luna` ($0.10/$0.50), `gpt-5-6-terra` ($2/$12), `gpt-5-6-luna` ($0.20/$1.20). Specs from each model's official page + Flagship/pricing tables; one direct-API route each. Catalog grows 33 → 37 models.
+- **Lifecycle (docs only, YAML kept — Iteration #22 remove-vs-flag still open):**
+  - `gemini-3.1-flash-lite`: shutdown 2027-05-07, replacement `gemini-3.5-flash-lite` (Google deprecations).
+  - `gpt-5` / `gpt-5-mini` / `gpt-5-nano` snapshots shut down 2026-12-11; `gpt-4o-2024-05-13` shuts 2026-10-23 (OpenAI deprecations).
+  - `claude-haiku-4-5`: still Active; retirement floor "not sooner than 2026-10-15", no formal deprecation (Anthropic deprecations).
+- Not admitted this pass: older alias `gpt-6-sol` (page defers to 6.1 Sol; Flagship table lists `gpt-6.1-sol`).
+
+See `Docs/IMPLEMENTATION_NOTES.md`, Iteration #22 / #23.
+
 ## 2026-10-05 — DeepSeek V4.1 Flash price/vision fix; Claude Sonnet 4.5 lifecycle noted
 
 **Urgent catalog corrections from the daily provider audit against official docs.**

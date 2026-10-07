@@ -1,0 +1,50 @@
+id: gpt-6-luna
+name: GPT-6 Luna
+provider: OpenAI
+version: "6"
+license: proprietary
+
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+
+quality:
+  reasoning: medium
+  coding: medium
+  creative_writing: low
+  instruction_following: medium
+
+languages: [en, es, pt, fr, de, ja, zh, hi, ar, ru]
+language_quality:
+  en: very_high
+  es: high
+  pt: high
+  fr: high
+  de: high
+  ja: medium
+  zh: medium
+  hi: medium
+  ar: medium
+  ru: medium
+
+operational:
+  context_window: 1050000
+  max_output: 128000
+
+# Standard short-context Flagship pricing. Source (direct):
+# https://developers.openai.com/api/docs/pricing and
+# https://developers.openai.com/api/docs/models/gpt-6-luna
+cost:
+  input_per_million: 0.10
+  output_per_million: 0.50
+
+ecosystem:
+  integration_ease: high
+  maturity: stable
+
+access:
+  has_free_access: false

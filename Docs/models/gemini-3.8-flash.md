@@ -1,7 +1,7 @@
 # Gemini 3.8 Flash
 
 Dataset entry: [`dataset/models/gemini-3.8-flash.yaml`](../../dataset/models/gemini-3.8-flash.yaml)
-Last verified: 2026-09-02
+Last verified: 2026-10-07 (access.has_free_access only; other fields last verified 2026-09-02)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows. Admitted from a tip in a third-party
@@ -123,23 +123,22 @@ subscribers per the announcement blog — neither modeled as a separate
 schema access route yet, consistent with how this catalog has treated
 every other Gemini model's non-API surfaces so far.
 
-**Free access (`access.has_free_access`):** `false`. Unlike
-`gemini-3.6-flash`/`gemini-3.7-flash` (confirmed `true` via the Gemini
-Developer API pricing page's free-tier column and the rate-limits
-page's tiered-system listing), neither of those pages mentions
-`gemini-3.8-flash` at all as of this verification — checked directly
-against both pages' raw HTML, not inferred. No public source
-confirms continuous free access for this specific model yet, so this
-defaults to `false` per this catalog's strict bar (same default used
-whenever explicit confirmation is absent, e.g. `claude-haiku-4-5`).
-Revisit once either page is updated.
+**Free access (`access.has_free_access`):** `true`.
+**Update 2026-10-07:** the Gemini Developer API pricing page now lists
+`gemini-3.8-flash` with a Free Tier column of "Free of charge" for
+input, output (including thinking tokens), and context caching —
+confirmed directly against
+https://ai.google.dev/gemini-api/docs/pricing. Same continuous free
+path already recorded for `gemini-3.6-flash`/`gemini-3.7-flash`. Free
+tier remains rate-limited; data may be used to improve Google products
+on the free path (pricing page).
 
 ## Sources
 
 - [Gemini 3.8 Flash model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash) — identity, capabilities, context window, max output, distribution surfaces.
 - [Gemini 3.8 Flash model card](https://deepmind.google/models/model-cards/gemini-3-8-flash/) — description, positioning, knowledge cutoff, safety-evaluation comparison to 3.7 Flash, distribution.
 - [Introducing Gemini 3.8 Flash and 3.8 Flash Cyber](https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/) — GA announcement, pricing (including the footnote expiration date), benchmark claims, Cyber variant's limited-availability terms, consumer/enterprise/developer access surfaces.
-- [Gemini Developer API pricing](https://ai.google.dev/gemini-api/docs/pricing) — checked directly (raw HTML), confirms this model is **not yet listed**; basis for not using this page as the cost source and for the `has_free_access: false` call.
+- [Gemini Developer API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost (introductory + reversion) and Free Tier "Free of charge" for this model id (re-verified 2026-10-07). At original 2026-09-02 admission this page did not yet list the model; blog footnote was used for cost then.
 - [Gemini API models](https://ai.google.dev/gemini-api/docs/models) — checked directly, does not yet list this model (or `gemini-3.7-flash`); basis for the `maturity: experimental` call.
 
 All read directly in-browser, 2026-09-02, not via summarization
@@ -151,8 +150,7 @@ for any field above.
 New dataset entry. All `[Objective]` fields confirmed against primary
 official Google documentation. `[Editorial]` fields kept identical to
 `gemini-3.7-flash` where no dimension-specific counter-evidence was
-found, per `SCHEMA.md`'s evidence-based calibration principle. Two
-fields defaulted conservatively for lack of public confirmation as of
-this date, both explicitly flagged rather than guessed: `maturity`
-(`experimental`, pending catalog listing) and `access.has_free_access`
-(`false`, pending pricing/rate-limits page listing).
+found, per `SCHEMA.md`'s evidence-based calibration principle. `maturity` was defaulted conservatively to `experimental` pending
+an explicit stability label on the Gemini API models index (unchanged
+this pass). `access.has_free_access` was flipped to `true` on
+2026-10-07 once the pricing page listed a Free Tier for this model.

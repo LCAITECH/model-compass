@@ -6,7 +6,20 @@ Last verified: 2026-08-11 (quality.reasoning only — see Quality section below;
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
 
+
 ---
+
+## Lifecycle
+
+| Field | Value |
+|-------|--------|
+| Pinned snapshot | `gpt-5-mini-2025-08-07` |
+| Status | Scheduled shutdown |
+| Shutdown date | 2026-12-11 |
+| Recommended replacement | `gpt-5.6-terra` (catalog `gpt-5-6-terra`) |
+
+Source: [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) (fetched 2026-10-07). Per Iteration #22, YAML stays in the active dataset; lifecycle noted here only.
+
 
 ## Identity
 

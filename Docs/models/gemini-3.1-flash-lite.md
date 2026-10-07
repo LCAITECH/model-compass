@@ -1,7 +1,7 @@
 # Gemini 3.1 Flash-Lite
 
 Dataset entry: [`dataset/models/gemini-3.1-flash-lite.yaml`](../../dataset/models/gemini-3.1-flash-lite.yaml)
-Last verified: 2026-08-10
+Last verified: 2026-08-10 (objective fields); lifecycle updated 2026-10-07
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows. Admitted from
@@ -10,7 +10,19 @@ the sourcing rule it follows. Admitted from
 `gemini-3.1-flash-lite-preview`, which Google's own docs say is
 "deprecated and has been shut down."
 
+
 ---
+
+## Lifecycle
+
+| Field | Value |
+|-------|--------|
+| API model name | `gemini-3.1-flash-lite` |
+| Status | Active (scheduled shutdown announced) |
+| Shutdown date | 2027-05-07 |
+| Recommended replacement | `gemini-3.5-flash-lite` (already in this catalog) |
+
+Source: [Gemini deprecations](https://ai.google.dev/gemini-api/docs/deprecations) (fetched 2026-10-07). Google Cloud also lists retirement "May 7, 2027 or later" on the Enterprise Agent Platform model page. Per `IMPLEMENTATION_NOTES.md` Iteration #22, whether to remove scheduled-shutdown entries from `dataset/models/` is still open — this entry stays until retirement or an explicit remove decision; lifecycle recorded here only.
 
 ## Identity
 

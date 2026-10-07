@@ -51,7 +51,7 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
 
     assert recommendation.recommended.id == "claude-opus-4-7"
     assert len(recommendation.alternatives) == 3
-    assert len(recommendation.also_strong_options) == 13
+    assert len(recommendation.also_strong_options) == 14
     assert {a.model.id for a in recommendation.also_strong_options} == {
         "claude-opus-4-8",
         "claude-opus-5",
@@ -65,23 +65,26 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
         "gemini-3.8-flash",
         "gpt-5",
         "gpt-5-6-sol",
+        "gpt-6-1-sol",
         "qwen3.8-max",
     }
-    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 15))  # score-sorted, contiguous
+    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 16))  # score-sorted, contiguous
 
 
 def test_also_strong_options_excludes_close_score_but_unfair_quality_gap(models):
-    # priority_1=context_window: gpt-5-6-sol and gemini-2.5-flash-lite
-    # land within 0.15% of each other in score (context_window
-    # dominates the weighting), but are very_high/very_high/high/very_high
-    # vs. medium/medium/low/medium -- an 8-tier cumulative quality gap.
-    # This is the concrete case that motivated the quality floor: score
-    # closeness alone would call this "practically tied"; it isn't.
+    # priority_1=context_window, priority_2=reasoning: among 1.05M-context
+    # models, reasoning breaks the tie toward gpt-5-6-sol (very_high).
+    # gemini-2.5-flash-lite is close on context-driven score but
+    # medium/medium/low/medium vs Sol's very_high profile — the quality
+    # floor correctly excludes it. (Pure CONTEXT_WINDOW alone now picks
+    # gpt-5-6-luna after the 2026-10-07 Luna admissions, which would
+    # invert the floor check; the second priority restores the intended
+    # case.)
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
         budget=BudgetLevel.VERY_HIGH,
-        priorities=(Priority.CONTEXT_WINDOW,),
+        priorities=(Priority.CONTEXT_WINDOW, Priority.REASONING),
         language="es",
     )
     candidates = evaluate(context, models)

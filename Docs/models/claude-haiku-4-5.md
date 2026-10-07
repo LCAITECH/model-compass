@@ -1,8 +1,8 @@
 # Claude Haiku 4.5
 
 Dataset entry: [`dataset/models/claude-haiku-4-5.yaml`](../../dataset/models/claude-haiku-4-5.yaml)
-Last verified: 2026-08-07 (see also the 2026-08-27 retirement-lifecycle
-note below — no dataset field changed, `SCHEMA.md` has no lifecycle
+Last verified: 2026-08-07 (see also the 2026-08-27 / 2026-10-07
+retirement-lifecycle notes below — no dataset field changed, `SCHEMA.md` has no lifecycle
 field)
 
 See [README.md](README.md) for what this document is (and isn't) and
@@ -117,3 +117,12 @@ other Claude entries in this catalog.
 **2026-08-27 re-audit (lifecycle only):** confirmed `Active`, no
 retirement scheduled before October 15, 2026 at the earliest. No
 dataset field affected.
+
+**2026-10-07 re-audit (lifecycle only):** still `Active`, Deprecation
+N/A, tentative retirement still "Not sooner than October 15, 2026" on
+Anthropic's model deprecations page — that date is an earliest-possible
+floor (the retirement window can open then), **not** a formal
+deprecation or scheduled shutdown. Anthropic's policy is at least 60
+days' notice before retiring a publicly released model; no such notice
+has been published for Haiku 4.5 as of this check. Entry stays in the
+active dataset per Iteration #22.

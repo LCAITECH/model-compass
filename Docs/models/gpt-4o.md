@@ -1,12 +1,23 @@
 # GPT-4o
 
 Dataset entry: [`dataset/models/gpt-4o.yaml`](../../dataset/models/gpt-4o.yaml)
-Last verified: 2026-08-07
+Last verified: 2026-08-07 (objective fields); lifecycle updated 2026-10-07
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
 
 ---
+
+## Lifecycle
+
+| Field | Value |
+|-------|--------|
+| Snapshot | `gpt-4o-2024-05-13` |
+| Status | Scheduled shutdown |
+| Shutdown date | 2026-10-23 |
+| Recommended replacement | `gpt-5.6-sol` (catalog id `gpt-5-6-sol`) |
+
+Source: [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) (fetched 2026-10-07). Other `gpt-4o` snapshots may have different dates — this note covers the 2024-05-13 snapshot specifically. Per Iteration #22, the catalog entry stays; lifecycle noted here only.
 
 ## Why this model — a PoC, not a routine addition
 

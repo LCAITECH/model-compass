@@ -48,11 +48,11 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     # CostTier is a fixed $/million-token band on cost.blended
     # (input+output per million), not a rank relative to the loaded
     # dataset -- see SCHEMA.md's Cost section for the exact bands.
-    # "low" is blended <= $2. Of all 26 models, blended cost ascending:
-    # gpt-5-nano 0.45, gemini-2.5-flash-lite 0.50, gemini-3.1-flash-lite
-    # 1.75, deepseek-v4-flash 1.76, mistral-large-3 2.00 -- all <= $2,
-    # so all five qualify. gpt-5-mini is next at 2.25, just over the $2
-    # ceiling, so it lands in "medium" and doesn't qualify here.
+    # "low" is blended <= $2. Blended cost ascending among low-tier:
+    # gpt-5-nano 0.45, gemini-2.5-flash-lite 0.50, gpt-6-luna 0.60,
+    # gpt-5-6-luna 1.40, gemini-3.1-flash-lite 1.75, deepseek-v4-flash
+    # 1.50, mistral-large-3 2.00 -- all <= $2. gpt-5-mini is next at
+    # 2.25, just over the $2 ceiling.
     # deepseek-v4-pro moved out of this tier in the 2026-08-27 catalog
     # refresh: its stale $0.435/$0.87 ($1.305 blended) was corrected to
     # the official peak rate $1.32/$3.96 ($5.28 blended), landing it in
@@ -71,6 +71,8 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     assert qualifying == {
         "gpt-5-nano",
         "gemini-2.5-flash-lite",
+        "gpt-6-luna",
+        "gpt-5-6-luna",
         "gemini-3.1-flash-lite",
         "deepseek-v4-flash",
         "mistral-large-3",

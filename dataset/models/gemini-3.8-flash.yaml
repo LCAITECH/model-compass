@@ -51,4 +51,4 @@ ecosystem:
   maturity: experimental
 
 access:
-  has_free_access: false
+  has_free_access: true
