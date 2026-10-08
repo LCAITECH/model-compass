@@ -19,6 +19,18 @@ public release to version against.
 
 ---
 
+## 2026-10-08 — Claude Haiku 5.5 admitted (38 models)
+
+**The new current Haiku is in, with every objective field re-read on Anthropic's own pages and each cloud's own docs.**
+
+- **Claude Haiku 5.5** (`claude-haiku-5-5`, released 2026-10-07, GA, "Active (latest)"): 1M-token context, 128K max output, text and image input, tool calling. Retirement not sooner than 2027-10-07.
+- **Two-tier pricing by prompt length**, a first for Claude: $0.10 / $0.50 per million tokens for prompts up to 100k tokens, $0.50 / $2.50 above. The dataset stores the ≤100k tier (the schema holds one rate), so the engine sees $0.60 blended (`low` tier); the >100k tier is documented in `Docs/models/claude-haiku-5-5.md`. Sources: https://platform.claude.com/docs/en/about-claude/pricing and https://platform.claude.com/docs/en/models/overview
+- Quality ratings and maturity mirror `claude-haiku-4-5` (editorial; Anthropic positions it for high-volume, latency-sensitive work, not as a higher capability tier).
+- Four access routes (direct API, AWS Bedrock, Google Vertex, Microsoft Foundry), each cloud confirmed on its own documentation. No Claude-subscription route (no plan tier named). Catalog grows 37 → 38 models, 80 → 84 routes.
+- Tests updated only where the new low-tier model legitimately changes counts and rankings (owner-authorized for this admission).
+
+See `Docs/IMPLEMENTATION_NOTES.md`, Iteration #24.
+
 ## 2026-10-07 — Gemini 3.8 Flash free tier; four OpenAI models admitted; lifecycle docs
 
 **Daily audit follow-through (2026-10-06 and 2026-10-07) against official provider docs only.**

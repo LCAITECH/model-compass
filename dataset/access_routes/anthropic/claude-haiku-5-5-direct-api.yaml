@@ -1,0 +1,21 @@
+provider: Anthropic
+model_id: claude-haiku-5-5
+access:
+  surface: direct_api
+  access_method: "API key (Messages API)"
+  capabilities: [prototype, build, automation]
+  guide_ref: anthropic#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Anthropic
+  billing_scheme: api_token
+  quota_scope: organization
+  production_allowed: true
+evidence:
+  source_url: https://platform.claude.com/docs/en/models/haiku-5-5/overview
+  consulted_at: "2026-10-08"
+  status: confirmed
+  caveat: "Billed by monthly usage; new accounts may start below the standard rate-limit tier. Model page lists Claude API availability, status Active (latest), released 2026-10-07. Prompts over 100,000 tokens are billed at the higher $0.50/$2.50 tier."

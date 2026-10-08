@@ -1171,3 +1171,25 @@ pages (pricing + per-model docs + deprecations), not via aggregators.
 **Status**
 Closed for the scoped audit items. Catalog policy (remove vs flag
 deprecated/scheduled-shutdown entries) remains open under #22.
+
+## Iteration #24
+
+**Observation**
+Admitting Claude Haiku 5.5 (2026-10-08) hit Iteration #5's friction
+again: Anthropic prices it by prompt length ($0.10/$0.50 per million
+tokens up to 100k-token prompts, $0.50/$2.50 above), the first Claude
+model with a long-context tier. Fourth independent instance of
+"one `cost.*` rate can't hold the real price" (after Gemini 2.5 Flash
+audio input, Claude Sonnet 5 cache tiers, Gemini 2.5 Pro's >200k tier).
+This one matters more for ranking: the ≤100k tier puts the model in the
+`low` cost band ($0.60 blended), while a >100k workload pays $3.00
+blended (`medium` band).
+
+**Current decision**
+Same convention as before: `cost.*` holds the tier a typical first
+request hits (≤100k), the other tier lives in
+`Docs/models/claude-haiku-5-5.md`. No schema change proposed here; per
+Iteration #5 that's a decision for the project owner.
+
+**Status**
+Open, folded into Iteration #5's pending decision (now four occurrences).
