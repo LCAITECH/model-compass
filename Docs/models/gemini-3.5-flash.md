@@ -107,6 +107,17 @@ Flash-Lite.
 product/model listed adjacent on the pricing page (speech-to-speech
 translation across ~90 languages) — different model, not this entry.
 
+## Lifecycle `[Objective]`
+
+As of 2026-10-10, Google's Gemini API deprecations page lists `gemini-3.5-flash`
+as deprecated with **no shutdown date announced**, and states that
+requests to `gemini-3.5-flash` are **automatically routed to `gemini-3.6-flash`**. The model
+no longer appears on Google's models, pricing, or rate-limits pages
+(models page last updated 2026-10-09 UTC). The dataset entry is kept
+(remove-vs-flag policy, Iteration #22, is still open); treat
+`gemini-3.6-flash` as the official successor. Source:
+https://ai.google.dev/gemini-api/docs/deprecations
+
 ## Sources
 
 - [Gemini 3.5 Flash model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash) — capabilities, context window, max output, positioning.

@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-10 — Gemini 3.7 Flash and 3.5 Flash now auto-routed to successors
+
+**Daily audit (2026-10-10), official provider docs only. Docs only, YAML kept (Iteration #22 remove-vs-flag still open).**
+
+- **`gemini-3.7-flash`:** Google now routes requests to `gemini-3.8-flash`; removed from the models, pricing and rate-limits pages; no shutdown date announced. Lifecycle note added to `Docs/models/gemini-3.7-flash.md`.
+- **`gemini-3.5-flash`:** Google now routes requests to `gemini-3.6-flash`; same page removals; no shutdown date announced. Lifecycle note added to `Docs/models/gemini-3.5-flash.md`.
+- Source: https://ai.google.dev/gemini-api/docs/deprecations
+
+---
+
 ## 2026-10-07 — Gemini 3.8 Flash free tier; four OpenAI models admitted; lifecycle docs
 
 **Daily audit follow-through (2026-10-06 and 2026-10-07) against official provider docs only.**
