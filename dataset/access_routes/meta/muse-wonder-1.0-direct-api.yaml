@@ -1,0 +1,21 @@
+provider: Meta
+model_id: muse-wonder-1.0
+access:
+  surface: direct_api
+  access_method: "API key (Bearer) — OpenAI Chat Completions/Responses or Anthropic Messages format, base URL https://api.meta.ai/v1"
+  capabilities: [prototype, build, automation]
+  guide_ref: meta#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: region_dependent
+economics:
+  billing_owner: Meta
+  billing_scheme: api_token
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://dev.meta.ai/docs/pricing-rate-limits
+  consulted_at: "2026-10-13"
+  status: confirmed
+  caveat: "Preview model, Standard mode only on pay-as-you-go ($4.00 input / $0.20 cached input / $20.00 output per 1M). Availability varies by country per Meta's Geographic Use Policy; Argentina availability not confirmed. No Docs/access-guides/meta.md exists yet, so guide_ref has no target section."

@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-13 — Meta Muse Wonder admitted (preview)
+
+**First Meta model in the catalog.**
+
+- **Admitted:** `muse-wonder-1.0` (Muse Wonder, preview, released 2026-10-12). $4.00 input / $20.00 output per 1M (Standard mode; cached input $0.20 not representable), 1,048,576-token context, text/image/video/audio/PDF in, text out. One direct-API route (`dataset/access_routes/meta/`). Sources: https://dev.meta.ai/docs/models, https://dev.meta.ai/docs/pricing-rate-limits
+- **Unconfirmed, stored as conservative defaults:** `max_output` (8192 placeholder), `json_mode` (false), `has_free_access` (false), languages (`[en]` only), Argentina availability. Quality/ecosystem values are editorial.
+- Not admitted: Muse Wonder Full (Muse Code subscription-only, not on the API).
+
+See `Docs/models/muse-wonder-1.0.md` and `Docs/IMPLEMENTATION_NOTES.md`, Iteration #24.
+
 ## 2026-10-07 — Gemini 3.8 Flash free tier; four OpenAI models admitted; lifecycle docs
 
 **Daily audit follow-through (2026-10-06 and 2026-10-07) against official provider docs only.**

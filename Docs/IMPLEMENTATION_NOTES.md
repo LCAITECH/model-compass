@@ -1171,3 +1171,27 @@ pages (pricing + per-model docs + deprecations), not via aggregators.
 **Status**
 Closed for the scoped audit items. Catalog policy (remove vs flag
 deprecated/scheduled-shutdown entries) remains open under #22.
+
+## Iteration #24
+
+**Observation**
+Meta released Muse Wonder (`muse-wonder-1.0`, preview) on 2026-10-12 on
+Meta Model API. Several fields the schema requires (`max_output`,
+`json_mode`, `languages`, `has_free_access`) have no official value yet.
+
+**Current decision**
+- Admitted with conservative placeholders, each flagged UNCONFIRMED in
+  `Docs/models/muse-wonder-1.0.md`: `max_output: 8192`, `json_mode:
+  false`, `has_free_access: false`, `languages: [en]`. This conflicts
+  with `SCHEMA.md`'s "fully characterized before admission" philosophy
+  — admission was an explicit owner request; revisit when Meta
+  publishes the missing values.
+- Provider is a free string in the loader, so no enum/registry change
+  was needed. One direct-API route; no cloud routes.
+- `guide_ref: meta#direct-api` has no `Docs/access-guides/meta.md`
+  target yet (out of scope for this change).
+- Muse Wonder Full (Muse Code subscription-only) not admitted.
+
+**Status**
+Open: placeholders, the missing access guide, and test expectations
+that assume every model supports `es` / fixed model and route counts.
