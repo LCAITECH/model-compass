@@ -1,0 +1,22 @@
+provider: Anthropic
+model_id: claude-haiku-5-5
+access:
+  surface: cloud_hosted
+  access_method: "Google Cloud Vertex AI (Model Garden, Partner Models)"
+  capabilities: [prototype, build, deploy, automation]
+  guide_ref: anthropic#gcp-vertex
+eligibility:
+  requirements:
+    - kind: cloud_account
+      value: gcp
+  region_scope: region_dependent
+economics:
+  billing_owner: Google Cloud
+  billing_scheme: cloud_paygo
+  quota_scope: project
+  production_allowed: true
+evidence:
+  source_url: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/haiku-5-5
+  consulted_at: "2026-10-08"
+  status: confirmed
+  caveat: "Billed through Google Cloud, not Anthropic directly; requires Cloud Billing linked to the project, and the model must be enabled in Vertex AI's Model Garden. Google Cloud's own Claude Haiku 5.5 page lists model id claude-haiku-5-5, launch stage GA, read directly 2026-10-08."

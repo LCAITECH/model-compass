@@ -80,7 +80,10 @@ def test_recommend_omits_also_strong_options_when_the_winner_is_unmatched(client
     # creative_writing/instruction_following, then gemini-3.8-flash
     # (2026-09-02) tied gemini-3.7-flash on reasoning/cost. mistral-large-3
     # has no same-family sibling in this dataset, so it's a more durable
-    # pick for "outright winner" going forward.
+    # pick for "outright winner" going forward. 2026-10-08: claude-haiku-5-5
+    # ($0.60 blended, same reasoning/instruction_following as mistral-large-3)
+    # turned that into a practical tie too, so priority_2 is now cost:
+    # claude-haiku-5-5 wins outright, no also-strong card.
     response = client.post(
         "/recommend",
         data={
@@ -88,12 +91,12 @@ def test_recommend_omits_also_strong_options_when_the_winner_is_unmatched(client
             "language": "en",
             "budget": "low",
             "priority_1": "reasoning",
-            "priority_2": "instruction_following",
+            "priority_2": "cost",
         },
     )
 
     assert response.status_code == 200
-    assert "Mistral Large 3" in response.text
+    assert "Claude Haiku 5.5" in response.text
     assert "Also strong options" not in response.text
     assert "DeepSeek V4.1 Flash" in response.text  # a real, unfiltered alternative
 

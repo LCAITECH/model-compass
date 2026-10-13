@@ -50,6 +50,7 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     # dataset -- see SCHEMA.md's Cost section for the exact bands.
     # "low" is blended <= $2. Blended cost ascending among low-tier:
     # gpt-5-nano 0.45, gemini-2.5-flash-lite 0.50, gpt-6-luna 0.60,
+    # claude-haiku-5-5 0.60 (<=100k-token tier, admitted 2026-10-08),
     # gpt-5-6-luna 1.40, gemini-3.1-flash-lite 1.75, deepseek-v4-flash
     # 1.50, mistral-large-3 2.00 -- all <= $2. gpt-5-mini is next at
     # 2.25, just over the $2 ceiling.
@@ -72,6 +73,7 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
         "gpt-5-nano",
         "gemini-2.5-flash-lite",
         "gpt-6-luna",
+        "claude-haiku-5-5",
         "gpt-5-6-luna",
         "gemini-3.1-flash-lite",
         "deepseek-v4-flash",
