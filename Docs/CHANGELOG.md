@@ -19,6 +19,19 @@ public release to version against.
 
 ---
 
+## 2026-10-14 — Immersive web redesign
+
+**Interface only: `decision/`, the dataset, the schema and every `.py` file are unchanged. The first redesign layered effects over the same layout; this one changes the composition.**
+
+- **Neural field:** a fixed canvas behind every page with depth, pointer parallax, pulses of light travelling along the links and a shock wave on click; calmer on pages other than the landing.
+- **Landing:** a full-viewport hero with a very large headline and a start button; the decision form became a four-step wizard in a glass panel (use case, priorities, budget, optional access) with a progress bar and transitions. Without JS every stage is visible and the form behaves as before.
+- **Calculating transition:** a full-screen seven-layer network lights up left to right, pulses ride its connections, and it folds into one node that flashes into the result. No percentages, counts or ETA; captions name the engine's real steps.
+- **Result as a decision graph:** the recommended model sits at the centre and every other model in the catalog is a dot whose ring is its real standing for the visitor's context (top alternatives, practically tied, also qualify, excluded). Hover shows price and the engine's reasons; click opens the comparison with the winner. Angle within a ring carries no meaning, and the legend says so. `result.html` lists the engine's own output in a hidden `.graph-data` list and `graph.js` only draws it.
+- **Effects are on by default and deliberately ignore `prefers-reduced-motion`** (owner decision); a header switch turns them off and the choice is kept in the browser (`mc-effects`). Dark is the default theme.
+- **Test change, for review:** `test_web_alternatives` now counts a model's name in the visible page, excluding the hidden `.graph-data` list that repeats every name on purpose. The scenario is unchanged. 206 tests pass.
+
+---
+
 ## 2026-10-14 — Web redesign and model comparator
 
 **Interface only: `decision/`, the dataset and the schema are unchanged.**
