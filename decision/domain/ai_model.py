@@ -70,7 +70,10 @@ class Quality:
 @dataclass(frozen=True)
 class Operational:
     context_window: int
-    max_output: int
+    # None when the provider publishes no output ceiling (SCHEMA.md,
+    # Iteration #26). Never a placeholder: the engine does not read this
+    # field, so "unknown" is representable and a made-up number is not.
+    max_output: int | None
 
 
 @dataclass(frozen=True)
