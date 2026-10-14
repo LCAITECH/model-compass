@@ -213,3 +213,51 @@ body.page-compare .site-header,
 body.page-compare .site-footer {
   max-width: 1040px;
 }
+
+/* Context block and the engine's per-model result. */
+
+.compare-context {
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.compare-context legend {
+  padding: 0 var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.compare-banner {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+  color: var(--text);
+  font-size: var(--text-sm);
+}
+
+.cell-items {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-4);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.compare-table td.tone-good .cell-text {
+  color: var(--positive);
+  font-weight: 700;
+}
+
+.compare-table td.tone-bad .cell-text {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.compare-table td.tone-neutral .cell-text {
+  font-weight: 700;
+}

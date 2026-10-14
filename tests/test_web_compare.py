@@ -4,9 +4,11 @@ from dataclasses import replace
 
 import pytest
 
-from decision.domain import Operational
+from decision.domain import BudgetLevel, BudgetMode, Context, Operational, Priority
+from decision.evaluator import evaluate
+from decision.explainer import explain
 from decision.loader import load_access_routes
-from interfaces.web.comparison import MAX_COMPARED, build_comparison, parse_selection
+from interfaces.web.comparison import MAX_COMPARED, build_comparison, context_fit, parse_selection
 from tests.conftest import ACCESS_ROUTES_DIR
 
 ARGON = "gemini-4-argon"
@@ -115,3 +117,97 @@ def test_result_page_links_to_a_prefilled_comparison(client):
 
     assert response.status_code == 200
     assert "/compare?m=" in response.text
+
+
+def _context(budget=BudgetLevel.VERY_HIGH, priorities=(Priority.CODING, Priority.REASONING), language="en"):
+    return Context(
+        use_case="Coding agent",
+        budget_mode=BudgetMode.TIER,
+        budget=budget,
+        priorities=priorities,
+        language=language,
+    )
+
+
+def test_context_fit_matches_the_engine_ranking_exactly(models):
+    context = _context()
+    recommendation = explain(context, evaluate(context, models))
+    expected = {recommendation.recommended.id: 1}
+    for entry in (*recommendation.alternatives, *recommendation.outranked):
+        expected[entry.model.id] = entry.rank
+
+    selected = _by_id(models, ARGON, HAIKU, NANO)
+    fit = context_fit(selected, models, context)
+
+    assert fit["total"] == recommendation.total_qualifying
+    for model, cell in zip(selected, fit["cells"]):
+        assert cell["text"].startswith(f"#{expected[model.id]} of {fit['total']}")
+
+
+def test_context_fit_flags_the_winner_and_an_over_budget_model(models):
+    context = _context(budget=BudgetLevel.LOW, priorities=(Priority.COST,), language="es")
+    winner = explain(context, evaluate(context, models)).recommended
+
+    fit = context_fit(_by_id(models, winner.id, ARGON), models, context)
+
+    assert fit["winner"].id == winner.id
+    assert fit["cells"][0]["tone"] == "good" and "Best match" in fit["cells"][0]["text"]
+    assert fit["cells"][1]["text"] == "Excluded"
+    assert fit["cells"][1]["reasons"] == ("cost tier exceeds a 'low' budget",)
+
+
+def test_context_fit_handles_a_context_nothing_qualifies_for(models):
+    context = _context(language="xx")  # no model supports it
+
+    fit = context_fit(_by_id(models, ARGON, HAIKU), models, context)
+
+    assert fit["winner"] is None and fit["total"] == 0
+    assert all(cell["text"] == "Excluded" and cell["reasons"] for cell in fit["cells"])
+
+
+def test_build_comparison_puts_the_context_row_first_only_when_given(models, access_routes):
+    selected = _by_id(models, ARGON, HAIKU)
+    fit = context_fit(selected, models, _context())
+
+    with_fit = build_comparison(selected, access_routes, fit)
+    without = build_comparison(selected, access_routes)
+
+    assert with_fit[0]["title"] == "For your context"
+    assert without[0]["title"] == "Overview"
+
+
+def test_compare_page_shows_the_engine_row_when_context_is_given(client):
+    response = client.get(
+        "/compare",
+        params=[("m", ARGON), ("m", HAIKU), ("language", "en"), ("budget", "very_high"), ("priority_1", "coding")],
+    )
+
+    assert response.status_code == 200
+    assert "Engine result" in response.text
+    assert "the engine's #1 among all" in response.text
+
+
+def test_compare_page_without_context_has_no_engine_row(client):
+    response = client.get("/compare", params=[("m", ARGON), ("m", HAIKU)])
+
+    assert "Engine result" not in response.text
+
+
+def test_compare_page_reports_an_incomplete_context_but_keeps_the_table(client):
+    response = client.get("/compare", params=[("m", ARGON), ("m", HAIKU), ("language", "en")])
+
+    assert response.status_code == 200
+    assert "Choose a budget." in response.text
+    assert "compare-table" in response.text
+    assert "Engine result" not in response.text
+
+
+def test_result_page_comparison_link_carries_the_context(client):
+    response = client.post(
+        "/recommend",
+        data={"use_case": "Bot", "language": "es", "budget": "low", "priority_1": "cost"},
+    )
+
+    assert "&amp;language=es" in response.text
+    assert "&amp;budget=low" in response.text
+    assert "&amp;priority_1=cost" in response.text

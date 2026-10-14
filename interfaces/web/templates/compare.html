@@ -6,7 +6,7 @@
 <div class="fade-in">
 <div class="compare-head">
   <h1>Compare models</h1>
-  <p class="muted">Pick two to four models and see their stored specs, prices and editorial ratings side by side. No context, no score and no verdict: this is the dataset itself.</p>
+  <p class="muted">Pick two to four models and see their stored specs, prices and editorial ratings side by side. Add your project's context and the engine also tells you how each one fares for it; leave it empty and this is just the dataset itself, with no verdict.</p>
 </div>
 
 <form method="get" action="/compare" class="card compare-picker">
@@ -27,8 +27,52 @@
     </label>
     {% endfor %}
   </div>
+
+  <fieldset class="compare-context">
+    <legend>Your context <span class="optional">(optional: shows how the engine ranks these models for it)</span></legend>
+    {% if context_error %}<p class="form-error">{{ context_error }}</p>{% endif %}
+    <div class="compare-slots">
+      <label class="compare-slot">
+        <span class="label">Language</span>
+        <select name="language">
+          <option value="">No context</option>
+          {% for lang in languages %}
+          <option value="{{ lang }}"{{ ' selected' if form.get('language') == lang else '' }}>{{ lang | language_name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="compare-slot">
+        <span class="label">Budget</span>
+        <select name="budget">
+          <option value="">Choose a budget</option>
+          {% for b in budgets %}
+          <option value="{{ b.value }}"{{ ' selected' if form.get('budget') == b.value else '' }}>{{ b.value | humanize }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      {% for rank in [1, 2, 3] %}
+      <label class="compare-slot">
+        <span class="label">Priority {{ rank }}{% if rank > 1 %} <span class="optional">(optional)</span>{% endif %}</span>
+        <select name="priority_{{ rank }}">
+          <option value="">—</option>
+          {% for p in priorities %}
+          <option value="{{ p.value }}"{{ ' selected' if form.get('priority_' ~ rank) == p.value else '' }}>{{ p.value | humanize }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      {% endfor %}
+    </div>
+  </fieldset>
+
   <button type="submit" class="primary-button">Compare</button>
 </form>
+
+{% if fit %}
+<p class="compare-banner">
+  {% if fit.winner %}For this context the engine's #1 among all {{ fit.total }} qualifying models is <strong>{{ fit.winner.name }}</strong>{% if fit.winner.id in selected_ids %}, which is in your selection.{% else %}, which is not in your selection.{% endif %}
+  {% else %}No model in the catalog qualifies for this context.{% endif %}
+</p>
+{% endif %}
 
 {% if sections %}
 <div class="card compare-card">
@@ -52,7 +96,7 @@
         <tr>
           <th scope="row">{{ row.label }}</th>
           {% for cell in row.cells %}
-          <td class="{{ 'is-best' if cell.best else '' }}">
+          <td class="{{ 'is-best' if cell.best else '' }}{{ ' tone-' ~ cell.tone if cell.tone else '' }}">
             {% if row.segments %}
             <span class="quality-segments" aria-hidden="true">
               {% for i in range(cell.max_ordinal + 1) %}
@@ -67,6 +111,12 @@
             {% endif %}
             {% if cell.best %}<span class="best-mark" title="Best value among the selected models for this row">best</span>{% endif %}
             {% if cell.note %}<span class="cell-note">{{ cell.note }}</span>{% endif %}
+            {% if cell.reasons %}
+            <ul class="cell-items">
+              {% for reason in cell.reasons[:3] %}<li>{{ reason }}</li>{% endfor %}
+            </ul>
+            {% if cell.reasons | length > 3 %}<span class="cell-note">+ {{ cell.reasons | length - 3 }} more</span>{% endif %}
+            {% endif %}
           </td>
           {% endfor %}
         </tr>
@@ -76,7 +126,7 @@
     </table>
   </div>
   <p class="muted compare-footnote">
-    "Best" only marks the highest or lowest stored value among the selected models, and only when they differ. It is not an overall ranking. Ratings are editorial judgments, not benchmark scores (see SCHEMA.md); where several models share a rating, the real differences are in price, limits and access. For a recommendation tailored to your project, <a href="/">use the form</a>.
+    "Best" only marks the highest or lowest stored value among the selected models, and only when they differ. It is not an overall ranking. The "For your context" row, when shown, is the engine's own result for the context you entered. Ratings are editorial judgments, not benchmark scores (see SCHEMA.md); where several models share a rating, the real differences are in price, limits and access. For a recommendation tailored to your project, <a href="/">use the form</a>.
   </p>
 </div>
 {% elif selected %}

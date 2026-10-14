@@ -34,7 +34,14 @@ from interfaces.web.affordability import (
     estimated_output_capacity,
     parse_budget_usd,
 )
-from interfaces.web.comparison import MAX_COMPARED, MIN_COMPARED, build_comparison, group_models, parse_selection
+from interfaces.web.comparison import (
+    MAX_COMPARED,
+    MIN_COMPARED,
+    build_comparison,
+    context_fit,
+    group_models,
+    parse_selection,
+)
 from interfaces.web.context_form import InvalidFormError, context_from_form
 from interfaces.web.model_profile import best_for, less_suited_for, quality_profile
 from interfaces.web.use_case_matcher import match_use_case
@@ -174,10 +181,30 @@ def index(request: Request):
     return templates.TemplateResponse(request, "index.html", _form_context())
 
 
+_CONTEXT_FIELDS = ("language", "budget", "priority_1", "priority_2", "priority_3")
+
+
 @app.get("/compare", response_class=HTMLResponse)
 def compare(request: Request, m: list[str] = Query(default=[])):
-    """Static side-by-side of 2-4 models. No context, no scoring (FEATURES.md)."""
+    """Side-by-side of 2-4 models, optionally with the engine's verdict for a context.
+
+    The context fields are optional. With none filled in this is a plain
+    stored-data comparison (FEATURES.md, "Static Model Comparator"); with
+    them, decision/ is run over the dataset and its result per model is
+    shown first, unchanged.
+    """
     selected = parse_selection(m, models)
+    form = dict(request.query_params)
+    context_error = None
+    fit = None
+    if any(form.get(field) for field in _CONTEXT_FIELDS):
+        try:
+            context = context_from_form(form)
+        except InvalidFormError as error:
+            context_error = error.message
+        else:
+            if len(selected) >= MIN_COMPARED:
+                fit = context_fit(selected, models, context)
     return templates.TemplateResponse(
         request,
         "compare.html",
@@ -187,7 +214,13 @@ def compare(request: Request, m: list[str] = Query(default=[])):
             "selected_ids": [model.id for model in selected],
             "slots": range(MAX_COMPARED),
             "min_compared": MIN_COMPARED,
-            "sections": build_comparison(selected, access_routes) if len(selected) >= MIN_COMPARED else None,
+            "sections": build_comparison(selected, access_routes, fit) if len(selected) >= MIN_COMPARED else None,
+            "fit": fit,
+            "form": form,
+            "context_error": context_error,
+            "languages": languages,
+            "budgets": list(BudgetLevel),
+            "priorities": list(Priority),
         },
     )
 

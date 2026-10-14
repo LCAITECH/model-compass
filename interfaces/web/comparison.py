@@ -1,14 +1,20 @@
-"""Static model comparison: the dataset's own fields, side by side.
+"""Model comparison: the dataset's own fields, side by side.
 
-View logic only -- no scoring, no verdict. Every cell is a stored field
-or a direct reading of one (a language count, a route count). The only
-derived thing is the "best in row" mark, which is just the highest or
-lowest stored value among the selected models, and only when they
-actually differ. Nothing here feeds decision/, and decision/ would work
-identically without it (ARCHITECTURE.md).
+View logic only. Every cell is a stored field or a direct reading of one
+(a language count, a route count). The "best in row" mark is just the
+highest or lowest stored value among the selected models, and only when
+they actually differ. Nothing here feeds decision/, and decision/ would
+work identically without it (ARCHITECTURE.md).
+
+Optionally, given a Context, the engine's own verdict for each selected
+model is shown first (does it qualify, its place among the qualifying
+models, the engine's reasons). That is decision/'s output passed
+through unchanged: no score is shown and nothing is computed here.
 """
 
-from decision.domain import AIModel, AccessRoute, language_name
+from decision.domain import AIModel, AccessRoute, Context, language_name
+from decision.evaluator import evaluate
+from decision.explainer import NoQualifyingModelsError, explain
 from interfaces.web.access_labels import humanize
 from interfaces.web.model_profile import capability_flags, quality_profile
 
@@ -48,7 +54,17 @@ def _best_flags(values: list[float | int | None], higher_is_better: bool) -> lis
 
 
 def _cell(text: str, **extra) -> dict:
-    return {"text": text, "best": False, "note": None, "ordinal": None, "max_ordinal": None, "flag": None, **extra}
+    return {
+        "text": text,
+        "best": False,
+        "note": None,
+        "reasons": (),
+        "tone": None,
+        "ordinal": None,
+        "max_ordinal": None,
+        "flag": None,
+        **extra,
+    }
 
 
 def _with_best(cells: list[dict], values, higher_is_better: bool) -> list[dict]:
@@ -70,7 +86,55 @@ def _cost_cell(model: AIModel, field: str) -> dict:
     return cell
 
 
-def build_comparison(selected: list[AIModel], routes: list[AccessRoute]) -> list[dict]:
+def context_fit(selected: list[AIModel], all_models: list[AIModel], context: Context) -> dict:
+    """The engine's verdict for each selected model under `context`.
+
+    Runs the real evaluator and explainer over the whole dataset, so the
+    place shown ("#3 of 36") is the same one the main recommendation flow
+    would give. `explain` raises when nothing qualifies; then every
+    selected model is simply excluded, with the evaluator's own reasons.
+    """
+    candidates = evaluate(context, all_models)
+    by_id = {candidate.model.id: candidate for candidate in candidates}
+    try:
+        recommendation = explain(context, candidates)
+    except NoQualifyingModelsError:
+        recommendation = None
+
+    placed: dict[str, tuple[int, tuple[str, ...]]] = {}
+    tied: set[str] = set()
+    total = 0
+    winner = None
+    if recommendation:
+        total = recommendation.total_qualifying
+        winner = recommendation.recommended
+        placed[winner.id] = (1, recommendation.reasons)
+        for alt in (*recommendation.alternatives, *recommendation.also_strong_options):
+            placed.setdefault(alt.model.id, (alt.rank, alt.reasons))
+        for outranked in recommendation.outranked:
+            placed.setdefault(outranked.model.id, (outranked.rank, outranked.reasons))
+        tied = {alt.model.id for alt in recommendation.also_strong_options}
+
+    cells = []
+    for model in selected:
+        candidate = by_id[model.id]
+        if not candidate.qualifies:
+            cells.append(_cell("Excluded", tone="bad", reasons=candidate.disqualified_reasons))
+            continue
+        rank, reasons = placed[model.id]
+        place = f"#{rank} of {total}"
+        if rank == 1:
+            cells.append(_cell(f"{place} · Best match", tone="good", reasons=reasons))
+        elif model.id in tied:
+            cells.append(_cell(f"{place} · Practically tied with #1", tone="good", reasons=reasons))
+        else:
+            cells.append(_cell(place, tone="neutral", reasons=reasons))
+    return {"winner": winner, "total": total, "cells": cells}
+
+
+def build_comparison(
+    selected: list[AIModel], routes: list[AccessRoute], fit: dict | None = None
+) -> list[dict]:
     """Sections of rows; every row has one cell per selected model, in order."""
     profiles = [quality_profile(model) for model in selected]
     quality_rows = []
@@ -96,7 +160,10 @@ def build_comparison(selected: list[AIModel], routes: list[AccessRoute]) -> list
     def routes_for(model: AIModel) -> list[str]:
         return [r.access.access_method for r in routes if r.model_id == model.id]
 
-    return [
+    fit_section = (
+        [{"title": "For your context", "rows": [{"label": "Engine result", "cells": fit["cells"]}]}] if fit else []
+    )
+    return fit_section + [
         {
             "title": "Overview",
             "rows": [
