@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-14 — `max_output` may be null (schema)
+
+**Providers that publish no output ceiling no longer force a made-up number.**
+
+- `operational.max_output` is now `integer | null`; the key stays required. Dataset unchanged: every existing model still has a real value.
+- Why: Muse Spark, Muse Wonder and Gemini 4 Argon all failed to fit a single sourced integer (Iteration #26). The engine never read the field.
+- Code: `decision/domain/ai_model.py`, `decision/loader/loader.py`. Docs: `Docs/SCHEMA.md`. Tests: `tests/test_loader_max_output.py` (+8, 187 total).
+
+---
+
 ## 2026-10-10 — Gemini 3.7 Flash and 3.5 Flash now auto-routed to successors
 
 **Daily audit (2026-10-10), official provider docs only. Docs only, YAML kept (Iteration #22 remove-vs-flag still open).**
