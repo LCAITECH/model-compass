@@ -1275,3 +1275,41 @@ explainer or web code changed.
 Closed. Unblocks Muse Spark 1.x, Muse Wonder and Gemini 4 Argon;
 admitting them is separate work (each still needs official-source
 verification and editorial ratings).
+
+## Iteration #27
+
+**Observation**
+The four-level quality scale saturates at `very_high`, and the engine
+cannot tell a newer flagship from the models it ties with. Four
+independent instances where a model's own provider called it a flagship
+and the rating still had nowhere to go: `gemini-3.8-flash` (2026-09-02,
+"a rating this 4-level scale has no room above"), `gpt-6-astra`
+(2026-09-04, same wording), the Sonnet/Opus 5.5 pair (Iteration #22,
+mirrored from their predecessors), and `gemini-4-argon` (2026-10-14).
+Running the real engine on the 39-model dataset on 2026-10-14 shows the
+effect: with `coding` then `reasoning` as priorities, Argon ranks #14 of
+39 at a `very_high` budget and #12 of 36 at a `high` one, behind
+cheaper models that carry the same `very_high` ratings. With context
+window first it lands #7. `gpt-6-astra` has the same shape (it never
+takes #1 against `gpt-5-6-sol`).
+
+The cause is the tie-break, not a bug: when every ranked dimension ties,
+the cheaper model wins, so a more expensive flagship with identical
+ratings is outranked by design.
+
+**Current decision**
+Owner decision (2026-10-14): leave it as it is. "Practically the same
+models, tie broken by price" is an honest answer given what the schema
+can express; adding a fifth tier or a finer scale would mean inventing a
+distinction no provider source supports (and ratings are never derived
+from benchmarks, `SCHEMA.md`). No `SCHEMA.md`, `decision/` or dataset
+change. Per `AGENTS.md`, a schema proposal waits until the owner asks
+for one; four instances is above the threshold for raising it, not for
+making it.
+
+**Status**
+Open, accepted limitation. Revisit if the owner wants the engine to
+separate top-tier models: that needs an evidence source for "better than
+`very_high`" first, then a schema decision. A static model comparator
+(`FEATURES.md`, "Static Model Comparator") is the non-engine way to show
+the differences the scale cannot rank.

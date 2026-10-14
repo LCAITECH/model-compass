@@ -19,6 +19,20 @@ public release to version against.
 
 ---
 
+## 2026-10-14 — Gemini 4 Argon admitted (39 models)
+
+**Google's new flagship, with every objective field re-read from raw official HTML.**
+
+- **Gemini 4 Argon** (`gemini-4-argon`, "Stable" on the models index, page updated 2026-10-13): 1,048,576-token context, `max_output` 65,536 (default; up to 1,048,576 with long decode, recorded in the model doc), text/image/video/audio/PDF in, text out, function calling, structured outputs.
+- **Price:** introductory $2.00 / $10.00 per 1M through 2026-11-30, then $4.00 / $20.00. Stored with `effective_until: "2026-11-30"`; **nothing flips it automatically, so the entry goes stale on 2026-12-01.** Source: https://ai.google.dev/gemini-api/docs/pricing
+- **Access:** one route, the Gemini API with billing linked. The pricing page says it is not available on the Free tier or on Google AI Pro, so `has_free_access: false` and no subscription route.
+- **Editorial, proposed for owner review:** reasoning and coding `very_high`; creative writing `medium`; instruction following `high` (no source for a higher call). Languages not published; the curated Gemini set is reused.
+- Catalog grows 38 → 39 models, 84 → 85 routes. Tests updated only where the new model legitimately changes counts and rankings (`test_loader`, `test_access_loader`, `test_explainer_also_strong`, `test_explainer_alternatives_outranked`); 188 pass.
+
+See `Docs/models/gemini-4-argon.md`.
+
+---
+
 ## 2026-10-14 — GPT-4o fully deprecated; Gemini 3.7/3.5 Flash lifecycle wording refreshed
 
 **Daily audit (2026-10-14), official provider docs only. Docs only, YAML kept (Iteration #22 remove-vs-flag still open).**

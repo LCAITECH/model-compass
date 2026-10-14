@@ -46,10 +46,11 @@ def test_loads_all_real_access_routes():
     # admitted 2026-10-07. + 4 more (claude-haiku-5-5: direct API, AWS
     # Bedrock, Google Vertex, Microsoft Foundry) admitted 2026-10-08, each
     # cloud confirmed on its own official docs.
-    assert len(routes) == 84
+    # + 1 (gemini-4-argon direct_api) admitted 2026-10-14.
+    assert len(routes) == 85
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
-    assert len(model_ids_with_direct_api) == 38
+    assert len(model_ids_with_direct_api) == 39
 
 
 def test_loads_all_real_subscriptions():

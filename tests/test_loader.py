@@ -43,13 +43,14 @@ EXPECTED_IDS = {
     "gpt-5-6-terra",
     "gpt-5-6-luna",
     "claude-haiku-5-5",
+    "gemini-4-argon",
 }
 
 
 def test_loads_all_real_models():
     models = load_dataset(DATASET_DIR)
 
-    assert len(models) == 38  # +claude-haiku-5-5 (2026-10-08)
+    assert len(models) == 39  # +gemini-4-argon (2026-10-14)
     assert all(isinstance(model, AIModel) for model in models)
     assert {model.id for model in models} == EXPECTED_IDS
 
