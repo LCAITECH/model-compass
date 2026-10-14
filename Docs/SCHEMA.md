@@ -136,7 +136,7 @@ etc.) in this version of the schema.
 | Field                        | Type    | Category      | Description |
 |--------------------------------|---------|---------------|--------------|
 | `operational.context_window` | integer | `[Objective]` | Maximum input context, in tokens. |
-| `operational.max_output`     | integer | `[Objective]` | Maximum output length, in tokens. |
+| `operational.max_output`     | integer or `null` | `[Objective]` | Maximum output length, in tokens. `null` means the provider publishes no output ceiling; the key must still be present. Never a placeholder. When a provider documents a default and a higher maximum, store the default and record the maximum in the model's `Docs/models/` page. |
 
 Latency is intentionally excluded from this version of the schema.
 Unlike quality or maturity, latency is not a property of the model
@@ -286,8 +286,9 @@ document, is the source of truth for actual values.*
   no free-text substitutes.
 - `cost.input_per_million` and `cost.output_per_million` must be
   non-negative numbers.
-- `operational.context_window` and `operational.max_output` must be
-  positive integers.
+- `operational.context_window` must be a positive integer.
+  `operational.max_output` must be a positive integer, or `null` when
+  the provider publishes no output ceiling (the key may not be omitted).
 - `access.has_free_access` must be a boolean.
 
 ## Contributing a New Model

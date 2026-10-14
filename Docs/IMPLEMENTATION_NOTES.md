@@ -1085,6 +1085,10 @@ underlying reality (a combined token budget) may not map onto
 undocumented. Flagged to the project owner rather than guessed.
 
 **Status**
+Update 2026-10-14: the underlying friction is resolved by Iteration #26
+(`max_output` may be `null`), so `muse-spark-1.3` is no longer blocked
+on this field. Original status follows, unchanged.
+
 Closed. Asked the project owner directly: hold `muse-spark-1.3` out of
 the dataset entirely rather than treat `max_output` as equal to
 `context_window` with a caveat. Revisit if Meta publishes a distinct
@@ -1193,3 +1197,81 @@ Iteration #5 that's a decision for the project owner.
 
 **Status**
 Open, folded into Iteration #5's pending decision (now four occurrences).
+
+## Iteration #25
+
+**Observation**
+2026-10-14 daily audit, official pages only:
+
+- **Gemini 4 Argon is now public.** Google's Gemini API changelog
+  (2026-10-13) lists `gemini-4-argon` as generally available, and it
+  now appears on the models, pricing and rate-limits pages, which is
+  the revisit condition Iteration #22 set. Objective facts from
+  https://ai.google.dev/gemini-api/docs/models/gemini-4-argon and
+  https://ai.google.dev/gemini-api/docs/pricing: input text, image,
+  video, audio and PDF; output text; 1,048,576-token context; max output
+  65,536 (default synchronous), up to 1,048,576 with long decode;
+  function calling, structured outputs, search grounding, code
+  execution supported; implicit caching only. Paid tier
+  only (no Free tier, not on the Google AI Pro plan). Standard price
+  $2.00 / $10.00 per 1M tokens **through 2026-11-30**, then
+  $4.00 / $20.00 from 2026-12-01 (this maps onto
+  `cost.effective_until` / `cost.reverts_to`, like Gemini 3.8 Flash).
+- **GPT-4o fully deprecated.** OpenAI's 2026-10-14 notice deprecates
+  `gpt-4o-2024-08-06` and `gpt-4o-2024-11-20` (shutdown 2027-01-14,
+  replacement `gpt-6-luna`), on top of `gpt-4o-2024-05-13` (2026-10-23).
+  The GPT-4o model page now labels the model "Deprecated".
+- Google's 2026-10-12 wording for `gemini-3.7-flash` /
+  `gemini-3.5-flash` (shutdown N/A, endpoint not shutting down) is now
+  reflected in `Docs/models/` (it landed after PR #4 was written).
+
+**Current decision**
+- Docs-only lifecycle updates for `gpt-4o`, `gemini-3.7-flash`,
+  `gemini-3.5-flash`. No YAML touched.
+- `gpt-4o` `ecosystem.maturity` stays `stable` (editorial). Its doc
+  rationale ("OpenAI's docs describe it as not deprecated") is now
+  marked as superseded instead of being rewritten.
+- Gemini 4 Argon **not admitted** by the bot. Admitting it adds a
+  model plus a route, which changes hardcoded counts in `tests/`
+  (the bot contract forbids touching them). It also needs editorial
+  ratings and a language set that Google doesn't publish, the same
+  gap that closed PR #5.
+
+**Status**
+Open, waiting on the owner:
+1. Admit Gemini 4 Argon (needs a scoped tests exception like
+   2026-10-08's Haiku 5.5, plus sign-off on editorial fields).
+2. Whether `gpt-4o` `maturity` should move off `stable` now that
+   OpenAI labels it deprecated. This folds into Iteration #22's
+   remove-vs-flag policy.
+
+## Iteration #26
+
+**Observation**
+`operational.max_output` hit the same friction three independent times:
+Muse Spark 1.3 (Iteration #21: Meta publishes one combined 1,048,576
+figure and no separate output ceiling), Muse Wonder (2026-10-13: the
+bot's PR #5 stored a made-up `8192` just to satisfy the loader, and was
+closed for it), and Gemini 4 Argon (2026-10-13: Google documents a
+65,536 default and a higher maximum of 1,048,576 with long decode, so a
+single integer is ambiguous). The engine never reads `max_output`
+(`decision/evaluator/` and `decision/explainer/` do not touch it); it
+was only ever a required display field, so forcing a number onto it
+could only add fabricated precision.
+
+**Current decision**
+Owner-approved (2026-10-14, "Option A"): `operational.max_output` is
+`integer | null`. `null` means the provider publishes no output ceiling.
+The key must still be present (omission stays a validation error, so a
+forgotten field is distinguishable from an explicit "not published").
+Where a provider documents a default and a higher maximum, store the
+default and record the maximum in `Docs/models/<id>.md` (same convention
+as the two Haiku 5.5 price tiers, Iteration #24). Changed:
+`decision/domain/ai_model.py`, `decision/loader/loader.py`,
+`Docs/SCHEMA.md`, `tests/test_loader_max_output.py`. No evaluator,
+explainer or web code changed.
+
+**Status**
+Closed. Unblocks Muse Spark 1.x, Muse Wonder and Gemini 4 Argon;
+admitting them is separate work (each still needs official-source
+verification and editorial ratings).

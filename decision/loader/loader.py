@@ -130,8 +130,10 @@ def _validate(raw, path: Path) -> list[str]:
     operational = raw["operational"]
     if not _is_positive_int(operational.get("context_window")):
         issues.append("operational.context_window must be a positive integer")
-    if not _is_positive_int(operational.get("max_output")):
-        issues.append("operational.max_output must be a positive integer")
+    if "max_output" not in operational:
+        issues.append("operational.max_output must be present (null if the provider publishes none)")
+    elif operational["max_output"] is not None and not _is_positive_int(operational["max_output"]):
+        issues.append("operational.max_output must be a positive integer or null")
 
     cost = raw["cost"]
     if not _is_non_negative_number(cost.get("input_per_million")):
