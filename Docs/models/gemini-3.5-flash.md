@@ -109,14 +109,17 @@ translation across ~90 languages) — different model, not this entry.
 
 ## Lifecycle `[Objective]`
 
-As of 2026-10-10, Google's Gemini API deprecations page lists `gemini-3.5-flash`
-as deprecated with **no shutdown date announced**, and states that
-requests to `gemini-3.5-flash` are **automatically routed to `gemini-3.6-flash`**. The model
-no longer appears on Google's models, pricing, or rate-limits pages
-(models page last updated 2026-10-09 UTC). The dataset entry is kept
-(remove-vs-flag policy, Iteration #22, is still open); treat
-`gemini-3.6-flash` as the official successor. Source:
-https://ai.google.dev/gemini-api/docs/deprecations
+As of 2026-10-14 (page last updated 2026-10-12 UTC), Google's Gemini API
+deprecations page lists `gemini-3.5-flash` (release date May 19, 2026) with shutdown
+date **N/A** and replacement `gemini-3.6-flash`, and states that the model is
+**not available to select in Google AI Studio; the endpoint is not
+shutting down and automatically routes API requests to `gemini-3.6-flash`**.
+(The 2026-10-10 wording here, "no shutdown date announced", was
+accurate then; Google has since made explicit that the endpoint stays
+up.) The model no longer appears on Google's models, pricing, or
+rate-limits pages. The dataset entry is kept (remove-vs-flag policy,
+Iteration #22, is still open); treat `gemini-3.6-flash` as the official
+successor. Source: https://ai.google.dev/gemini-api/docs/deprecations
 
 ## Sources
 
