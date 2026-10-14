@@ -8,7 +8,7 @@ this whole package were deleted.
 
 from pathlib import Path
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Query, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -34,6 +34,7 @@ from interfaces.web.affordability import (
     estimated_output_capacity,
     parse_budget_usd,
 )
+from interfaces.web.comparison import MAX_COMPARED, MIN_COMPARED, build_comparison, group_models, parse_selection
 from interfaces.web.context_form import InvalidFormError, context_from_form
 from interfaces.web.model_profile import best_for, less_suited_for, quality_profile
 from interfaces.web.use_case_matcher import match_use_case
@@ -171,6 +172,24 @@ def _savings_summary(recommendation, candidates, budget_usd, priority_1) -> dict
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     return templates.TemplateResponse(request, "index.html", _form_context())
+
+
+@app.get("/compare", response_class=HTMLResponse)
+def compare(request: Request, m: list[str] = Query(default=[])):
+    """Static side-by-side of 2-4 models. No context, no scoring (FEATURES.md)."""
+    selected = parse_selection(m, models)
+    return templates.TemplateResponse(
+        request,
+        "compare.html",
+        {
+            "model_groups": group_models(models),
+            "selected": selected,
+            "selected_ids": [model.id for model in selected],
+            "slots": range(MAX_COMPARED),
+            "min_compared": MIN_COMPARED,
+            "sections": build_comparison(selected, access_routes) if len(selected) >= MIN_COMPARED else None,
+        },
+    )
 
 
 @app.get("/use-case-suggestion", response_class=JSONResponse)

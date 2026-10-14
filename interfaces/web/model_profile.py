@@ -40,6 +40,11 @@ def best_for(model: AIModel, all_models: list[AIModel]) -> list[str]:
     return strengths
 
 
+def capability_flags(model: AIModel) -> list[tuple[str, bool]]:
+    """(label, supported) for each functional capability, in display order."""
+    return [(label, bool(getattr(model.capabilities, attr))) for attr, label in _CAPABILITY_LABELS.items()]
+
+
 def less_suited_for(model: AIModel) -> list[str]:
     return [
         label

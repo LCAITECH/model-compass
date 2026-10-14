@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% import "_icons.html" as icons %}
+{% block title %}Model Compass — Compare models{% endblock %}
+{% block body_class %}page-compare{% endblock %}
+{% block content %}
+<div class="fade-in">
+<div class="compare-head">
+  <h1>Compare models</h1>
+  <p class="muted">Pick two to four models and see their stored specs, prices and editorial ratings side by side. No context, no score and no verdict: this is the dataset itself.</p>
+</div>
+
+<form method="get" action="/compare" class="card compare-picker">
+  <div class="compare-slots">
+    {% for i in slots %}
+    <label class="compare-slot">
+      <span class="label">Model {{ i + 1 }}{% if i >= min_compared %} <span class="optional">(optional)</span>{% endif %}</span>
+      <select name="m">
+        <option value="">Choose a model</option>
+        {% for provider, group in model_groups %}
+        <optgroup label="{{ provider }}">
+          {% for model in group %}
+          <option value="{{ model.id }}"{{ ' selected' if i < selected_ids | length and selected_ids[i] == model.id else '' }}>{{ model.name }}</option>
+          {% endfor %}
+        </optgroup>
+        {% endfor %}
+      </select>
+    </label>
+    {% endfor %}
+  </div>
+  <button type="submit" class="primary-button">Compare</button>
+</form>
+
+{% if sections %}
+<div class="card compare-card">
+  <div class="compare-scroll">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th scope="col"><span class="sr-only">Field</span></th>
+          {% for model in selected %}
+          <th scope="col">
+            <span class="compare-model-name">{{ model.name }}</span>
+            <span class="muted">{{ model.provider }}</span>
+          </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      {% for section in sections %}
+      <tbody>
+        <tr class="compare-section"><th colspan="{{ selected | length + 1 }}" scope="colgroup">{{ section.title }}</th></tr>
+        {% for row in section.rows %}
+        <tr>
+          <th scope="row">{{ row.label }}</th>
+          {% for cell in row.cells %}
+          <td class="{{ 'is-best' if cell.best else '' }}">
+            {% if row.segments %}
+            <span class="quality-segments" aria-hidden="true">
+              {% for i in range(cell.max_ordinal + 1) %}
+              <span class="segment{{ ' filled' if i <= cell.ordinal else '' }}"></span>
+              {% endfor %}
+            </span>
+            {% endif %}
+            {% if cell.flag is not none %}
+            <span class="flag {{ 'flag-yes' if cell.flag else 'flag-no' }}">{{ cell.text }}</span>
+            {% else %}
+            <span class="cell-text">{{ cell.text }}</span>
+            {% endif %}
+            {% if cell.best %}<span class="best-mark" title="Best value among the selected models for this row">best</span>{% endif %}
+            {% if cell.note %}<span class="cell-note">{{ cell.note }}</span>{% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+      {% endfor %}
+    </table>
+  </div>
+  <p class="muted compare-footnote">
+    "Best" only marks the highest or lowest stored value among the selected models, and only when they differ. It is not an overall ranking. Ratings are editorial judgments, not benchmark scores (see SCHEMA.md); where several models share a rating, the real differences are in price, limits and access. For a recommendation tailored to your project, <a href="/">use the form</a>.
+  </p>
+</div>
+{% elif selected %}
+<p class="muted compare-hint">Pick at least {{ min_compared }} models to compare.</p>
+{% endif %}
+</div>
+{% endblock %}

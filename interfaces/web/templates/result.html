@@ -24,6 +24,10 @@
     {{ icons.item_list(recommendation.trade_offs, icons.dash) }}
   </ul>
   {% endif %}
+
+  {% if recommendation.alternatives %}
+  <a class="compare-link" href="/compare?m={{ recommendation.recommended.id }}{% for alt in recommendation.alternatives %}&amp;m={{ alt.model.id }}{% endfor %}">Compare with the top alternatives &rarr;</a>
+  {% endif %}
 </div>
 
 {% if access %}

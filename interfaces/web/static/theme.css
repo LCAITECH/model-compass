@@ -94,8 +94,6 @@ body,
 }
 
 .theme-toggle {
-  grid-column: 2;
-  grid-row: 1 / span 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
