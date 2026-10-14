@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-14 — Web redesign and model comparator
+
+**Interface only: `decision/`, the dataset and the schema are unchanged.**
+
+- **Redesign:** light and dark themes (system preference plus a saved toggle, no flash on load); a "calculating" transition with a small neural network that lights up left to right and folds into one node (no percentages or counts, captions name the engine's real steps); a landing hero with a network that reacts to the pointer; the recommended model's name decrypts in place and the cards below enter in a cascade. Everything honors `prefers-reduced-motion`: with it, the form submits at once and the page is static.
+- **Model comparator** at `/compare` (`FEATURES.md`, "Static Model Comparator"): 2-4 models side by side from stored fields, with a "best in row" mark only where values differ. With an optional context it also shows the engine's own result per model (qualifies or why not, place among qualifying models, reasons), unchanged and without a score. The result page links to it with the context prefilled.
+- Tests: 206 pass (+18: comparator, context fit, link carrying the context).
+
+---
+
 ## 2026-10-14 — Gemini 4 Argon admitted (39 models)
 
 **Google's new flagship, with every objective field re-read from raw official HTML.**

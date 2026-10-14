@@ -284,7 +284,16 @@ phases of the [Roadmap](./ROADMAP.md).
   prompted by reviewing a third-party AI playground (IBM watsonx) for
   ideas — this is the one piece of that playground's UI that's
   actually just the dataset, no live execution involved, so it's safe
-  under every existing principle. Not started, not scoped.
+  under every existing principle. **Implemented 2026-10-14** at
+  `/compare` (2-4 models; `interfaces/web/comparison.py`). Without a
+  context it is exactly this entry: stored fields side by side, with
+  only a "best in row" mark on the highest or lowest stored value when
+  the models differ, never an overall verdict. With an optional context
+  (language, budget, priorities) it also shows `decision/`'s own result
+  for each selected model: whether it qualifies, its place among the
+  qualifying models, and the engine's reasons, passed through unchanged
+  with no score shown. Motivated by the tie-break behavior logged in
+  `IMPLEMENTATION_NOTES.md`, Iteration #27.
 - **Live multi-provider playground** — run one prompt against several
   models at once and compare real responses, with per-run cost and
   latency measured live, plus an automatic "best model for this task"
