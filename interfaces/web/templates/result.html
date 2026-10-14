@@ -4,9 +4,10 @@
 {% block content %}
 <div class="fade-in">
 {% if recommendation %}
-<div class="card card-featured">
+<div class="card card-featured reveal">
+  <span class="reveal-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
   <div class="recommendation">
-    <p class="eyebrow">Recommended model</p>
+    <p class="eyebrow">We recommend</p>
     <h1>{{ recommendation.recommended.name }}</h1>
     <span class="pill">{{ icons.star() }}Best match for your context</span>
     <span class="pill pill-muted">#1 of {{ recommendation.total_qualifying }} qualifying model{{ 's' if recommendation.total_qualifying != 1 }}</span>

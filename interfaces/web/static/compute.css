@@ -1,0 +1,119 @@
+/* "Calculating" overlay: a small neural network whose edges light up
+   left to right. Purely decorative (aria-hidden); the caption below it
+   is the accessible status text. */
+
+.compute-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  background:
+    radial-gradient(ellipse 700px 420px at 50% 40%, rgba(79, 70, 229, 0.18) 0%, transparent 70%),
+    color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity 280ms ease;
+}
+
+.compute-overlay[hidden] {
+  display: none;
+}
+
+.compute-overlay.is-on {
+  opacity: 1;
+}
+
+body.is-computing {
+  overflow: hidden;
+}
+
+.compute-panel {
+  width: min(680px, 100%);
+  text-align: center;
+}
+
+.compute-net {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.net-edge {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  opacity: 0.28;
+}
+
+.is-on .net-edge {
+  stroke: var(--accent);
+  stroke-dasharray: 6 10;
+  animation: net-flow 1.1s linear infinite, net-edge-on 600ms ease-out forwards;
+  animation-delay: 0ms, var(--d);
+}
+
+.net-node {
+  fill: var(--surface);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+}
+
+.is-on .net-node {
+  animation: net-node-on 520ms ease-out forwards, net-node-pulse 1.4s ease-in-out infinite;
+  animation-delay: var(--d), calc(var(--d) + 520ms);
+}
+
+.compute-caption {
+  min-height: 1.6em;
+  margin: var(--space-6) 0 var(--space-1);
+  font-size: var(--text-lg);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.compute-caption::after {
+  content: "";
+  display: inline-block;
+  width: 1.2em;
+  text-align: left;
+  animation: caption-dots 1.2s steps(4, end) infinite;
+}
+
+.compute-sub {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+@keyframes net-flow {
+  to { stroke-dashoffset: -32; }
+}
+
+@keyframes net-edge-on {
+  from { opacity: 0.28; }
+  to { opacity: 0.85; }
+}
+
+@keyframes net-node-on {
+  from { fill: var(--surface); stroke: var(--border-strong); }
+  to { fill: var(--accent); stroke: var(--accent-secondary); }
+}
+
+@keyframes net-node-pulse {
+  0%, 100% { stroke-width: 1.5; }
+  50% { stroke-width: 5; }
+}
+
+@keyframes caption-dots {
+  0% { content: ""; }
+  25% { content: "."; }
+  50% { content: ".."; }
+  75% { content: "..."; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .compute-overlay { display: none; }
+}
