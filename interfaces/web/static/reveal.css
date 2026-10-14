@@ -8,39 +8,21 @@
   initial-value: 0deg;
 }
 
+/* Gradient ring: the card's own background is split in two layers, the
+   normal fill clipped to the padding box and the sweeping gradient to
+   the border box, so only the 2px transparent border shows it. */
 .card-featured.reveal {
   position: relative;
-  isolation: isolate;
-  border-color: transparent;
-}
-
-/* Gradient ring: painted behind the card, visible only as a 2px edge. */
-.card-featured.reveal::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  z-index: -1;
-  border-radius: calc(var(--radius) + 2px);
-  background: conic-gradient(
-    from var(--reveal-angle),
-    var(--accent),
-    var(--accent-secondary),
-    var(--accent-strong),
-    var(--accent)
-  );
-}
-
-/* Halo behind the ring. */
-.card-featured.reveal::after {
-  content: "";
-  position: absolute;
-  inset: -24px;
-  z-index: -2;
-  border-radius: calc(var(--radius) + 24px);
-  background: radial-gradient(ellipse at 50% 40%, var(--accent) 0%, transparent 70%);
-  opacity: 0.16;
-  filter: blur(28px);
-  pointer-events: none;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(180deg, var(--accent-soft) 0%, var(--surface) 55%) padding-box,
+    conic-gradient(
+      from var(--reveal-angle),
+      var(--accent),
+      var(--accent-secondary),
+      var(--accent-strong),
+      var(--accent)
+    ) border-box;
 }
 
 .card-featured.reveal .eyebrow {
@@ -98,15 +80,10 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .card-featured.reveal {
-    animation: reveal-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  }
-
-  .card-featured.reveal::before {
-    animation: reveal-spin 6s linear infinite;
-  }
-
-  .card-featured.reveal::after {
-    animation: reveal-halo 4s ease-in-out infinite;
+    animation:
+      reveal-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both,
+      reveal-spin 6s linear infinite,
+      reveal-halo 4s ease-in-out infinite;
   }
 
   .card-featured.reveal .eyebrow::before {
@@ -142,8 +119,8 @@
 }
 
 @keyframes reveal-halo {
-  0%, 100% { opacity: 0.12; }
-  50% { opacity: 0.26; }
+  0%, 100% { box-shadow: 0 8px 30px color-mix(in srgb, var(--accent) 16%, transparent), var(--shadow-sm); }
+  50% { box-shadow: 0 10px 52px color-mix(in srgb, var(--accent) 34%, transparent), var(--shadow-sm); }
 }
 
 @keyframes reveal-ping {
