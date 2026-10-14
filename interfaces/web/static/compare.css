@@ -144,6 +144,7 @@
 
 .compare-table .quality-segments {
   display: inline-flex;
+  width: 64px;
   margin-right: var(--space-2);
   vertical-align: middle;
 }
@@ -203,4 +204,12 @@
 
 .compare-link:hover {
   color: var(--accent-hover);
+}
+
+/* The table needs more room than the 720px reading column. */
+
+body.page-compare main,
+body.page-compare .site-header,
+body.page-compare .site-footer {
+  max-width: 1040px;
 }
