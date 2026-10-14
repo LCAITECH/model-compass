@@ -1,23 +1,35 @@
 # GPT-4o
 
 Dataset entry: [`dataset/models/gpt-4o.yaml`](../../dataset/models/gpt-4o.yaml)
-Last verified: 2026-08-07 (objective fields); lifecycle updated 2026-10-07
+Last verified: 2026-08-07 (objective fields); lifecycle updated 2026-10-14
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
 
 ---
 
-## Lifecycle
+## Lifecycle `[Objective]`
 
-| Field | Value |
-|-------|--------|
-| Snapshot | `gpt-4o-2024-05-13` |
-| Status | Scheduled shutdown |
-| Shutdown date | 2026-10-23 |
-| Recommended replacement | `gpt-5.6-sol` (catalog id `gpt-5-6-sol`) |
+As of 2026-10-14, OpenAI lists **every** GPT-4o text snapshot as
+deprecated, and the GPT-4o model page labels the model "Deprecated".
 
-Source: [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) (fetched 2026-10-07). Other `gpt-4o` snapshots may have different dates — this note covers the 2024-05-13 snapshot specifically. Per Iteration #22, the catalog entry stays; lifecycle noted here only.
+| Snapshot | Status | Shutdown date | Recommended replacement |
+|----------|--------|---------------|-------------------------|
+| `gpt-4o-2024-05-13` | Deprecated | 2026-10-23 | `gpt-5.6-sol` (catalog id `gpt-5-6-sol`) |
+| `gpt-4o-2024-08-06` | Deprecated (announced 2026-10-14) | 2027-01-14 | `gpt-6-luna` (catalog id `gpt-6-luna`) |
+| `gpt-4o-2024-11-20` | Deprecated (announced 2026-10-14) | 2027-01-14 | `gpt-6-luna` (catalog id `gpt-6-luna`) |
+
+The same 2026-10-14 notice also covers `gpt-4o-mini-2024-07-18`,
+`gpt-4.1-2025-04-14` and `gpt-4.1-mini-2025-04-14` (not in this
+catalog), all shutting down 2027-01-14 with `gpt-6-luna` as the
+replacement; fine-tuned versions follow their base model's schedule.
+Pricing for `gpt-4o` is unchanged ($2.50 / $10.00 per 1M tokens).
+
+Sources: [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations)
+("2026-10-14: GPT-4 series model deprecations"), [GPT-4o model page](https://developers.openai.com/api/docs/models/gpt-4o)
+(snapshot list), [OpenAI pricing](https://developers.openai.com/api/docs/pricing) — all fetched 2026-10-14.
+Per Iteration #22 the catalog entry stays; lifecycle noted here only
+(remove-vs-flag still open).
 
 ## Why this model — a PoC, not a routine addition
 
@@ -106,7 +118,7 @@ quality on this dataset's dimensions.
 | Field                | Value    | Why |
 |------------------------|----------|-----|
 | `integration_ease`      | `high`   | Same OpenAI API surface as the GPT-5 line. |
-| `maturity`              | `stable` | OpenAI's own docs describe it as **not deprecated**, still generally available. Worth flagging as a slightly odd signal: the same page also calls it "our most capable model outside of our o-series models" and "recommended as the best option for most general tasks" — language that reads as stale relative to GPT-5's existence, not something this project treats as current guidance. `maturity: stable` reflects availability, not a claim that OpenAI's marketing copy is still accurate. |
+| `maturity`              | `stable` | *(Superseded fact, 2026-10-14: OpenAI now labels GPT-4o "Deprecated" — see Lifecycle; whether `maturity` should change is an owner decision, Iteration #25.)* At admission (2026-08-07) OpenAI's own docs described it as **not deprecated**, still generally available. Worth flagging as a slightly odd signal: the same page also calls it "our most capable model outside of our o-series models" and "recommended as the best option for most general tasks" — language that reads as stale relative to GPT-5's existence, not something this project treats as current guidance. `maturity: stable` reflects availability, not a claim that OpenAI's marketing copy is still accurate. |
 
 ---
 

@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-14 — GPT-4o fully deprecated; Gemini 3.7/3.5 Flash lifecycle wording refreshed
+
+**Daily audit (2026-10-14), official provider docs only. Docs only, YAML kept (Iteration #22 remove-vs-flag still open).**
+
+- **`gpt-4o`:** OpenAI announced on 2026-10-14 the deprecation of the remaining GPT-4o snapshots (`gpt-4o-2024-08-06`, `gpt-4o-2024-11-20`), shutting down **2027-01-14**, replacement `gpt-6-luna`. With `gpt-4o-2024-05-13` already shutting down 2026-10-23, every GPT-4o text snapshot is now deprecated and the model page labels GPT-4o "Deprecated". Lifecycle table updated in `Docs/models/gpt-4o.md`; price unchanged ($2.50/$10.00). Sources: https://developers.openai.com/api/docs/deprecations and https://developers.openai.com/api/docs/models/gpt-4o
+- **`gemini-3.7-flash` / `gemini-3.5-flash`:** Google's deprecations page (updated 2026-10-12) now shows shutdown **N/A** and says the endpoints are **not shutting down** and keep auto-routing to `gemini-3.8-flash` / `gemini-3.6-flash` (not selectable in AI Studio). Lifecycle notes refreshed from the 2026-10-10 "no shutdown date announced" wording. Source: https://ai.google.dev/gemini-api/docs/deprecations
+- **Not admitted this pass:** Gemini 4 Argon (`gemini-4-argon`, GA 2026-10-13) is now in Google's public catalog and pricing. Admission needs owner decisions first (see `Docs/IMPLEMENTATION_NOTES.md`, Iteration #25).
+
+---
+
 ## 2026-10-14 — `max_output` may be null (schema)
 
 **Providers that publish no output ceiling no longer force a made-up number.**
