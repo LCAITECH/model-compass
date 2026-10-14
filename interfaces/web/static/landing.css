@@ -1,0 +1,97 @@
+/* Landing page polish (index only). The hero gets a live network behind
+   it (hero-net.js), a gradient headline and a staggered entrance; the
+   form stages get presence when focused. Layout is untouched. */
+
+.hero-net {
+  position: absolute;
+  z-index: -1;
+  top: -64px;
+  left: -48px;
+  width: calc(100% + 96px);
+  height: calc(100% + 96px);
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 62% 60% at 50% 48%, #000 35%, transparent 80%);
+  mask-image: radial-gradient(ellipse 62% 60% at 50% 48%, #000 35%, transparent 80%);
+}
+
+.hero h1 {
+  background: linear-gradient(100deg, var(--text) 0%, var(--text) 38%, var(--accent) 70%, var(--accent-secondary) 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.hero-badge .icon {
+  color: var(--accent-secondary);
+}
+
+.hero #demo-button {
+  position: relative;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.hero #demo-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px var(--accent), 0 10px 30px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* Stage cards: a quiet lift and glow while the visitor is working in one. */
+
+.decision-stage {
+  border-radius: var(--radius);
+  transition: box-shadow 240ms ease, background-color 240ms ease;
+}
+
+.decision-stage:focus-within {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent),
+    0 12px 40px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.stage-index {
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero > .hero-badge,
+  .hero > h1,
+  .hero > .hero-lead,
+  .hero > .hero-subhead,
+  .hero > #demo-button {
+    animation: hero-rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .hero > .hero-badge { animation-delay: 60ms; }
+  .hero > h1 { animation-delay: 160ms; }
+  .hero > .hero-lead { animation-delay: 300ms; }
+  .hero > .hero-subhead { animation-delay: 400ms; }
+  .hero > #demo-button { animation-delay: 520ms; }
+
+  .hero h1 {
+    animation: hero-rise 700ms 160ms cubic-bezier(0.2, 0.8, 0.2, 1) both, hero-shine 7s 1s ease-in-out infinite;
+  }
+
+  .principles li {
+    animation: hero-rise 600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .principles li:nth-child(1) { animation-delay: 640ms; }
+  .principles li:nth-child(2) { animation-delay: 720ms; }
+  .principles li:nth-child(3) { animation-delay: 800ms; }
+  .principles li:nth-child(4) { animation-delay: 880ms; }
+}
+
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes hero-shine {
+  0%, 100% { background-position: 0% 0; }
+  50% { background-position: 100% 0; }
+}
