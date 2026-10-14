@@ -1,16 +1,19 @@
-// "Calculating" interstitial. The engine answers in milliseconds, so the
-// animation is a short, honest-looking transition, not a progress meter:
-// it shows no percentages, counts or ETA. The stage captions name the
-// steps the engine really performs, in order.
+// "Calculating" interstitial. The engine answers in milliseconds, so this
+// is a short transition, not a progress meter: it shows no percentages,
+// counts or ETA. The stage captions name the steps the engine really
+// performs, in order. A full-screen network lights up left to right,
+// pulses ride its connections, and at the end it folds into one node that
+// flashes into the result.
 //
-// Without JS, or with prefers-reduced-motion, the form submits at once.
+// Skipped (the form submits at once) when effects are off or JS is absent.
 (function () {
   const SVG_NS = "http://www.w3.org/2000/svg";
-  const LAYERS = [3, 5, 6, 5, 3];
-  const DURATION_MS = 3000;
-  const CONVERGE_AT_MS = 2150; // the last stretch: the network folds into one node
-  const WIDTH = 640;
-  const HEIGHT = 260;
+  const LAYERS = [3, 6, 8, 9, 8, 6, 3];
+  const DURATION_MS = 3300;
+  const CONVERGE_AT_MS = 2300;
+  const FLASH_AT_MS = 2950;
+  const WIDTH = 1200;
+  const HEIGHT = 440;
   const STAGES = [
     "Reading your context",
     "Filtering by language and budget",
@@ -25,17 +28,18 @@
   }
 
   function buildNetwork() {
-    const svg = el("svg", { viewBox: `0 0 ${WIDTH} ${HEIGHT}`, class: "compute-net", "aria-hidden": "true" });
-    const xs = LAYERS.map((_, i) => 40 + (i * (WIDTH - 80)) / (LAYERS.length - 1));
+    const svg = el("svg", {
+      viewBox: `0 0 ${WIDTH} ${HEIGHT}`,
+      class: "compute-net",
+      preserveAspectRatio: "xMidYMid meet",
+      "aria-hidden": "true",
+    });
+    const xs = LAYERS.map((_, i) => 60 + (i * (WIDTH - 120)) / (LAYERS.length - 1));
     const points = LAYERS.map((count, layer) =>
-      Array.from({ length: count }, (_, i) => ({
-        x: xs[layer],
-        y: ((i + 1) * HEIGHT) / (count + 1),
-        layer,
-      }))
+      Array.from({ length: count }, (_, i) => ({ x: xs[layer], y: ((i + 1) * HEIGHT) / (count + 1), layer }))
     );
+    const centerX = WIDTH / 2;
     const centerY = HEIGHT / 2;
-    const coreX = WIDTH / 2;
 
     const edges = el("g", { class: "net-edges" });
     const pulses = el("g", { class: "net-pulses" });
@@ -44,22 +48,20 @@
     points.slice(0, -1).forEach((from, layer) => {
       from.forEach((a) => {
         points[layer + 1].forEach((b) => {
-          const delay = layer * 380 + (edgeIndex % 7) * 45;
+          const delay = layer * 330 + (edgeIndex % 9) * 40;
           const line = el("line", { x1: a.x, y1: a.y, x2: b.x, y2: b.y, class: "net-edge" });
           line.style.setProperty("--d", `${delay}ms`);
           edges.appendChild(line);
-
-          // Every third edge carries a travelling pulse: a dot that rides the
-          // edge left to right, restarting while the network is "thinking".
-          if (edgeIndex % 3 === 0) {
-            const dot = el("circle", { r: 2.6, class: "net-pulse" });
-            const motion = el("animateMotion", {
-              dur: "1.1s",
-              begin: `${delay + 200}ms`,
-              repeatCount: "indefinite",
-              path: `M${a.x} ${a.y} L${b.x} ${b.y}`,
-            });
-            dot.appendChild(motion);
+          if (edgeIndex % 2 === 0) {
+            const dot = el("circle", { r: 3, class: "net-pulse" });
+            dot.appendChild(
+              el("animateMotion", {
+                dur: `${0.9 + (edgeIndex % 5) * 0.12}s`,
+                begin: `${delay + 150}ms`,
+                repeatCount: "indefinite",
+                path: `M${a.x} ${a.y} L${b.x} ${b.y}`,
+              })
+            );
             pulses.appendChild(dot);
           }
           edgeIndex += 1;
@@ -68,19 +70,14 @@
     });
     points.forEach((layerPoints, layer) => {
       layerPoints.forEach((p, i) => {
-        const circle = el("circle", { cx: p.x, cy: p.y, r: 7, class: "net-node" });
-        circle.style.setProperty("--d", `${layer * 380 + i * 60}ms`);
-        // Where this node slides to when the network converges (the centre).
-        circle.style.setProperty("--dx", `${coreX - p.x}px`);
+        const circle = el("circle", { cx: p.x, cy: p.y, r: 8, class: "net-node" });
+        circle.style.setProperty("--d", `${layer * 330 + i * 50}ms`);
+        circle.style.setProperty("--dx", `${centerX - p.x}px`);
         circle.style.setProperty("--dy", `${centerY - p.y}px`);
         nodes.appendChild(circle);
       });
     });
-    const core = el("circle", { cx: coreX, cy: centerY, r: 9, class: "net-core" });
-    svg.appendChild(edges);
-    svg.appendChild(pulses);
-    svg.appendChild(nodes);
-    svg.appendChild(core);
+    svg.append(edges, pulses, nodes, el("circle", { cx: centerX, cy: centerY, r: 10, class: "net-core" }));
     return svg;
   }
 
@@ -94,26 +91,22 @@
     const panel = document.createElement("div");
     panel.className = "compute-panel";
     const net = buildNetwork();
-    panel.appendChild(net);
-
     const caption = document.createElement("p");
     caption.className = "compute-caption";
-    panel.appendChild(caption);
-
     const sub = document.createElement("p");
     sub.className = "compute-sub";
     sub.textContent = "Deterministic rules, no guessing. The same context always gives the same answer.";
-    panel.appendChild(sub);
+    panel.append(net, caption, sub);
 
-    overlay.appendChild(panel);
+    const flash = document.createElement("div");
+    flash.className = "compute-flash";
+    overlay.append(panel, flash);
     return { overlay, caption, net };
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelector("form.context-form");
     if (!form) return;
-    const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) return;
 
     const { overlay, caption, net } = buildOverlay();
     document.body.appendChild(overlay);
@@ -123,13 +116,14 @@
       timers.forEach(clearTimeout);
       timers = [];
       overlay.hidden = true;
-      overlay.classList.remove("is-on", "is-converging");
+      overlay.classList.remove("is-on", "is-converging", "is-flash");
       net.classList.remove("is-converging");
       document.body.classList.remove("is-computing");
     }
 
     form.addEventListener("submit", (event) => {
       if (event.defaultPrevented || form.dataset.computed === "1") return;
+      if (!window.MC || !MC.effectsOn || !MC.effectsOn()) return;
       event.preventDefault();
       form.dataset.computed = "1";
 
@@ -145,6 +139,7 @@
         overlay.classList.add("is-converging");
         caption.textContent = "Your match";
       }, CONVERGE_AT_MS));
+      timers.push(setTimeout(() => overlay.classList.add("is-flash"), FLASH_AT_MS));
       timers.push(setTimeout(() => form.submit(), DURATION_MS));
     });
 

@@ -1,0 +1,307 @@
+/* Result page as a stage: the recommendation on the left, the decision
+   graph on the right (graph.js draws it from the engine's own output).
+   Motion is gated on html[data-effects="on"]. */
+
+body.page-result main {
+  max-width: 1240px;
+}
+
+body.page-result .site-header {
+  max-width: 1240px;
+}
+
+.result-stage {
+  display: grid;
+  grid-template-columns: minmax(320px, 5fr) minmax(0, 7fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+  margin-bottom: var(--space-8);
+}
+
+.result-stage .card-featured .recommendation h1 {
+  font-size: clamp(2rem, 4.2vw, 3.2rem);
+  line-height: 1.05;
+}
+
+/* Cards below the stage keep a readable column. */
+.fade-in > .card:not(.card-featured),
+.fade-in > .back-link {
+  width: 100%;
+  max-width: 880px;
+  margin-inline: auto;
+}
+
+.fade-in {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.decision-graph {
+  margin: 0;
+  min-width: 0;
+}
+
+.graph-stage {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
+  aspect-ratio: 1;
+  max-height: 80vh;
+}
+
+.graph-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.graph-guide {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 1.2;
+  stroke-dasharray: 3 8;
+  opacity: 0.8;
+}
+
+.graph-ring {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+
+.graph-edge {
+  stroke: var(--accent);
+  stroke-width: 1.4;
+  opacity: 0.55;
+}
+
+.graph-pulse {
+  fill: var(--accent-secondary);
+  filter: drop-shadow(0 0 5px var(--accent-secondary));
+}
+
+.graph-node {
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.graph-node[tabindex] {
+  cursor: pointer;
+}
+
+.graph-node[tabindex]:hover,
+.graph-node[tabindex]:focus-visible {
+  transform: scale(1.7);
+  filter: drop-shadow(0 0 10px var(--accent-secondary));
+  outline: none;
+}
+
+.node-alt {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.node-alt.is-tied {
+  stroke: var(--accent-secondary);
+}
+
+.node-tied {
+  fill: var(--accent-secondary);
+  fill-opacity: 0.95;
+  stroke: none;
+  filter: drop-shadow(0 0 6px var(--accent-secondary));
+}
+
+.node-out {
+  fill: var(--accent);
+  fill-opacity: 0.8;
+  stroke: none;
+}
+
+.node-ex {
+  fill: var(--muted);
+  fill-opacity: 0.75;
+  stroke: none;
+}
+
+.graph-label {
+  fill: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.graph-rank {
+  fill: var(--accent);
+  font-size: 13px;
+  font-weight: 800;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.graph-halo {
+  fill: var(--accent);
+  opacity: 0.18;
+}
+
+.graph-core {
+  fill: var(--accent);
+  stroke: var(--accent-secondary);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 18px var(--accent));
+}
+
+.graph-core-text {
+  fill: var(--accent-contrast);
+  font-size: 20px;
+  font-weight: 800;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.graph-tip {
+  position: absolute;
+  z-index: 5;
+  width: 250px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--text-secondary);
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+}
+
+.graph-tip[hidden] {
+  display: none;
+}
+
+.graph-tip strong {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+.graph-tip ul {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-4);
+}
+
+.graph-tip em {
+  display: block;
+  margin-top: var(--space-2);
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.decision-graph figcaption {
+  margin-top: var(--space-4);
+  text-align: center;
+}
+
+.decision-graph figcaption p {
+  max-width: 60ch;
+  margin: var(--space-2) auto 0;
+  font-size: var(--text-xs);
+}
+
+.graph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.graph-legend .key {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: var(--space-2);
+  border-radius: 50%;
+}
+
+.key-center { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.key-alt { background: var(--accent-soft); border: 2px solid var(--accent); }
+.key-tied { background: var(--accent-secondary); opacity: 0.75; }
+.key-out { background: var(--accent); opacity: 0.55; }
+.key-ex { background: var(--muted); opacity: 0.75; }
+
+html[data-effects="on"] {
+  & .graph-ring {
+    animation: ring-spin var(--spin, 120s) linear infinite;
+  }
+
+  & .ring-alt {
+    animation: none;
+  }
+
+  & .ring-out {
+    animation-direction: reverse;
+  }
+
+  & .graph-node {
+    animation: node-in 700ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+    animation-delay: calc(500ms + var(--i, 0) * 22ms);
+  }
+
+  & .graph-edge {
+    stroke-dasharray: 200;
+    animation: edge-draw 900ms 400ms ease-out both;
+  }
+
+  & .graph-halo {
+    animation: halo-breathe 3.4s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  & .graph-center {
+    animation: node-in 800ms 200ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+  }
+}
+
+html[data-effects="off"] .graph-pulse {
+  display: none;
+}
+
+@keyframes ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes node-in {
+  from { opacity: 0; transform: scale(0.2); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes edge-draw {
+  from { stroke-dashoffset: 200; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes halo-breathe {
+  0%, 100% { opacity: 0.12; transform: scale(0.9); }
+  50% { opacity: 0.3; transform: scale(1.25); }
+}
+
+@media (max-width: 960px) {
+  .result-stage {
+    grid-template-columns: 1fr;
+  }
+}

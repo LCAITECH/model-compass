@@ -71,7 +71,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     const card = document.querySelector(".card-featured.reveal");
     if (!card) return;
-    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!window.MC || !MC.effectsOn || !MC.effectsOn()) return;
 
     const heading = card.querySelector("h1[data-scramble]");
     const eyebrow = card.querySelector(".eyebrow[data-unlock-label]");

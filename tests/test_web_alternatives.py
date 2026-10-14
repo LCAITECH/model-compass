@@ -1,6 +1,17 @@
 """What renders below the recommendation: also-strong-options/alternatives
 dedup, and access route rows."""
 
+import re
+
+
+def _visible(html: str) -> str:
+    """The page without the hidden .graph-data list that feeds the decision graph.
+
+    That list repeats every model name on purpose (graph.js draws it), so a
+    test about what the visitor reads must not count it.
+    """
+    return re.sub(r'<ul class="graph-data".*?</ul>', "", html, flags=re.S)
+
 
 def test_recommend_shows_also_strong_options_when_practically_tied(client):
     # Customer support, reasoning#1/coding#2, budget=low: deepseek-v4-flash
@@ -45,7 +56,7 @@ def test_also_strong_options_are_not_duplicated_in_the_alternatives_section(clie
         },
     )
 
-    assert response.text.count("Mistral Large 3") == 1
+    assert _visible(response.text).count("Mistral Large 3") == 1
 
 
 def test_alternatives_section_is_omitted_when_every_alternative_is_also_strong(client):

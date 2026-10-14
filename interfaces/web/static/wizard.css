@@ -1,0 +1,187 @@
+/* The decision form as a step-by-step wizard (wizard.js adds .wizard-on).
+   Without JS none of this applies and every stage stays visible. */
+
+.wizard-panel {
+  position: relative;
+  max-width: 820px;
+  margin: var(--space-12) auto 0;
+  padding: clamp(1.25rem, 4vw, 2.75rem);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+  backdrop-filter: blur(22px) saturate(1.2);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+    0 0 80px color-mix(in srgb, var(--accent) 14%, transparent);
+  scroll-margin-top: var(--space-6);
+}
+
+.wizard-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-secondary), var(--accent), transparent);
+}
+
+.wizard-progress {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.wizard-progress button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-1);
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.wizard-progress button:disabled {
+  cursor: default;
+}
+
+.wizard-progress .dot {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  transition: background-color 250ms ease, border-color 250ms ease, color 250ms ease, box-shadow 250ms ease;
+}
+
+.wizard-progress .is-done .dot {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.wizard-progress .is-current .dot {
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-secondary) 20%, transparent);
+}
+
+.wizard-progress .is-current button,
+.wizard-progress .is-done button {
+  color: var(--text);
+}
+
+.wizard-bar {
+  height: 3px;
+  margin-bottom: var(--space-6);
+  border-radius: 3px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.wizard-bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+  transition: width 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.wizard-on .decision-stage {
+  display: none;
+  padding: 0;
+  border-top: 0;
+}
+
+.wizard-on .decision-stage.is-active {
+  display: block;
+}
+
+.wizard-on .stage-index {
+  font-size: var(--text-3xl);
+}
+
+.wizard-on > .primary-button[type="submit"] {
+  display: none;
+}
+
+.wizard-on > .primary-button[type="submit"].is-ready {
+  display: inline-block;
+}
+
+.wizard-nav {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+.wizard-nav button {
+  padding: var(--space-3) var(--space-6);
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.wizard-nav button[hidden] {
+  display: none;
+}
+
+.wizard-nav .wizard-next {
+  margin-left: auto;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  color: var(--accent-contrast);
+}
+
+.wizard-nav button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.wizard-on .primary-button.is-ready {
+  margin-top: var(--space-4);
+}
+
+html[data-effects="on"] .wizard-on .decision-stage.is-active {
+  animation: step-in 480ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+html[data-effects="on"] .wizard-on .decision-stage.is-active[data-dir="back"] {
+  animation-name: step-back;
+}
+
+@keyframes step-in {
+  from { opacity: 0; transform: translateX(46px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes step-back {
+  from { opacity: 0; transform: translateX(-46px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+@media (max-width: 560px) {
+  .wizard-progress .label {
+    display: none;
+  }
+}
