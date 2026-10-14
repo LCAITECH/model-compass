@@ -160,6 +160,17 @@ Source: `ai.google.dev/gemini-api/docs/rate-limits`. The observed
 dashboard numbers above (0/5, 0/250K, 0/20) are one project's snapshot
 on one date, not a specification.
 
+## Lifecycle `[Objective]`
+
+As of 2026-10-10, Google's Gemini API deprecations page lists `gemini-3.7-flash`
+as deprecated with **no shutdown date announced**, and states that
+requests to `gemini-3.7-flash` are **automatically routed to `gemini-3.8-flash`**. The model
+no longer appears on Google's models, pricing, or rate-limits pages
+(models page last updated 2026-10-09 UTC). The dataset entry is kept
+(remove-vs-flag policy, Iteration #22, is still open); treat
+`gemini-3.8-flash` as the official successor. Source:
+https://ai.google.dev/gemini-api/docs/deprecations
+
 ## Sources
 
 - [Gemini 3.7 Flash model card](https://deepmind.google/models/model-cards/gemini-3-7-flash/) — description, model dependencies, inputs/outputs, distribution, pricing table, benchmark results, safety evaluation. Read directly in-browser, two independent passes, 2026-08-13.
