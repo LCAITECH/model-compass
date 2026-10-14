@@ -47,7 +47,8 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     # curated list), gpt-6-astra (admitted 2026-09-04, inherits
     # gpt-5-6-sol's curated list), and claude-sonnet-5-5/claude-opus-5-5
     # (admitted 2026-10-04, inherit their predecessors' curated lists),
-    # and claude-haiku-5-5 (admitted 2026-10-08, same curated Claude list). qwen3.8-max is a new provider with no
+    # claude-haiku-5-5 (admitted 2026-10-08, same curated Claude list),
+    # and gemini-4-argon (admitted 2026-10-14, same curated Gemini list). qwen3.8-max is a new provider with no
     # sibling to inherit from -- its language list is independently
     # curated (Docs/models/qwen3.8-max.md), and happens to include "ko".
     context = Context(
@@ -100,6 +101,7 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "gpt-6-astra",
         "gpt-6-1-sol",
         "gpt-6-luna",
+        "gemini-4-argon",
     }
     assert all(
         any("language" in reason for reason in excl.reasons)
@@ -131,16 +133,16 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.total_qualifying == 35  # 38 models - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra)
+    assert recommendation.total_qualifying == 36  # 39 models - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra)
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
 def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
-    # Same context as above (35 qualifying, see
+    # Same context as above (36 qualifying, see
     # test_total_qualifying_and_alternative_ranks). Since 2026-10-08 the
     # top-3 alternatives are gemini-2.5-flash-lite, claude-haiku-5-5 and
     # gpt-6-luna, which leaves gpt-5-6-luna as the first model past them,
-    # into the outranked group (rank 5 of 35).
+    # into the outranked group (rank 5 of 36).
     # Unlike the winner's trade_offs, its reasons include "Not the
     # cheapest option" even though COST is the prioritized dimension,
     # because there's no positive "reasons" line for it to contradict;
@@ -157,8 +159,8 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 31  # 35 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 36))
+    assert len(recommendation.outranked) == 32  # 36 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 37))
 
     first = recommendation.outranked[0]
     assert first.model.id == "gpt-5-6-luna"
