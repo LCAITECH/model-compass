@@ -19,6 +19,19 @@ public release to version against.
 
 ---
 
+## 2026-10-14 — Deprecated models stop being recommended
+
+**Touches the schema, the dataset and the Decision Engine (owner-approved schema change).**
+
+- **New `lifecycle` block in every model** (`SCHEMA.md`, Lifecycle): `status` (`active` or `deprecated`), `shutdown_date` and `replacement`, taken from each provider's own deprecations page. All 39 models were re-checked against those pages on 2026-10-14.
+- **The engine no longer recommends deprecated models.** Until now a model its provider is shutting down could still win: `gpt-5-nano` (off on 2026-12-11) was the top pick for cost-first contexts. Seven models are now excluded for that reason alone, and the result, the decision graph and the comparator say when each one shuts down and which model replaces it: Claude Sonnet 4.5 (2026-11-30, use Sonnet 5.5), GPT-5, GPT-5 Mini and GPT-5 Nano (2026-12-11, use the GPT-5.6 tiers), GPT-4o (2027-01-14, use GPT-6 Luna), and Gemini 3.5/3.7 Flash (Google already routes them to 3.6/3.8 Flash).
+- **A date alarm for the dataset.** Introductory prices and shutdown dates used to be reminders in a notes file. The test suite now fails from the first day one has passed and warns during the 30 days before. The engine itself never looks at the calendar, so the same input still gives the same answer on any day.
+- **Comparator:** a new "Lifecycle" row (active or deprecated, shutdown date, successor).
+- **Found along the way:** Google now limits Gemini 2.5 Pro, Flash and Flash-Lite to developers who already used them. Recorded in their model notes, not modeled yet (`IMPLEMENTATION_NOTES.md`, Iteration #29). It matters because Gemini 2.5 Flash-Lite is now the cheapest model the engine recommends.
+- **Tests:** expected rankings that changed were re-derived from real engine runs (29 models qualify under a high budget instead of 36). 233 tests pass.
+
+---
+
 ## 2026-10-14 — Immersive web redesign
 
 **Interface only: `decision/`, the dataset, the schema and every `.py` file are unchanged. The first redesign layered effects over the same layout; this one changes the composition.**

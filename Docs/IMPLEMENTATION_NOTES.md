@@ -1150,6 +1150,12 @@ Partially closed by the 2026-10-05 and 2026-10-07 catalog passes:
   (see Iteration #23). Still open as candidates: Qwen3.8-Flash,
   Qwen3.7-Plus/Flash.
 
+**Update 2026-10-14:** Gemini 4 Argon was admitted in Phase 16. The
+remove-vs-flag policy is decided (Iteration #28): `lifecycle` block,
+deprecated models excluded from recommendations, YAML removed on the
+shutdown date. `claude-haiku-4-5` re-checked the same day: still Active,
+same floor.
+
 ## Iteration #23
 
 **Observation**
@@ -1175,6 +1181,9 @@ pages (pricing + per-model docs + deprecations), not via aggregators.
 **Status**
 Closed for the scoped audit items. Catalog policy (remove vs flag
 deprecated/scheduled-shutdown entries) remains open under #22.
+
+**Update 2026-10-14:** the remove-vs-flag policy is decided; see
+Iteration #28.
 
 ## Iteration #24
 
@@ -1245,6 +1254,11 @@ Open, waiting on the owner:
    OpenAI labels it deprecated. This folds into Iteration #22's
    remove-vs-flag policy.
 
+**Update 2026-10-14:** item 1 was done in Phase 16 (Argon admitted).
+Item 2 is resolved by Iteration #28: deprecation lives in the new
+objective `lifecycle` block, so `gpt-4o`'s editorial `maturity` stays
+`stable` and no longer has to carry that meaning.
+
 ## Iteration #26
 
 **Observation**
@@ -1313,3 +1327,133 @@ separate top-tier models: that needs an evidence source for "better than
 `very_high`" first, then a schema decision. A static model comparator
 (`FEATURES.md`, "Static Model Comparator") is the non-engine way to show
 the differences the scale cannot rank.
+
+## Iteration #28
+
+**Observation**
+Deprecation kept showing up with nowhere to go in the schema: Claude
+Sonnet 4.5 (Iteration #22), the GPT-5 snapshots and Gemini 3.1
+Flash-Lite (#23), GPT-4o and Gemini 3.5/3.7 Flash (#25). Each time the
+lifecycle went into `Docs/models/{id}.md` as prose and the YAML stayed
+untouched, because `ecosystem.maturity` is editorial and the engine does
+not read it. The consequence, checked against the engine on 2026-10-14:
+deprecated models still competed and could win. `gpt-5-nano`, which
+OpenAI shuts down on 2026-12-11, was the #1 recommendation for any
+cost-first context with a `medium` or looser budget.
+
+All 39 entries were re-checked that day against each provider's own
+page (Anthropic model deprecations, OpenAI deprecations, Gemini
+deprecations, DeepSeek Models & Pricing, Mistral models overview,
+Alibaba Model Studio recommended models). The dates already recorded in
+`Docs/models/` all matched.
+
+**Current decision**
+Owner decision (2026-10-14), from three options (flag and exclude, flag
+and keep ranking, delete now): a new objective `lifecycle` block
+(`status`, `shutdown_date`, `replacement`; `SCHEMA.md`, Lifecycle),
+required in every entry, and a hard filter in `decision/evaluator/`: a
+`deprecated` model never qualifies, and its exclusion reason names the
+provider's date and successor. It still appears in the result's
+exclusions, the decision graph and the comparator. On its shutdown date
+the YAML and its access routes are removed.
+
+Seven entries are `deprecated`: `claude-sonnet-4-5` (2026-11-30),
+`gpt-5`, `gpt-5-mini`, `gpt-5-nano` (2026-12-11), `gpt-4o`
+(2027-01-14), and `gemini-3.5-flash`/`gemini-3.7-flash` (no shutdown
+date; Google routes their endpoints to 3.6/3.8 Flash). Two calls in this
+pass that the owner may want to revisit:
+
+- `gemini-3.1-flash-lite` stays `active` with `shutdown_date:
+  "2027-05-07"` and a replacement: Google lists the date and a successor
+  but has announced no deprecation (a GA model with a dated lifespan).
+  It keeps qualifying.
+- `deepseek-v4-flash` is `active`: DeepSeek retired the V4-Flash model
+  but still accepts the name and serves V4.1-Flash, which is what the
+  entry has described since 2026-10-05.
+
+Also decided with it: a dated alarm. `tests/test_catalog_dates.py`
+fails from the first day a `cost.effective_until` or
+`lifecycle.shutdown_date` has passed and warns during the 30 days
+before. The engine itself never reads the calendar, so determinism
+holds; the suite is the reminder that `HANDOFF.md` used to be.
+
+Tests whose expected values changed were re-derived from real engine
+runs, not guessed: 29 models qualify instead of 36 under a `high`
+budget, `gemini-2.5-flash-lite` replaces `gpt-5-nano` as the cheapest
+winner, and `gemini-3.8-flash` replaces `gemini-3.7-flash` in the
+reasoning-then-cost case.
+
+**Status**
+Closed. Resolves Iteration #22's remove-vs-flag policy and Iteration
+#25's open `gpt-4o` question. Next dates the alarm will raise:
+`gpt-5-6-sol` price (wrong from 2026-11-22), `claude-sonnet-4-5` and
+`gemini-4-argon` price (2026-11-30 / from 2026-12-01), the three GPT-5
+snapshots (2026-12-11).
+
+## Iteration #29
+
+**Observation**
+On 2026-10-14 Google's Gemini deprecations page says, for both the
+Gemini 2.5 Pro and the 2.5 Flash tables: access to the 2.5 models is
+limited "to users who have actively used them in the past"; they "are
+not deprecated and will continue to be served until further notice",
+and new projects should use 3.5 Flash-Lite or 3.8 Flash. None of
+`gemini-2.5-pro`, `gemini-2.5-flash` or `gemini-2.5-flash-lite`
+recorded this, and none of their access routes model it: for a new
+developer, the route is not actually available.
+
+It matters more after Iteration #28: with `gpt-5-nano` excluded,
+`gemini-2.5-flash-lite` is now the cheapest qualifying model and the #1
+recommendation for cost-first contexts.
+
+**Current decision**
+Owner decision (2026-10-14): record it and move on, as a first
+instance. Lifecycle stays `active` (Google says "not deprecated"); the
+restriction is noted in the three `Docs/models/` entries. No schema,
+access-route or engine change.
+
+**Status**
+Open. Candidates when it is taken up: an access requirement (prior use
+of the model) in Access Advisor, which keeps the recommendation
+untouched, or a lifecycle status of its own, which would filter. A
+second provider doing the same would make it a schema question.
+
+## Iteration #30
+
+**Observation**
+The owner asked for prominent notices on the site: models about to stop
+being recommended, introductory prices, and models that are new. The
+first two were already in the dataset (`lifecycle`, Iteration #28;
+`cost.effective_until`/`reverts_to`, Iteration #13). "New" was not:
+nothing recorded when a model came out, and a "New" badge without that
+date would be invented.
+
+**Current decision**
+Owner decision (2026-10-14), offered against "show only what is already
+sourced": add `lifecycle.release_date` (`SCHEMA.md`, Lifecycle),
+objective, required, `null` allowed. All 39 dates were read on
+2026-10-14 from first-party pages and are cited in each YAML comment:
+Anthropic's per-model pages ("Released"), the release-date column of
+Google's Gemini deprecations page (Gemini 4 Argon from the Gemini API
+release notes, GA 2026-10-13), OpenAI's API changelog, DeepSeek's and
+Alibaba's release notes, Mistral's model card. One judgment call:
+`deepseek-v4-pro` uses its first API availability (2026-04-24, "V4
+Preview") rather than its GA date (2026-08-13), the same rule as
+`gemini-3.1-pro-preview`.
+
+The notices themselves are presentation (`interfaces/web/catalog_notices.py`):
+"New" means released in the last 30 days, a promo is shown until its
+`effective_until`, and a retiring model until its `shutdown_date`; the
+only computation is days between a published date and today, and no
+percentage or progress bar is shown because no total exists to measure
+against. `decision/` reads none of it. A deprecated model shows neither
+a promo nor a "New" badge (gemini-3.7-flash still stores an introductory
+price, but it is no longer an offer).
+
+The same pass confirmed Iteration #28's call on Gemini 3.5/3.7 Flash
+with Google's own words: the Gemini API release notes of 2026-10-08 say
+each "is deprecated and has been replaced by" its successor (now cited
+in both YAML comments).
+
+**Status**
+Closed.

@@ -51,3 +51,12 @@ ecosystem:
 
 access:
   has_free_access: false
+
+# Source: https://www.alibabacloud.com/help/en/model-studio/models (checked 2026-10-14).
+# Listed under recommended text-generation models.
+# Release date: https://www.alibabacloud.com/help/en/model-studio/newly-released-models (International).
+lifecycle:
+  status: active
+  release_date: "2026-08-02"
+  shutdown_date: null
+  replacement: null

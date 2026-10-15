@@ -14,6 +14,7 @@ from tests.conftest import ACCESS_ROUTES_DIR
 ARGON = "gemini-4-argon"
 HAIKU = "claude-haiku-5-5"
 NANO = "gpt-5-nano"
+LUNA = "gpt-6-luna"
 
 
 @pytest.fixture(scope="module")
@@ -80,6 +81,18 @@ def test_best_marks_the_lowest_price_only_when_prices_differ(models, access_rout
     assert [cell["best"] for cell in inputs] == [False, True]  # gpt-5-nano is cheaper than Argon
 
 
+def test_lifecycle_row_shows_status_shutdown_and_successor(models, access_routes):
+    sections = build_comparison(_by_id(models, NANO, "gemini-3.1-flash-lite", HAIKU), access_routes)
+
+    nano, flash_lite, haiku = _row(sections, "Lifecycle")["cells"]
+
+    assert (nano["text"], nano["tone"]) == ("Deprecated", "bad")
+    assert nano["note"] == "Shuts down 2026-12-11; replacement: gpt-5-6-luna"
+    assert (flash_lite["text"], flash_lite["tone"]) == ("Active", None)
+    assert flash_lite["note"] == "Shuts down 2027-05-07; replacement: gemini-3.5-flash-lite"
+    assert (haiku["text"], haiku["note"]) == ("Active", None)
+
+
 def test_no_best_mark_when_values_are_identical(models, access_routes):
     twin = replace(_by_id(models, HAIKU)[0], id="haiku-twin", name="Haiku twin")
 
@@ -136,7 +149,7 @@ def test_context_fit_matches_the_engine_ranking_exactly(models):
     for entry in (*recommendation.alternatives, *recommendation.outranked):
         expected[entry.model.id] = entry.rank
 
-    selected = _by_id(models, ARGON, HAIKU, NANO)
+    selected = _by_id(models, ARGON, HAIKU, LUNA)
     fit = context_fit(selected, models, context)
 
     assert fit["total"] == recommendation.total_qualifying
@@ -154,6 +167,18 @@ def test_context_fit_flags_the_winner_and_an_over_budget_model(models):
     assert fit["cells"][0]["tone"] == "good" and "Best match" in fit["cells"][0]["text"]
     assert fit["cells"][1]["text"] == "Excluded"
     assert fit["cells"][1]["reasons"] == ("cost tier exceeds a 'low' budget",)
+
+
+def test_context_fit_excludes_a_deprecated_model_and_names_its_successor(models):
+    # gpt-5-nano fits this context on language and budget; it is
+    # excluded only because OpenAI deprecated it (lifecycle.status).
+    fit = context_fit(_by_id(models, NANO, HAIKU), models, _context())
+
+    assert fit["cells"][0]["text"] == "Excluded"
+    assert fit["cells"][0]["reasons"] == (
+        "deprecated by its provider (shuts down 2026-12-11; replacement: gpt-5-6-luna)",
+    )
+    assert fit["cells"][1]["text"].startswith("#")
 
 
 def test_context_fit_handles_a_context_nothing_qualifies_for(models):

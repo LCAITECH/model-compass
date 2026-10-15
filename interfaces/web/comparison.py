@@ -86,6 +86,19 @@ def _cost_cell(model: AIModel, field: str) -> dict:
     return cell
 
 
+def _lifecycle_cell(model: AIModel) -> dict:
+    lifecycle = model.lifecycle
+    details = []
+    if lifecycle.shutdown_date:
+        details.append(f"Shuts down {lifecycle.shutdown_date}")
+    if lifecycle.replacement:
+        details.append(f"replacement: {lifecycle.replacement}")
+    note = "; ".join(details) or None
+    if lifecycle.deprecated:
+        return _cell("Deprecated", tone="bad", note=note)
+    return _cell("Active", note=note)
+
+
 def context_fit(selected: list[AIModel], all_models: list[AIModel], context: Context) -> dict:
     """The engine's verdict for each selected model under `context`.
 
@@ -169,6 +182,7 @@ def build_comparison(
             "rows": [
                 {"label": "Provider", "cells": [_cell(m.provider) for m in selected]},
                 {"label": "License", "cells": [_cell(humanize(m.license.value.replace("-", "_"))) for m in selected]},
+                {"label": "Lifecycle", "cells": [_lifecycle_cell(m) for m in selected]},
                 {"label": "Maturity", "cells": [_cell(humanize(m.ecosystem.maturity.value)) for m in selected]},
                 {"label": "Integration ease", "cells": [_cell(humanize(m.ecosystem.integration_ease.value)) for m in selected]},
             ],

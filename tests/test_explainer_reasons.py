@@ -8,12 +8,15 @@ from decision.explainer import NoQualifyingModelsError, explain
 
 
 def test_cost_priority_explains_the_cheapest_model_and_its_weaknesses(models):
-    # gpt-5-nano ($0.45 blended) is the cheapest model in the dataset and
+    # gpt-5-nano ($0.45 blended) was the cheapest model in the dataset and
     # is not the strongest on any quality dimension or context window.
     # Previously deepseek-v4-flash held this spot at a stale $0.42
     # blended; the 2026-08-27 catalog refresh corrected it to the
     # official peak rate ($1.76 blended, see Docs/CHANGELOG.md),
-    # handing the win to gpt-5-nano.
+    # handing the win to gpt-5-nano. Since 2026-10-14 gpt-5-nano is
+    # deprecated and never qualifies; gemini-2.5-flash-lite ($0.50) is
+    # the cheapest qualifying model, with the same "wins nothing else"
+    # profile.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -25,7 +28,7 @@ def test_cost_priority_explains_the_cheapest_model_and_its_weaknesses(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.recommended.id == "gpt-5-nano"
+    assert recommendation.recommended.id == "gemini-2.5-flash-lite"
     assert recommendation.cost_tier == CostTier.LOW
     assert "your use case is High-volume low-cost bot" in recommendation.reasons[0]
     assert any("Lowest cost" in reason for reason in recommendation.reasons)

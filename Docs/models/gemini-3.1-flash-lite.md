@@ -24,6 +24,8 @@ the sourcing rule it follows. Admitted from
 
 Source: [Gemini deprecations](https://ai.google.dev/gemini-api/docs/deprecations) (fetched 2026-10-07). Google Cloud also lists retirement "May 7, 2027 or later" on the Enterprise Agent Platform model page. Per `IMPLEMENTATION_NOTES.md` Iteration #22, whether to remove scheduled-shutdown entries from `dataset/models/` is still open — this entry stays until retirement or an explicit remove decision; lifecycle recorded here only.
 
+**2026-10-14, `lifecycle` block (Iteration #28):** the YAML records `status: active`, `shutdown_date: "2027-05-07"`, `replacement: gemini-3.5-flash-lite`. Google publishes the date and a successor but announces no deprecation, so the model keeps qualifying; the comparator shows the date, and `tests/test_catalog_dates.py` warns from 30 days before it and fails on it.
+
 ## Identity
 
 | Field      | Value                       |

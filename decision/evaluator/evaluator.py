@@ -107,6 +107,11 @@ def _split_by_hard_filters(context: Context, models: list[AIModel], cost_tiers: 
 
     for model in models:
         reasons = []
+        # A deprecated model never competes, whatever the context: the
+        # provider has said it is going away, so recommending it for new
+        # work would be advice the provider itself contradicts.
+        if model.lifecycle.deprecated:
+            reasons.append(_deprecation_reason(model))
         if context.language not in model.languages:
             reasons.append(f"does not support language '{context.language}'")
         if budget_ceiling is not None and cost_tiers[model.id] > budget_ceiling:
@@ -118,6 +123,15 @@ def _split_by_hard_filters(context: Context, models: list[AIModel], cost_tiers: 
             qualifying.append(model)
 
     return qualifying, disqualified
+
+
+def _deprecation_reason(model: AIModel) -> str:
+    details = []
+    if model.lifecycle.shutdown_date:
+        details.append(f"shuts down {model.lifecycle.shutdown_date}")
+    if model.lifecycle.replacement:
+        details.append(f"replacement: {model.lifecycle.replacement}")
+    return "deprecated by its provider" + (f" ({'; '.join(details)})" if details else "")
 
 
 def _score(context: Context, model: AIModel, qualifying: list[AIModel], cost_tiers: dict[str, CostTier]) -> Candidate:

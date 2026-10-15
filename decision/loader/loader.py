@@ -22,6 +22,8 @@ from decision.domain.ai_model import (
     Ecosystem,
     IntegrationEase,
     License,
+    Lifecycle,
+    LifecycleStatus,
     Maturity,
     Operational,
     Quality,
@@ -44,7 +46,10 @@ REQUIRED_TOP_LEVEL_FIELDS = (
     "cost",
     "ecosystem",
     "access",
+    "lifecycle",
 )
+
+REQUIRED_LIFECYCLE_FIELDS = ("status", "release_date", "shutdown_date", "replacement")
 
 REQUIRED_CAPABILITIES = (
     "vision",
@@ -64,8 +69,22 @@ REQUIRED_QUALITY_DIMENSIONS = (
 
 
 def load_dataset(directory: Path) -> list[AIModel]:
-    """Loads and validates every model YAML file in `directory`."""
-    return [load_model_file(path) for path in sorted(Path(directory).glob("*.yaml"))]
+    """Loads and validates every model YAML file in `directory`.
+
+    One check spans files: a `lifecycle.replacement` must name a model
+    that is itself in the dataset, so a successor shown to the user is
+    always one the engine can actually recommend or compare.
+    """
+    paths = sorted(Path(directory).glob("*.yaml"))
+    models = [load_model_file(path) for path in paths]
+    ids = {model.id for model in models}
+    for path, model in zip(paths, models):
+        replacement = model.lifecycle.replacement
+        if replacement is not None and replacement not in ids:
+            raise DatasetValidationError(
+                path, [f"lifecycle.replacement '{replacement}' is not a model in the dataset"]
+            )
+    return models
 
 
 def load_model_file(path: Path) -> AIModel:
@@ -168,6 +187,40 @@ def _validate(raw, path: Path) -> list[str]:
     if not isinstance(access.get("has_free_access"), bool):
         issues.append("access.has_free_access must be a boolean")
 
+    issues.extend(_lifecycle_issues(raw["lifecycle"], raw["id"]))
+    return issues
+
+
+def _lifecycle_issues(lifecycle, model_id) -> list[str]:
+    # Every key is required, null included -- same rule as
+    # operational.max_output: "no date published" has to be written down,
+    # not left out, so a missing key can't pass for a checked one.
+    if not isinstance(lifecycle, dict):
+        return ["lifecycle must be a mapping"]
+    issues = [
+        f"lifecycle.{field} must be present (null if the provider publishes none)"
+        for field in REQUIRED_LIFECYCLE_FIELDS
+        if field not in lifecycle
+    ]
+    if issues:
+        return issues
+
+    if lifecycle["status"] not in enum_values(LifecycleStatus):
+        issues.append(f"invalid lifecycle.status='{lifecycle['status']}'")
+    dates_valid = True
+    for field in ("release_date", "shutdown_date"):
+        value = lifecycle[field]
+        if value is not None and not _is_iso_date(value):
+            issues.append(f"lifecycle.{field} must be an ISO date string (YYYY-MM-DD) or null")
+            dates_valid = False
+    release_date, shutdown_date = lifecycle["release_date"], lifecycle["shutdown_date"]
+    if dates_valid and release_date and shutdown_date and release_date >= shutdown_date:
+        issues.append("lifecycle.release_date must be before lifecycle.shutdown_date")
+    replacement = lifecycle["replacement"]
+    if replacement is not None and (not isinstance(replacement, str) or not replacement):
+        issues.append("lifecycle.replacement must be a model id or null")
+    elif replacement == model_id:
+        issues.append("lifecycle.replacement cannot be the model itself")
     return issues
 
 
@@ -224,4 +277,10 @@ def _to_ai_model(raw: dict) -> AIModel:
             maturity=Maturity(ecosystem["maturity"]),
         ),
         access=Access(**raw["access"]),
+        lifecycle=Lifecycle(
+            status=LifecycleStatus(raw["lifecycle"]["status"]),
+            shutdown_date=raw["lifecycle"]["shutdown_date"],
+            replacement=raw["lifecycle"]["replacement"],
+            release_date=raw["lifecycle"]["release_date"],
+        ),
     )

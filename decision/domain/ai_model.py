@@ -128,6 +128,37 @@ class Access:
     has_free_access: bool
 
 
+class LifecycleStatus(str, Enum):
+    ACTIVE = "active"
+    DEPRECATED = "deprecated"
+
+
+@dataclass(frozen=True)
+class Lifecycle:
+    """Where the provider's own deprecations page puts this model.
+
+    Objective, unlike Ecosystem.maturity (an editorial call about
+    stability). `shutdown_date` is a specific date the provider
+    publishes for turning the model off -- never a "not sooner than"
+    floor, which every active model carries and which promises nothing.
+    `replacement` is the catalog id of the successor the provider names,
+    when that successor is in this catalog. `release_date` is the day the
+    provider first made the model available through its API.
+
+    Only `status` is read by decision/evaluator/; the dates are
+    display-only, so the engine never depends on the calendar.
+    """
+
+    status: LifecycleStatus
+    shutdown_date: str | None = None
+    replacement: str | None = None
+    release_date: str | None = None
+
+    @property
+    def deprecated(self) -> bool:
+        return self.status == LifecycleStatus.DEPRECATED
+
+
 @dataclass(frozen=True)
 class AIModel:
     id: str
@@ -143,3 +174,4 @@ class AIModel:
     cost: Cost
     ecosystem: Ecosystem
     access: Access
+    lifecycle: Lifecycle

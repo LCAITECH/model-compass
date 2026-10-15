@@ -46,3 +46,12 @@ ecosystem:
 
 access:
   has_free_access: false
+
+# Source: https://api-docs.deepseek.com/quick_start/pricing (checked 2026-10-14).
+# Listed as DeepSeek-V4-Pro-0813.
+# Release date: https://api-docs.deepseek.com/news/news260424/ (V4 Preview, API available that day; GA 2026-08-13).
+lifecycle:
+  status: active
+  release_date: "2026-04-24"
+  shutdown_date: null
+  replacement: null

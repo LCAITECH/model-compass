@@ -46,3 +46,12 @@ ecosystem:
 
 access:
   has_free_access: false
+
+# Source: https://docs.mistral.ai/models (checked 2026-10-14).
+# Listed under generalist models, not under deprecated & retired.
+# Release date: https://docs.mistral.ai/models/mistral-large-3-25-12 (model card date).
+lifecycle:
+  status: active
+  release_date: "2025-12-02"
+  shutdown_date: null
+  replacement: null

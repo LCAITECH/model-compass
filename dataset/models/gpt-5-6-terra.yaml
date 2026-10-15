@@ -48,3 +48,12 @@ ecosystem:
 
 access:
   has_free_access: false
+
+# Source: https://developers.openai.com/api/docs/deprecations (checked 2026-10-14).
+# Not on the deprecations page.
+# Release date: https://developers.openai.com/api/docs/changelog (Jul 9, 2026: GPT-5.6 family).
+lifecycle:
+  status: active
+  release_date: "2026-07-09"
+  shutdown_date: null
+  replacement: null

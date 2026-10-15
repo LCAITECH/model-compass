@@ -45,3 +45,13 @@ ecosystem:
 
 access:
   has_free_access: true
+
+# Source: https://ai.google.dev/gemini-api/docs/deprecations (checked 2026-10-14).
+# Shutdown N/A: the endpoint stays up and routes requests to gemini-3.6-flash.
+# Release date: https://ai.google.dev/gemini-api/docs/deprecations (release date column).
+# Google release notes, 2026-10-08: "gemini-3.5-flash is deprecated and has been replaced by gemini-3.6-flash".
+lifecycle:
+  status: deprecated
+  release_date: "2026-05-19"
+  shutdown_date: null
+  replacement: gemini-3.6-flash

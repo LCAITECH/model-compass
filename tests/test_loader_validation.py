@@ -36,6 +36,11 @@ ecosystem:
   maturity: stable
 access:
   has_free_access: false
+lifecycle:
+  status: active
+  release_date: null
+  shutdown_date: null
+  replacement: null
 """
     path = tmp_path / "expected-id.yaml"
     path.write_text(content, encoding="utf-8")
@@ -89,6 +94,11 @@ ecosystem:
   maturity: stable
 access:
   has_free_access: false
+lifecycle:
+  status: active
+  release_date: null
+  shutdown_date: null
+  replacement: null
 """
     path = tmp_path / "broken.yaml"
     path.write_text(content, encoding="utf-8")
@@ -132,6 +142,11 @@ ecosystem:
   maturity: stable
 access:
   has_free_access: false
+lifecycle:
+  status: active
+  release_date: null
+  shutdown_date: null
+  replacement: null
 """
     path = tmp_path / "broken.yaml"
     path.write_text(content, encoding="utf-8")
@@ -216,6 +231,11 @@ ecosystem:
   maturity: stable
 access:
   has_free_access: "yes"
+lifecycle:
+  status: active
+  release_date: null
+  shutdown_date: null
+  replacement: null
 """
     path = tmp_path / "broken.yaml"
     path.write_text(content, encoding="utf-8")
@@ -258,6 +278,11 @@ ecosystem:
   maturity: stable
 access:
   has_free_access: false
+lifecycle:
+  status: active
+  release_date: null
+  shutdown_date: null
+  replacement: null
 """
 
 

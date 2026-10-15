@@ -121,6 +121,8 @@ rate-limits pages. The dataset entry is kept (remove-vs-flag policy,
 Iteration #22, is still open); treat `gemini-3.6-flash` as the official
 successor. Source: https://ai.google.dev/gemini-api/docs/deprecations
 
+**2026-10-14, `lifecycle` block (Iteration #28):** the policy above is decided. The YAML now records `status: deprecated`, `shutdown_date: null` (Google publishes none: the endpoint stays up and serves `gemini-3.6-flash`), `replacement: gemini-3.6-flash`. Since requests to this id already get `gemini-3.6-flash`, recommending it would describe a model nobody receives. The Decision Engine never recommends a `deprecated` model; this one is listed among the exclusions with its date and successor. The YAML and its access routes are removed on the shutdown date (`tests/test_catalog_dates.py` fails from that day).
+
 ## Sources
 
 - [Gemini 3.5 Flash model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash) — capabilities, context window, max output, positioning.

@@ -53,7 +53,8 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     # claude-haiku-5-5 0.60 (<=100k-token tier, admitted 2026-10-08),
     # gpt-5-6-luna 1.40, gemini-3.1-flash-lite 1.75, deepseek-v4-flash
     # 1.50, mistral-large-3 2.00 -- all <= $2. gpt-5-mini is next at
-    # 2.25, just over the $2 ceiling.
+    # 2.25, just over the $2 ceiling. gpt-5-nano is in the band but
+    # deprecated (shuts down 2026-12-11), so it never qualifies.
     # deepseek-v4-pro moved out of this tier in the 2026-08-27 catalog
     # refresh: its stale $0.435/$0.87 ($1.305 blended) was corrected to
     # the official peak rate $1.32/$3.96 ($5.28 blended), landing it in
@@ -70,7 +71,6 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     qualifying = {c.model.id for c in candidates if c.qualifies}
 
     assert qualifying == {
-        "gpt-5-nano",
         "gemini-2.5-flash-lite",
         "gpt-6-luna",
         "claude-haiku-5-5",
@@ -93,7 +93,8 @@ def test_high_budget_excludes_the_very_high_cost_tier(models):
     # 2026-08-27 catalog refresh corrected it to OpenAI's live
     # promotional price $4.00/$20.00 ($24 blended, in effect at least
     # through 2026-11-21) -- see Docs/CHANGELOG.md, 2026-08-27 -- which
-    # now qualifies under this $30 ceiling.
+    # now qualifies under this $30 ceiling. Deprecated models are
+    # disqualified too, for that reason alone, never for cost.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -103,9 +104,9 @@ def test_high_budget_excludes_the_very_high_cost_tier(models):
     )
 
     candidates = evaluate(context, models)
-    disqualified_ids = {c.model.id for c in candidates if not c.qualifies}
+    over_budget = {c.model.id for c in candidates if not c.qualifies and not c.model.lifecycle.deprecated}
 
-    assert disqualified_ids == {"claude-fable-5", "claude-fable-5-1", "gpt-6-astra"}
+    assert over_budget == {"claude-fable-5", "claude-fable-5-1", "gpt-6-astra"}
 
 
 def test_very_high_budget_admits_every_language_qualifying_model(models):
@@ -119,7 +120,7 @@ def test_very_high_budget_admits_every_language_qualifying_model(models):
 
     candidates = evaluate(context, models)
 
-    assert all(c.qualifies for c in candidates)
+    assert all(c.qualifies for c in candidates if not c.model.lifecycle.deprecated)
 
 
 def test_custom_budget_never_filters_by_cost(models):
@@ -138,7 +139,7 @@ def test_custom_budget_never_filters_by_cost(models):
 
     candidates = evaluate(context, models)
 
-    assert all(c.qualifies for c in candidates)
+    assert all(c.qualifies for c in candidates if not c.model.lifecycle.deprecated)
 
 
 def test_cost_weight_dampens_by_budget_tier_unless_cost_is_first():
@@ -215,7 +216,7 @@ def test_cost_weight_is_never_dampened_under_custom_budget():
     assert _dampen_cost_weight(context, weights) == weights
 
 
-def test_gemini_3_7_flash_wins_on_reasoning_even_with_cost_dampened(models):
+def test_gemini_3_8_flash_wins_on_reasoning_even_with_cost_dampened(models):
     # HANDOFF.md "Finding 1" originally documented deepseek-v4-pro
     # winning this extreme case (Reasoning#1, Cost#2, budget=High)
     # because its price gap to the competition was wide enough that
@@ -225,7 +226,9 @@ def test_gemini_3_7_flash_wins_on_reasoning_even_with_cost_dampened(models):
     # to the official peak rate ($1.32/$3.96, $5.28 blended) -- see
     # Docs/CHANGELOG.md, 2026-08-27 -- closing that gap and moving the
     # win to gemini-3.7-flash instead, confirmed by re-running
-    # evaluate() against the corrected dataset, not guessed.
+    # evaluate() against the corrected dataset, not guessed. Since
+    # 2026-10-14 gemini-3.7-flash is deprecated (its endpoint routes to
+    # gemini-3.8-flash), and its successor, same rating and price, wins.
     context = Context(
         use_case="Complex agentic workflow",
         budget_mode=BudgetMode.TIER,
@@ -236,7 +239,7 @@ def test_gemini_3_7_flash_wins_on_reasoning_even_with_cost_dampened(models):
 
     candidates = evaluate(context, models)
 
-    assert candidates[0].model.id == "gemini-3.7-flash"
+    assert candidates[0].model.id == "gemini-3.8-flash"
 
 
 def test_cost_priority_picks_the_cheapest_qualifying_model(models):
@@ -244,6 +247,8 @@ def test_cost_priority_picks_the_cheapest_qualifying_model(models):
     # since the 2026-08-27 catalog refresh corrected the latter's stale
     # $0.14/$0.28 price ($0.42 blended) to the official peak rate
     # $0.44/$1.32 ($1.76 blended) -- see Docs/CHANGELOG.md, 2026-08-27.
+    # gpt-5-nano is deprecated since 2026-10-14's lifecycle pass, so the
+    # cheapest qualifying model is now gemini-2.5-flash-lite ($0.50).
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -254,7 +259,7 @@ def test_cost_priority_picks_the_cheapest_qualifying_model(models):
 
     candidates = evaluate(context, models)
 
-    assert candidates[0].model.id == "gpt-5-nano"
+    assert candidates[0].model.id == "gemini-2.5-flash-lite"
 
 
 def test_reasoning_priority_picks_the_strongest_reasoning_model(models):

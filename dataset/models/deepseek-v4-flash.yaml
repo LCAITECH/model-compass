@@ -47,3 +47,12 @@ ecosystem:
 
 access:
   has_free_access: false
+
+# Source: https://api-docs.deepseek.com/quick_start/pricing (checked 2026-10-14).
+# Served as DeepSeek-V4.1-Flash; the deepseek-v4-flash name is still accepted.
+# Release date: https://api-docs.deepseek.com/news/news260910/ (DeepSeek-V4.1-Flash Release).
+lifecycle:
+  status: active
+  release_date: "2026-09-10"
+  shutdown_date: null
+  replacement: null

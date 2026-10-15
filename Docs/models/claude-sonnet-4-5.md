@@ -31,6 +31,8 @@ retirement or an explicit remove decision, with lifecycle recorded here.
 `ecosystem.maturity` remains `stable` because `SCHEMA.md` has no
 `legacy`/`deprecated` enum value.
 
+**2026-10-14, `lifecycle` block (Iteration #28):** the policy above is decided. The YAML now records `status: deprecated`, `shutdown_date: "2026-11-30"`, `replacement: claude-sonnet-5-5`, re-checked on Anthropic's deprecations page the same day; `maturity` stays an editorial call and no longer has to carry this. The Decision Engine never recommends a `deprecated` model; this one is listed among the exclusions with its date and successor. The YAML and its access routes are removed on the shutdown date (`tests/test_catalog_dates.py` fails from that day).
+
 ---
 
 ## Identity

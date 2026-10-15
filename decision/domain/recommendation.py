@@ -14,8 +14,9 @@ from decision.domain.ai_model import AIModel, CostTier
 class Exclusion:
     """A model that never entered the ranking.
 
-    Disqualified by a hard filter (unsupported language, cost tier
-    over budget) before any scoring happened — it never competed, so
+    Disqualified by a hard filter (deprecated by its provider,
+    unsupported language, cost tier over budget) before any scoring
+    happened — it never competed, so
     it has no `rank`. Distinct from `Outranked`, which did compete.
     """
 

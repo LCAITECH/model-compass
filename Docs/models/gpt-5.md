@@ -20,6 +20,8 @@ the sourcing rule it follows.
 
 Source: [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations) (fetched 2026-10-07). Per Iteration #22, YAML stays in the active dataset; lifecycle noted here only.
 
+**2026-10-14, `lifecycle` block (Iteration #28):** the policy above is decided. The YAML now records `status: deprecated`, `shutdown_date: "2026-12-11"`, `replacement: gpt-5-6-sol`, re-checked on OpenAI's deprecations page the same day. The Decision Engine never recommends a `deprecated` model; this one is listed among the exclusions with its date and successor. The YAML and its access routes are removed on the shutdown date (`tests/test_catalog_dates.py` fails from that day).
+
 
 ## Identity
 

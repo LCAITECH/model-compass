@@ -45,3 +45,11 @@ ecosystem:
 
 access:
   has_free_access: false
+
+# Source: https://platform.claude.com/docs/en/about-claude/model-deprecations (checked 2026-10-14).
+# Release date: https://platform.claude.com/docs/en/models/sonnet-4-6/overview ("Released").
+lifecycle:
+  status: active
+  release_date: "2026-02-17"
+  shutdown_date: null
+  replacement: null

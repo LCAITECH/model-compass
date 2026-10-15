@@ -99,6 +99,8 @@ deprecation has been announced. `SCHEMA.md` has no lifecycle/retirement
 field, so this is recorded here in prose only, same convention as
 every other fact that doesn't map to a schema field.
 
+**2026-10-14:** re-checked on the same page, still `Active` with the same floor. `SCHEMA.md` now has a `lifecycle` block (Iteration #28); this entry records `status: active` and `shutdown_date: null`, because a "not sooner than" floor is not a shutdown date.
+
 ## Sources
 
 - [Claude models overview](https://platform.claude.com/docs/en/docs/about-claude/models/overview) — pricing, context window, max output, capabilities, thinking-mode positioning, knowledge cutoff (reliable: Feb 2025; training: Jul 2025).

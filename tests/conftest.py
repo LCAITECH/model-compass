@@ -15,6 +15,8 @@ from decision.domain import (
     Ecosystem,
     IntegrationEase,
     License,
+    Lifecycle,
+    LifecycleStatus,
     Maturity,
     Operational,
     Quality,
@@ -54,6 +56,7 @@ def make_model():
         instruction_following: QualityLevel | None = None,
         input_per_million: float = 1.0,
         output_per_million: float = 1.0,
+        lifecycle: Lifecycle = Lifecycle(LifecycleStatus.ACTIVE),
     ) -> AIModel:
         return AIModel(
             id=id,
@@ -74,6 +77,7 @@ def make_model():
             cost=Cost(input_per_million=input_per_million, output_per_million=output_per_million),
             ecosystem=Ecosystem(IntegrationEase.LOW, Maturity.STABLE),
             access=Access(has_free_access=False),
+            lifecycle=lifecycle,
         )
 
     return _make

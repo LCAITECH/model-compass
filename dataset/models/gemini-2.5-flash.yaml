@@ -45,3 +45,12 @@ ecosystem:
 
 access:
   has_free_access: true
+
+# Source: https://ai.google.dev/gemini-api/docs/deprecations (checked 2026-10-14).
+# "Not deprecated"; no shutdown date announced.
+# Release date: https://ai.google.dev/gemini-api/docs/deprecations (release date column).
+lifecycle:
+  status: active
+  release_date: "2025-06-17"
+  shutdown_date: null
+  replacement: null

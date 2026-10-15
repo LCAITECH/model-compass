@@ -87,6 +87,14 @@ notice a model entry is outdated:
    confirms it (for objective fields).
 3. Open a Pull Request.
 
+When a provider deprecates a model, set its `lifecycle` block (status,
+shutdown date, the successor's id) from the provider's own deprecations
+page — the engine stops recommending it from then on. On the shutdown
+date, remove the model's YAML and its access routes. Dated facts don't
+update themselves: `tests/test_catalog_dates.py` fails once a
+`cost.effective_until` or `lifecycle.shutdown_date` has passed, and warns
+in the 30 days before, so a stale entry can't go unnoticed.
+
 ### What makes a good dataset contribution
 
 - Objective fields are accurate and verifiable.

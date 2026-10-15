@@ -164,7 +164,9 @@ a temporary introductory rate with a provider-published expiration
 date; see `Docs/IMPLEMENTATION_NOTES.md`, Iteration #13. Nothing in
 this project re-checks these fields automatically once
 `effective_until` passes — updating `cost.*` back to the reverted
-price on that date is still a manual dataset edit.
+price on that date is still a manual dataset edit; since 2026-10-14
+`tests/test_catalog_dates.py` fails the suite from the day after
+`effective_until` until it is done (see Lifecycle below).
 
 Cost tier (e.g. "low-cost", "premium") is not stored in the dataset.
 It's a derived value, computed by the Decision Engine from the raw
@@ -220,6 +222,64 @@ table). That detail stays in prose, in that model's `docs/models/{id}.md`
 Access section, the same place other access nuance (subscription tiers,
 multi-surface access) already lives.
 
+### Lifecycle
+
+| Field                       | Type | Category      | Allowed values |
+|-------------------------------|------|---------------|-----------------|
+| `lifecycle.status`          | enum | `[Objective]` | `active`, `deprecated` |
+| `lifecycle.release_date`    | date (ISO 8601 string) or `null` | `[Objective]` | The day the provider first made the model available through its API. |
+| `lifecycle.shutdown_date`   | date (ISO 8601 string) or `null` | `[Objective]` | The specific date the provider publishes for turning the model off. |
+| `lifecycle.replacement`     | model id or `null` | `[Objective]` | The successor the provider names, when it is a model in this dataset. |
+
+Sourced from the provider's own deprecations or lifecycle page, never
+from an aggregator. Every key is required, `null` included, the same
+rule as `operational.max_output`: "the provider publishes no date" has
+to be written down, so a missing key can't pass for a checked one.
+
+- **`status`** is `deprecated` once the provider has announced the
+  model is going away, or already serves its requests with a successor
+  (Google's "the endpoint ... automatically routes API requests to"
+  wording). Providers use different words for the same thing (Anthropic
+  "Deprecated", OpenAI "deprecated"/"shut down", Google a shutdown date
+  plus a recommended replacement); the provider's page decides, and the
+  entry's YAML comment cites it. `active` is everything else, including
+  Anthropic's "Legacy".
+- **`shutdown_date`** is a specific date, never a "not sooner than"
+  floor: Anthropic gives every active model one ("not sooner than
+  2027-09-28") and it promises nothing. An `active` model can carry a
+  `shutdown_date` when the provider publishes one without announcing a
+  deprecation (`gemini-3.1-flash-lite`, 2027-05-07): it is shown, not
+  filtered.
+- **`release_date`** is the provider's own date for the model's first
+  API availability: Anthropic's per-model "Released" field, the release
+  date column of Google's deprecations page, OpenAI's API changelog,
+  DeepSeek's and Alibaba's release notes, Mistral's model card. For a
+  preview that later went GA it is the first public API date (DeepSeek
+  V4 Pro: 2026-04-24, GA 2026-08-13). Never a snapshot date read off a
+  model id, and never a blog date for a model that was not yet callable.
+  Display-only: it drives the "New" badge (released in the last 30 days,
+  `interfaces/web/catalog_notices.py`), never the ranking. Added
+  2026-10-14, Iteration #30.
+- **`replacement`** must be the id of another model in this dataset;
+  the loader checks it across files. If the provider's successor isn't
+  in the catalog, it is `null` and the successor is named in that
+  model's `Docs/models/{id}.md`.
+
+Unlike `ecosystem.maturity` (an editorial call about stability), this
+block decides something: **the Decision Engine never recommends a
+`deprecated` model.** It is a hard filter, like language and budget:
+the model is listed among the exclusions with the provider's date and
+successor, so the user sees why. Recommending it for new work would be
+advice the provider itself contradicts. First added 2026-10-14; see
+`Docs/IMPLEMENTATION_NOTES.md`, Iteration #28.
+
+Nothing in `decision/` reads the calendar: on the shutdown date the
+engine behaves exactly as the day before. Removing the model (its YAML
+and its access routes) on that date is a manual dataset edit, enforced
+by `tests/test_catalog_dates.py`, which fails from the first day a
+`shutdown_date` or a `cost.effective_until` has passed and warns during
+the 30 days before.
+
 ---
 
 ## Example — `gemini-2.5-flash.yaml`
@@ -265,6 +325,12 @@ ecosystem:
 
 access:
   has_free_access: false
+
+lifecycle:
+  status: active
+  release_date: "2025-06-17"
+  shutdown_date: null
+  replacement: null
 ```
 
 *Values in this example are illustrative and may not reflect the
@@ -290,6 +356,15 @@ document, is the source of truth for actual values.*
   `operational.max_output` must be a positive integer, or `null` when
   the provider publishes no output ceiling (the key may not be omitted).
 - `access.has_free_access` must be a boolean.
+- `lifecycle.status`, `lifecycle.release_date`,
+  `lifecycle.shutdown_date` and `lifecycle.replacement` must all be
+  present. Both dates are quoted ISO date strings or `null`, and a
+  `release_date` must come before a `shutdown_date`; `replacement` is
+  `null` or the id of another model in the dataset, never the model
+  itself.
+- No dated fact may be in the past: a `cost.effective_until` or
+  `lifecycle.shutdown_date` that has passed fails the test suite
+  (`tests/test_catalog_dates.py`) until the entry is updated.
 
 ## Contributing a New Model
 

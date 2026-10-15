@@ -33,6 +33,11 @@ ecosystem:
   maturity: stable
 access:
   has_free_access: false
+lifecycle:
+  status: active
+  release_date: null
+  shutdown_date: null
+  replacement: null
 """
 
 

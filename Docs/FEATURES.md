@@ -336,3 +336,11 @@ phases of the [Roadmap](./ROADMAP.md).
   dataset. Not started, not scoped — needs a decision on where (a)
   would even run from, given the project has no server-side scheduler
   today.
+  **2026-10-14, (a) partly in place:** known drift points now live in
+  the dataset itself (`cost.effective_until`, `lifecycle.shutdown_date`)
+  and the test suite is where they are checked:
+  `tests/test_catalog_dates.py` fails once a date has passed and warns
+  in the 30 days before, so every `pytest` run (including the daily
+  review of the catalog bot's PRs) is the schedule. Still missing:
+  anything that notices a change the dataset doesn't know about yet (a
+  new price, a new deprecation), which is (b).
