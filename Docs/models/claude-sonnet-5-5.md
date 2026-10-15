@@ -78,13 +78,23 @@ partner-models page lists it), Microsoft Foundry (Microsoft's
 Claude-models page lists `claude-sonnet-5-5` as "Hosted on Azure: GA").
 **No Claude-subscription route:** Anthropic's pages mention the Claude
 apps but name no plan tier (Pro/Max), so none was added rather than
-guessed. `has_free_access: false`.
+guessed.
+
+**Free access (`access.has_free_access`):** `true` since 2026-10-15,
+through the consumer app, not the API. Anthropic's Sonnet page: "Anyone
+can chat with Claude using Sonnet 5.5 on Claude.ai", which includes the
+Free plan, and claude.com/pricing marks Sonnet as included in Free. That
+is a chat app within Claude.ai's usage limits: building an application on
+the model still means the paid API, which has only a one-time starter
+credit. The field counts a free consumer plan since Iteration #32 (owner
+decision); before that it was `false` here.
 
 ## Sources
 
 - [Claude Sonnet 5.5 model page](https://platform.claude.com/docs/en/models/sonnet-5-5/overview)
 - [Models overview](https://platform.claude.com/docs/en/models/overview)
 - [Model deprecations / lifecycle](https://platform.claude.com/docs/en/about-claude/model-deprecations)
+- [Claude Sonnet](https://www.anthropic.com/claude/sonnet) and [Claude pricing](https://claude.com/pricing) — Sonnet 5.5 on Claude.ai, Free plan (2026-10-15)
 - [Amazon Bedrock models at a glance](https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html)
 - [Claude on Google Cloud](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude)
 - [Claude models in Microsoft Foundry](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/claude-models)

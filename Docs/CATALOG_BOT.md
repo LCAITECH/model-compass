@@ -72,8 +72,11 @@ broken PRs before:
   store the tier a typical first request hits and describe the other in
   `Docs/models/{id}.md` (Iteration #24).
 - **`access.has_free_access`** is `true` only with an official,
-  continuous way to use that exact model without paying for API usage
-  (`SCHEMA.md`, Access). A one-time credit is not one.
+  continuous way to use that exact model without paying: a free API
+  tier, even rate-limited, or the provider's free consumer plan when its
+  own page names that exact model (`SCHEMA.md`, Access; Iteration #32).
+  A one-time credit is not one, and neither is a paid plan, however
+  cheap. The model's `Docs/models/{id}.md` says which path it is.
 - **Editorial fields** (`quality`, `language_quality`, `ecosystem`) are
   judgment: evidence-based, never copied from a sibling or derived from
   a benchmark, and labeled as judgment in the PR. `maturity: stable`
@@ -196,6 +199,7 @@ Don't reopen these; raise new evidence under "Owner decision needed".
 | `deprecated` and `restricted` models are never recommended | Iterations #28, #29 |
 | Gemini 2.5 is `restricted`, successors picked by the owner | Iteration #29 |
 | `release_date` sourcing | Iteration #30 |
+| `has_free_access` counts a free API tier or a free consumer plan that names the model | Iteration #32 |
 | Plans: list price, multiplier in the provider's words, no token limits | Iteration #31 |
 | Text and code LLMs only | `VISION.md` |
 
@@ -205,8 +209,6 @@ The owner is working on these right now. Don't open PRs about them; if
 you find something new, mention it under "Owner decision needed". Items
 leave this list when they land on `main`.
 
-- `access.has_free_access` of `claude-haiku-5-5`, `claude-sonnet-5-5`
-  and `gpt-6-luna`.
 - Admissions: Mistral Large 4; Meta (Muse Wonder, Muse Spark 1.x);
   Qwen3.8-Flash, Qwen3.7-Plus, Qwen3.7-Flash; self-hosted open-weights
   models (Liquid AI LFM2.5).

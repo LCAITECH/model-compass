@@ -45,8 +45,11 @@ ecosystem:
   integration_ease: high
   maturity: stable
 
+# Free consumer plan, not the API (Iteration #32): "Anyone can chat with Claude
+# using Sonnet 5.5 on Claude.ai". The API has only a one-time starter credit.
+# Source: https://www.anthropic.com/claude/sonnet (checked 2026-10-15).
 access:
-  has_free_access: false
+  has_free_access: true
 
 # Source: https://platform.claude.com/docs/en/about-claude/model-deprecations (checked 2026-10-14).
 # Release date: https://platform.claude.com/docs/en/models/sonnet-5-5/overview ("Released").

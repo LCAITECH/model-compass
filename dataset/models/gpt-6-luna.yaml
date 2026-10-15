@@ -46,8 +46,11 @@ ecosystem:
   integration_ease: high
   maturity: stable
 
+# Free consumer plan, not the API (Iteration #32): ChatGPT's plan table lists
+# GPT-6 Luna as available on Free. The API's Free tier is "Not supported" on the
+# model page. Source: https://chatgpt.com/pricing (checked 2026-10-15).
 access:
-  has_free_access: false
+  has_free_access: true
 
 # Source: https://developers.openai.com/api/docs/deprecations (checked 2026-10-14).
 # Not on the deprecations page.

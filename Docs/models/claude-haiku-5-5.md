@@ -96,11 +96,19 @@ direct API (Anthropic model page), AWS Bedrock (AWS's models-at-a-glance
 page lists Claude Haiku 5.5 under Claude 5.x), Google Vertex (Google
 Cloud's own Claude Haiku 5.5 page: model id `claude-haiku-5-5`, launch
 stage GA), Microsoft Foundry (Microsoft's Claude-models page lists
-`claude-haiku-5-5` as "Hosted on Azure: GA"). **No Claude-subscription
-route:** Anthropic's pages name no plan tier, so none was added rather
-than guessed. `has_free_access: false` — Anthropic's pricing FAQ
-describes only a small one-time credit for new users, not continuous
-free access.
+`claude-haiku-5-5` as "Hosted on Azure: GA"). A fifth route, the Claude
+subscription (Pro, Max 5x, Max 20x), was added on 2026-10-14 from
+Anthropic's Haiku page, which names the plans; the admission pass had
+found no page that did.
+
+**Free access (`access.has_free_access`):** `true` since 2026-10-15,
+through the consumer app, not the API. Anthropic's Haiku page: "Free,
+Pro, Max, Team, and Enterprise users can select Haiku 5.5 on Claude.ai",
+so the Free plan reaches this exact model, within Claude.ai's usage
+limits. That is a chat app: building an application on the model still
+means the paid API, where Anthropic's pricing FAQ describes only a small
+one-time credit for new users. The field counts a free consumer plan
+since Iteration #32 (owner decision); before that it was `false` here.
 
 **Rate limits (prose only, per Iteration #8):** Anthropic's rate-limits
 page lists Claude Haiku 5.5 at the Start tier (entry-level standard
@@ -123,6 +131,7 @@ Cloud's page states the same floor for Vertex.
 - [Pricing](https://platform.claude.com/docs/en/about-claude/pricing) — both price tiers, batch, long-context note, tool-use token table.
 - [Rate limits](https://platform.claude.com/docs/en/api/rate-limits) — Start/Build/Scale limits.
 - [Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations) — lifecycle.
+- [Claude Haiku](https://www.anthropic.com/claude/haiku) — plans that reach the model on Claude.ai, Free included (2026-10-15).
 - [Structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)
 - [Amazon Bedrock models at a glance](https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html)
 - [Claude Haiku 5.5 on Google Cloud](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/haiku-5-5)

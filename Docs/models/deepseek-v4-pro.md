@@ -100,9 +100,15 @@ captured by `SCHEMA.md`, same known granularity gap as
 Standard DeepSeek API at the pricing in `cost.*` above. No other
 access surface checked for this entry.
 
-**Free access (`access.has_free_access`):** `false`. DeepSeek's
-official pricing page makes no mention of any free tier or trial
-credit — confirmed directly, 2026-08-10.
+**Free access (`access.has_free_access`):** `true` since 2026-10-15,
+through DeepSeek's consumer app, not the API. DeepSeek's V4 Pro GA
+release note (2026-08-13): "V4 Pro is now available on app/web. Try it
+via 'Expert Mode'". DeepSeek's app announcement (2025-01-15): "100% FREE
+- No ads, no in-app purchases". That is a chat app: building an
+application on the model still means the paid API, whose pricing page
+makes no mention of any free tier or trial credit (confirmed directly,
+2026-08-10, and again 2026-10-15). The field counts a free consumer plan
+since Iteration #32 (owner decision); before that it was `false` here.
 
 ## Sources
 
@@ -111,6 +117,7 @@ credit — confirmed directly, 2026-08-10.
 - [DeepSeek JSON Output guide](https://api-docs.deepseek.com/guides/json_mode) — confirms example-guided JSON mode, not strict schema.
 - [DeepSeek Responses API guide](https://api-docs.deepseek.com/guides/responses_api) — explicit confirmation that image/file inputs are unsupported.
 - [DeepSeek V4 Preview Release announcement](https://api-docs.deepseek.com/news/news260424/) — release date, parameter counts, and (as of the 2026-08-10 re-evaluation) the "World-Class Reasoning" / coding positioning quotes now used as the basis for `quality.reasoning` and `quality.coding` above. Chart-only benchmark figures on the same page were not used, per `SCHEMA.md`'s ban on benchmark-derived ratings.
+- [DeepSeek-V4-Pro GA Release](https://api-docs.deepseek.com/news/news260813/) and [Introducing DeepSeek App](https://api-docs.deepseek.com/news/news250115/) — free access through the app (2026-10-15).
 - [DeepSeek-V4-Pro model card, Hugging Face](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro) — license (MIT), no vision/multimodal mention.
 - Full navigation index of `api-docs.deepseek.com` — confirmed no vision/image/audio guide exists anywhere in the docs.
 

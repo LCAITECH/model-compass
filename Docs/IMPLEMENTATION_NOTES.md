@@ -1542,3 +1542,62 @@ found, not applied (owner decision: separate fix later): Claude Haiku
 5.5 and Sonnet 5.5 are usable on Claude.ai Free and GPT-6 Luna on
 ChatGPT Free, yet all three store `access.has_free_access: false`.
 Status: closed.
+
+---
+
+## Iteration #32
+
+**Observation**
+Iteration #31's update left a finding open: Claude Haiku 5.5 and Claude
+Sonnet 5.5 are usable on Claude.ai's Free plan and GPT-6 Luna on
+ChatGPT's Free plan, yet all three stored `access.has_free_access:
+false`. Re-read on the providers' own pages on 2026-10-15: Anthropic's
+Haiku page ("Free, Pro, Max, Team, and Enterprise users can select Haiku
+5.5 on Claude.ai"), its Sonnet page ("Anyone can chat with Claude using
+Sonnet 5.5 on Claude.ai"; claude.com/pricing marks Sonnet as included in
+Free), ChatGPT's plan table (GPT-6 Luna "Sí" on Free; the es-419 page,
+the only one served from the reviewer's region). None of the three has
+a free API tier: Anthropic gives a one-time starter credit, and OpenAI's
+Luna model page lists the Free tier as "Not supported".
+
+The data was not wrong under the field's wording at the time: "without
+paying for API usage" had been read as "a free API tier", which is why
+the only `true` entries were Gemini models with a free tier in Google's
+Gemini API, and why `Docs/models/gpt-6-luna.md` called ChatGPT Free "a
+different surface". The open question was what the field means.
+
+**Current decision**
+Owner decision (2026-10-15), from three options (free API only, any free
+path, free API plus the app shown as a separate route): the field counts
+a free API tier, even with low rate limits, **or** the provider's free
+consumer plan when the provider's own page names that exact model. A
+paid plan never counts, however cheap. `SCHEMA.md`'s Access definition
+says so, and so does `Docs/CATALOG_BOT.md`. The three models are now
+`true`; each YAML comment and `Docs/models/{id}.md` Access section says
+the path is the consumer app, not the API, because a free chat app is
+not a way to build an application on the model.
+
+Consequence on the site: Claude Haiku 5.5 wins cost-first contexts under
+a low budget, so its result now shows the "Free access also documented"
+chip, which links to those Access notes. The ranking is unchanged; the
+field never affected it. The one test that asserted the old fact on the
+real page (`tests/test_web_budget.py`) was updated to the new fact, same
+scenario.
+
+The same reading was applied to the rest of the catalog, read on the
+providers' pages the same day, and two borderline cases went to the
+owner. `deepseek-v4-pro` is now `true` too ("V4 Pro is now available on
+app/web. Try it via 'Expert Mode'", DeepSeek's 2026-08-13 release note,
+and the DeepSeek app announced as "100% FREE"). `gpt-5-6-terra` stays
+`false` (owner decision): ChatGPT Free gives it only "limited access in
+Work and Codex in the desktop app", not the model in the app at large.
+`deepseek-v4-flash` stays `false`: its release note names the API only.
+No change either: Mistral's Free
+plan names "our latest models", not Mistral Large 3; no Alibaba page
+found names Qwen3.8-Max on a free consumer surface; Gemini 4 Argon is
+"not available on the Free tier"; Gemini 3.1 Pro Preview waits on the
+app naming question (Iteration #31's update).
+
+**Status**
+Applied: four models `true` (the three above and `deepseek-v4-pro`).
+Closed.

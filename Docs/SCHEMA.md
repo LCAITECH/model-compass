@@ -206,14 +206,23 @@ whose tier exceeds the chosen `BudgetLevel` doesn't qualify.
 | `access.has_free_access`    | boolean | `[Objective]` |
 
 **Definition, deliberately narrow:** there currently exists an official,
-documented way to use this specific model without paying for API usage —
-even if rate-limited, quota-capped, or otherwise restricted. `false` by
-default. Only becomes `true` when a specific model has demonstrable official
-free access from the provider's own documentation — never `true` by
-inference, and never based on a one-time trial credit (that's temporary, not
-continuous free access).
+documented way to use this specific model without paying — even if
+rate-limited, quota-capped, or otherwise restricted. Two paths count: a
+free tier of the provider's API (Google's Gemini API free tier, for
+several Gemini models), or the provider's free consumer plan when the
+provider's own page names that exact model (Claude.ai's Free plan for
+Claude Haiku 5.5). `false` by default. Only becomes `true` when a specific
+model has demonstrable official free access from the provider's own
+documentation — never `true` by inference or by family name, never based
+on a one-time trial credit (that's temporary, not continuous free
+access), and never for a paid plan, however cheap. The consumer path was
+added on 2026-10-15 (owner decision, `Docs/IMPLEMENTATION_NOTES.md`,
+Iteration #32); before that the field counted only free API tiers.
 
-The boolean says whether a documented path exists — not how generous it is.
+The boolean says whether a documented path exists — not how generous it
+is, nor which of the two it is: a model's Access section in
+`docs/models/{id}.md` says which, because a free chat app is not a way to
+build an application on the model.
 Exact limits, conditions, and expiry are not objective facts stable enough to
 put in this schema (see `Docs/IMPLEMENTATION_NOTES.md`, Iteration #8: most
 providers' rate limits are dynamic per-account dashboards or simply

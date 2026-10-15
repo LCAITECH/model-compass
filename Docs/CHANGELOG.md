@@ -19,6 +19,18 @@ public release to version against.
 
 ---
 
+## 2026-10-15 — Free access now counts the providers' free apps
+
+**Schema definition (owner decision) and dataset. The ranking is unchanged.**
+
+- **Why:** Claude Haiku 5.5 and Claude Sonnet 5.5 can be used on Claude.ai's Free plan and GPT-6 Luna on ChatGPT's Free plan, and the catalog said none of them had free access. It wasn't a data error: the field had only ever counted free API tiers, like the one Google offers for several Gemini models.
+- **New definition:** "free access" means the exact model can be used without paying, either through a free API tier (even a heavily rate-limited one) or through the provider's free app plan when the provider's own page names that model. A paid plan never counts, however cheap. Each model's audit doc says which of the two it is, because a free chat app is not a way to build an application on the model.
+- **What changes:** the three models now have free access, and so does DeepSeek V4 Pro, which DeepSeek's free app offers in "Expert Mode". Under a low budget, Claude Haiku 5.5 is the cost-first winner and its result now carries the "Free access also documented" chip, linking to notes that say it is the Claude.ai app, not the API.
+- **Not counted:** GPT-5.6 Terra, which ChatGPT Free offers only inside Work and Codex in the desktop app (owner's call); Mistral Large 3, Qwen3.8-Max and Gemini 4 Argon, which no free plan page names.
+- **Tests:** 303 pass; the one test that asserted the old fact on the real page now asserts the new one, same scenario.
+
+---
+
 ## 2026-10-15 — Gemini 2.5 stops being recommended
 
 **Schema (owner-approved: a `restricted` lifecycle status), dataset and Decision Engine. Rankings change.**

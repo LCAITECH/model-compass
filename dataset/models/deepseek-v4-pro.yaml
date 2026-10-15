@@ -44,8 +44,12 @@ ecosystem:
   integration_ease: medium
   maturity: stable
 
+# Free consumer app, not the API (Iteration #32): "V4 Pro is now available on
+# app/web. Try it via 'Expert Mode'" (https://api-docs.deepseek.com/news/news260813/),
+# and the DeepSeek app is "100% FREE - No ads, no in-app purchases"
+# (https://api-docs.deepseek.com/news/news250115/). Both checked 2026-10-15.
 access:
-  has_free_access: false
+  has_free_access: true
 
 # Source: https://api-docs.deepseek.com/quick_start/pricing (checked 2026-10-14).
 # Listed as DeepSeek-V4-Pro-0813.

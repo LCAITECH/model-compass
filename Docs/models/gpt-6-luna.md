@@ -81,15 +81,22 @@ described in OpenAI's GPT-6 Sol and Luna announcement.
 
 Standard OpenAI API at the pricing in `cost.*` above.
 
-**Free access (`access.has_free_access`):** `false`. Model page: Free
-tier "Not supported" for API. (ChatGPT Free/Go desktop access to Luna
-is a different surface, not continuous free API access per
-`SCHEMA.md`.)
+**Free access (`access.has_free_access`):** `true` since 2026-10-15,
+through the consumer app, not the API. ChatGPT's plan comparison table
+lists GPT-6 Luna as available on the Free plan (read 2026-10-15 on the
+es-419 page, the only one served from the reviewer's region: "Plan:
+Gratis. Característica: GPT-6 Luna, Sí"). That is a chat app within
+ChatGPT's usage limits: building an application on the model still means
+the paid API, whose Free tier is "Not supported" on the model page. The
+field counts a free consumer plan since Iteration #32 (owner decision);
+before that it was `false` here, on the reasoning that ChatGPT is a
+different surface from the API.
 
 ## Sources
 
 - [GPT-6 Luna model page](https://developers.openai.com/api/docs/models/gpt-6-luna)
 - [OpenAI API pricing](https://developers.openai.com/api/docs/pricing)
+- [ChatGPT plans](https://chatgpt.com/pricing) — free access (2026-10-15)
 - [Introducing GPT-6 Sol and Luna](https://openai.com/index/introducing-gpt-6-sol-and-luna/)
 
 Accessed 2026-10-07, official OpenAI documentation only.
