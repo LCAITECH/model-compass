@@ -1,0 +1,238 @@
+/* /plans ("Subscription or API?"): page frame, form, the strip of plans
+   and the footnote. The two-paths scene is in plans-paths.css. */
+
+body.page-plans main,
+body.page-plans .site-header,
+body.page-plans .site-footer {
+  max-width: 1200px;
+}
+
+.plans-page {
+  gap: var(--space-8);
+}
+
+.plans-head h1 {
+  margin: var(--space-2) 0 var(--space-3);
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.plans-head p {
+  max-width: 66ch;
+  margin: 0;
+}
+
+/* graph.css caps cards in .fade-in at a reading width; the form spans the page. */
+.fade-in.plans-page > .plans-form.card {
+  max-width: none;
+}
+
+.plans-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.plans-form .primary-button {
+  align-self: flex-start;
+  margin-top: 0;
+}
+
+.plans-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.plans-field,
+.plans-use,
+.plans-usage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.plans-form .label {
+  margin: 0;
+  padding: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.plans-hint {
+  font-size: var(--text-xs);
+  line-height: 1.45;
+}
+
+.plans-use {
+  grid-column: span 2;
+}
+
+@media (max-width: 760px) {
+  .plans-use {
+    grid-column: auto;
+  }
+}
+
+.plans-use .label {
+  margin-bottom: var(--space-1);
+}
+
+.use-choice {
+  position: relative;
+  margin: 0;
+  cursor: pointer;
+}
+
+.use-choice input {
+  position: absolute;
+  opacity: 0;
+}
+
+.use-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--input-bg);
+  font-size: var(--text-sm);
+  transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.use-card .muted {
+  font-size: var(--text-xs);
+  font-weight: 400;
+}
+
+.use-choice input:checked + .use-card {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 24px -14px var(--accent);
+}
+
+.use-choice input:focus-visible + .use-card {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.plans-fields .plans-use {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-2) var(--space-3);
+}
+
+.plans-fields .plans-use legend {
+  grid-column: 1 / -1;
+}
+
+.usage-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.usage-inputs label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  font-size: var(--text-xs);
+}
+
+/* The strip of plans that include the model. */
+
+.plan-strip h2 {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-xl);
+  letter-spacing: -0.01em;
+}
+
+.strip-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-3);
+}
+
+.strip-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+
+.strip-card:hover,
+.strip-card:focus-visible {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.strip-card.is-chosen {
+  border-color: var(--accent);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+    var(--surface);
+}
+
+.strip-name {
+  font-weight: 700;
+}
+
+.strip-price {
+  color: var(--accent);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.strip-price small {
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.strip-meta,
+.strip-credits {
+  font-size: var(--text-xs);
+  line-height: 1.45;
+}
+
+.strip-meta {
+  color: var(--text-secondary);
+}
+
+.strip-credits {
+  color: var(--positive);
+  font-weight: 700;
+}
+
+.plans-footnote {
+  max-width: 90ch;
+  margin: 0;
+  font-size: var(--text-xs);
+  line-height: 1.6;
+}
+
+html[data-effects="on"] .strip-card {
+  animation: pln-rise 600ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  animation-delay: calc(400ms + var(--i, 0) * 80ms);
+}
+
+@keyframes pln-rise {
+  from { opacity: 0; translate: 0 14px; }
+}

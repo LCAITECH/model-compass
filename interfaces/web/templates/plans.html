@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Model Compass — Subscription or API?{% endblock %}
+{% block body_class %}page-plans{% endblock %}
+{% block content %}
+<div class="fade-in plans-page">
+<div class="plans-head">
+  <p class="eyebrow">Subscription or API?</p>
+  <h1>How should you pay for it?</h1>
+  <p class="muted">Pick a model. On one side, what a monthly amount buys on the API, measured at list prices. On the other, the plans that include the model: their price, what they come with and their limit, which no provider publishes in tokens. That gap is shown as it is, not filled in with a guess.</p>
+</div>
+
+{% include "_plans_form.html" %}
+
+{% if comparison %}
+{% include "_plans_paths.html" %}
+{% endif %}
+</div>
+<script src="/static/plans.js"></script>
+{% endblock %}

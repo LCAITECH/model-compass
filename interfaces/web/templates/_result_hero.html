@@ -23,6 +23,7 @@
   </ul>
   {% endif %}
 
+  <a class="compare-link" href="/plans?model={{ recommendation.recommended.id }}">How should you pay for it? &rarr;</a>
   {% if recommendation.alternatives %}
   <a class="compare-link" href="/compare?m={{ recommendation.recommended.id }}{% for alt in recommendation.alternatives %}&amp;m={{ alt.model.id }}{% endfor %}&amp;language={{ context.language }}{% if context.budget %}&amp;budget={{ context.budget.value }}{% endif %}{% for p in context.priorities %}&amp;priority_{{ loop.index }}={{ p.value }}{% endfor %}">Compare with the top alternatives &rarr;</a>
   {% endif %}

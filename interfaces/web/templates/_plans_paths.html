@@ -1,0 +1,94 @@
+{#- Two paths and where they meet. Left: the API, measured (tokens a dollar
+    amount buys at list prices). Right: the plan, in fog, because its limit
+    is not published in tokens; only what the provider does publish is
+    shown (price, multiplier in its own words, included API credits).
+    Every value comes from plans_view.py. -#}
+<section class="paths tone-{{ verdict.tone }}" aria-label="API or plan">
+  <div class="path path-api">
+    <p class="path-kicker">API · measured</p>
+    <h2>{% if amount %}{{ amount }} a month on the API{% else %}The API, per token{% endif %}</h2>
+    {% if capacity %}
+    <div class="flow">
+      <div class="flow-row">
+        <span class="flow-label">All on input</span>
+        <span class="flow-bar" aria-hidden="true"><span style="--w: {{ capacity.input_bar }}%"></span></span>
+        <strong>{{ capacity.input }}</strong>
+      </div>
+      <div class="flow-row">
+        <span class="flow-label">All on output</span>
+        <span class="flow-bar" aria-hidden="true"><span style="--w: {{ capacity.output_bar }}%"></span></span>
+        <strong>{{ capacity.output }}</strong>
+      </div>
+    </div>
+    <p class="path-note">Two bounds for {{ model.name }} at list prices: real use mixes input and output and lands in between.</p>
+    {% if capacity.after_promo %}<p class="path-note is-warn">{{ capacity.after_promo }}</p>{% endif %}
+    {% else %}
+    <p class="path-note">Enter a monthly amount to see what it buys.</p>
+    {% endif %}
+    {% if api_cost %}<p class="path-fact">Your usage costs <strong>{{ api_cost }}</strong> a month at {{ model.name }}'s list prices.</p>
+    {% else %}<p class="path-fact is-empty">Add your monthly usage above, if you know it, and its exact API cost appears here.</p>{% endif %}
+    <ul class="path-facts">
+      <li>Billed per token, from your own account</li>
+      <li>Usable from your own code, services and automations</li>
+    </ul>
+  </div>
+
+  <div class="path-node" role="status">
+    <span class="node-orb" aria-hidden="true"><span></span></span>
+    <p class="eyebrow">Verdict</p>
+    <h2>{{ verdict.headline }}</h2>
+    <p>{{ verdict.detail }}</p>
+  </div>
+
+  <div class="path path-plan{{ ' is-empty' if not chosen_card }}">
+    {% if chosen_card %}
+    <p class="path-kicker">Plan · {{ chosen_card.plan.provider }}</p>
+    <h2>{{ chosen_card.plan.plan_name }} <span class="path-price">{{ chosen_card.price }}/month list price</span></h2>
+    <div class="fog">
+      <span class="fog-layer" aria-hidden="true"></span>
+      <span class="fog-layer" aria-hidden="true"></span>
+      <p class="fog-text">
+        <strong>Usage limit: not published in tokens</strong>
+        {% if chosen_card.multiplier %}<span>{{ chosen_card.multiplier }}</span>{% else %}<span>{{ chosen_card.plan.provider }} publishes no number for it.</span>{% endif %}
+      </p>
+    </div>
+    {% if chosen_card.credits %}
+    <div class="credit-chip">
+      <strong>Includes {{ chosen_card.credits.amount }}/month of API credits</strong>
+      <span>That is {{ chosen_card.credits.input }} of input or {{ chosen_card.credits.output }} of output of {{ model.name }} on the API.</span>
+      <span class="muted">{{ chosen_card.credits.conditions }}.</span>
+    </div>
+    {% endif %}
+    <ul class="path-facts">
+      <li>Where: {{ chosen_card.methods | join('; ') }}</li>
+      {% for exclusion in chosen_card.plan.documented_exclusions %}<li>{{ exclusion }}</li>{% endfor %}
+      {% if not chosen_card.production_allowed %}<li>Not allowed for production use per official docs</li>{% endif %}
+    </ul>
+    {% else %}
+    <p class="path-kicker">Plans</p>
+    <h2>No plan names {{ model.name }}</h2>
+    <div class="fog is-void">
+      <p class="fog-text"><strong>None of the {{ plan_count }} plans in this catalog</strong><span>lists this model on its own pages.</span></p>
+    </div>
+    <p class="path-note">Not documented is not the same as unavailable: a plan may include it without naming it.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% if cards %}
+<section class="plan-strip">
+  <h2>Plans that include {{ model.name }}</h2>
+  <div class="strip-cards">
+    {% for card in cards %}
+    <a class="strip-card{{ ' is-chosen' if card.chosen }}" href="{{ card.href }}"{{ ' aria-current="true"' if card.chosen }} style="--i: {{ loop.index }}">
+      <span class="strip-name">{{ card.plan.plan_name }}</span>
+      <span class="strip-price">{{ card.price }}<small>/month</small></span>
+      <span class="strip-meta">{{ card.multiplier or 'No usage multiplier published' }}</span>
+      {% if card.credits %}<span class="strip-credits">+ {{ card.credits.amount }}/month in API credits</span>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<p class="muted plans-footnote">Plans are matched to a model only where the provider's own page names that exact model, and no provider says the model in its apps is the same snapshot as the one on its API. Prices are US list prices before tax; change the amount to what you pay. The API side is exact at {{ model.name }}'s list prices, before caching or batch discounts. Plan limits are not shown as numbers because no provider publishes them in tokens. Sources and dates live in the dataset (<a href="https://github.com/LCAITECH/model-compass/tree/main/dataset/subscriptions" target="_blank" rel="noopener">dataset/subscriptions</a>).</p>

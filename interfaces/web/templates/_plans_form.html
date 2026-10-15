@@ -1,0 +1,64 @@
+{#- The /plans form: one GET form, usable without JavaScript. plans.js only
+    refills the amount when the plan changes and resubmits when the model
+    changes (the plan list depends on the model). -#}
+<form method="get" action="/plans" class="card plans-form" id="plans-form">
+  <div class="plans-fields">
+    <label class="plans-field plans-field-model">
+      <span class="label">Model</span>
+      <select name="model" data-plans-model>
+        <option value="">Choose a model</option>
+        {% for provider, group in model_groups %}
+        <optgroup label="{{ provider }}">
+          {% for m in group %}
+          <option value="{{ m.id }}"{{ ' selected' if model and model.id == m.id }}>{{ m.name }}{{ ' (deprecated)' if m.lifecycle.deprecated }}</option>
+          {% endfor %}
+        </optgroup>
+        {% endfor %}
+      </select>
+    </label>
+
+    <fieldset class="plans-use">
+      <legend class="label">How will you use it?</legend>
+      {% for mode, title, hint in use_choices %}
+      <label class="use-choice">
+        <input type="radio" name="use" value="{{ mode.value }}"{{ ' checked' if (use_mode or form.get('use') or 'manual') == mode.value }}>
+        <span class="use-card"><strong>{{ title }}</strong><span class="muted">{{ hint }}</span></span>
+      </label>
+      {% endfor %}
+    </fieldset>
+  </div>
+
+  {% if comparison %}
+  <div class="plans-fields">
+    {% if cards %}
+    <label class="plans-field">
+      <span class="label">Plan</span>
+      <select name="plan" data-plans-plan>
+        {% for card in cards %}
+        <option value="{{ card.plan.plan_id }}" data-price="{{ '%.2f'|format(card.plan.price.monthly_usd) }}"{{ ' selected' if card.chosen }}>{{ card.plan.plan_name }} · {{ card.price }}/month</option>
+        {% endfor %}
+      </select>
+    </label>
+    {% endif %}
+    <label class="plans-field">
+      <span class="label">Monthly amount <span class="optional">(USD, what you would pay)</span></span>
+      <span class="amount-input">
+        <span aria-hidden="true">$</span>
+        <input type="number" name="monthly_usd" min="0" step="0.01" placeholder="e.g. 20" value="{{ '%.2f'|format(comparison.monthly_usd) if comparison.monthly_usd is not none else '' }}" data-plans-amount>
+      </span>
+      <input type="hidden" name="amount_for" value="{{ comparison.chosen.plan.plan_id if comparison.chosen else '' }}" data-plans-amount-for>
+      <span class="muted plans-hint">{% if cards %}The plan's list price in the US. Change it to what you pay where you live.{% else %}Optional: what you would spend on the API each month.{% endif %}</span>
+    </label>
+    <fieldset class="plans-usage">
+      <legend class="label">Your monthly usage <span class="optional">(optional, millions of tokens)</span></legend>
+      <div class="usage-inputs">
+        <label><span class="muted">Input</span><input type="number" name="input_m" min="0" step="0.1" placeholder="e.g. 2" value="{{ form.get('input_m', '') }}"></label>
+        <label><span class="muted">Output</span><input type="number" name="output_m" min="0" step="0.1" placeholder="e.g. 0.5" value="{{ form.get('output_m', '') }}"></label>
+      </div>
+      <span class="muted plans-hint">Only if you know it, for example from your provider's usage page. Nothing here is estimated for you.</span>
+    </fieldset>
+  </div>
+  {% endif %}
+
+  <button type="submit" class="primary-button">{{ 'Compare' if comparison else 'Show the options' }}</button>
+</form>

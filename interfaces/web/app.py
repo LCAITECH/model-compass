@@ -49,6 +49,7 @@ from interfaces.web.comparison import (
 )
 from interfaces.web.context_form import InvalidFormError, context_from_form
 from interfaces.web.model_profile import best_for, less_suited_for, quality_profile
+from interfaces.web.plans_view import plans_context
 from interfaces.web.use_case_matcher import match_use_case
 from interfaces.web.use_cases import USE_CASES
 
@@ -256,6 +257,15 @@ def compare(request: Request, m: list[str] = Query(default=[])):
             "priorities": list(Priority),
         },
     )
+
+
+@app.get("/plans", response_class=HTMLResponse)
+def plans(request: Request):
+    """Subscription or API for one model (FEATURES.md, "Subscription vs. API
+    Comparator"). decision/access/plan_compare.py decides; the model is an
+    input, so nothing here touches the recommendation."""
+    context = plans_context(dict(request.query_params), models, access_routes, subscriptions)
+    return templates.TemplateResponse(request, "plans.html", context)
 
 
 @app.get("/use-case-suggestion", response_class=JSONResponse)
