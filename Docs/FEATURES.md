@@ -293,7 +293,20 @@ phases of the [Roadmap](./ROADMAP.md).
   for each selected model: whether it qualifies, its place among the
   qualifying models, and the engine's reasons, passed through unchanged
   with no score shown. Motivated by the tie-break behavior logged in
-  `IMPLEMENTATION_NOTES.md`, Iteration #27.
+  `IMPLEMENTATION_NOTES.md`, Iteration #27. **Extended 2026-10-14**
+  (owner-chosen set of improvements): an "only differences" switch;
+  a Lifecycle section (release date, days to a shutdown or to the end
+  of an introductory price, and a one-click swap to the named
+  replacement); price and limit bars relative to the selected models
+  only, plus an exact price ratio against the cheapest; an optional
+  monthly dollar amount shown as all-input / all-output token bounds
+  (the same no-usage-assumption rule as the main form's custom
+  budget); access routes grouped by surface, naming the subscription
+  plans; and, with a context, the engine's verdict drawn as an orbit
+  (every catalog model on the ring the engine put it in) with the
+  picks in the engine's order. Quality is drawn as one constellation
+  per model on the fixed four-level scale, never as a percentage or a
+  score.
 - **Live multi-provider playground** — run one prompt against several
   models at once and compare real responses, with per-run cost and
   latency measured live, plus an automatic "best model for this task"

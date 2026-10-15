@@ -19,6 +19,23 @@ public release to version against.
 
 ---
 
+## 2026-10-14 — The model comparator, rebuilt
+
+**Interface only: `decision/`, the dataset and the schema are unchanged. The improvements are the set the project owner picked from a list grounded in the old page.**
+
+- **Picker:** the selected models are chips, each with its own color and a remove button; "Add a model" is a searchable list where deprecated models are marked. The context folds away unless it is filled in. It is still a plain form, so it works without JavaScript.
+- **The engine's verdict, drawn:** with a context, every model in the catalog appears as a dot on the ring the engine put it in (the same rings as the result page's decision graph), the selected models are lit and numbered with their place, and a podium lists them in the engine's order with its reasons. If the engine's #1 is not in the selection, it can be added with one click.
+- **Quality constellations:** one per model, four axes (one per editorial rating) and four fixed rings for low to very high. A point always sits on a ring, so the drawing stays as discrete as the scale; the page says the shape is not a score.
+- **"Only differences":** a switch hides the rows where every selected model reads the same (often a third of them).
+- **Lifecycle:** release date (with "New" for the last 30 days), days left to a shutdown or to the end of an introductory price, and a "Swap in" button that replaces a model with its named successor while keeping the context.
+- **What a monthly amount buys:** type an amount and each model shows how many tokens it buys if spent all on input or all on output, plus the figure at the price that applies after a promotion. Two bounds, never a usage estimate.
+- **Prices and limits as bars**, relative to the selected models only (never to an assumed maximum), with the exact ratio against the cheapest ("20×").
+- **Access by surface:** direct API, cloud platforms, subscription apps and studios each get their own row, with chips linking to the access guide and naming the plans. Where no route is documented the page says "Not documented", not "No".
+- **Layout:** model columns read as cards with a header that stays pinned while scrolling; on phones each model is a swipeable card. Light and dark themes.
+- **Housekeeping:** the view logic is split into four modules to stay under the 400-line limit. **Tests:** 263 pass (+16).
+
+---
+
 ## 2026-10-14 — Catalog radar: new releases, introductory prices and retirements on the site
 
 **Schema (owner-approved: `lifecycle.release_date`) and interface. The Decision Engine is unchanged: none of this affects rankings.**
