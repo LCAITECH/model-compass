@@ -46,7 +46,7 @@ ecosystem:
 access:
   has_free_access: false
 
-# Source: https://platform.claude.com/docs/en/about-claude/model-deprecations (checked 2026-10-14).
+# Source: https://platform.claude.com/docs/en/about-claude/model-deprecations (checked 2026-10-15).
 # Release date: https://platform.claude.com/docs/en/models/haiku-4-5/overview ("Released").
 lifecycle:
   status: active

@@ -214,5 +214,4 @@ leave this list when they land on `main`.
   (Iteration #33); the owner re-checks it after 2026-10-31.
 - Self-hosted open-weights models (Liquid AI LFM2.5, Meta's Muse
   Glimmer): no policy yet.
-- The `lifecycle` block of `claude-haiku-4-5`.
 - A subscription route for "Gemini 3.1 Pro" in the Gemini app.

@@ -101,6 +101,8 @@ every other fact that doesn't map to a schema field.
 
 **2026-10-14:** re-checked on the same page, still `Active` with the same floor. `SCHEMA.md` now has a `lifecycle` block (Iteration #28); this entry records `status: active` and `shutdown_date: null`, because a "not sooner than" floor is not a shutdown date.
 
+**2026-10-15 (the floor date):** re-checked on the same page. Still `Active`, Deprecated N/A, retirement "not sooner than October 15, 2026", and no Haiku 4.5 entry in the deprecation history. The floor only opens the window: the same page promises "at least 60 days' notice before model retirement for publicly released models", so the earliest possible retirement is now 2026-12-14, and only if Anthropic announces it today. No dataset change. The same check confirmed every other Claude entry against the page's status table: all `active` except `claude-sonnet-4-5` (deprecated 2026-09-30, retirement 2026-11-30, replacement `claude-sonnet-5-5`), as the dataset has them.
+
 ## Sources
 
 - [Claude models overview](https://platform.claude.com/docs/en/docs/about-claude/models/overview) — pricing, context window, max output, capabilities, thinking-mode positioning, knowledge cutoff (reliable: Feb 2025; training: Jul 2025).
