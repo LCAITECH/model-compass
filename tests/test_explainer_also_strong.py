@@ -40,6 +40,8 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
     # predecessors. gemini-3.7-flash and gpt-5 left it on 2026-10-14:
     # both are deprecated, so they no longer qualify. gemini-2.5-pro left
     # it on 2026-10-15: restricted (Google limits it to existing users).
+    # muse-wonder-1.0 joined on 2026-10-15 (very_high reasoning, $24
+    # blended, inside the high band).
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -53,7 +55,7 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
 
     assert recommendation.recommended.id == "claude-opus-4-7"
     assert len(recommendation.alternatives) == 3
-    assert len(recommendation.also_strong_options) == 12
+    assert len(recommendation.also_strong_options) == 13
     assert {a.model.id for a in recommendation.also_strong_options} == {
         "claude-opus-4-8",
         "claude-opus-5",
@@ -66,9 +68,10 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
         "gemini-4-argon",
         "gpt-5-6-sol",
         "gpt-6-1-sol",
+        "muse-wonder-1.0",
         "qwen3.8-max",
     }
-    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 14))  # score-sorted, contiguous
+    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 15))  # score-sorted, contiguous
 
 
 def test_also_strong_options_excludes_close_score_but_unfair_quality_gap(models):

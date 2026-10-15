@@ -94,22 +94,27 @@ def test_recommend_omits_also_strong_options_when_the_winner_is_unmatched(client
     # pick for "outright winner" going forward. 2026-10-08: claude-haiku-5-5
     # ($0.60 blended, same reasoning/instruction_following as mistral-large-3)
     # turned that into a practical tie too, so priority_2 is now cost:
-    # claude-haiku-5-5 wins outright, no also-strong card.
+    # claude-haiku-5-5 wins outright, no also-strong card. 2026-10-15:
+    # qwen3.8-flash ($0.62 blended, same ratings) tied it as well, so the
+    # scenario is now cost then context window, found by searching every
+    # low/medium priority pair for one without a tie: gpt-6-luna wins
+    # outright on its 1.05M context window, and claude-haiku-5-5,
+    # qwen3.8-flash and gpt-5-6-luna are the ordinary alternatives.
     response = client.post(
         "/recommend",
         data={
             "use_case": "Customer support",
             "language": "en",
             "budget": "low",
-            "priority_1": "reasoning",
-            "priority_2": "cost",
+            "priority_1": "cost",
+            "priority_2": "context_window",
         },
     )
 
     assert response.status_code == 200
-    assert "Claude Haiku 5.5" in response.text
+    assert "GPT-6 Luna" in response.text
     assert "Also strong options" not in response.text
-    assert "DeepSeek V4.1 Flash" in response.text  # a real, unfiltered alternative
+    assert "Qwen3.8-Flash" in response.text  # a real, unfiltered alternative
 
 
 def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_routes(client):

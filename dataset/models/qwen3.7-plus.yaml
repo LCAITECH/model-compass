@@ -1,0 +1,64 @@
+id: qwen3.7-plus
+name: Qwen3.7-Plus
+provider: Alibaba Cloud
+version: "3.7"
+license: proprietary
+
+# Model page, Model Capabilities: Input Modality "Image Text Video", Output
+# "Text"; Function Calling and Structured Outputs "Supported". json_mode not
+# itemized, same basis as qwen3.8-max.
+# Source: https://www.alibabacloud.com/help/en/model-studio/qwen3-7-plus (checked 2026-10-15).
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+
+quality:
+  reasoning: high
+  coding: high
+  creative_writing: medium
+  instruction_following: high
+
+# Alibaba publishes no per-model language list; the curated Qwen set (qwen3.8-max).
+languages: [en, zh, es, fr, de, ja, ko, ar, ru, pt]
+language_quality:
+  en: very_high
+  zh: very_high
+  es: high
+  fr: high
+  de: high
+  ja: medium
+  ko: medium
+  ar: medium
+  ru: medium
+  pt: high
+
+operational:
+  context_window: 1000000
+  max_output: 131072
+
+# Two tiers by input length; the schema stores one, so this is the tier for
+# inputs up to 256k tokens (Iteration #24). International (Singapore) scope.
+# Source: https://www.alibabacloud.com/help/en/model-studio/qwen3-7-plus (checked 2026-10-15).
+cost:
+  input_per_million: 0.40
+  output_per_million: 1.60
+
+ecosystem:
+  integration_ease: high
+  maturity: stable
+
+access:
+  has_free_access: false
+
+# Source: https://www.alibabacloud.com/help/en/model-studio/models (checked 2026-10-15).
+# Release date: https://www.alibabacloud.com/help/en/model-studio/newly-released-models
+# (International, 2026-06-01; not the 2026-05-26 snapshot in the id of its snapshot).
+lifecycle:
+  status: active
+  release_date: "2026-06-01"
+  shutdown_date: null
+  replacement: null

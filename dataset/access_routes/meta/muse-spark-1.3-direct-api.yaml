@@ -1,0 +1,21 @@
+provider: Meta
+model_id: muse-spark-1.3
+access:
+  surface: direct_api
+  access_method: "API key (Meta Model API; OpenAI- and Anthropic-compatible endpoints)"
+  capabilities: [prototype, build, automation]
+  guide_ref: meta#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: region_dependent
+economics:
+  billing_owner: Meta
+  billing_scheme: api_token
+  quota_scope: organization
+  production_allowed: true
+evidence:
+  source_url: https://dev.meta.ai/docs/models
+  consulted_at: "2026-10-15"
+  status: confirmed
+  caveat: "Pay-as-you-go on Meta Model API in Standard mode, where Meta does not train on your content. The cheaper muse-spark-1.3-contributor id ($0.10/$0.20) is the same model with permission for Meta to train future models on your prompts and outputs. Availability varies by country (Meta's Geographic Use Policy). Rate limits apply per team, not per key."

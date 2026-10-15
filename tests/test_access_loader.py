@@ -53,10 +53,12 @@ def test_loads_all_real_access_routes():
     # and six GPT models in ChatGPT.
     # - 1 (gemini-2.5-pro-ai-studio) removed 2026-10-15: no plan page names
     #   the model, and Gemini 2.5 is restricted to existing users.
-    assert len(routes) == 94
+    # + 4 direct_api routes admitted 2026-10-15: muse-wonder-1.0 and
+    #   muse-spark-1.3 (Meta Model API), qwen3.8-flash and qwen3.7-plus.
+    assert len(routes) == 98
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
-    assert len(model_ids_with_direct_api) == 39
+    assert len(model_ids_with_direct_api) == 43
 
 
 def test_loads_all_real_subscriptions():

@@ -81,7 +81,9 @@ def test_retiring_lists_dated_shutdowns_first_then_routed_ones(models):
 def test_catalog_lists_new_releases_and_promos_soonest_first(models):
     notices = catalog_notices(models, TODAY)
 
-    assert [n.model.id for n in notices.new][:2] == ["gemini-4-argon", "claude-haiku-5-5"]
+    # muse-wonder-1.0 (released 2026-10-12, admitted 2026-10-15) sits
+    # between gemini-4-argon (2026-10-13) and claude-haiku-5-5 (2026-10-07).
+    assert [n.model.id for n in notices.new][:3] == ["gemini-4-argon", "muse-wonder-1.0", "claude-haiku-5-5"]
     assert [p.model.id for p in notices.promos] == ["gpt-5-6-sol", "gemini-4-argon", "gemini-3.6-flash", "gemini-3.8-flash"]
 
 

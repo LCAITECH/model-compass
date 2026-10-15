@@ -89,8 +89,8 @@ broken PRs before:
   `Docs/CHANGELOG.md` entry.
 - **Scope:** text and code LLMs only (`VISION.md`). No video, music or
   image-generation models.
-- **Providers:** Anthropic, DeepSeek, Google, Mistral AI, OpenAI and
-  Alibaba Cloud. A new provider, or a hosting platform (OpenRouter,
+- **Providers:** Anthropic, DeepSeek, Google, Mistral AI, OpenAI,
+  Alibaba Cloud and Meta. A new provider, or a hosting platform (OpenRouter,
   Groq), is the owner's call: report it under "Owner decision needed",
   don't add it.
 
@@ -200,6 +200,7 @@ Don't reopen these; raise new evidence under "Owner decision needed".
 | Gemini 2.5 is `restricted`, successors picked by the owner | Iteration #29 |
 | `release_date` sourcing | Iteration #30 |
 | `has_free_access` counts a free API tier or a free consumer plan that names the model | Iteration #32 |
+| Meta: curated languages; Contributor ids, Muse Spark 1.2/1.1 and Muse Wonder Full are not entries | Iteration #33 |
 | Plans: list price, multiplier in the provider's words, no token limits | Iteration #31 |
 | Text and code LLMs only | `VISION.md` |
 
@@ -209,8 +210,9 @@ The owner is working on these right now. Don't open PRs about them; if
 you find something new, mention it under "Owner decision needed". Items
 leave this list when they land on `main`.
 
-- Admissions: Mistral Large 4; Meta (Muse Wonder, Muse Spark 1.x);
-  Qwen3.8-Flash, Qwen3.7-Plus, Qwen3.7-Flash; self-hosted open-weights
-  models (Liquid AI LFM2.5).
+- Mistral Large 4: not admitted until its weights and license are out
+  (Iteration #33); the owner re-checks it after 2026-10-31.
+- Self-hosted open-weights models (Liquid AI LFM2.5, Meta's Muse
+  Glimmer): no policy yet.
 - The `lifecycle` block of `claude-haiku-4-5`.
 - A subscription route for "Gemini 3.1 Pro" in the Gemini app.

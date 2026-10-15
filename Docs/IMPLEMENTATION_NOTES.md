@@ -1085,6 +1085,10 @@ underlying reality (a combined token budget) may not map onto
 undocumented. Flagged to the project owner rather than guessed.
 
 **Status**
+Update 2026-10-15: `muse-spark-1.3` admitted (Iteration #33). Meta's
+setup guides now give an output figure, 131,072, which is what the entry
+stores.
+
 Update 2026-10-14: the underlying friction is resolved by Iteration #26
 (`max_output` may be `null`), so `muse-spark-1.3` is no longer blocked
 on this field. Original status follows, unchanged.
@@ -1601,3 +1605,68 @@ app naming question (Iteration #31's update).
 **Status**
 Applied: four models `true` (the three above and `deepseek-v4-pro`).
 Closed.
+
+---
+
+## Iteration #33
+
+**Observation**
+The admissions pass of 2026-10-15 (owner request) covered the candidates
+left open since Phase 14: Mistral Large 4, Meta's Muse models, and
+Qwen3.8-Flash, Qwen3.7-Plus and Qwen3.7-Flash. All read on the providers'
+own pages the same day. Four frictions:
+
+1. **Mistral Large 4** (`mistral-large-4`, public preview since
+   2026-10-06): its model card shows the license as "Coming soon" and
+   Mistral's announcement says "Weights drop end of this month", so
+   `license: open-weights` would state something not yet true. Its
+   price is a "Temporary sale price" ($0.68/$2.09 against a list
+   $1.36/$4.18) with no end date, and `cost.effective_until` needs a
+   published one.
+2. **Meta publishes no supported-language list** for the Muse models
+   (its model card is a PDF download, not read). The same gap as Claude,
+   Qwen and Mistral, which carry curated lists.
+3. **Muse Spark 1.3's output limit**: Meta's quickstart and
+   coding-agents guide tell agents to register it with "Limits: context
+   1048576, output 131072". The first output figure Meta publishes, which
+   Iteration #21 had set as its revisit condition, but inside a
+   recommended configuration rather than a limits table. Meta gives none
+   for Muse Wonder.
+4. **Audio**: Meta's models page says every Muse model takes audio input,
+   then that "Audio understanding in Muse Spark 1.3 is currently not fully
+   supported" (use 1.2 for audio). Muse Wonder's launch post adds that
+   "audio-dependent use cases require confirmation of audio support on
+   the release surface", while the API docs list audio for it.
+
+Also: Muse Spark has Contributor-mode ids (`-contributor`), the same
+model at a lower price in exchange for Meta training on your content;
+Muse Spark 1.2 and 1.1 are earlier versions still served; Muse Wonder
+Full is subscription-only with no API id. Qwen3.7-Flash is not in Model
+Studio's catalog.
+
+**Current decision**
+Owner decisions (2026-10-15):
+- Mistral Large 4 is not admitted yet. Re-check after 2026-10-31, when
+  Mistral says weights and license will be out; it stays on the bot
+  contract's "Owner work in progress" list until then.
+- Admitted: `muse-wonder-1.0` (preview, `maturity: experimental`,
+  `max_output: null`), `muse-spark-1.3` (`max_output: 131072` from Meta's
+  agent configuration, `audio: false` on Meta's caveat), `qwen3.8-flash`
+  and `qwen3.7-plus` (International scope; 3.7-Plus stores its <=256k
+  tier, Iteration #24). Contributor ids, Spark 1.2/1.1 and Wonder Full
+  stay in the docs, not the dataset.
+- Meta's languages are curated, conservatively: English `very_high`;
+  Spanish, Portuguese, French, German, Italian `high`. A short list keeps
+  the models out of contexts they may serve, the safer error. The Qwen
+  entries reuse `qwen3.8-max`'s curated list.
+- Muse Wonder keeps `audio: true` per the API docs, the surface the entry
+  describes; the launch post's hedge is in its doc.
+- Editorial ratings were proposed by Claude with the provider's own
+  words as evidence and approved by the owner before the commit.
+
+First Meta entries: `Docs/access-guides/meta.md` and
+`dataset/access_routes/meta/` are new.
+
+**Status**
+Four admitted (43 models, 98 routes). Mistral Large 4 pending, re-check
+after 2026-10-31.

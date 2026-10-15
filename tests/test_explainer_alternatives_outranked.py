@@ -23,6 +23,8 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
     # the alternatives are gpt-6-luna, gpt-5-6-luna (both standing out on
     # context window) and deepseek-v4-flash ($1.50), which stands out on
     # creative writing.
+    # 2026-10-15: qwen3.8-flash ($0.62 blended) takes deepseek-v4-flash's
+    # slot; it stands out on creative writing and instruction following.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -35,10 +37,10 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
     recommendation = explain(context, candidates)
     by_id = {alt.model.id: alt for alt in recommendation.alternatives}
 
-    assert set(by_id) == {"gpt-6-luna", "gpt-5-6-luna", "deepseek-v4-flash"}
+    assert set(by_id) == {"gpt-6-luna", "gpt-5-6-luna", "qwen3.8-flash"}
     assert any("context window" in reason for reason in by_id["gpt-6-luna"].reasons)
     assert any("context window" in reason for reason in by_id["gpt-5-6-luna"].reasons)
-    assert any("creative writing" in reason for reason in by_id["deepseek-v4-flash"].reasons)
+    assert any("creative writing" in reason for reason in by_id["qwen3.8-flash"].reasons)
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
@@ -60,6 +62,9 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     # and gemini-4-argon (admitted 2026-10-14, same curated Gemini list). qwen3.8-max is a new provider with no
     # sibling to inherit from -- its language list is independently
     # curated (Docs/models/qwen3.8-max.md), and happens to include "ko".
+    # 2026-10-15: qwen3.8-flash and qwen3.7-plus reuse that Qwen list, so
+    # qwen3.8-flash ($0.62 blended) now wins; muse-wonder-1.0 and
+    # muse-spark-1.3 (curated Meta list, no "ko") join the excluded.
     context = Context(
         use_case="Korean support assistant",
         budget_mode=BudgetMode.TIER,
@@ -71,8 +76,8 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.recommended.id == "mistral-large-3"
-    assert [alt.model.id for alt in recommendation.alternatives] == ["qwen3.8-max"]
+    assert recommendation.recommended.id == "qwen3.8-flash"
+    assert [alt.model.id for alt in recommendation.alternatives] == ["mistral-large-3", "qwen3.7-plus", "qwen3.8-max"]
     assert {excl.model.id for excl in recommendation.excluded} == {
         "gemini-2.5-flash",
         "gemini-2.5-flash-lite",
@@ -111,6 +116,8 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "gpt-6-1-sol",
         "gpt-6-luna",
         "gemini-4-argon",
+        "muse-wonder-1.0",
+        "muse-spark-1.3",
     }
     assert all(
         any("language" in reason for reason in excl.reasons)
@@ -134,7 +141,8 @@ def test_total_qualifying_and_alternative_ranks(models):
     # (lifecycle.status) never qualify either: 39 - 3 - 7 = 29, and
     # gemini-2.5-flash-lite replaces gpt-5-nano as the winner. Since
     # 2026-10-15 the 3 restricted Gemini 2.5 models don't qualify either:
-    # 29 - 3 = 26, and claude-haiku-5-5 wins.
+    # 29 - 3 = 26, and claude-haiku-5-5 wins. The four 2026-10-15
+    # admissions all qualify: 26 + 4 = 30.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -146,17 +154,17 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.total_qualifying == 26  # 39 - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra) - 7 deprecated - 3 restricted
+    assert recommendation.total_qualifying == 30  # 43 - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra) - 7 deprecated - 3 restricted
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
 def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
-    # Same context as above (26 qualifying, see
+    # Same context as above (30 qualifying, see
     # test_total_qualifying_and_alternative_ranks). Since 2026-10-15 the
     # winner is claude-haiku-5-5 and the top-3 alternatives are
-    # gpt-6-luna, gpt-5-6-luna and deepseek-v4-flash, which leaves
-    # gemini-3.1-flash-lite ($1.75 blended) as the first model past them,
-    # into the outranked group (rank 5 of 26).
+    # gpt-6-luna, qwen3.8-flash and gpt-5-6-luna, which leaves
+    # deepseek-v4-flash ($1.50 blended) as the first model past them,
+    # into the outranked group (rank 5 of 30).
     # Unlike the winner's trade_offs, its reasons include "Not the
     # cheapest option" even though COST is the prioritized dimension,
     # because there's no positive "reasons" line for it to contradict;
@@ -173,11 +181,11 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 22  # 26 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 27))
+    assert len(recommendation.outranked) == 26  # 30 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 31))
 
     first = recommendation.outranked[0]
-    assert first.model.id == "gemini-3.1-flash-lite"
+    assert first.model.id == "deepseek-v4-flash"
     assert any("Not the cheapest" in reason for reason in first.reasons)
 
 

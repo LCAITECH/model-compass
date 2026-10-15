@@ -19,6 +19,19 @@ public release to version against.
 
 ---
 
+## 2026-10-15 — Four new models: Meta's Muse Wonder and Muse Spark 1.3, Qwen3.8-Flash, Qwen3.7-Plus
+
+**Dataset and access catalog. Rankings change.**
+
+- **Meta, a new provider:** Muse Wonder ($4/$20, in preview, Meta's most capable model for long agentic and coding work) and Muse Spark 1.3 ($1.25/$4.25, Meta's model for volume work), both through Meta Model API with a new access guide. Meta publishes no language list, so both carry a short, curated one (English, Spanish, Portuguese, French, German, Italian) that keeps them out of languages nobody has confirmed. Muse Spark 1.3 is marked without audio, as Meta itself says audio isn't fully supported in that version. Its cheaper "Contributor" option, where Meta trains on your content, is described in its notes and not used for ranking.
+- **Alibaba Cloud:** Qwen3.8-Flash ($0.15/$0.47) and Qwen3.7-Plus ($0.40/$1.60 for inputs up to 256k), International pricing, like Qwen3.8-Max.
+- **What changes in results:** Qwen3.8-Flash is now an alternative in cost-first contexts (Claude Haiku 5.5 still wins at $0.60 against $0.62) and wins Korean-language contexts; Muse Wonder joins the "also strong" group for reasoning-first contexts. Under a high budget 30 models qualify.
+- **Not added yet:** Mistral Large 4, whose license is "Coming soon" and whose weights are due at the end of October, with a sale price that has no end date. Re-checked after 2026-10-31. Qwen3.7-Flash is not in Alibaba's catalog.
+- **Ratings:** the editorial ratings of the four models were proposed with the providers' own words as evidence and approved by the project owner.
+- **Tests:** 307 pass. Catalog counts and the expectations that list catalog members were updated from real engine runs; one web scenario whose winner became a tie was replaced with a real one that still has an outright winner.
+
+---
+
 ## 2026-10-15 — Free access now counts the providers' free apps
 
 **Schema definition (owner decision) and dataset. The ranking is unchanged.**
