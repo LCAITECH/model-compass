@@ -1,0 +1,80 @@
+{% import "_icons.html" as icons -%}
+{% import "_notices.html" as notices -%}
+{#- Floating notices for the result page: what the visitor should know
+    about the recommended model's dates, and which models are leaving the
+    catalog (and so are no longer recommended). Facts only, see
+    interfaces/web/catalog_notices.py. -#}
+{% set focus = badges_for(recommendation.recommended) %}
+{% set catalog = catalog_notices() %}
+{% set deprecated = catalog.retiring | selectattr('deprecated') | list %}
+{% if focus or catalog.retiring %}
+<aside class="notice-dock" data-notice-dock aria-label="Catalog notices">
+  <button type="button" class="notice-dock-handle" data-notice-collapse aria-expanded="true">
+    <span class="notice-dock-ping" aria-hidden="true"></span>
+    <span class="notice-dock-label">Catalog notices</span>
+    <span class="notice-dock-count">{{ [focus.new, focus.promo, focus.retiring] | select | list | length + (1 if catalog.retiring else 0) }}</span>
+  </button>
+  <div class="notice-stack" data-notice-stack>
+    {% if focus.promo %}
+    <article class="notice notice-promo" data-notice>
+      <span class="notice-icon">{{ icons.tag() }}</span>
+      <div class="notice-body">
+        <p class="notice-kicker">Introductory price</p>
+        <p class="notice-title">{{ recommendation.recommended.name }} costs {{ notices.price(focus.promo.now) }} per 1M tokens until {{ focus.promo.ends | short_date }}</p>
+        <p class="notice-text">From {{ focus.promo.reverts_on | short_date }} it goes to {{ notices.price(focus.promo.then) }}. This ranking used today's price.</p>
+      </div>
+      <p class="notice-count"><strong>{{ focus.promo.days_left }}</strong><span>{{ 'day' if focus.promo.days_left == 1 else 'days' }} left</span></p>
+      <button type="button" class="notice-close" data-notice-close aria-label="Dismiss this notice">&times;</button>
+    </article>
+    {% endif %}
+    {% if focus.retiring %}
+    <article class="notice notice-retiring" data-notice>
+      <span class="notice-icon">{{ icons.hourglass() }}</span>
+      <div class="notice-body">
+        <p class="notice-kicker">Scheduled shutdown</p>
+        <p class="notice-title">{{ recommendation.recommended.provider }} {{ notices.retiring_when(focus.retiring) }} for {{ recommendation.recommended.name }}</p>
+        <p class="notice-text">It is still recommended today{% if focus.retiring.replacement %}; the provider names {{ focus.retiring.replacement.name }} as its successor{% endif %}.</p>
+      </div>
+      {% if focus.retiring.days_left is not none %}
+      <p class="notice-count"><strong>{{ focus.retiring.days_left }}</strong><span>{{ 'day' if focus.retiring.days_left == 1 else 'days' }} left</span></p>
+      {% endif %}
+      <button type="button" class="notice-close" data-notice-close aria-label="Dismiss this notice">&times;</button>
+    </article>
+    {% endif %}
+    {% if focus.new %}
+    <article class="notice notice-new" data-notice>
+      <span class="notice-icon">{{ icons.bolt() }}</span>
+      <div class="notice-body">
+        <p class="notice-kicker">Fresh release</p>
+        <p class="notice-title">{{ recommendation.recommended.name }} was released {{ focus.new.release_date | short_date }}</p>
+        <p class="notice-text">New models change fast in their first weeks; check the provider's page before relying on it in production.</p>
+      </div>
+      <p class="notice-count"><strong>{{ focus.new.days_ago }}</strong><span>{{ 'day' if focus.new.days_ago == 1 else 'days' }} ago</span></p>
+      <button type="button" class="notice-close" data-notice-close aria-label="Dismiss this notice">&times;</button>
+    </article>
+    {% endif %}
+    {% if catalog.retiring %}
+    <article class="notice notice-leaving" data-notice>
+      <span class="notice-icon">{{ icons.hourglass() }}</span>
+      <div class="notice-body">
+        <p class="notice-kicker">Leaving the catalog</p>
+        <p class="notice-title">{{ deprecated | length }} model{{ 's' if deprecated | length != 1 }} deprecated by {{ 'their providers' if deprecated | length != 1 else 'its provider' }} — no longer recommended</p>
+        <details class="notice-details">
+          <summary>Dates and successors</summary>
+          <ul class="notice-list">
+            {% for r in catalog.retiring %}
+            <li class="{{ 'is-deprecated' if r.deprecated else 'is-scheduled' }}">
+              <span class="notice-list-name">{{ r.model.name }}</span>
+              <span class="notice-list-when">{% if r.shutdown_date %}{{ r.shutdown_date | short_date }}{% if r.days_left is not none %} · {{ notices.days(r.days_left) }}{% endif %}{% else %}routed now{% endif %}{% if not r.deprecated %} · still recommended{% endif %}</span>
+              {% if r.replacement %}<span class="notice-list-next">&rarr; {{ r.replacement.name }}</span>{% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </details>
+      </div>
+      <button type="button" class="notice-close" data-notice-close aria-label="Dismiss this notice">&times;</button>
+    </article>
+    {% endif %}
+  </div>
+</aside>
+{% endif %}

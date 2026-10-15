@@ -1,0 +1,41 @@
+{% import "_icons.html" as icons -%}
+{% if profile %}
+<div class="card">
+  <h2>Quality profile</h2>
+  <div class="quality-profile quality-profile-large">
+    {% for dim in profile.quality_profile %}
+    <div class="quality-row">
+      <span class="quality-label">{{ dim.label }}</span>
+      <span class="quality-segments" aria-hidden="true">
+        {% for i in range(dim.max_ordinal + 1) %}
+        <span class="segment{{ ' filled' if i <= dim.ordinal else '' }}"></span>
+        {% endfor %}
+      </span>
+      <span class="quality-level">{{ dim.level | capitalize }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if profile.best_for %}
+  <div class="chip-section">
+    <span class="label">Best for</span>
+    <div class="chip-row">
+      {% for item in profile.best_for %}
+      <span class="chip chip-positive">{{ icons.check() }}{{ item }}</span>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if profile.less_suited_for %}
+  <div class="chip-section">
+    <span class="label">Less suited for</span>
+    <div class="chip-row">
+      {% for item in profile.less_suited_for %}
+      <span class="chip chip-muted">{{ item }}</span>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endif %}

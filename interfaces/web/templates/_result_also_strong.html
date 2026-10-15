@@ -1,0 +1,36 @@
+{% import "_icons.html" as icons -%}
+{% import "_notices.html" as notices -%}
+{% if recommendation.also_strong_options %}
+<div class="card also-strong-card">
+  <h2>{{ icons.swap() }}Also strong options</h2>
+  <p class="muted">
+    {{ recommendation.also_strong_options | length }} other qualifying model{{ 's' if recommendation.also_strong_options | length != 1 }}
+    scored within 2% of {{ recommendation.recommended.name }} and stayed within one quality tier of it
+    on every dimension — practically tied, not clearly behind.
+    {{ recommendation.recommended.name }} is listed first because of a deterministic tie-break, not
+    because it scored higher.
+  </p>
+  <div class="alternatives-grid">
+    {% for opt in recommendation.also_strong_options %}
+    <div class="card alternative-card">
+      <div class="alternative-header">
+        <span class="alt-name">{{ opt.model.name }}</span>
+        <span class="chip chip-positive">Practically tied</span>
+        {{ notices.badges(opt.model, compact=true) }}
+        {% if opt.model.cost.blended < recommendation.recommended.cost.blended %}
+        <span class="chip chip-muted">Cheaper</span>
+        {% elif opt.model.cost.blended > recommendation.recommended.cost.blended %}
+        <span class="chip chip-muted">More expensive</span>
+        {% endif %}
+      </div>
+      <span class="muted">#{{ opt.rank }} of {{ recommendation.total_qualifying }} — ${{ "%.2f"|format(opt.model.cost.input_per_million) }} / ${{ "%.2f"|format(opt.model.cost.output_per_million) }} per 1M tokens</span>
+      {% if opt.reasons %}
+      <ul class="standout-reasons">
+        {{ icons.item_list(opt.reasons, icons.check) }}
+      </ul>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

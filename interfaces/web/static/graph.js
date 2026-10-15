@@ -31,8 +31,21 @@
     try {
       reasons = JSON.parse(d.reasons || "[]");
     } catch (e) {}
-    return { ring: d.ring, id: d.id, name: d.name, rank: d.rank, input: d.in, output: d.out, tied: d.tied === "1", reasons };
+    return {
+      ring: d.ring, id: d.id, name: d.name, rank: d.rank, input: d.in, output: d.out, tied: d.tied === "1", reasons,
+      isNew: d.new === "1", promo: d.promo || "", retiring: d.retiring || "", deprecated: d.deprecated === "1",
+    };
   }
+
+  // Dated facts about a model (see catalog_notices.py), as graph marks and a tooltip line.
+  const MARKS = [
+    { key: "promo", test: (m) => m.promo, label: "Intro price", text: (m) => `Intro price until ${m.promo}` },
+    { key: "new", test: (m) => m.isNew, label: "New release", text: () => "New release" },
+    {
+      key: "retiring", test: (m) => m.retiring, label: "Leaving",
+      text: (m) => (m.deprecated ? "Deprecated" : "Retiring") + (m.retiring === "routed" ? ", routed to its successor" : ` · ${m.retiring}`),
+    },
+  ];
 
   function compareHref(centerId, otherId) {
     const link = document.querySelector("a.compare-link");
@@ -103,6 +116,9 @@
         if (clickable) node.setAttribute("tabindex", "0");
         node.setAttribute("aria-label", `${model.name}${model.rank ? `, rank ${model.rank}` : ", excluded"}`);
         groups[key].appendChild(node);
+        MARKS.filter((mark) => mark.test(model)).forEach((mark, n) => {
+          groups[key].appendChild(el("circle", { cx: p.x, cy: p.y, r: RINGS[key].r + 4 + n * 4, class: `graph-mark graph-mark-${mark.key}` }));
+        });
         nodes.push({ node, model, key, x: p.x, y: p.y });
         if (key === "alt") {
           const label = el("text", { x: p.x, y: p.y + RINGS.alt.r + 19, class: "graph-label" });
@@ -131,7 +147,8 @@
       const reasons = m.reasons.slice(0, 2).map((r) => `<li>${r.replace(/</g, "&lt;")}</li>`).join("");
       const place = m.rank ? `#${m.rank} of ${totalQualifying}` : "Excluded";
       const price = m.input ? `$${m.input} / $${m.output} per 1M tokens` : "";
-      tip.innerHTML = `<strong></strong><span>${place}${price ? " · " + price : ""}</span>${reasons ? `<ul>${reasons}</ul>` : ""}${
+      const flags = MARKS.filter((mark) => mark.test(m)).map((mark) => mark.text(m)).join(" · ");
+      tip.innerHTML = `<strong></strong><span>${place}${price ? " · " + price : ""}</span>${flags ? `<b class="graph-tip-flags">${flags}</b>` : ""}${reasons ? `<ul>${reasons}</ul>` : ""}${
         entry.key !== "ex" && entry.key !== "center" ? "<em>Click to compare with the winner</em>" : ""
       }`;
       tip.querySelector("strong").textContent = m.name;
@@ -153,6 +170,14 @@
       };
       entry.node.addEventListener("click", go);
       entry.node.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    });
+
+    // Legend entries only for the marks this result actually shows.
+    const legend = figure.querySelector(".graph-legend");
+    MARKS.filter((mark) => items.some(mark.test)).forEach((mark) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span class="key key-mark" style="--mark: var(--tone-${mark.key === "retiring" ? "retire" : mark.key})"></span>${mark.label}`;
+      if (legend) legend.appendChild(li);
     });
 
     const stage = figure.querySelector(".graph-stage");

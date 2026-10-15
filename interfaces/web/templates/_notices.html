@@ -1,0 +1,34 @@
+{#- Dated catalog notices: badges for one model, plus the shared bits the
+    floating dock and the landing radar use. Every value comes from
+    interfaces/web/catalog_notices.py, which reads the model's own fields;
+    nothing here computes or estimates anything. -#}
+{% import "_icons.html" as icons %}
+
+{% macro days(n) -%}
+{% if n == 0 %}today{% elif n == 1 %}1 day{% else %}{{ n }} days{% endif %}
+{%- endmacro %}
+
+{% macro price(pair) -%}
+${{ "%.2f"|format(pair[0]) }} / ${{ "%.2f"|format(pair[1]) }}
+{%- endmacro %}
+
+{% macro retiring_when(r) -%}
+{% if r.shutdown_date %}shuts down {{ r.shutdown_date | short_date }}{% else %}requests already go to {{ r.replacement.name if r.replacement else 'a successor' }}{% endif %}
+{%- endmacro %}
+
+{% macro badges(model, compact=false) -%}
+{% set b = badges_for(model) %}
+{% if b %}
+<span class="mc-badges{{ ' mc-badges-compact' if compact }}">
+  {% if b.new %}
+  <span class="mc-badge mc-badge-new" title="Released {{ b.new.release_date | short_date }}, per the provider's own page">{{ icons.bolt() }}New<span class="mc-badge-meta">{% if b.new.days_ago == 0 %}released today{% else %}{{ days(b.new.days_ago) }} ago{% endif %}</span></span>
+  {% endif %}
+  {% if b.promo %}
+  <span class="mc-badge mc-badge-promo" title="Introductory price {{ price(b.promo.now) }} per 1M tokens through {{ b.promo.ends | short_date }}; {{ price(b.promo.then) }} from {{ b.promo.reverts_on | short_date }}">{{ icons.tag() }}Intro price<span class="mc-badge-meta">ends {{ b.promo.ends | short_date }}{% if not compact %} · {{ days(b.promo.days_left) }} left{% endif %}</span></span>
+  {% endif %}
+  {% if b.retiring %}
+  <span class="mc-badge mc-badge-retiring{{ ' is-deprecated' if b.retiring.deprecated }}" title="{{ 'Deprecated by its provider' if b.retiring.deprecated else 'Shutdown date published by its provider' }}{% if b.retiring.replacement %}; successor: {{ b.retiring.replacement.name }}{% endif %}">{{ icons.hourglass() }}{{ 'Deprecated' if b.retiring.deprecated else 'Retiring' }}<span class="mc-badge-meta">{% if b.retiring.shutdown_date %}{{ b.retiring.shutdown_date | short_date }}{% else %}routed to successor{% endif %}</span></span>
+  {% endif %}
+</span>
+{% endif %}
+{%- endmacro %}

@@ -1,0 +1,161 @@
+{% import "_icons.html" as icons -%}
+<div class="card">
+  <h2>{{ icons.dollar() }}Pricing</h2>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <span class="label">{{ icons.arrow_in() }}Input</span>
+      <span class="value">${{ "%.2f"|format(recommendation.recommended.cost.input_per_million) }}</span>
+      <span class="unit">per 1M tokens</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">{{ icons.arrow_out() }}Output</span>
+      <span class="value">${{ "%.2f"|format(recommendation.recommended.cost.output_per_million) }}</span>
+      <span class="unit">per 1M tokens</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">Cost tier</span>
+      <span class="value">
+        <span class="tier-dot tier-{{ recommendation.cost_tier.name | lower }}"></span>
+        {{ recommendation.cost_tier.name | humanize }}
+      </span>
+    </div>
+  </div>
+
+  {% if recommendation.recommended.cost.effective_until %}
+  <p class="muted cost-caveat">
+    Introductory price, in effect until {{ recommendation.recommended.cost.effective_until }} —
+    reverts to ${{ "%.2f"|format(recommendation.recommended.cost.reverts_to.input_per_million) }} input /
+    ${{ "%.2f"|format(recommendation.recommended.cost.reverts_to.output_per_million) }} output per 1M tokens afterward.
+  </p>
+  {% endif %}
+
+  {% if context.budget.value == 'low' and recommendation.recommended.access.has_free_access %}
+  <div class="chip-row-with-link">
+    <span class="chip chip-positive">{{ icons.check() }}Free access also documented — see this model's Access notes for limits</span>
+    <a class="chip-link" href="https://github.com/LCAITECH/model-compass/blob/main/Docs/models/{{ recommendation.recommended.id }}.md#access" target="_blank" rel="noopener">Read access docs &rarr;</a>
+  </div>
+  {% endif %}
+
+  {% if input_capacity %}
+  <div class="affordability">
+    <p>With ${{ "%.2f"|format(budget_usd) }}/month, this model gets you approximately:</p>
+    <div class="capacity-bars">
+      <div class="capacity-bar-row">
+        <span class="label">Input capacity</span>
+        <div class="capacity-bar"><div class="capacity-bar-fill" style="width: {{ input_capacity_pct }}%"></div></div>
+        <span class="value">{{ "{:,}".format(input_capacity) }} tokens</span>
+      </div>
+      <div class="capacity-bar-row">
+        <span class="label">Output capacity</span>
+        <div class="capacity-bar"><div class="capacity-bar-fill" style="width: {{ output_capacity_pct }}%"></div></div>
+        <span class="value">{{ "{:,}".format(output_capacity) }} tokens</span>
+      </div>
+    </div>
+    <p class="muted">
+      Each figure assumes the full budget spent on that one type alone — independent upper
+      bounds, not a combined total. Bars are scaled to each other, not to any fixed ceiling.
+      Real usage mixes both, so your actual capacity falls somewhere between the two.
+    </p>
+  </div>
+  {% endif %}
+
+  {% if savings and savings.comparison_rows %}
+  <div class="savings-callout">
+    <p class="savings-header">{{ icons.sparkle() }}<strong>You could spend less</strong></p>
+    <p>
+      <strong>{{ savings.model.name }}</strong> costs
+      <strong>{{ savings.input_pct }}%</strong> less on input and
+      <strong>{{ savings.output_pct }}%</strong> less on output than {{ recommendation.recommended.name }},
+      and stays within one quality tier on
+      {{ context.priorities[0].value.replace('_', ' ') }} — not just cheaper, a fair swap.
+    </p>
+    <div class="comparison-table-wrap">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th scope="col">&nbsp;</th>
+            <th scope="col">{{ recommendation.recommended.name }} (recommended)</th>
+            <th scope="col">{{ savings.model.name }} (lower-cost)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in savings.comparison_rows %}
+          <tr>
+            <th scope="row">{{ row.label }}</th>
+            <td>
+              <span class="quality-segments" aria-hidden="true">
+                {% for i in range(row.max_ordinal + 1) %}
+                <span class="segment{{ ' filled' if i <= row.recommended_ordinal else '' }}"></span>
+                {% endfor %}
+              </span>
+              {{ row.recommended_level | capitalize }}
+            </td>
+            <td>
+              <span class="quality-segments" aria-hidden="true">
+                {% for i in range(row.max_ordinal + 1) %}
+                <span class="segment{{ ' filled' if i <= row.alternative_ordinal else '' }}"></span>
+                {% endfor %}
+              </span>
+              {{ row.alternative_level | capitalize }}
+            </td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <th scope="row">Input price</th>
+            <td>${{ "%.2f"|format(recommendation.recommended.cost.input_per_million) }} / 1M</td>
+            <td>${{ "%.2f"|format(savings.model.cost.input_per_million) }} / 1M</td>
+          </tr>
+          <tr>
+            <th scope="row">Output price</th>
+            <td>${{ "%.2f"|format(recommendation.recommended.cost.output_per_million) }} / 1M</td>
+            <td>${{ "%.2f"|format(savings.model.cost.output_per_million) }} / 1M</td>
+          </tr>
+          {% if savings.input_capacity %}
+          <tr>
+            <th scope="row">Input capacity at ${{ "%.2f"|format(budget_usd) }}/mo</th>
+            <td>{{ "{:,}".format(input_capacity) }} tokens</td>
+            <td>{{ "{:,}".format(savings.input_capacity) }} tokens</td>
+          </tr>
+          <tr>
+            <th scope="row">Output capacity at ${{ "%.2f"|format(budget_usd) }}/mo</th>
+            <td>{{ "{:,}".format(output_capacity) }} tokens</td>
+            <td>{{ "{:,}".format(savings.output_capacity) }} tokens</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">
+      It wasn't the recommendation because of the trade-offs above — this shows what switching
+      would cost, not a suggestion to switch.
+    </p>
+  </div>
+  {% elif savings and savings.is_cheapest %}
+  <div class="savings-callout">
+    <p class="savings-header">{{ icons.check() }}<strong>Already the cheapest option</strong></p>
+    <p>
+      No other qualifying model would stretch your budget further —
+      <strong>{{ recommendation.recommended.name }}</strong> is already the least expensive
+      choice among the models that fit your context.
+    </p>
+  </div>
+  {% elif savings and savings.filtered_by_quality %}
+  <div class="savings-callout savings-callout-muted">
+    <p class="savings-header">{{ icons.dash() }}<strong>No fair lower-cost swap</strong></p>
+    <p>
+      Cheaper models exist among the ones that qualify, but none stay within one quality
+      tier of <strong>{{ recommendation.recommended.name }}</strong> on
+      {{ context.priorities[0].value.replace('_', ' ') }} — the priority you ranked #1. Showing
+      one anyway would trade away exactly what you asked for, so nothing is shown here instead.
+    </p>
+  </div>
+  {% endif %}
+
+  {% if input_capacity %}
+  <p class="tip">
+    Tip: many teams reduce total cost by using a cheaper model for simple requests and a
+    stronger one only where it's needed — this project tracks that idea as a possible
+    future capability, not yet built.
+  </p>
+  {% endif %}
+</div>

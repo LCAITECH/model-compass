@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% import "_icons.html" as icons %}
+{% import "_notices.html" as notices %}
 {% block title %}Model Compass — Compare models{% endblock %}
 {% block body_class %}page-compare{% endblock %}
 {% block content %}
@@ -85,6 +86,7 @@
           <th scope="col">
             <span class="compare-model-name">{{ model.name }}</span>
             <span class="muted">{{ model.provider }}</span>
+            {{ notices.badges(model, compact=true) }}
           </th>
           {% endfor %}
         </tr>

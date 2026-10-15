@@ -1,0 +1,63 @@
+{% import "_icons.html" as icons -%}
+{% import "_notices.html" as notices -%}
+{#- Landing "catalog radar": new releases, introductory prices and models
+    leaving the catalog, straight from each model's own dated fields. -#}
+{% set catalog = catalog_notices() %}
+{% if catalog %}
+<section class="radar" id="radar" aria-labelledby="radar-title" data-radar>
+  <div class="radar-head">
+    <span class="radar-scope" aria-hidden="true"><span class="radar-sweep"></span></span>
+    <div>
+      <p class="radar-eyebrow">Catalog radar</p>
+      <h2 id="radar-title" class="radar-title">What's moving in the catalog</h2>
+      <p class="radar-lead">Releases, introductory prices and retirements, read from each provider's own pages. Every count below is days between two published dates and today.</p>
+    </div>
+  </div>
+  <div class="radar-grid">
+    {% if catalog.new %}
+    <article class="radar-panel radar-panel-new">
+      <header class="radar-panel-head">{{ icons.bolt() }}<span>New releases</span><span class="radar-panel-count">{{ catalog.new | length }}</span></header>
+      <ul class="radar-list">
+        {% for n in catalog.new %}
+        <li class="radar-item" style="--i: {{ loop.index0 }}">
+          <span class="radar-item-main"><span class="radar-name">{{ n.model.name }}</span><span class="radar-sub">{{ n.model.provider }} · released {{ n.release_date | short_date }}</span></span>
+          <span class="radar-days"><strong>{{ n.days_ago }}</strong><small>{{ 'day' if n.days_ago == 1 else 'days' }} ago</small></span>
+        </li>
+        {% endfor %}
+      </ul>
+    </article>
+    {% endif %}
+    {% if catalog.promos %}
+    <article class="radar-panel radar-panel-promo">
+      <header class="radar-panel-head">{{ icons.tag() }}<span>Introductory prices</span><span class="radar-panel-count">{{ catalog.promos | length }}</span></header>
+      <ul class="radar-list">
+        {% for p in catalog.promos %}
+        <li class="radar-item" style="--i: {{ loop.index0 }}">
+          <span class="radar-item-main"><span class="radar-name">{{ p.model.name }}</span><span class="radar-sub">{{ notices.price(p.now) }} now &rarr; {{ notices.price(p.then) }} from {{ p.reverts_on | short_date }}</span></span>
+          <span class="radar-days"><strong>{{ p.days_left }}</strong><small>{{ 'day' if p.days_left == 1 else 'days' }} left</small></span>
+        </li>
+        {% endfor %}
+      </ul>
+      <p class="radar-note">Per 1M input / output tokens. Rankings always use today's price.</p>
+    </article>
+    {% endif %}
+    {% if catalog.retiring %}
+    <article class="radar-panel radar-panel-retiring">
+      <header class="radar-panel-head">{{ icons.hourglass() }}<span>Leaving the catalog</span><span class="radar-panel-count">{{ catalog.retiring | length }}</span></header>
+      <ul class="radar-list">
+        {% for r in catalog.retiring %}
+        <li class="radar-item{{ ' is-deprecated' if r.deprecated }}" style="--i: {{ loop.index0 }}">
+          <span class="radar-item-main"><span class="radar-name">{{ r.model.name }}</span><span class="radar-sub">{{ 'Deprecated, not recommended' if r.deprecated else 'Still recommended' }}{% if r.replacement %} · &rarr; {{ r.replacement.name }}{% endif %}</span></span>
+          {% if r.days_left is not none %}
+          <span class="radar-days"><strong>{{ r.days_left }}</strong><small>{{ 'day' if r.days_left == 1 else 'days' }} left</small></span>
+          {% else %}
+          <span class="radar-days radar-days-routed"><small>routed to<br>successor</small></span>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </article>
+    {% endif %}
+  </div>
+</section>
+{% endif %}

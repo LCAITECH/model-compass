@@ -19,6 +19,19 @@ public release to version against.
 
 ---
 
+## 2026-10-14 — Catalog radar: new releases, introductory prices and retirements on the site
+
+**Schema (owner-approved: `lifecycle.release_date`) and interface. The Decision Engine is unchanged: none of this affects rankings.**
+
+- **Release dates for all 39 models** (`lifecycle.release_date`), read from each provider's own pages, so the site can say what is new without guessing.
+- **Badges on every model card, in the comparator header and in the decision graph:** "New" (released in the last 30 days), "Intro price" (with its end date and days left) and "Deprecated"/"Retiring" (with the shutdown date). In the graph they are rings around the dots, with a legend entry only for what appears.
+- **Floating notices on the result page:** when the recommended model is on an introductory price, the ranking says it used today's price and what it costs afterwards; when it has a shutdown date or is a fresh release, the visitor is told; and a "Leaving the catalog" notice lists every model on its way out, with its date and successor. The notices fold away by themselves after a few seconds so they never cover the result.
+- **Catalog radar on the landing page:** a ticker in the hero and three panels (new releases, introductory prices, leaving the catalog) with day counts. Every number is days between a published date and today; nothing is estimated.
+- **Housekeeping:** `result.html` (429 lines, over the project's 400-line limit since the immersive redesign) was split into six partials with byte-identical output in seven scenarios.
+- **Tests:** 247 pass, including the notices with today's date pinned.
+
+---
+
 ## 2026-10-14 — Deprecated models stop being recommended
 
 **Touches the schema, the dataset and the Decision Engine (owner-approved schema change).**

@@ -6,6 +6,7 @@ of its own — per ARCHITECTURE.md, decision/ would work identically if
 this whole package were deleted.
 """
 
+from datetime import date
 from pathlib import Path
 
 from fastapi import FastAPI, Query, Request
@@ -26,6 +27,7 @@ from decision.loader import (
 )
 from interfaces.web.access_context_form import access_context_from_form
 from interfaces.web.access_labels import guide_ref_url, humanize, requirement_label
+from interfaces.web.catalog_notices import badges_for, catalog_notices, short_date
 from interfaces.web.affordability import (
     capacity_bar_widths,
     cheapest_qualifying_alternative,
@@ -59,6 +61,7 @@ templates.env.filters["language_name"] = language_name
 templates.env.filters["requirement_label"] = requirement_label
 templates.env.filters["guide_ref_url"] = guide_ref_url
 templates.env.filters["humanize"] = humanize
+templates.env.filters["short_date"] = short_date
 
 models = load_dataset(DATASET_DIR)
 languages = sorted({language for model in models for language in model.languages})
@@ -71,6 +74,11 @@ subscriptions = load_subscriptions(SUBSCRIPTIONS_DIR)
 validate_route_references(access_routes, models)
 validate_subscription_references(access_routes, subscriptions)
 subscription_plan_names = {plan.plan_id: plan.plan_name for plan in subscriptions}
+
+# Dated notices are computed per render, so a server left running across
+# midnight still counts days from the real "today".
+templates.env.globals["badges_for"] = lambda model: badges_for(model, models, date.today())
+templates.env.globals["catalog_notices"] = lambda: catalog_notices(models, date.today())
 
 
 def _form_context(error: str | None = None) -> dict:

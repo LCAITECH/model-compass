@@ -144,6 +144,27 @@ the first round:
   screens (form, result, no-match).
 - **Favicon / social preview metadata** — none set.
 
+## Catalog notices (2026-10-14)
+
+Badges, a floating dock on the result page and a "catalog radar" on the
+landing page, in the immersive language of Phase 17 (glass panels,
+sweeping gradient borders, motion only with the effects switch on).
+
+- **Three tones, one per kind of fact**, used everywhere the fact
+  appears: cyan/violet for a new release, gold for an introductory
+  price, rose for a model leaving the catalog (`badges.css` holds the
+  tokens; `notices.css` and `radar.css` reuse them).
+- **Numbers are day counts only.** No progress ring or bar: a bar needs
+  a total (how long the promo lasted, when the deprecation was
+  announced) that providers don't publish consistently.
+- **The dock never keeps covering the result.** It enters after the
+  reveal, folds into a handle after ~9 s (or at once on phones), and
+  stays open while the pointer is on it. A first version that stayed
+  open sat on top of the decision graph's centre, the one thing the
+  page is about.
+- **Badges wrap on phones** instead of widening the page (a long "Intro
+  price" badge pushed a 375 px viewport to 393 px before that).
+
 ## Guiding principle
 
 The interface should feel like a precision instrument for making a

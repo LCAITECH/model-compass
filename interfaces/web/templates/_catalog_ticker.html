@@ -1,0 +1,19 @@
+{% import "_notices.html" as notices -%}
+{#- A scrolling strip of the same facts the radar lists, shown in the
+    landing hero. The second copy only exists so the loop is seamless;
+    screen readers get the first one. -#}
+{% set catalog = catalog_notices() %}
+{% if catalog %}
+{% set ticker %}
+{% for n in catalog.new %}<li class="ticker-item ticker-new"><span class="ticker-dot"></span><strong>{{ n.model.name }}</strong>new · {% if n.days_ago == 0 %}released today{% else %}{{ notices.days(n.days_ago) }} ago{% endif %}</li>{% endfor %}
+{% for p in catalog.promos %}<li class="ticker-item ticker-promo"><span class="ticker-dot"></span><strong>{{ p.model.name }}</strong>intro price · {{ notices.days(p.days_left) }} left</li>{% endfor %}
+{% for r in catalog.retiring if r.deprecated %}<li class="ticker-item ticker-retiring"><span class="ticker-dot"></span><strong>{{ r.model.name }}</strong>deprecated{% if r.days_left is not none %} · off in {{ notices.days(r.days_left) }}{% endif %}</li>{% endfor %}
+{% endset %}
+<a class="catalog-ticker" href="#radar" aria-label="Catalog radar: new releases, introductory prices and retirements">
+  <span class="ticker-label"><span class="ticker-live" aria-hidden="true"></span>Catalog radar</span>
+  <span class="ticker-window">
+    <ul class="ticker-track">{{ ticker }}</ul>
+    <ul class="ticker-track" aria-hidden="true">{{ ticker }}</ul>
+  </span>
+</a>
+{% endif %}
