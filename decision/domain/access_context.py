@@ -2,7 +2,7 @@
 
 Separate from Context (decision/domain/context.py) -- quality/budget
 priorities and access circumstances are independent questions, per
-ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 3.3.
+the Access Advisor research of 2026-08-11 (internal, not in this repository).
 """
 
 from dataclasses import dataclass

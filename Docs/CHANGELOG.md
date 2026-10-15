@@ -645,7 +645,7 @@ reach it, without ranking them against each other.**
   recommendation.** `evaluate()`/`explain()` are unchanged; Access
   Advisor runs after them, in `interfaces/web/app.py`, and only reads
   `AIModel` — it can't import `decision/evaluator/` even by mistake,
-  by design (see `Docs/ACCESS_ADVISOR_AUDIT_2026-08-11.md`).
+  by design (internal 2026-08-11 Access Advisor research, not published).
 - **Three access states, not a pass/fail gate:** a route is
   `currently_eligible` (usable now), `requires_onboarding` (needs an
   API key, a cloud account, a subscription, etc. — never hidden for
@@ -775,8 +775,8 @@ how editorial quality ratings get calibrated.**
   Gemini 2.5 Flash-Lite, Gemini 3.1 Flash-Lite, Gemini 3.5 Flash,
   GPT-5.6 Sol (OpenAI's new flagship, replacing GPT-5), Claude Sonnet
   4.5, and Claude Opus 4.5. All six came out of a dedicated research
-  branch (`research/model-candidates`, see
-  `Docs/CANDIDATE_RESEARCH_2026-08-10.md`) done in a prior session —
+  branch (`research/model-candidates`, internal and not published)
+  done in a prior session —
   this pass was the field-by-field sourcing verification and the
   actual admission, not new candidate hunting.
 - **New rule in `SCHEMA.md`/`CONTRIBUTING.md`: editorial calibration

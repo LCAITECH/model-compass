@@ -3,8 +3,8 @@ loader, subscription_loader.py.
 
 Mirrors decision/loader/loader.py's discipline (structural validation at
 load time, DatasetValidationError on any issue) but stays a separate
-module -- per ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 5.3, this is not an
-extension of the model loader.
+module: routes are not an extension of the model loader, per
+the Access Advisor research of 2026-08-11 (internal, not in this repository).
 
 Cross-catalog referential integrity (does a route's model_id exist in
 dataset/models/? does a consumer_subscription value exist in

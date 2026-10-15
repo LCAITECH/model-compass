@@ -1,12 +1,11 @@
-"""AccessRecommendation: the output of decision/access/, per
-ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 5.3.
+"""AccessRecommendation: the output of decision/access/.
 
 Answers "how can I access this model" -- a separate question from
 Recommendation's "which model should I use". Never ranks routes against
-each other (see spec Part 5.2.2 for why that was designed, then
-reverted): routes are grouped by eligibility state only, in a stable
-alphabetical order within each group that carries no meaning beyond
-making repeated runs deterministic.
+each other (a ranking was designed, then reverted, in the internal
+2026-08-11 research): routes are grouped by eligibility state only, in
+a stable alphabetical order within each group that carries no meaning
+beyond making repeated runs deterministic.
 """
 
 from dataclasses import dataclass

@@ -48,11 +48,11 @@ def humanize(value: str) -> str:
 def guide_ref_url(guide_ref: str) -> str:
     """Builds the link for a route's `access.guide_ref` (e.g.
     "anthropic#direct-api"), pointing at the curated
-    Docs/access-guides/{provider}.md section instead of raw evidence --
-    see ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 3.5/5.4. Each guide's
-    heading is the literal guide_ref text (e.g. `` `anthropic#direct-api` ``),
-    and GitHub's anchor slugifier drops the "#" without inserting a
-    separator, so the anchor is the guide_ref with "#" removed.
+    Docs/access-guides/{provider}.md section instead of raw evidence.
+    Each guide's heading is the literal guide_ref text (e.g.
+    `` `anthropic#direct-api` ``), and GitHub's anchor slugifier drops
+    the "#" without inserting a separator, so the anchor is the guide_ref
+    with "#" removed.
     """
     provider, _, anchor = guide_ref.partition("#")
     return f"{_GUIDE_BASE_URL}/{provider}.md#{provider}{anchor}"

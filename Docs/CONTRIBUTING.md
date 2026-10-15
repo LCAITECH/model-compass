@@ -48,7 +48,7 @@ same as a fully verified one to anyone using the tool downstream.
 
 The same standard applies to `docs/models/{id}.md`, the audit-trail
 companion to each dataset entry (see
-[`docs/models/README.md`](../docs/models/README.md)): every field
+[`Docs/models/README.md`](models/README.md)): every field
 either cites where it came from, or is explicitly marked as not
 independently confirmed. Third-party aggregators (OpenRouter, pricing
 trackers, etc.) are never an acceptable source for objective fields —

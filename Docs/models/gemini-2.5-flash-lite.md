@@ -5,8 +5,8 @@ Last verified: 2026-08-10
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows. Admitted from
-`Docs/CANDIDATE_RESEARCH_2026-08-10.md` (branch
-`research/model-candidates`) — GA since July 2025, a real gap in the
+the 2026-08-10 candidate research (internal branch
+`research/model-candidates`, not published) — GA since July 2025, a real gap in the
 catalog (it sat in the same tier as Gemini 2.5 Flash/Pro, both already
 loaded, and was simply never added).
 

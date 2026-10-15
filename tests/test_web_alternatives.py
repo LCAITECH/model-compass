@@ -114,7 +114,7 @@ def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_rou
     # and its AI Studio route was removed). Haiku 5.5 has both kinds of
     # route: direct-api (production_allowed=true) and the Claude
     # subscription (production_allowed=false). Each row must link to
-    # access.guide_ref (ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 3.5), never
+    # access.guide_ref (the curated Docs/access-guides/ section), never
     # bare evidence, and the subscription row must warn it isn't for
     # production use.
     response = client.post(

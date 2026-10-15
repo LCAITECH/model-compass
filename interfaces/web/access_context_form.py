@@ -3,8 +3,7 @@
 Same split as context_form.py: parsing/defaulting belongs here, not in
 decision/. Unlike the main Context form, every field here is optional --
 Access Advisor is a bonus layer on top of the model recommendation, not
-a second gate the developer must clear (see
-Docs/ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 3.3). An empty submission
+a second gate the developer must clear. An empty submission
 still produces a usable, if uncertain, AccessContext.
 """
 

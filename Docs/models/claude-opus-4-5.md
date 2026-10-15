@@ -5,8 +5,8 @@ Last verified: 2026-08-10
 
 See [README.md](README.md) for what this document is (and isn't), and
 `claude-opus-4-8.md` for why this and its sibling legacy Claude entries
-were added. Admitted from `Docs/CANDIDATE_RESEARCH_2026-08-10.md`
-(branch `research/model-candidates`) — same admission pattern as the
+were added. Admitted from the 2026-08-10 candidate research
+(internal branch `research/model-candidates`, not published) — same admission pattern as the
 other legacy Claude entries already in this catalog.
 
 ---

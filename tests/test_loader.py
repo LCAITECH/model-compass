@@ -2,7 +2,7 @@ import pytest
 
 from conftest import DATASET_DIR
 from decision.domain import AIModel, License, QualityLevel
-from decision.loader import DatasetValidationError, load_dataset, load_model_file
+from decision.loader import load_dataset, load_model_file
 
 EXPECTED_IDS = {
     "gemini-2.5-flash",

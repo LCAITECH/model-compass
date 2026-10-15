@@ -1,5 +1,5 @@
 """Import-boundary checks -- mechanical enforcement of the hard constraints
-in AGENTS.md/ARCHITECTURE.md and ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 5.0.
+in AGENTS.md/ARCHITECTURE.md and the internal 2026-08-11 Access Advisor research.
 
 Previously these boundaries were held by discipline/code review only.
 Added here per the spec's own note that decision/access/ -> decision/

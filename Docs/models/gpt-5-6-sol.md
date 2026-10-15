@@ -6,8 +6,8 @@ last verified 2026-08-10 as noted below)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows. Admitted from
-`Docs/CANDIDATE_RESEARCH_2026-08-10.md` (branch
-`research/model-candidates`) — **replaced GPT-5 as OpenAI's current
+the 2026-08-10 candidate research (internal branch
+`research/model-candidates`, not published) — **replaced GPT-5 as OpenAI's current
 flagship**, GA since 2026-07-09.
 
 ## Naming note

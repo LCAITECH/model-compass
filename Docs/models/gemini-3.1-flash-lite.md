@@ -5,8 +5,8 @@ Last verified: 2026-08-10 (objective fields); lifecycle updated 2026-10-07
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows. Admitted from
-`Docs/CANDIDATE_RESEARCH_2026-08-10.md` (branch
-`research/model-candidates`) — GA successor to
+the 2026-08-10 candidate research (internal branch
+`research/model-candidates`, not published) — GA successor to
 `gemini-3.1-flash-lite-preview`, which Google's own docs say is
 "deprecated and has been shut down."
 

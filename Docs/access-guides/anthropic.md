@@ -1,9 +1,9 @@
 # Access guide — Anthropic
 
-Curated pointer, not a step-by-step tutorial — see
-`Docs/ACCESS_ADVISOR_AUDIT_2026-08-11.md`, Part 5.4, for why. Links to
-official documentation for the actual steps; Model Compass does not
-replace it.
+Curated pointer, not a step-by-step tutorial: it says what you need
+and where to start, and links to the official documentation for the
+steps, which would go stale every time a provider redesigns its
+console. Model Compass does not replace that documentation (`VISION.md`).
 
 ## `anthropic#direct-api`
 

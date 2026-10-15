@@ -1,11 +1,12 @@
 """AccessRoute: one documented way to reach a specific model, per SCHEMA.md's
-counterpart for access -- ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 3.2.
+counterpart for access, designed in the Access Advisor research of
+2026-08-11 (internal, not in this repository).
 
 Access, Eligibility, and Economics are kept as three explicit, separate
 blocks on purpose -- they are independent axes (does the route exist /
 who qualifies / what does it cost), and collapsing them back into a flat
 list of fields is the exact regression the spec's design review caught
-and corrected. See the spec doc, Part 3.1.
+and corrected.
 """
 
 from dataclasses import dataclass

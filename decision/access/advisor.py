@@ -1,8 +1,9 @@
 """recommend_access: answers "how can I access this model", never "which
 model should I use" -- that question belongs to decision/evaluator/ and
-decision/explainer/, which this module never imports from. See
-ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 5.0/5.3 for the import boundary
-and Part 5.2.1 for the three-state eligibility model this implements.
+decision/explainer/, which this module never imports from (an import
+boundary tests/test_architecture.py enforces). It implements three
+eligibility states, as designed in the Access Advisor research of
+2026-08-11 (internal, not in this repository).
 
 KNOWN SPEC GAP, deliberately not resolved here (see AGENTS.md: raise it,
 don't invent a workaround): the spec repeatedly says enterprise routes

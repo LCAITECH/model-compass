@@ -537,7 +537,7 @@ page before the promotional rate took effect, not a sourcing error.
 The price genuinely changed under the entry. Corrected in this same
 session to $0.75/$3.75 (the current live price), with the 2027-01-01
 reversion documented in prose in
-[`docs/models/gemini-3.6-flash.md`](../docs/models/gemini-3.6-flash.md#cost-objective).
+[`docs/models/gemini-3.6-flash.md`](models/gemini-3.6-flash.md#cost-objective).
 
 This is a different shape of friction than Iteration #5 (which is
 about multiple simultaneous prices for different request types on the

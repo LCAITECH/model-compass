@@ -5,8 +5,8 @@ Last verified: 2026-08-10
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows. Admitted from
-`Docs/CANDIDATE_RESEARCH_2026-08-10.md` (branch
-`research/model-candidates`) — a distinct GA model from Gemini 3.5
+the 2026-08-10 candidate research (internal branch
+`research/model-candidates`, not published) — a distinct GA model from Gemini 3.5
 Flash-Lite (already in this dataset), with its own model page and
 pricing, not a variant.
 

@@ -3,9 +3,9 @@
 Deliberately never references a model or a route -- the relationship is
 one-directional. An AccessRoute's `consumer_subscription` requirement
 points at a plan_id (see access_route.py); a plan never declares what it
-satisfies. See ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 5.4.1 for why the
-earlier two-directional design (`satisfies_requirements` on both sides)
-was dropped as redundant.
+satisfies. An earlier two-directional design (`satisfies_requirements`
+on both sides) was dropped as redundant in the internal 2026-08-11
+Access Advisor research.
 
 Price, usage multiplier and included API credits are objective facts
 from the provider's own pages (SCHEMA.md, "Subscription plans"). None of
