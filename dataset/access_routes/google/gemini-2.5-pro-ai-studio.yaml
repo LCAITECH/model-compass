@@ -17,6 +17,6 @@ economics:
   production_allowed: false
 evidence:
   source_url: https://support.google.com/googleone/answer/16105039?hl=en-en
-  consulted_at: "2026-08-11"
-  status: confirmed
-  caveat: "Google One's terms indicate AI Studio access is currently limited to Pro/Ultra subscribers; a paid API key linked inside AI Studio is billed separately as API usage."
+  consulted_at: "2026-10-14"
+  status: not_determined
+  caveat: "Google One's terms limit AI Studio access to Pro/Ultra subscribers, but as of 2026-10-14 no current plan page names Gemini 2.5 Pro among the models it includes, and Google limits the Gemini 2.5 models to developers who already used them (see IMPLEMENTATION_NOTES.md, Iteration #29). A paid API key linked inside AI Studio is billed separately as API usage."

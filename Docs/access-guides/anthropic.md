@@ -32,8 +32,10 @@ shared weekly limit ("usage credits"), not per-token billing.
 1. Subscribe to Claude Pro or Claude Max at [claude.com/pricing](https://claude.com/pricing).
 2. Sign in to [Claude.ai](https://claude.ai/) or [Claude Code](https://code.claude.com/docs/en/overview) with that account -- no separate API key needed for this path.
 3. Model availability and the exact usage-credit split per model change over time; check the pricing page's comparison table for current terms.
+4. Fable models are included in Max only (up to 50% of the weekly limit). On Pro they run on pay-as-you-go usage credits at standard API rates, outside the plan's limits.
+5. Max also includes monthly Claude API credits (USD 100 on Max 5x, USD 200 on Max 20x, since 2026-10-07). They live in a separate Console organization, expire each billing cycle and do not cover Claude Code; the plan's own usage limits are never usable through the API.
 
-Source: [Pricing](https://claude.com/pricing), consulted 2026-08-13.
+Sources: [Pricing](https://claude.com/pricing), consulted 2026-08-13; [Fable models on your plan](https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan) and [API credits for subscribers](https://platform.claude.com/docs/en/about-claude/api-credits-for-subscribers), consulted 2026-10-14.
 
 ## `anthropic#aws-bedrock`
 

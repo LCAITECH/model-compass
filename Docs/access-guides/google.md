@@ -23,5 +23,9 @@ Currently listed as a Google AI Pro/Ultra benefit.
 2. Open Google AI Studio with that account.
 3. If you link a paid API key inside AI Studio, its usage is billed
    separately as API usage.
+4. The plan's AI Studio quota covers the AI Studio web interface only.
+   AI Pro and Ultra do include monthly Google Cloud credits (USD 10 on
+   Pro, 40 on Ultra 5x, 100 on Ultra 20x, through the Google Developer
+   Program) that apply to Cloud services, including the Gemini API.
 
-Source: [Google One restrictions](https://support.google.com/googleone/answer/16105039?hl=en-en), consulted 2026-08-11.
+Sources: [Google One restrictions](https://support.google.com/googleone/answer/16105039?hl=en-en), consulted 2026-08-11; [Google AI plans and the Gemini API](https://ai.google.dev/gemini-api/docs/google-ai-plans), consulted 2026-10-14.

@@ -98,7 +98,11 @@ re-checked for `claude-fable-5-1` this pass — **one did not confirm**:
   `claude-fable-5-1` via the Claude API").
 - **Consumer subscription** (Claude.ai / Claude Code, Pro/Max/Team/Enterprise):
   confirmed directly on the marketing page: "available to Pro, Max,
-  Team, and Enterprise users."
+  Team, and Enterprise users." **Corrected 2026-10-14:** Anthropic's
+  support article on Fable by plan says that on Pro "both models run on
+  pay-as-you-go usage credits" (billed at standard API rates), while Max
+  includes them up to 50% of the weekly limit. The subscription route now
+  lists Claude Max only (`IMPLEMENTATION_NOTES.md`, Iteration #31).
 - **Amazon Bedrock**: confirmed. AWS's own Bedrock model-cards page
   explicitly lists "Claude Fable 5.1" under Anthropic's Claude 5.x
   lineup, alongside Claude Mythos 5.1, Opus 5, Sonnet 5, Mythos 5, and

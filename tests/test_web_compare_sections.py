@@ -119,7 +119,7 @@ def test_access_rows_group_routes_by_surface_and_name_the_plans(models, access_r
     sections = _build(models, access_routes, FABLE, ARGON, plan_names=plan_names)
 
     fable, argon = _row(sections, "Subscription apps")["cells"]
-    assert [chip["detail"] for chip in fable["chips"]] == ["Claude Pro or Claude Max"]
+    assert [chip["detail"] for chip in fable["chips"]] == ["Claude Max"]  # Pro pays Fable at API rates
     assert (argon["chips"], argon["text"], argon["tone"]) == ((), "Not documented", "muted")
     fable_api, argon_api = _row(sections, "Direct API")["cells"]
     assert [chip["label"] for chip in argon_api["chips"]] == ["Google API"]

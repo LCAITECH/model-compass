@@ -19,6 +19,18 @@ public release to version against.
 
 ---
 
+## 2026-10-14 — Subscription facts corrected
+
+**Dataset and docs only, no schema change. Found while researching the upcoming "subscription or API" section.**
+
+- **Claude Max now includes API credits:** USD 100 a month on Max 5x and USD 200 on Max 20x since 2026-10-07, in a separate Console balance that does not roll over and does not cover Claude Code. The catalog said the plan had none.
+- **Google AI Pro and Ultra include Google Cloud credits** usable on the Gemini API (USD 10, 40 or 100 a month). The catalog said they had none.
+- **Fable 5 and 5.1 are included in Claude Max, not Pro.** On Pro they are billed at API rates through usage credits, so the Access Advisor no longer lists Claude Pro as a way to reach them.
+- **Gemini 2.5 Pro in AI Studio is now marked unconfirmed:** no current plan page names it, and Google limits Gemini 2.5 to developers who already used it.
+- Details and sources: `IMPLEMENTATION_NOTES.md`, Iteration #31. Tests: 263 pass (two updated for the corrected text).
+
+---
+
 ## 2026-10-14 — The model comparator, rebuilt
 
 **Interface only: `decision/`, the dataset and the schema are unchanged. The improvements are the set the project owner picked from a list grounded in the old page.**

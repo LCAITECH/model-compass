@@ -8,7 +8,7 @@ access:
 eligibility:
   requirements:
     - kind: consumer_subscription
-      value: [claude-pro, claude-max]
+      value: [claude-max]
   region_scope: account_dependent
 economics:
   billing_owner: Anthropic
@@ -16,7 +16,7 @@ economics:
   quota_scope: account
   production_allowed: false
 evidence:
-  source_url: https://www.anthropic.com/claude/fable
-  consulted_at: "2026-09-01"
+  source_url: https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan
+  consulted_at: "2026-10-14"
   status: confirmed
-  caveat: "Confirmed directly on Anthropic's own Fable marketing page: 'available to Pro, Max, Team, and Enterprise users.' Access draws from the plan's shared usage limit, not unlimited or per-token access -- the exact quota split has changed multiple times for the Fable line per Anthropic's own pricing-page footnotes (see claude-fable-5-claude-subscription's caveat), so confirm current terms before relying on this. Team Standard/Premium and Enterprise tiers weren't independently confirmed beyond this page's own listing."
+  caveat: "Included in Claude Max only, up to 50% of the plan's weekly usage limit (not an additional 50%), per Anthropic's support article on Fable models by plan. On Claude Pro, Fable 5.1 runs on pay-as-you-go usage credits billed at standard API rates, outside the plan's quota, so Pro is not listed as satisfying this route; the marketing page's 'available to Pro, Max, Team, and Enterprise users' is true only in that sense. The Fable quota split has changed several times, so confirm current terms before relying on this. Team and Enterprise tiers were not independently confirmed."

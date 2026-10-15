@@ -5,5 +5,9 @@ documented_exclusions:
   - "Does not document any credits or improved quotas for the Anthropic API -- API billing is independent of this plan"
 region_scope: account_dependent
 source_url: https://claude.com/pricing
-consulted_at: "2026-08-13"
+consulted_at: "2026-10-14"
 status: confirmed
+# Re-verified 2026-10-14: still no API credits. "The Pro plan does not include
+# API usage through the Claude Console" (support article 8325606), and the
+# monthly API credits are for Max and Team only ("Free, Pro, and Enterprise
+# plans aren't eligible", platform docs, api-credits-for-subscribers).

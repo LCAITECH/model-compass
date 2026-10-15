@@ -2,8 +2,16 @@ provider: Anthropic
 plan_name: Claude Max
 surface_entitlements: [consumer_subscription]
 documented_exclusions:
-  - "Does not document any credits or improved quotas for the Anthropic API -- API billing is independent of this plan"
+  - "The plan's usage limits cover Claude and Claude Code only, never API calls; the monthly Claude API credits included since 2026-10-07 (USD 100 on Max 5x, USD 200 on Max 20x) are a separate Console balance that expires each billing cycle with no rollover and does not cover Claude Code"
 region_scope: account_dependent
 source_url: https://claude.com/pricing
-consulted_at: "2026-08-13"
+consulted_at: "2026-10-14"
 status: confirmed
+# Re-verified 2026-10-14. The 2026-08-13 text said the plan documented no
+# API credits; Anthropic added monthly API credits for Max on 2026-10-07:
+# https://support.claude.com/en/articles/17154008-monthly-api-credits-for-max-and-team-plans
+# https://platform.claude.com/docs/en/about-claude/api-credits-for-subscribers
+# ("Refresh: Each billing cycle"; "Expiry: End of each billing cycle ... with
+# no rollover"; "Credits don't change your usage limits in Claude or Claude
+# Code"). Max has two tiers with separate prices (5x USD 100, 20x USD 200);
+# kept as one plan here until the plan schema gains price fields.

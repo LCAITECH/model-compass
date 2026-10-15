@@ -1457,3 +1457,54 @@ in both YAML comments).
 
 **Status**
 Closed.
+
+---
+
+## Iteration #31
+
+**Observation**
+While researching the "Subscription or API?" section (owner request,
+2026-10-14), every plan in `dataset/subscriptions/` and the four
+`consumer_subscription` routes were re-read on the providers' own pages.
+Four facts had drifted or were wrong:
+
+- Claude Max includes monthly Claude API credits since 2026-10-07 (USD
+  100 on Max 5x, USD 200 on Max 20x; a separate Console balance with no
+  rollover that does not cover Claude Code). The plan's
+  `documented_exclusions` said it documented none.
+- Google AI Pro and Ultra include monthly Google Cloud credits (USD 10 /
+  40 / 100) that apply to the Gemini API. Both plans said they documented
+  none. Whether the credits already existed when those YAMLs were
+  verified (2026-08-11 and 2026-08-27) could not be determined.
+- Both Fable subscription routes listed `claude-pro` with
+  `billing_scheme: subscription_quota`. On Pro, Fable runs on
+  pay-as-you-go usage credits at API rates, outside the plan's limits;
+  only Max includes it. `Docs/models/claude-fable-5.md` already said so,
+  and the routes contradicted it.
+- `gemini-2.5-pro-ai-studio`: no current plan page names Gemini 2.5 Pro,
+  and Google limits the 2.5 models to existing users (Iteration #29).
+
+Also: Max and Ultra are two tiers each, with separate prices (Max 5x/20x
+USD 100/200, Ultra 5x/20x USD 99.99/199.99), and free-text
+`documented_exclusions` cannot express included credits in a form a page
+can compute with.
+
+**Current decision**
+Corrections without a schema change, on their own branch, merged before
+the section (owner decision, 2026-10-14): the four plans'
+`documented_exclusions` rewritten and re-dated, with the sources in YAML
+comments; both Fable routes now require `claude-max` only; the 2.5 Pro
+studio route keeps its requirement, with evidence status
+`not_determined` and a caveat saying why. The access guides and
+`Docs/models/claude-fable-5-1.md` say the same.
+
+For the section itself the owner approved, the same day, an extension of
+the plan schema: a required monthly US list price, an optional usage
+multiplier in the provider's own words (never converted to tokens), and
+optional included API credits; Max and Ultra split into 5x and 20x
+plans; ChatGPT Plus and Pro added; and coverage routes only where an
+official page names the exact model, never a family. Not applied yet.
+
+**Status**
+Corrections applied. Plan-schema extension approved, pending
+implementation.

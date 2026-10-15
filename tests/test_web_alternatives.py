@@ -150,4 +150,4 @@ def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_rou
     # other dataset field is English-only (see dataset/models/*.yaml),
     # so free-text dataset fields must never mix languages either.
     assert "Restricciones de Google One" not in response.text
-    assert "Google One" in response.text and "AI Studio access is currently limited" in response.text
+    assert "Google One" in response.text and "limit AI Studio access to Pro/Ultra subscribers" in response.text
