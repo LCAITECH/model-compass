@@ -32,9 +32,12 @@ language_quality:
   ko: medium
   ar: medium
 
+# Model card: context "256k" (262,144 tokens); no output ceiling published, so
+# max_output is null (Iteration #26) instead of a copy of the context window.
+# Source: https://docs.mistral.ai/models/mistral-large-3-25-12 (checked 2026-10-15).
 operational:
   context_window: 262144
-  max_output: 262144
+  max_output: null
 
 cost:
   input_per_million: 0.50

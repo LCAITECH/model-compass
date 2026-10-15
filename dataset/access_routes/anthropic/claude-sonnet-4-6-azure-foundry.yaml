@@ -19,4 +19,4 @@ evidence:
   source_url: https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/how-to/use-foundry-models-claude
   consulted_at: "2026-08-13"
   status: confirmed
-  caveat: "Billed via Azure Marketplace subscription, not Anthropic directly; requires a paid Azure subscription with an active pay-as-you-go billing method in a supported region -- student/free-trial/sponsored-credit-only subscriptions don't qualify."
+  caveat: "Billed via an Azure Marketplace subscription, not Anthropic directly; needs a paid Azure subscription with an active pay-as-you-go billing method in a supported region (student, free-trial and sponsored-credit-only subscriptions don't qualify)."

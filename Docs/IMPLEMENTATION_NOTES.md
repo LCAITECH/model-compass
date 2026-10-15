@@ -1703,3 +1703,37 @@ id; a family name still does not count. `has_free_access` stays
 
 **Status**
 Applied (99 routes). Closed.
+
+---
+
+## Iteration #35
+
+**Observation**
+The full audit of 2026-10-15 (owner request) re-read the dataset against
+what the site shows and found two data problems:
+
+- `mistral-large-3` stored `max_output: 262144`, the same number as its
+  context window. `Docs/models/mistral-large-3.md` said both values had
+  never been matched to a source (the model card returned a 404 on
+  2026-08-07). The card resolves now: context "256k" (262,144), no
+  output ceiling published. A copied context window is the placeholder
+  Iteration #26 rules out.
+- 43 of 99 routes had `evidence.caveat` text written as an audit note
+  ("primary evidence.source_url", "see docs/models/...", "read directly
+  2026-10-08", "Corrects an earlier pass in this catalog"), and the
+  result page shows caveats to visitors as they are. Two were also out of
+  date (Gemini 4 Argon's said its Gemini app access was not modeled; it
+  has been since 2026-10-14).
+
+**Current decision**
+Owner decisions (2026-10-15): `mistral-large-3` gets `max_output: null`,
+and the caveats are rewritten for a developer, keeping billing,
+requirements, region, limits and the app-versus-API snapshot note. The
+audit trail they carried is either already in each model's
+`Docs/models/{id}.md` or moved there (`claude-fable-5.md`: how its cloud
+routes were added). New rule in `Docs/CATALOG_BOT.md`: caveats are
+user-facing text, the audit trail belongs in `Docs/models/`. No schema
+change.
+
+**Status**
+Applied. Closed.

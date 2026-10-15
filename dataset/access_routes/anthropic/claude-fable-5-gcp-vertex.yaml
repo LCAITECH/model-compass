@@ -19,4 +19,4 @@ evidence:
   source_url: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-claude
   consulted_at: "2026-08-13"
   status: confirmed
-  caveat: "Billed through Google Cloud, not Anthropic directly; requires Cloud Billing linked to the project, and the model must be enabled in Vertex AI's Model Garden. Corrects an earlier pass in this catalog that excluded Fable 5 from Vertex as undocumented -- Google's own partner-models page and Anthropic's Transparency Hub (anthropic.com/transparency, updated 2026-07-23) both confirm it."
+  caveat: "Billed through Google Cloud, not Anthropic directly; needs Cloud Billing linked to the project and the model enabled in Vertex AI's Model Garden. Listed on Google's partner-models page and on Anthropic's Transparency Hub."

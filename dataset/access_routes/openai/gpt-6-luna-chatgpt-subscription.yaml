@@ -19,4 +19,4 @@ evidence:
   source_url: https://chatgpt.com/pricing/
   consulted_at: "2026-10-14"
   status: confirmed
-  caveat: "ChatGPT's plan comparison table (en-US) lists GPT-6 Luna as 'Yes' on Plus and 'Expanded' on Pro (also on Free and Go, which are not plans in this catalog). Usage limits are not published in tokens, and the three Pro tiers publish no multiplier between them. API usage is billed separately and is not included in any ChatGPT plan. OpenAI does not state that the model in its apps is the same snapshot as the API model; the match is by the exact name on its page."
+  caveat: "ChatGPT's plan table lists GPT-6 Luna on Plus and Pro, and also on the Free and Go plans. Usage limits are not published in tokens, and the three Pro tiers publish no multiplier between them. API usage is billed separately and isn't included in any ChatGPT plan. OpenAI doesn't say the app runs the same snapshot as the API; the match is by the exact name."

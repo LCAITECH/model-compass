@@ -19,4 +19,4 @@ evidence:
   source_url: https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/claude-models
   consulted_at: "2026-09-01"
   status: confirmed
-  caveat: "Billed via Azure Marketplace subscription, not Anthropic directly; requires a paid Azure subscription with an active pay-as-you-go billing method in a supported region -- student/free-trial/sponsored-credit-only subscriptions don't qualify. Microsoft's own Claude-models-in-Foundry concepts page explicitly lists claude-fable-5-1, read directly 2026-09-01, noting it uses different watermarking (double-key) than claude-fable-5 (single-key)."
+  caveat: "Billed via an Azure Marketplace subscription, not Anthropic directly; needs a paid Azure subscription with an active pay-as-you-go billing method in a supported region (student, free-trial and sponsored-credit-only subscriptions don't qualify). Microsoft notes that Fable 5.1 uses double-key watermarking, unlike Fable 5's single key."

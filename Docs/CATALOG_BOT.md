@@ -51,6 +51,12 @@ what is specific to an automated run and what has broken bot PRs before.
   provider's exact words.
 - A field with no official source keeps the model out. Never fill a gap
   with a guess, a sibling model's value or a placeholder.
+- A route's `evidence.caveat` is shown to visitors on the result page.
+  Write it for a developer, in plain sentences: billing, requirements,
+  region, limits, whether the app may run a different snapshot. No audit
+  trail in it (dates you read a page, corrections of earlier passes, file
+  paths, "this catalog"): that goes in `Docs/models/{id}.md`
+  (Iteration #35).
 
 ## 3. A new model entry
 

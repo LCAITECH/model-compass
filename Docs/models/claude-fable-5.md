@@ -55,6 +55,16 @@ here rather than a rigid schema field for now — a field that goes
 stale every few weeks needs a different design than "one enum value
 per model."
 
+**Cloud routes (AWS Bedrock, Google Cloud Vertex, Microsoft Foundry).**
+The access-catalog contract first left Fable 5 off all three as
+undocumented. The 2026-08-13 expansion found it listed on Anthropic's
+Transparency Hub (`anthropic.com/transparency`, updated 2026-07-23) and on
+each cloud's own pages (Amazon's model cards, Google's partner-models
+page, Microsoft's Foundry guide, which covers Fable alongside Mythos,
+Opus, Sonnet and Haiku), and the three routes were added. Until the
+2026-10-15 audit this history sat in the routes' caveats, which the site
+shows to visitors; it lives here now.
+
 **Free access (`access.has_free_access`):** `false`. None of the three
 paths above is continuous, unconditional free access — the Pro/Team
 Standard credit is explicitly one-time, and Max/Team Premium requires

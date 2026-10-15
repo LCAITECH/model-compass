@@ -19,4 +19,4 @@ evidence:
   source_url: https://one.google.com/intl/en_us/about/google-ai-plans/
   consulted_at: "2026-10-15"
   status: confirmed
-  caveat: "Google's AI plans page lists 'Expanded access to Gemini 3.1 Pro' on AI Pro and 'Higher access to Gemini 3.1 Pro' on AI Ultra; the free Gemini app names only 'our Flash-Lite model'. 'Gemini 3.1 Pro' is the name Google's own Gemini API model list gives to gemini-3.1-pro-preview, its only 3.1 Pro model id (https://ai.google.dev/gemini-api/docs/models). Use draws from the app quota, which is not published in tokens. Google does not state that the model in its apps is the same snapshot as the API model; the match is by that name."
+  caveat: "Google's AI plans page lists 'Expanded access to Gemini 3.1 Pro' on AI Pro and 'Higher access' on AI Ultra; the free Gemini app doesn't include it. 'Gemini 3.1 Pro' is the name Google's Gemini API model list gives this model. Use draws from the app quota, which is not published in tokens, and Google doesn't say the app runs the same snapshot as the API."

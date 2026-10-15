@@ -19,6 +19,21 @@ public release to version against.
 
 ---
 
+## 2026-10-15 — Full audit: dead CSS out, light theme readable, access notes rewritten
+
+**Interface, dataset and documentation. The ranking is unchanged.**
+
+- **What was checked:** every code file against the 400-line limit (none over), unused code and files, repeated code, broken links and references, every page and link of the running site, text contrast in both themes, and the dataset against what the site shows.
+- **Light theme:** cyan text was barely readable on white (2.3:1, the minimum is 4.5:1) in "Stop guessing.", the catalog radar labels and the comparator's "new" dates; it uses a darker cyan in the light theme now, and the grey for secondary text is a little darker. The dark theme, the default, didn't change and already passed.
+- **Cleaner styles, same look:** an old block of landing-page styles nobody used anymore is gone, and every dark-theme color is defined once instead of twice. Every element on five pages was compared before and after, in both themes: identical.
+- **Access notes written for people:** the notes under each access route (billing, requirements, region) had internal audit wording in them ("primary evidence.source_url", "read directly on…"), and two were out of date. They are plain sentences now; the audit history stays in each model's notes.
+- **Mistral Large 3:** its maximum output was a copy of its context window and had never been checked against a source. Mistral publishes no maximum, so the catalog says so now.
+- **Documentation:** two links that broke on GitHub (a lowercase folder name) are fixed, and 24 files no longer point to research documents that were never published.
+- **Smaller:** the comparator's search box shows the same focus ring as the other inputs; two repeated form fields and two pill styles share their code.
+- **Tests:** 313 pass.
+
+---
+
 ## 2026-10-15 — Gemini 3.1 Pro Preview is in the Gemini app
 
 **Access catalog only. Rankings unchanged.**

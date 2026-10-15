@@ -18,4 +18,4 @@ evidence:
   source_url: https://mistral.ai/pricing
   consulted_at: "2026-08-13"
   status: confirmed
-  caveat: "Mistral's API console offers a general free tier for trying models, but no official source confirms Mistral Large 3 specifically is included in it -- this route assumes paid billing, same no-inference rule as docs/models/mistral-large-3.md."
+  caveat: "Mistral's API has a free tier for trying models, but no official page says Mistral Large 3 is included, so this route assumes paid billing."

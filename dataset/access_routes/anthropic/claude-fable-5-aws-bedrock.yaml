@@ -19,4 +19,4 @@ evidence:
   source_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html
   consulted_at: "2026-08-13"
   status: confirmed
-  caveat: "Billed through AWS, not Anthropic directly; model access must be requested per-model in the Bedrock console before first use, and availability is region-dependent. Corrects an earlier pass in this catalog that excluded Fable 5 from Bedrock as undocumented -- Amazon's own model-cards page and Anthropic's Transparency Hub (anthropic.com/transparency, updated 2026-07-23) both confirm it."
+  caveat: "Billed through AWS, not Anthropic directly; access must be requested per model in the Bedrock console before first use, and availability depends on the region. Listed on Amazon's model cards and on Anthropic's Transparency Hub."

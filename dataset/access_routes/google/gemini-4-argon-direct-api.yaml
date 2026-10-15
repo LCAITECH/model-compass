@@ -18,4 +18,4 @@ evidence:
   source_url: https://ai.google.dev/gemini-api/docs/pricing
   consulted_at: "2026-10-14"
   status: confirmed
-  caveat: "The pricing page states Gemini 4 Argon is 'not available on the Free tier or on the Google AI Pro plan'; the paid tier requires Cloud Billing linked to the project, quota scoped per project. Introductory rate through 2026-11-30, then double (see Docs/models/gemini-4-argon.md). The announcement blog also names Google AI Ultra subscribers; that is a consumer-app surface, not modeled as a route."
+  caveat: "Not available on the Gemini API's free tier or with Google AI Pro. The paid tier needs Cloud Billing linked to the project, with quota per project. Introductory price until 2026-11-30, then double."

@@ -18,4 +18,4 @@ evidence:
   source_url: https://www.alibabacloud.com/help/en/model-studio/qwen3-8-max
   consulted_at: "2026-09-08"
   status: confirmed
-  caveat: "Pricing here is the International (Singapore) scope, confirmed on the model's own page -- Alibaba Cloud Model Studio prices per region, and the China (Beijing) scope is materially cheaper but requires a Mainland China account and is not eligible for the new-user free quota either way (free quota is Beijing-scope only). International scope used as the one reachable from a standard account, same rationale as picking one tier for any other multi-region/multi-tier provider in this dataset."
+  caveat: "Priced at the International (Singapore) scope, the one a standard account can use. The China (Beijing) scope is cheaper but needs a Mainland China account, and Model Studio's new-user free quota applies only there."

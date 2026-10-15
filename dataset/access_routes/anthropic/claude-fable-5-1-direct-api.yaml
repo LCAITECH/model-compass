@@ -18,4 +18,4 @@ evidence:
   source_url: https://platform.claude.com/docs/en/about-claude/pricing
   consulted_at: "2026-09-01"
   status: confirmed
-  caveat: "Direct API access is billed at standard per-token pricing, independent of any Claude Pro/Max consumer subscription; see the separate claude-fable-5-1-claude-subscription route for the subscription path, and anthropic#aws-bedrock/azure-foundry for the confirmed cloud-platform routes -- Google Cloud Vertex not yet confirmed for this model, see docs/models/claude-fable-5-1.md's Access section."
+  caveat: "Billed per token, separately from any Claude Pro or Max subscription (the subscription path is its own route). Also on AWS Bedrock and Microsoft Foundry; Google Cloud Vertex doesn't list this model yet."

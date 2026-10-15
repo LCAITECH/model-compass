@@ -18,4 +18,4 @@ evidence:
   source_url: https://deepmind.google/models/model-cards/gemini-3-7-flash/
   consulted_at: "2026-08-13"
   status: confirmed
-  caveat: "Model-specific distribution via 'Gemini API' confirmed directly on this model's own official model card (Distribution section). Billing/eligibility mechanics (Cloud Billing linkage, free-tier-outside-paid-path) sourced separately from https://ai.google.dev/gemini-api/docs/billing?hl=es-419 -- generic across the Gemini API, not model-specific, so not used as the primary evidence.source_url. Pricing reflects an introductory rate expiring 2026-12-31 (see docs/models/gemini-3.7-flash.md, Cost section)."
+  caveat: "Available through the Gemini API, per its model card. The paid tier needs Cloud Billing linked to the project, and a rate-limited free tier exists outside the paid path. Introductory price until 2026-12-31."

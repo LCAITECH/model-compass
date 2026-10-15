@@ -283,6 +283,29 @@ milliseconds (a Phase 17 decision); the ChatGPT plan table served in
 Spanish marks GPT-6 Luna, GPT-6.1 Sol and Astra as "Limitado" on Plus
 while their routes quote "Yes" from the English page.
 
+## Audit: one dark source, a text-safe cyan (2026-10-15)
+
+- **Dark has one definition.** `theme.css` and `compare.css` declared
+  every dark token twice, for `data-theme="dark"` and again under
+  `prefers-color-scheme: dark`. Since base.html always sets
+  `data-theme` before first paint, the second copy only served visitors
+  without JavaScript. Both collapse into `:root:not([data-theme="light"])`,
+  so dark (the default the owner chose) also applies without JS.
+- **Cyan has a text variant.** `--accent-secondary` (#06b6d4) reads at
+  2.3:1 on the light background. Where cyan is text or a state icon
+  (hero lead, radar labels, the wizard's current step, "new" dates,
+  `/plans` path kicker, the effects toggle), the light theme uses
+  `--accent-secondary-text` (#0e7490, about 5:1); glows, borders and
+  graph strokes keep the bright cyan. Dark keeps #22d3ee for both.
+  Light `--muted` moved from #71717a to #6b6b74 (from 4.24 to over 4.5
+  on tinted surfaces).
+- **How it was checked:** the computed style of every element on five
+  pages, in both themes, before and after. The dead-CSS removal and the
+  dark merge changed nothing; the contrast change touched only `color`
+  in the light theme (380 elements with `--muted`, 20 with cyan), plus
+  two `--muted` swatches. Contrast measured on every text element
+  afterwards: no failures in either theme.
+
 ## Guiding principle
 
 The interface should feel like a precision instrument for making a

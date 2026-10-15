@@ -56,14 +56,23 @@ the other providers (see
 
 ## Operational `[Objective]`
 
-**Not independently reconfirmed this pass.** `context_window`
-(262,144) and `max_output` (262,144) in the dataset entry could not be
-matched against an official source during this pass — Mistral's
-overview page doesn't list per-model specs, and the specific model
-card page (`/models/model-cards/mistral-large-3-25-12`) returned a 404
-when fetched. These values are inherited from the original dataset
-curation, not freshly verified. Flagging explicitly per this folder's
-sourcing rule, rather than presenting a 404 lookup as confirmation.
+| Field              | Value     |
+|----------------------|-----------|
+| `context_window`      | 262,144   |
+| `max_output`           | `null`    |
+
+**Verified 2026-10-15** on the model card
+(`docs.mistral.ai/models/mistral-large-3-25-12`, which now resolves):
+context "256k", the 262,144 tokens already stored; no maximum output is
+published, so `max_output` is `null` (Iteration #26). The same card
+confirms GA, Apache 2.0, the API id `mistral-large-2512` and $0.5/$1.5
+per million tokens.
+
+Before this, both values came from the original dataset curation and
+were never matched to a source: the card returned a 404 on 2026-08-07,
+and `max_output` had been set equal to the context window, the
+placeholder Iteration #26 rules out (found in the 2026-10-15 audit,
+Iteration #35).
 
 ## Cost `[Objective]`
 
