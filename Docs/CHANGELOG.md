@@ -19,6 +19,18 @@ public release to version against.
 
 ---
 
+## 2026-10-15 — Subscription or API?
+
+**Schema (owner-approved: plan prices, multipliers and API credits), dataset, Access Advisor and interface. The ranking is unchanged: nothing about a plan affects which model is recommended.**
+
+- **A new page, `/plans`:** pick a model and see two paths. On one side, what a monthly amount buys on the API, measured at list prices. On the other, the plan, drawn in fog because no provider publishes its limit in tokens; the page shows only what the provider does publish (price, its own "5x Pro" multiplier, included API credits and what they buy of that model). The verdict sits where the paths meet: use the API to build an app or automation; the API is the only way in when no plan names the model; with your own monthly usage, its exact API cost against the plan; without usage, no cost verdict at all. The result page links to it with the recommended model prefilled.
+- **Plans now carry facts you can compute with:** US list price (editable on the page, since regional prices differ), the provider's own usage multiplier, and included API credits. Claude Max and Google AI Ultra split into their 5x and 20x tiers, and ChatGPT Plus and the three Pro tiers were added: 10 plans.
+- **Ten new access routes**, only where a plan page names the exact model: Claude Opus 5.5 and Haiku 5.5 on Claude plans, Gemini 4 Argon in the Gemini app and (Ultra only) in AI Studio, and six GPT models in ChatGPT. Gemini 3.1 Pro Preview gets no Gemini app route: the plan pages say "Gemini 3.1 Pro", which is not the catalog's name. 95 routes.
+- **The Access Advisor gained `compare_plans`**, which reads plans and routes by their attributes and never imports the ranking.
+- **Tests:** 295 pass (+32).
+
+---
+
 ## 2026-10-14 — Subscription facts corrected
 
 **Dataset and docs only, no schema change. Found while researching the upcoming "subscription or API" section.**

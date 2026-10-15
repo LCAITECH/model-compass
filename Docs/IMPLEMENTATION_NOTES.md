@@ -1508,3 +1508,15 @@ official page names the exact model, never a family. Not applied yet.
 **Status**
 Corrections applied. Plan-schema extension approved, pending
 implementation.
+
+**Update 2026-10-15:** the plan-schema extension is implemented
+(`SCHEMA.md`, "Subscription plans"): 10 plans, 95 routes, and
+`decision/access/plan_compare.py` behind the new `/plans` page. One
+deviation from the approved coverage, by the approved rule itself:
+Gemini 3.1 Pro Preview gets no Gemini app route, because Google's plan
+pages name "Gemini 3.1 Pro", not the catalog's "Gemini 3.1 Pro
+Preview"; whether the app model is the preview is not stated. Also
+found, not applied (owner decision: separate fix later): Claude Haiku
+5.5 and Sonnet 5.5 are usable on Claude.ai Free and GPT-6 Luna on
+ChatGPT Free, yet all three store `access.has_free_access: false`.
+Status: closed.

@@ -366,6 +366,51 @@ document, is the source of truth for actual values.*
   `lifecycle.shutdown_date` that has passed fails the test suite
   (`tests/test_catalog_dates.py`) until the entry is updated.
 
+## Subscription plans
+
+Consumer plans live in `dataset/subscriptions/{provider}/{plan_id}.yaml`,
+a separate catalog from the models. A plan never lists the models it
+includes: an access route (`dataset/access_routes/`) names the plan in
+its `consumer_subscription` requirement, and only where the provider's
+own page names that exact model (never a family). Every field is
+`[Objective]` and sourced from the provider's own pages, with the URLs
+in a YAML comment, the same rule as `lifecycle`.
+
+| Field                           | Type | Allowed values |
+|---------------------------------|------|----------------|
+| `provider`, `plan_name`         | string | As the provider writes them. |
+| `surface_entitlements`          | list of surfaces | Where the plan applies (display only). |
+| `documented_exclusions`         | list of strings | What the plan does not cover, in English. |
+| `region_scope`                  | string | Usually `account_dependent`. |
+| `source_url`, `consulted_at`, `status` | string, ISO date, evidence status | The plan's main source. |
+| `price.monthly_usd`             | number > 0 | US list price, monthly billing, before tax. |
+| `usage_multiplier`              | mapping or `null` | `relative_to` (another plan_id), `factor` (> 0), `scope` (what is multiplied, in the provider's words). |
+| `api_credits`                   | mapping or `null` | `monthly_usd` (> 0), `surface` (where they are spent), `conditions` (expiry, separate account, exclusions). |
+
+- **No plan limit is stored as a number.** No provider publishes a
+  plan's usage limit in tokens, so nothing here pretends to: the
+  multiplier is the provider's own "5x Pro" statement, kept as a factor
+  and a scope, and it is never converted into tokens.
+- **`price.monthly_usd`** is the US list price. Regional prices and
+  taxes differ, which is why the site prefills it and lets the visitor
+  change it. A plan with several tiers at different prices is several
+  plans (`claude-max-5x`, `claude-max-20x`).
+- **`usage_multiplier`** is `null` when the provider publishes no
+  number, or only one against a tier that is not a plan in this catalog
+  (Free). `relative_to` must name another plan in the catalog; the
+  loader checks it across files.
+- **`api_credits`** is `null` when the plan includes none. When it
+  does, it states the monthly amount and where it can be spent; a page
+  may translate that amount into the tokens it buys at a model's list
+  prices, which is exact, never into plan usage.
+- `price`, `usage_multiplier` and `api_credits` are required keys,
+  `null` allowed for the last two. Approved by the owner on 2026-10-14,
+  added 2026-10-15;
+  see `Docs/IMPLEMENTATION_NOTES.md`, Iteration #31.
+
+Plans are read by the Access Advisor (`decision/access/`) and never by
+the evaluator: nothing about a plan changes which model is recommended.
+
 ## Contributing a New Model
 
 Adding a model to the dataset means creating one new YAML file under

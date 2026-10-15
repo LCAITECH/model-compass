@@ -219,6 +219,15 @@ because they're unimportant:
   and validating the dataset was the simplest option for the set of
   rules `SCHEMA.md` currently defines; a separate validation step can
   be split out later if the rules grow enough to justify it.
+- **Where "subscription or API" lives** (resolved 2026-10-15, when it
+  was built) — in `decision/access/plan_compare.py`, next to the Access
+  Advisor: both answer "how do I reach and pay for this model", never
+  "which model". The model is an input; the module reads plans and
+  routes by their attributes and never imports `decision/evaluator/` or
+  `decision/explainer/`, so it cannot change a recommendation. The page
+  (`interfaces/web/plans_view.py`) only turns its result into text and
+  the tokens a dollar amount buys at list prices. Plan loading moved to
+  `decision/loader/subscription_loader.py` in the same change.
 
 ---
 

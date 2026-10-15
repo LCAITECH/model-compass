@@ -221,6 +221,15 @@ phases of the [Roadmap](./ROADMAP.md).
   (token-equivalent usage), and must not claim a precise equivalence
   like "$20 of Plus = X million tokens" — that's the same fabricated-
   precision problem Multi-Model Cost Strategies runs into, above.
+  **Implemented 2026-10-15** at `/plans`, standalone as described: the
+  plan schema gained a US list price, the provider's own usage
+  multiplier and included API credits (`SCHEMA.md`, "Subscription
+  plans"), and `decision/access/plan_compare.py` compares one model's
+  plans against its API. What is verifiable is shown as exact (prices,
+  credits, what an amount buys on the API, the API cost of a usage the
+  developer types in); a plan's limit is shown as "not published in
+  tokens" and never converted, so no "$20 of Plus = X tokens" claim is
+  made.
 - **Specialized / Domain-Specific Models** — a separate category for
   models fine-tuned or purpose-built for a narrow domain (e.g. Gemini
   3.5 Flash Cyber, tuned for cybersecurity vulnerability work) rather
