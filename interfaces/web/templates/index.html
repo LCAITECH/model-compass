@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% import "_icons.html" as icons %}
+{% macro yes_no_unknown(name) %}
+          <select id="{{ name }}" name="{{ name }}">
+            <option value="unknown" selected>Not sure / haven't checked</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+{%- endmacro %}
 {% block title %}Model Compass — What model should I use?{% endblock %}
 {% block body_class %}page-index{% endblock %}
 {% block content %}
@@ -190,22 +197,12 @@
     <div class="decision-field-pair">
       <div class="decision-field">
         <div class="field-label"><label for="has_api_billing">Do you already have API billing set up (with any provider)?</label></div>
-        <div class="field-control">
-          <select id="has_api_billing" name="has_api_billing">
-            <option value="unknown" selected>Not sure / haven't checked</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
+        <div class="field-control">{{ yes_no_unknown("has_api_billing") }}
         </div>
       </div>
       <div class="decision-field">
         <div class="field-label"><label for="has_gpu_infrastructure">GPU infrastructure available to run models yourself?</label></div>
-        <div class="field-control">
-          <select id="has_gpu_infrastructure" name="has_gpu_infrastructure">
-            <option value="unknown" selected>Not sure / haven't checked</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
+        <div class="field-control">{{ yes_no_unknown("has_gpu_infrastructure") }}
         </div>
       </div>
     </div>

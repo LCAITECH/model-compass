@@ -16,7 +16,7 @@
 }
 
 .effects-toggle[aria-pressed="true"] {
-  color: var(--accent-secondary);
+  color: var(--accent-secondary-text);
   border-color: color-mix(in srgb, var(--accent-secondary) 55%, var(--border));
 }
 

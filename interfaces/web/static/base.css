@@ -5,7 +5,7 @@
   --input-bg: #eef0f6;
   --text: #16161f;
   --text-secondary: #3f3f46;
-  --muted: #71717a;
+  --muted: #6b6b74;
   --border: #e4e4e7;
   --border-strong: #87878f;
 
@@ -13,6 +13,7 @@
   --accent-hover: #4338ca;
   --accent-strong: #6d28d9;
   --accent-secondary: #06b6d4;
+  --accent-secondary-text: #0e7490; /* cyan as text: 2.3:1 on white -> ~5:1 */
   --accent-contrast: #ffffff;
   --accent-soft: #eef2ff;
 

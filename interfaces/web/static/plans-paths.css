@@ -59,7 +59,7 @@
 
 .path-kicker {
   margin: 0;
-  color: var(--accent-secondary);
+  color: var(--accent-secondary-text);
   font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: 0.08em;

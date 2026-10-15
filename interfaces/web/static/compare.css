@@ -26,20 +26,11 @@
   --series-4: #c2410c;
 }
 
-:root[data-theme="dark"] {
+:root:not([data-theme="light"]) {
   --series-1: #8b8cff;
   --series-2: #22d3ee;
   --series-3: #f472b6;
   --series-4: #fb923c;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --series-1: #8b8cff;
-    --series-2: #22d3ee;
-    --series-3: #f472b6;
-    --series-4: #fb923c;
-  }
 }
 
 .series-1 { --series: var(--series-1); }

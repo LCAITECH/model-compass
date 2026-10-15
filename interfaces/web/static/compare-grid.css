@@ -197,7 +197,7 @@
 .tone-bad .cell-text { color: var(--danger); font-weight: 700; }
 .tone-neutral .cell-text { font-weight: 700; }
 .tone-caution .cell-text { color: var(--caution); font-weight: 700; }
-.tone-new .cell-text { color: var(--accent-secondary); font-weight: 700; }
+.tone-new .cell-text { color: var(--accent-secondary-text); font-weight: 700; }
 .tone-muted .cell-text { color: var(--muted); }
 
 .is-best {

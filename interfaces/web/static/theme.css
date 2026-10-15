@@ -1,8 +1,9 @@
 /* Light/dark theming. Light tokens live in base.css; this file only
-   overrides them. Dark applies when the visitor picked it explicitly
-   (data-theme="dark") or when they never picked and the OS prefers it. */
+   overrides them. Dark is the site's default: it applies unless the
+   visitor picked light (data-theme="light", set before first paint by
+   base.html). One rule per token set, so dark has a single source. */
 
-:root[data-theme="dark"] {
+:root:not([data-theme="light"]) {
   color-scheme: dark;
   --bg: #0b0d14;
   --surface: #141826;
@@ -17,6 +18,7 @@
   --accent-hover: #a5a6ff;
   --accent-strong: #b794ff;
   --accent-secondary: #22d3ee;
+  --accent-secondary-text: #22d3ee;
   --accent-contrast: #0b0d14;
   --accent-soft: #1d2142;
 
@@ -33,41 +35,6 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.35);
   --shadow-glow: 0 8px 40px rgba(139, 140, 255, 0.22), 0 2px 8px rgba(0, 0, 0, 0.4);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg: #0b0d14;
-    --surface: #141826;
-    --input-bg: #1b2032;
-    --text: #eceef7;
-    --text-secondary: #c3c7d9;
-    --muted: #959bb3;
-    --border: #272d44;
-    --border-strong: #5a6283;
-
-    --accent: #8b8cff;
-    --accent-hover: #a5a6ff;
-    --accent-strong: #b794ff;
-    --accent-secondary: #22d3ee;
-    --accent-contrast: #0b0d14;
-    --accent-soft: #1d2142;
-
-    --positive: #34d399;
-    --positive-soft: #0f2a24;
-    --caution: #fbbf24;
-    --caution-soft: #2b2310;
-    --danger: #f87171;
-    --danger-soft: #2d1519;
-    --danger-border: #5c2a30;
-
-    --neutral-soft: #1b2032;
-
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.35);
-    --shadow-glow: 0 8px 40px rgba(139, 140, 255, 0.22), 0 2px 8px rgba(0, 0, 0, 0.4);
-  }
 }
 
 :root {
@@ -167,30 +134,15 @@ body,
 .theme-toggle .icon-moon { display: block; }
 .theme-toggle .icon-sun { display: none; }
 
-:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
-:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
-  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
-}
+:root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+:root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
 
 /* Dark page background: same two soft glows, tuned for a dark base. */
 
-:root[data-theme="dark"] body {
+:root:not([data-theme="light"]) body {
   background:
     radial-gradient(ellipse 900px 500px at 12% -8%, rgba(139, 140, 255, 0.16) 0%, transparent 55%),
     radial-gradient(ellipse 800px 500px at 100% 10%, rgba(34, 211, 238, 0.1) 0%, transparent 55%),
     var(--bg);
   background-attachment: fixed;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) body {
-    background:
-      radial-gradient(ellipse 900px 500px at 12% -8%, rgba(139, 140, 255, 0.16) 0%, transparent 55%),
-      radial-gradient(ellipse 800px 500px at 100% 10%, rgba(34, 211, 238, 0.1) 0%, transparent 55%),
-      var(--bg);
-    background-attachment: fixed;
-  }
 }
