@@ -8,7 +8,7 @@ access:
 eligibility:
   requirements:
     - kind: consumer_subscription
-      value: [claude-max]
+      value: [claude-max-5x, claude-max-20x]
   region_scope: account_dependent
 economics:
   billing_owner: Anthropic

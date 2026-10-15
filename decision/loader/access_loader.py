@@ -1,4 +1,5 @@
-"""Reads dataset/access_routes/*/*.yaml and dataset/subscriptions/*/*.yaml.
+"""Reads dataset/access_routes/*/*.yaml. Subscription plans have their own
+loader, subscription_loader.py.
 
 Mirrors decision/loader/loader.py's discipline (structural validation at
 load time, DatasetValidationError on any issue) but stays a separate
@@ -8,8 +9,9 @@ extension of the model loader.
 Cross-catalog referential integrity (does a route's model_id exist in
 dataset/models/? does a consumer_subscription value exist in
 subscriptions/?) is deliberately NOT checked here per-file -- it's a
-separate, explicit step (validate_route_references) run once after both
-catalogs are loaded, so decision/access/advisor.py never has to worry
+separate, explicit step (validate_route_references here, and
+validate_subscription_references in subscription_loader.py) run once
+after the catalogs are loaded, so decision/access/advisor.py never has to worry
 about whether the ids it's handed are real.
 """
 
@@ -34,7 +36,6 @@ from decision.domain.access_route import (
     Surface,
 )
 from decision.domain.ai_model import AIModel
-from decision.domain.subscription import SubscriptionPlan
 from decision.loader._util import enum_values
 from decision.loader.errors import DatasetValidationError
 
@@ -43,17 +44,6 @@ REQUIRED_ACCESS_FIELDS = ("surface", "access_method", "capabilities", "guide_ref
 REQUIRED_ELIGIBILITY_FIELDS = ("requirements", "region_scope")
 REQUIRED_ECONOMICS_FIELDS = ("billing_owner", "billing_scheme", "quota_scope", "production_allowed")
 REQUIRED_EVIDENCE_FIELDS = ("source_url", "consulted_at", "status", "caveat")
-
-REQUIRED_SUBSCRIPTION_FIELDS = (
-    "provider",
-    "plan_name",
-    "surface_entitlements",
-    "documented_exclusions",
-    "region_scope",
-    "source_url",
-    "consulted_at",
-    "status",
-)
 
 # Which kinds carry a value, and what shape it must be.
 _KIND_VALUE_SHAPE = {
@@ -85,26 +75,6 @@ def load_access_route_file(path: Path) -> AccessRoute:
     return _to_access_route(raw, route_id=path.stem)
 
 
-def load_subscriptions(directory: Path) -> list[SubscriptionPlan]:
-    """Loads and validates every subscription plan YAML file under `directory`.
-
-    Expects the dataset/subscriptions/{provider}/{plan_id}.yaml layout.
-    """
-    return [load_subscription_file(path) for path in sorted(Path(directory).glob("*/*.yaml"))]
-
-
-def load_subscription_file(path: Path) -> SubscriptionPlan:
-    path = Path(path)
-    with path.open(encoding="utf-8") as f:
-        raw = yaml.safe_load(f)
-
-    issues = _validate_subscription(raw)
-    if issues:
-        raise DatasetValidationError(path, issues)
-
-    return _to_subscription_plan(raw, plan_id=path.stem)
-
-
 def validate_route_references(routes: list[AccessRoute], models: list[AIModel]) -> None:
     """Cross-catalog check: every route.model_id must be a real dataset/models/ id.
 
@@ -120,25 +90,6 @@ def validate_route_references(routes: list[AccessRoute], models: list[AIModel]) 
         raise DatasetValidationError(
             "access_routes", [f"{route_id}: {issue}" for route_id, issue in issues_by_route.items()]
         )
-
-
-def validate_subscription_references(
-    routes: list[AccessRoute], subscriptions: list[SubscriptionPlan]
-) -> None:
-    """Cross-catalog check: every consumer_subscription value must be a real plan_id."""
-    known_plan_ids = {plan.plan_id for plan in subscriptions}
-    issues = []
-    for route in routes:
-        for requirement in route.eligibility.requirements:
-            if requirement.kind != RequirementKind.CONSUMER_SUBSCRIPTION:
-                continue
-            for plan_id in requirement.value:
-                if plan_id not in known_plan_ids:
-                    issues.append(
-                        f"{route.route_id}: consumer_subscription references unknown plan_id '{plan_id}'"
-                    )
-    if issues:
-        raise DatasetValidationError("access_routes", issues)
 
 
 def _validate_route(raw) -> list[str]:
@@ -224,33 +175,6 @@ def _validate_requirements(requirements) -> list[str]:
     return issues
 
 
-def _validate_subscription(raw) -> list[str]:
-    if not isinstance(raw, dict):
-        return ["file does not contain a YAML mapping"]
-
-    issues = [
-        f"missing required field '{field}'" for field in REQUIRED_SUBSCRIPTION_FIELDS if field not in raw
-    ]
-    if issues:
-        return issues
-
-    if not isinstance(raw["surface_entitlements"], list):
-        issues.append("surface_entitlements must be a list")
-    else:
-        for surface in raw["surface_entitlements"]:
-            if surface not in enum_values(Surface):
-                issues.append(f"invalid surface_entitlements entry '{surface}'")
-    if not (
-        isinstance(raw["documented_exclusions"], list)
-        and all(isinstance(item, str) for item in raw["documented_exclusions"])
-    ):
-        issues.append("documented_exclusions must be a list of strings")
-    if raw["status"] not in enum_values(EvidenceStatus):
-        issues.append(f"invalid status='{raw['status']}'")
-
-    return issues
-
-
 def _convert_requirement_value(kind: RequirementKind, raw_value):
     """Converts a requirement's raw YAML value into the typed shape
     AccessRequirement.value actually promises for that kind (see
@@ -306,18 +230,4 @@ def _to_access_route(raw: dict, route_id: str) -> AccessRoute:
             status=EvidenceStatus(evidence["status"]),
             caveat=evidence["caveat"],
         ),
-    )
-
-
-def _to_subscription_plan(raw: dict, plan_id: str) -> SubscriptionPlan:
-    return SubscriptionPlan(
-        plan_id=plan_id,
-        provider=raw["provider"],
-        plan_name=raw["plan_name"],
-        surface_entitlements=tuple(Surface(s) for s in raw["surface_entitlements"]),
-        documented_exclusions=tuple(raw["documented_exclusions"]),
-        region_scope=raw["region_scope"],
-        source_url=raw["source_url"],
-        consulted_at=str(raw["consulted_at"]),
-        status=EvidenceStatus(raw["status"]),
     )

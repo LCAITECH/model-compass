@@ -7,7 +7,14 @@ region_scope: account_dependent
 source_url: https://claude.com/pricing
 consulted_at: "2026-10-14"
 status: confirmed
+price:
+  monthly_usd: 20.00
+usage_multiplier: null
+api_credits: null
 # Re-verified 2026-10-14: still no API credits. "The Pro plan does not include
 # API usage through the Claude Console" (support article 8325606), and the
 # monthly API credits are for Max and Team only ("Free, Pro, and Enterprise
 # plans aren't eligible", platform docs, api-credits-for-subscribers).
+# Price: USD 20 billed monthly (USD 200 a year if paid upfront), https://claude.com/pricing.
+# No multiplier stored: Anthropic's "at least 5x more usage per 5-hour session
+# than Free" is relative to Free, which is not a plan in this catalog.

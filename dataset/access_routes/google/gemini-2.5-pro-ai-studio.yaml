@@ -8,7 +8,7 @@ access:
 eligibility:
   requirements:
     - kind: consumer_subscription
-      value: [google-ai-pro, google-ai-ultra]
+      value: [google-ai-pro, google-ai-ultra-5x, google-ai-ultra-20x]
   region_scope: account_dependent
 economics:
   billing_owner: Google

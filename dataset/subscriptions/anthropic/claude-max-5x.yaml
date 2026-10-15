@@ -1,0 +1,27 @@
+provider: Anthropic
+plan_name: Claude Max 5x
+surface_entitlements: [consumer_subscription]
+documented_exclusions:
+  - "The plan's usage limits cover Claude and Claude Code only, never API calls"
+region_scope: account_dependent
+source_url: https://claude.com/pricing
+consulted_at: "2026-10-14"
+status: confirmed
+price:
+  monthly_usd: 100.00
+usage_multiplier:
+  relative_to: claude-pro
+  factor: 5
+  scope: "usage per 5-hour session"
+api_credits:
+  monthly_usd: 100.00
+  surface: direct_api
+  conditions: "Claude API credits in a separate Console organization; they refresh and expire each billing cycle with no rollover, do not cover Claude Code or extra usage in the apps, and apply to the Claude API in the Console only (not Bedrock, Vertex or Foundry)"
+# Sources, consulted 2026-10-14 (US English pages):
+# - price and per-session multiplier: https://claude.com/pricing and
+#   https://support.claude.com/en/articles/11049741-what-is-the-max-plan
+#   ("Max gives you 5x or 20x more usage per 5-hour session than Pro";
+#   monthly billing only; prices exclude tax).
+# - API credits (since 2026-10-07):
+#   https://support.claude.com/en/articles/17154008-monthly-api-credits-for-max-and-team-plans
+#   https://platform.claude.com/docs/en/about-claude/api-credits-for-subscribers

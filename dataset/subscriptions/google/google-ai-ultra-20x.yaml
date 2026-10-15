@@ -1,0 +1,27 @@
+provider: Google
+plan_name: Google AI Ultra 20x
+surface_entitlements: [playground_or_studio, consumer_subscription]
+documented_exclusions:
+  - "The plan's AI Studio quota covers the AI Studio web interface only; direct Gemini API use is billed separately"
+region_scope: account_dependent
+source_url: https://support.google.com/googleone/answer/16286513
+consulted_at: "2026-10-14"
+status: confirmed
+price:
+  monthly_usd: 199.99
+usage_multiplier:
+  relative_to: google-ai-pro
+  factor: 20
+  scope: "usage quota in the Gemini app and Google Antigravity"
+api_credits:
+  monthly_usd: 100.00
+  surface: direct_api
+  conditions: "Google Cloud credits through the Google Developer Program; they apply to Cloud services, including the Gemini API, and a paid AI Studio balance above USD 0 is required to activate them"
+# Sources, consulted 2026-10-14:
+# - price, multiplier and Cloud credits per tier: https://one.google.com/intl/en_us/about/google-ai-plans/
+#   (the URL without /intl/en_us/ shows local currency; the multiplier row
+#   reads "5x Pro plan" / "20x Pro plan" and applies to the Gemini app and Antigravity).
+# - credits apply to "Cloud services, including the Gemini API":
+#   https://ai.google.dev/gemini-api/docs/google-ai-plans ; amounts also in
+#   https://developers.google.com/profile/help/benefits ("$10, $40, or $100").
+# Replaces google-ai-ultra.yaml (one plan for two tiers).

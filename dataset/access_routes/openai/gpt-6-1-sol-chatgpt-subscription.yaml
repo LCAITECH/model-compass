@@ -1,0 +1,22 @@
+provider: OpenAI
+model_id: gpt-6-1-sol
+access:
+  surface: consumer_subscription
+  access_method: "ChatGPT (web, desktop and mobile apps), signed in with a ChatGPT plan"
+  capabilities: [prototype]
+  guide_ref: openai#chatgpt-subscription
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [chatgpt-plus, chatgpt-pro-100, chatgpt-pro-200, chatgpt-pro-500]
+  region_scope: account_dependent
+economics:
+  billing_owner: OpenAI
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://chatgpt.com/pricing/
+  consulted_at: "2026-10-14"
+  status: confirmed
+  caveat: "ChatGPT's plan comparison table (en-US) lists GPT-6.1 Sol as 'Yes' on Plus and 'Expanded' on Pro. Usage limits are not published in tokens, and the three Pro tiers publish no multiplier between them. API usage is billed separately and is not included in any ChatGPT plan. OpenAI does not state that the model in its apps is the same snapshot as the API model; the match is by the exact name on its page."

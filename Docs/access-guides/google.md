@@ -15,11 +15,26 @@ tiers.
 
 Source: [Billing](https://ai.google.dev/gemini-api/docs/billing?hl=es-419), consulted 2026-08-11.
 
+## `google#gemini-app`
+
+The Gemini app (web and mobile) under a Google AI plan. Usage draws from
+the app quota, which Google does not publish in tokens; Ultra 5x and
+Ultra 20x give 5x or 20x the AI Pro quota.
+
+1. Subscribe to Google AI Pro or one of the two Ultra tiers (Google One),
+   at [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/).
+2. Open the Gemini app with that account and pick the model.
+3. The app quota is not usable through the Gemini API; API use is billed
+   separately (see `google#direct-api`), although the plans include
+   Google Cloud credits that apply to it.
+
+Sources: [Google AI Pro](https://support.google.com/googleone/answer/14534406?hl=en) and [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/), consulted 2026-10-14.
+
 ## `google#ai-studio`
 
 Currently listed as a Google AI Pro/Ultra benefit.
 
-1. Subscribe to Google AI Pro or Ultra (Google One).
+1. Subscribe to Google AI Pro or one of the two Ultra tiers (Google One). Some models are Ultra-only here (for example Gemini 4 Argon).
 2. Open Google AI Studio with that account.
 3. If you link a paid API key inside AI Studio, its usage is billed
    separately as API usage.

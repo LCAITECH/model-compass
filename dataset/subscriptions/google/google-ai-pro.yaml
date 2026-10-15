@@ -2,15 +2,25 @@ provider: Google
 plan_name: Google AI Pro
 surface_entitlements: [playground_or_studio, consumer_subscription]
 documented_exclusions:
-  - "The plan's AI Studio quota covers the AI Studio web interface only; direct Gemini API use is billed separately. The plan does include USD 10 per month in Google Cloud credits (through the Google Developer Program) that apply to Cloud services, including the Gemini API"
+  - "The plan's AI Studio quota covers the AI Studio web interface only; direct Gemini API use is billed separately"
 region_scope: account_dependent
 source_url: https://support.google.com/googleone/answer/14534406
 consulted_at: "2026-10-14"
 status: confirmed
-# Re-verified 2026-10-14. The 2026-08-11 text said the plan documented no
-# Gemini API credits; Google now documents Cloud credits for AI Pro/Ultra:
-# https://ai.google.dev/gemini-api/docs/google-ai-plans (AI Studio quota is
-# "AI Studio UI only"; credits apply to "Cloud services, including the Gemini
-# API"). Credit amounts: https://one.google.com/intl/en_us/about/google-ai-plans/
-# and https://developers.google.com/profile/help/benefits. Whether the credits
-# already existed on 2026-08-11 could not be determined.
+price:
+  monthly_usd: 19.99
+usage_multiplier: null
+api_credits:
+  monthly_usd: 10.00
+  surface: direct_api
+  conditions: "Google Cloud credits through the Google Developer Program; they apply to Cloud services, including the Gemini API, and a paid AI Studio balance above USD 0 is required to activate them"
+# Sources, consulted 2026-10-14:
+# - price, multiplier and Cloud credits per tier: https://one.google.com/intl/en_us/about/google-ai-plans/
+#   (the URL without /intl/en_us/ shows local currency; the multiplier row
+#   reads "5x Pro plan" / "20x Pro plan" and applies to the Gemini app and Antigravity).
+# - credits apply to "Cloud services, including the Gemini API":
+#   https://ai.google.dev/gemini-api/docs/google-ai-plans ; amounts also in
+#   https://developers.google.com/profile/help/benefits ("$10, $40, or $100").
+# No multiplier stored: the "4x" row is relative to non-AI subscribers, not a plan in this catalog.
+# Whether the Cloud credits already existed when this plan was first verified
+# (2026-08-11) could not be determined.

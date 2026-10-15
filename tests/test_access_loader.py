@@ -47,7 +47,11 @@ def test_loads_all_real_access_routes():
     # Bedrock, Google Vertex, Microsoft Foundry) admitted 2026-10-08, each
     # cloud confirmed on its own official docs.
     # + 1 (gemini-4-argon direct_api) admitted 2026-10-14.
-    assert len(routes) == 85
+    # + 10 subscription routes admitted 2026-10-14 for the subscription-vs-API
+    # section, each named exactly on its plan page: claude-opus-5-5 and
+    # claude-haiku-5-5 (Claude), gemini-4-argon (Gemini app and AI Studio),
+    # and six GPT models in ChatGPT.
+    assert len(routes) == 95
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
     assert len(model_ids_with_direct_api) == 39
@@ -56,13 +60,20 @@ def test_loads_all_real_access_routes():
 def test_loads_all_real_subscriptions():
     plans = load_subscriptions(SUBSCRIPTIONS_DIR)
 
-    assert len(plans) == 4
+    # Max and Ultra split into their 5x/20x tiers, ChatGPT added (2026-10-14).
+    assert len(plans) == 10
     assert all(isinstance(plan, SubscriptionPlan) for plan in plans)
     assert {plan.plan_id for plan in plans} == {
         "google-ai-pro",
-        "google-ai-ultra",
+        "google-ai-ultra-5x",
+        "google-ai-ultra-20x",
         "claude-pro",
-        "claude-max",
+        "claude-max-5x",
+        "claude-max-20x",
+        "chatgpt-plus",
+        "chatgpt-pro-100",
+        "chatgpt-pro-200",
+        "chatgpt-pro-500",
     }
 
 
@@ -108,7 +119,7 @@ def test_gemini_ai_studio_route_requires_consumer_subscription():
 
     [requirement] = route.eligibility.requirements
     assert requirement.kind == RequirementKind.CONSUMER_SUBSCRIPTION
-    assert requirement.value == ("google-ai-pro", "google-ai-ultra")
+    assert requirement.value == ("google-ai-pro", "google-ai-ultra-5x", "google-ai-ultra-20x")
 
 
 def test_rejects_unknown_model_id(tmp_path):
@@ -212,6 +223,10 @@ region_scope: account_dependent
 source_url: https://example.com
 consulted_at: "2026-08-11"
 status: confirmed
+price:
+  monthly_usd: 10
+usage_multiplier: null
+api_credits: null
 """
 
 _MINIMAL_ROUTE = """

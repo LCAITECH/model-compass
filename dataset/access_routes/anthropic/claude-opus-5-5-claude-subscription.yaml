@@ -1,0 +1,22 @@
+provider: Anthropic
+model_id: claude-opus-5-5
+access:
+  surface: consumer_subscription
+  access_method: "Claude.ai or Claude Code, signed in with a Claude subscription"
+  capabilities: [prototype, build]
+  guide_ref: anthropic#claude-subscription
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [claude-pro, claude-max-5x, claude-max-20x]
+  region_scope: account_dependent
+economics:
+  billing_owner: Anthropic
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://www.anthropic.com/claude/opus
+  consulted_at: "2026-10-14"
+  status: confirmed
+  caveat: "Anthropic's Opus page: 'Opus 5.5 is available on Claude for Pro, Max, Team, and Enterprise users'; Claude Code's model configuration docs say Pro and Max default to Opus 5.5. Use draws from the plan's shared usage limits, which are not published in tokens. Anthropic does not state that the model in its apps is the same snapshot as the API model; the match is by the exact name on its page."

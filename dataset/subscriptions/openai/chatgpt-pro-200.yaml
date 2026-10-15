@@ -1,0 +1,17 @@
+provider: OpenAI
+plan_name: ChatGPT Pro 200
+surface_entitlements: [consumer_subscription]
+documented_exclusions:
+  - "API usage is not included; it is billed to a separate OpenAI API account"
+region_scope: account_dependent
+source_url: https://help.openai.com/en/articles/9793128-about-chatgpt-pro-tiers
+consulted_at: "2026-10-14"
+status: confirmed
+price:
+  monthly_usd: 200.00
+usage_multiplier: null
+api_credits: null
+# Consulted 2026-10-14: three Pro tiers, "Pro is billed monthly".
+# No multiplier stored: OpenAI publishes none between tiers, only that
+# "Pro 200 includes more usage than Pro 100" and Pro 500 "offers the highest
+# included usage of the three plans".

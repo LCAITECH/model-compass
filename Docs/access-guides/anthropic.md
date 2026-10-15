@@ -29,7 +29,7 @@ Claude.ai and Claude Code can both be used under a paid Claude
 subscription instead of an API key -- usage draws from the plan's
 shared weekly limit ("usage credits"), not per-token billing.
 
-1. Subscribe to Claude Pro or Claude Max at [claude.com/pricing](https://claude.com/pricing).
+1. Subscribe to Claude Pro (USD 20 a month) or Claude Max (two tiers: Max 5x at USD 100, Max 20x at USD 200) at [claude.com/pricing](https://claude.com/pricing).
 2. Sign in to [Claude.ai](https://claude.ai/) or [Claude Code](https://code.claude.com/docs/en/overview) with that account -- no separate API key needed for this path.
 3. Model availability and the exact usage-credit split per model change over time; check the pricing page's comparison table for current terms.
 4. Fable models are included in Max only (up to 50% of the weekly limit). On Pro they run on pay-as-you-go usage credits at standard API rates, outside the plan's limits.

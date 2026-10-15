@@ -20,7 +20,7 @@ TODAY = date(2026, 10, 14)
 ARGON = "gemini-4-argon"  # released 2026-10-13, introductory price through 2026-11-30
 HAIKU = "claude-haiku-5-5"
 NANO = "gpt-5-nano"  # deprecated, replacement gpt-5-6-luna
-FABLE = "claude-fable-5-1"  # the only one of these with a Claude subscription route
+FABLE = "claude-fable-5-1"  # Claude subscription route on Max only
 
 
 @pytest.fixture(scope="module")
@@ -119,8 +119,13 @@ def test_access_rows_group_routes_by_surface_and_name_the_plans(models, access_r
     sections = _build(models, access_routes, FABLE, ARGON, plan_names=plan_names)
 
     fable, argon = _row(sections, "Subscription apps")["cells"]
-    assert [chip["detail"] for chip in fable["chips"]] == ["Claude Max"]  # Pro pays Fable at API rates
-    assert (argon["chips"], argon["text"], argon["tone"]) == ((), "Not documented", "muted")
+    assert [chip["detail"] for chip in fable["chips"]] == ["Claude Max 5x or Claude Max 20x"]  # Pro pays Fable at API rates
+    assert [(chip["label"], chip["detail"]) for chip in argon["chips"]] == [
+        ("Gemini app", "Google AI Pro or Google AI Ultra 5x or Google AI Ultra 20x")
+    ]
+    fable_studio, argon_studio = _row(sections, "Studio")["cells"]
+    assert (fable_studio["chips"], fable_studio["text"], fable_studio["tone"]) == ((), "Not documented", "muted")
+    assert [chip["detail"] for chip in argon_studio["chips"]] == ["Google AI Ultra 5x or Google AI Ultra 20x"]
     fable_api, argon_api = _row(sections, "Direct API")["cells"]
     assert [chip["label"] for chip in argon_api["chips"]] == ["Google API"]
     assert fable_api["chips"][0]["href"].endswith("anthropic.md#anthropicdirect-api")

@@ -46,9 +46,11 @@ from decision.domain.candidate import Candidate
 from decision.domain.context import QUALITY_DIMENSION_ATTR, BudgetLevel, BudgetMode, Context, Priority
 from decision.domain.languages import language_name
 from decision.domain.recommendation import Alternative, Exclusion, Outranked, Recommendation
-from decision.domain.subscription import SubscriptionPlan
+from decision.domain.subscription import ApiCredits, PlanPrice, SubscriptionPlan, UsageMultiplier
 
 __all__ = [
+    "ApiCredits",
+    "PlanPrice",
     "Access",
     "AIModel",
     "AccessContext",
@@ -93,6 +95,7 @@ __all__ = [
     "RouteEligibilityState",
     "RouteEntry",
     "SubscriptionPlan",
+    "UsageMultiplier",
     "Surface",
     "UseMode",
     "WorkloadType",

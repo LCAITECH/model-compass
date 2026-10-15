@@ -1,0 +1,17 @@
+provider: OpenAI
+plan_name: ChatGPT Plus
+surface_entitlements: [consumer_subscription]
+documented_exclusions:
+  - "API usage is separate and billed independently, per OpenAI's own wording"
+region_scope: account_dependent
+source_url: https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus
+consulted_at: "2026-10-14"
+status: confirmed
+price:
+  monthly_usd: 20.00
+usage_multiplier: null
+api_credits: null
+# Consulted 2026-10-14: USD 20 "billed monthly"; "we do not support annual billing";
+# "Not included: API usage is separate and billed independently." Sign in with
+# ChatGPT allowances for third-party tools are not API credits (same article).
+# No multiplier: OpenAI describes Plus against Free only in qualitative terms.

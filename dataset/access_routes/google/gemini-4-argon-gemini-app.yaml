@@ -1,0 +1,22 @@
+provider: Google
+model_id: gemini-4-argon
+access:
+  surface: consumer_subscription
+  access_method: "Gemini app (web and mobile), signed in with a Google AI plan"
+  capabilities: [prototype]
+  guide_ref: google#gemini-app
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [google-ai-pro, google-ai-ultra-5x, google-ai-ultra-20x]
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://support.google.com/googleone/answer/14534406?hl=en
+  consulted_at: "2026-10-14"
+  status: confirmed
+  caveat: "Google's AI Pro page lists the 'Gemini app with Gemini 4 Argon', and the plans table shows it on AI Pro and both Ultra tiers. Use draws from the app quota, which is not published in tokens (Ultra: 5x or 20x the AI Pro quota, per Google). Google does not state that the model in its apps is the same snapshot as the API model; the match is by the exact name on its page."
