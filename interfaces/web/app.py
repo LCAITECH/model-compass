@@ -36,6 +36,7 @@ from interfaces.web.affordability import (
     estimated_output_capacity,
     parse_budget_usd,
 )
+from interfaces.web.compare_visuals import constellation_frame, constellations, orbit, podium
 from interfaces.web.comparison import (
     MAX_COMPARED,
     MIN_COMPARED,
@@ -43,6 +44,8 @@ from interfaces.web.comparison import (
     context_fit,
     group_models,
     parse_selection,
+    row_counts,
+    selection_links,
 )
 from interfaces.web.context_form import InvalidFormError, context_from_form
 from interfaces.web.model_profile import best_for, less_suited_for, quality_profile
@@ -213,6 +216,20 @@ def compare(request: Request, m: list[str] = Query(default=[])):
         else:
             if len(selected) >= MIN_COMPARED:
                 fit = context_fit(selected, models, context)
+    budget_usd = parse_budget_usd(form.get("monthly_budget_usd"))
+    ready = len(selected) >= MIN_COMPARED
+    sections = None
+    if ready:
+        sections = build_comparison(
+            selected,
+            access_routes,
+            fit,
+            all_models=models,
+            plan_names=subscription_plan_names,
+            today=date.today(),
+            budget_usd=budget_usd,
+            form=form,
+        )
     return templates.TemplateResponse(
         request,
         "compare.html",
@@ -220,11 +237,19 @@ def compare(request: Request, m: list[str] = Query(default=[])):
             "model_groups": group_models(models),
             "selected": selected,
             "selected_ids": [model.id for model in selected],
-            "slots": range(MAX_COMPARED),
+            "max_compared": MAX_COMPARED,
             "min_compared": MIN_COMPARED,
-            "sections": build_comparison(selected, access_routes, fit) if len(selected) >= MIN_COMPARED else None,
+            "links": selection_links(selected, form, fit),
+            "sections": sections,
+            "counts": row_counts(sections) if sections else None,
             "fit": fit,
+            "orbit": orbit(fit, selected) if fit else None,
+            "podium": podium(fit, selected) if fit else None,
+            "constellations": constellations(selected) if ready else None,
+            "frame": constellation_frame(),
+            "budget_usd": budget_usd,
             "form": form,
+            "context_open": bool(context_error or any(form.get(field) for field in _CONTEXT_FIELDS)),
             "context_error": context_error,
             "languages": languages,
             "budgets": list(BudgetLevel),

@@ -1,0 +1,105 @@
+{#- The side-by-side itself, from the same `sections` twice: a table with
+    one card-like column per model (wide screens) and one swipeable card
+    per model (narrow screens). CSS shows one or the other. "Only
+    differences" hides rows flagged `same` in comparison.py; pure CSS. -#}
+{% import "_notices.html" as notices %}
+
+{% macro cell_body(c, row) -%}
+{% if row.segments %}
+<span class="quality-segments" aria-hidden="true">
+  {% for i in range(c.max_ordinal + 1) %}<span class="segment{{ ' filled' if i <= c.ordinal else '' }}"></span>{% endfor %}
+</span>
+{% endif %}
+{% if c.chips %}
+<span class="route-chips">
+  {% for chip in c.chips %}<a class="route-chip" href="{{ chip.href }}" title="{{ chip.title }}" target="_blank" rel="noopener">{{ chip.label }}{% if chip.detail %}<span class="chip-detail">{{ chip.detail }}</span>{% endif %}</a>{% endfor %}
+</span>
+{% elif c.flag is not none %}
+<span class="flag {{ 'flag-yes' if c.flag else 'flag-no' }}">{{ c.text }}</span>
+{% else %}
+<span class="cell-text">{{ c.text }}</span>
+{% endif %}
+{% if c.best %}<span class="best-mark" title="Best value among the selected models for this row">best</span>{% endif %}
+{% if c.ratio %}<span class="ratio-mark" title="Times the lowest price among the selected models">{{ c.ratio }}</span>{% endif %}
+{% if c.bar is not none %}<span class="cell-bar" aria-hidden="true"><span style="--w: {{ c.bar }}%"></span></span>{% endif %}
+{% if c.note %}<span class="cell-note">{{ c.note }}</span>{% endif %}
+{% if c.action %}<a class="cell-action" href="{{ c.action.href }}">{{ c.action.label }} &rarr;</a>{% endif %}
+{%- endmacro %}
+
+{% macro cell_class(c, index) -%}
+series-{{ index }}{{ ' is-best' if c.best }}{{ ' tone-' ~ c.tone if c.tone }}
+{%- endmacro %}
+
+<section class="compare-board" aria-label="Side-by-side comparison">
+  <div class="board-toolbar">
+    <label class="diff-toggle">
+      <input type="checkbox" id="only-diff">
+      <span class="switch" aria-hidden="true"></span>
+      Only differences
+    </label>
+    <p class="muted">{{ counts.differ }} of {{ counts.total }} rows differ between these models.</p>
+  </div>
+
+  <table class="compare-table cols-{{ selected | length }}">
+    <thead>
+      <tr>
+        <th scope="col" class="corner"><span class="sr-only">Field</span></th>
+        {% for model in selected %}
+        <th scope="col" class="col-head series-{{ loop.index }}">
+          <span class="compare-model-name"><span class="series-dot" aria-hidden="true"></span>{{ model.name }}</span>
+          <span class="muted">{{ model.provider }}</span>
+          {{ notices.badges(model, compact=true) }}
+        </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    {% for section in sections %}
+    <tbody class="{{ 'is-same' if section.all_same }}">
+      <tr class="compare-section">
+        <th scope="rowgroup">{{ section.title }}{% if section.note %}<span class="section-note">{{ section.note }}</span>{% endif %}</th>
+        {% for model in selected %}<td class="series-{{ loop.index }}" aria-hidden="true"></td>{% endfor %}
+      </tr>
+      {% for row in section.rows %}
+      <tr class="{{ 'is-same' if row.same }}{{ ' is-pinned' if row.pinned }}">
+        <th scope="row">{{ row.label }}</th>
+        {% for c in row.cells %}
+        <td class="{{ cell_class(c, loop.index) }}">{{ cell_body(c, row) }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+    {% endfor %}
+  </table>
+
+  <div class="compare-cards" data-cards>
+    {% for model in selected %}
+    {% set col = loop.index0 %}
+    <article class="mcard series-{{ loop.index }}" id="mcard-{{ loop.index }}" aria-label="{{ model.name }}">
+      <header class="mcard-head">
+        <h3><span class="series-dot" aria-hidden="true"></span>{{ model.name }}</h3>
+        <span class="muted">{{ model.provider }} · {{ loop.index }} of {{ selected | length }}</span>
+        {{ notices.badges(model, compact=true) }}
+      </header>
+      {% for section in sections %}
+      <section class="mcard-section{{ ' is-same' if section.all_same }}">
+        <h4>{{ section.title }}</h4>
+        {% for row in section.rows %}
+        {% set c = row.cells[col] %}
+        <div class="mcard-row {{ cell_class(c, col + 1) }}{{ ' is-same' if row.same }}">
+          <span class="mcard-label">{{ row.label }}</span>
+          <div class="mcard-value">{{ cell_body(c, row) }}</div>
+        </div>
+        {% endfor %}
+      </section>
+      {% endfor %}
+    </article>
+    {% endfor %}
+  </div>
+  <nav class="mcard-dots" aria-label="Models">
+    {% for model in selected %}<a class="series-{{ loop.index }}" href="#mcard-{{ loop.index }}" aria-label="{{ model.name }}" data-card-dot></a>{% endfor %}
+  </nav>
+
+  <p class="muted compare-footnote">
+    "Best" only marks the highest or lowest stored value among the selected models, and only when they differ. It is not an overall ranking. Bars and ratios compare the selected models with each other, never against a maximum. The "For your context" row, when shown, is the engine's own result for the context you entered. Ratings are editorial judgments, not benchmark scores (see SCHEMA.md); where several models share a rating, the real differences are in price, limits and access. For a recommendation tailored to your project, <a href="/">use the form</a>.
+  </p>
+</section>

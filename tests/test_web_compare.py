@@ -1,6 +1,7 @@
 """The static model comparator: /compare and interfaces/web/comparison.py."""
 
 from dataclasses import replace
+from datetime import date
 
 import pytest
 
@@ -81,16 +82,24 @@ def test_best_marks_the_lowest_price_only_when_prices_differ(models, access_rout
     assert [cell["best"] for cell in inputs] == [False, True]  # gpt-5-nano is cheaper than Argon
 
 
-def test_lifecycle_row_shows_status_shutdown_and_successor(models, access_routes):
-    sections = build_comparison(_by_id(models, NANO, "gemini-3.1-flash-lite", HAIKU), access_routes)
+def test_lifecycle_rows_show_status_shutdown_and_successor(models, access_routes):
+    selected = _by_id(models, NANO, "gemini-3.1-flash-lite", HAIKU)
+    sections = build_comparison(selected, access_routes, all_models=models, today=date(2026, 10, 14))
 
-    nano, flash_lite, haiku = _row(sections, "Lifecycle")["cells"]
-
+    nano, flash_lite, haiku = _row(sections, "Status")["cells"]
     assert (nano["text"], nano["tone"]) == ("Deprecated", "bad")
-    assert nano["note"] == "Shuts down 2026-12-11; replacement: gpt-5-6-luna"
-    assert (flash_lite["text"], flash_lite["tone"]) == ("Active", None)
-    assert flash_lite["note"] == "Shuts down 2027-05-07; replacement: gemini-3.5-flash-lite"
-    assert (haiku["text"], haiku["note"]) == ("Active", None)
+    assert (flash_lite["text"], flash_lite["tone"]) == ("Active", "caution")
+    assert (haiku["text"], haiku["tone"]) == ("Active", None)
+
+    nano, flash_lite, haiku = _row(sections, "Shutdown")["cells"]
+    assert (nano["text"], nano["note"]) == ("Dec 11, 2026", "in 58 days")
+    assert (flash_lite["text"], flash_lite["note"]) == ("May 7, 2027", "in 205 days")
+    assert haiku["text"] == "None announced"
+
+    nano, flash_lite, haiku = _row(sections, "Replacement")["cells"]
+    assert nano["text"] == "GPT-5.6 Luna"
+    assert flash_lite["text"] == "Gemini 3.5 Flash-Lite"
+    assert (haiku["text"], haiku["action"]) == ("None named", None)
 
 
 def test_no_best_mark_when_values_are_identical(models, access_routes):

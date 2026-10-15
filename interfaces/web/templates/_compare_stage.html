@@ -1,0 +1,117 @@
+{#- The comparison as two drawings. With a context: the engine orbit (every
+    catalog model on the ring the engine put it in, the picks lit) and the
+    picks in the engine's order. Always: one quality constellation per
+    model. Geometry from compare_visuals.py; nothing here computes. -#}
+<section class="compare-stage">
+  {% if fit %}
+  <div class="stage-panel stage-verdict">
+    <header class="stage-head">
+      <p class="eyebrow">For your context</p>
+      <h2>Where the engine puts them</h2>
+      <p class="compare-banner">
+        {% if fit.winner %}For this context the engine's #1 among all {{ fit.total }} qualifying models is <strong>{{ fit.winner.name }}</strong>{% if fit.winner.id in selected_ids %}, which is in your selection.{% else %}, which is not in your selection.{% endif %}
+        {% else %}No model in the catalog qualifies for this context.{% endif %}
+      </p>
+    </header>
+    <div class="verdict-body">
+      <figure class="orbit">
+        <svg class="orbit-svg" viewBox="0 0 {{ orbit.size }} {{ orbit.size }}" role="img" aria-labelledby="orbit-title">
+          <title id="orbit-title">Every catalog model on the ring the engine put it in for this context. Your picks are lit and numbered with their place.</title>
+          {% for ring in orbit.rings %}
+          <circle class="orbit-ring on-{{ ring.ring }}" cx="{{ orbit.center }}" cy="{{ orbit.center }}" r="{{ ring.r }}"/>
+          {% endfor %}
+          {% for n in orbit.nodes if n.series and n.ring != 'center' %}
+          <line class="orbit-edge series-{{ n.series }} on-{{ n.ring }}" x1="{{ orbit.center }}" y1="{{ orbit.center }}" x2="{{ n.x }}" y2="{{ n.y }}" pathLength="1" style="--i: {{ loop.index }}"/>
+          {% endfor %}
+          {% for n in orbit.nodes %}
+          {% if n.series %}
+          <g class="orbit-node series-{{ n.series }} on-{{ n.ring }}" transform="translate({{ n.x }} {{ n.y }})" style="--i: {{ loop.index }}">
+            <title>{{ n.name }}</title>
+            <circle class="node-halo" r="20"/>
+            <circle class="node-core" r="14"/>
+            <text dy="0.35em">{{ n.mark }}</text>
+          </g>
+          {% elif n.ring == 'center' %}
+          <g class="orbit-node is-winner" transform="translate({{ n.x }} {{ n.y }})">
+            <title>{{ n.name }} (the engine's #1, not in your selection)</title>
+            <circle class="node-core" r="13"/>
+            <text dy="0.35em">#1</text>
+          </g>
+          {% else %}
+          <circle class="orbit-dot on-{{ n.ring }}" cx="{{ n.x }}" cy="{{ n.y }}" r="{{ 2.6 if n.ring == 'ex' else 3.6 }}"><title>{{ n.name }}</title></circle>
+          {% endif %}
+          {% endfor %}
+        </svg>
+        <figcaption>
+          <ul class="orbit-legend">
+            <li><span class="key key-center"></span>#1</li>
+            <li><span class="key key-alt"></span>Top alternatives</li>
+            <li><span class="key key-tied"></span>Practically tied</li>
+            <li><span class="key key-out"></span>Also qualify</li>
+            <li><span class="key key-ex"></span>Excluded</li>
+          </ul>
+          <p class="muted">The ring is the engine's verdict; position around a ring means nothing.</p>
+        </figcaption>
+      </figure>
+
+      <ol class="podium">
+        {% if fit.winner and fit.winner.id not in selected_ids %}
+        <li class="podium-step is-ghost">
+          <span class="step-rank">#1</span>
+          <div class="step-body">
+            <p class="step-name">{{ fit.winner.name }}</p>
+            <p class="step-category">The engine's best match · not in your selection</p>
+            {% if links.add_winner %}<a class="cell-action" href="{{ links.add_winner }}">Add it to the comparison &rarr;</a>{% endif %}
+          </div>
+        </li>
+        {% endif %}
+        {% for e in podium %}
+        <li class="podium-step series-{{ e.series }} on-{{ e.cell.ring }}" style="--i: {{ loop.index }}">
+          <span class="step-rank">{{ '#' ~ e.cell.rank if e.cell.rank else '—' }}</span>
+          <div class="step-body">
+            <p class="step-name"><span class="series-dot" aria-hidden="true"></span>{{ e.model.name }}</p>
+            <p class="step-category tone-{{ e.cell.tone }}">{{ e.cell.category }}{% if e.cell.rank %} · #{{ e.cell.rank }} of {{ fit.total }}{% endif %}</p>
+            {% if e.cell.reasons %}
+            <ul class="cell-items">
+              {% for reason in e.cell.reasons[:3] %}<li>{{ reason }}</li>{% endfor %}
+            </ul>
+            {% if e.cell.reasons | length > 3 %}<span class="cell-note">+ {{ e.cell.reasons | length - 3 }} more</span>{% endif %}
+            {% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="stage-panel stage-quality">
+    <header class="stage-head">
+      <p class="eyebrow">Quality</p>
+      <h2>Constellations</h2>
+      <p class="muted">Rings, inside out: low, medium, high, very high. Every point sits on a ring, never between two. Dashed outlines are the other models you picked. An editorial profile, not a score.</p>
+    </header>
+    <div class="constellations cols-{{ constellations | length }}">
+      {% for c in constellations %}
+      <figure class="constellation series-{{ c.series }}" style="--i: {{ loop.index }}">
+        <svg viewBox="{{ frame.view_box }}" role="img" aria-label="Quality profile of {{ c.model.name }}: {% for v in c.vertices %}{{ v.title }}{{ ', ' if not loop.last }}{% endfor %}">
+          {% for ring in frame.rings %}
+          <circle class="cons-ring" cx="{{ frame.center }}" cy="{{ frame.center }}" r="{{ ring.r }}"/>
+          {% endfor %}
+          <line class="cons-axis" x1="{{ frame.center }}" y1="{{ frame.center - frame.edge }}" x2="{{ frame.center }}" y2="{{ frame.center + frame.edge }}"/>
+          <line class="cons-axis" x1="{{ frame.center - frame.edge }}" y1="{{ frame.center }}" x2="{{ frame.center + frame.edge }}" y2="{{ frame.center }}"/>
+          {% for label in frame.labels %}
+          <text class="cons-label" x="{{ label.x }}" y="{{ label.y }}" text-anchor="{{ label.anchor }}">{{ label.text }}</text>
+          {% endfor %}
+          {% for ghost in c.ghosts %}<polygon class="cons-ghost" points="{{ ghost }}"/>{% endfor %}
+          <polygon class="cons-shape" points="{{ c.points }}" pathLength="1"/>
+          {% for v in c.vertices %}
+          <circle class="cons-star" cx="{{ v.x }}" cy="{{ v.y }}" r="4.5"><title>{{ v.title }}</title></circle>
+          {% endfor %}
+        </svg>
+        <figcaption><span class="series-dot" aria-hidden="true"></span>{{ c.model.name }}</figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,99 @@
+{#- Selection, context and amount. One GET form: adding a model is a submit
+    button carrying its id, removing one is a plain link, so the picker
+    works without JavaScript. compare.js only filters the list. -#}
+<form method="get" action="/compare" class="card compare-picker" id="compare-form">
+  {# Enter in any field means "Compare", never "add the first model in the list". #}
+  <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Compare</button>
+
+  <ul class="picker-chips" aria-label="Selected models">
+    {% for model in selected %}
+    <li class="picker-chip series-{{ loop.index }}">
+      <input type="hidden" name="m" value="{{ model.id }}">
+      <span class="series-dot" aria-hidden="true"></span>
+      <span class="chip-text">
+        <strong>{{ model.name }}</strong>
+        <span class="muted">{{ model.provider }}{% if model.lifecycle.deprecated %} · <span class="chip-warn">Deprecated</span>{% endif %}</span>
+      </span>
+      <a class="chip-remove" href="{{ links.remove[model.id] }}" aria-label="Remove {{ model.name }}" title="Remove">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </a>
+    </li>
+    {% endfor %}
+    {% for _ in range(max_compared - selected | length) %}
+    <li class="picker-chip is-empty" aria-hidden="true">{{ 'Model ' ~ (selected | length + loop.index) }}{% if selected | length + loop.index > min_compared %} (optional){% endif %}</li>
+    {% endfor %}
+  </ul>
+
+  <details class="picker-add"{{ ' open' if selected | length < min_compared }}>
+    <summary><span class="picker-plus" aria-hidden="true">+</span>Add a model <span class="muted">{{ selected | length }} of {{ max_compared }}</span></summary>
+    <div class="picker-panel">
+      <input type="search" class="picker-search" placeholder="Search by model or provider" aria-label="Search models" autocomplete="off" data-picker-search>
+      {% if selected | length >= max_compared %}<p class="muted picker-full">Four is the most it compares: remove one to add another.</p>{% endif %}
+      <div class="picker-groups">
+        {% for provider, group in model_groups %}
+        <div class="picker-group" data-picker-group>
+          <p class="picker-provider">{{ provider }}</p>
+          <div class="picker-options">
+            {% for model in group %}
+            {% set chosen = model.id in selected_ids %}
+            <button type="submit" name="m" value="{{ model.id }}" class="picker-option{{ ' is-deprecated' if model.lifecycle.deprecated }}" data-search="{{ (model.name ~ ' ' ~ provider) | lower }}"{{ ' disabled' if chosen or selected | length >= max_compared }}>
+              <span>{{ model.name }}</span>
+              {% if chosen %}<span class="option-tag">Added</span>{% elif model.lifecycle.deprecated %}<span class="option-tag tag-bad">Deprecated</span>{% endif %}
+            </button>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <p class="muted picker-none" hidden data-picker-none>No model matches.</p>
+    </div>
+  </details>
+
+  <details class="compare-context"{{ ' open' if context_open }}>
+    <summary>Your context <span class="optional">(optional: shows how the engine ranks these models for it)</span></summary>
+    {% if context_error %}<p class="form-error">{{ context_error }}</p>{% endif %}
+    <div class="compare-slots">
+      <label class="compare-slot">
+        <span class="label">Language</span>
+        <select name="language">
+          <option value="">No context</option>
+          {% for lang in languages %}
+          <option value="{{ lang }}"{{ ' selected' if form.get('language') == lang else '' }}>{{ lang | language_name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="compare-slot">
+        <span class="label">Budget</span>
+        <select name="budget">
+          <option value="">Choose a budget</option>
+          {% for b in budgets %}
+          <option value="{{ b.value }}"{{ ' selected' if form.get('budget') == b.value else '' }}>{{ b.value | humanize }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      {% for rank in [1, 2, 3] %}
+      <label class="compare-slot">
+        <span class="label">Priority {{ rank }}{% if rank > 1 %} <span class="optional">(optional)</span>{% endif %}</span>
+        <select name="priority_{{ rank }}">
+          <option value="">—</option>
+          {% for p in priorities %}
+          <option value="{{ p.value }}"{{ ' selected' if form.get('priority_' ~ rank) == p.value else '' }}>{{ p.value | humanize }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      {% endfor %}
+    </div>
+  </details>
+
+  <div class="picker-foot">
+    <label class="compare-amount">
+      <span class="label">Monthly amount <span class="optional">(optional, USD)</span></span>
+      <span class="amount-input">
+        <span aria-hidden="true">$</span>
+        <input type="number" name="monthly_budget_usd" min="0" step="0.01" placeholder="e.g. 20" value="{{ form.get('monthly_budget_usd', '') }}">
+      </span>
+      <span class="muted amount-hint">Shows how many tokens it buys with each model.</span>
+    </label>
+    <button type="submit" class="primary-button">Compare</button>
+  </div>
+</form>

@@ -1,138 +1,22 @@
 {% extends "base.html" %}
-{% import "_icons.html" as icons %}
-{% import "_notices.html" as notices %}
 {% block title %}Model Compass — Compare models{% endblock %}
 {% block body_class %}page-compare{% endblock %}
 {% block content %}
-<div class="fade-in">
+<div class="fade-in compare-page">
 <div class="compare-head">
+  <p class="eyebrow">Model comparator</p>
   <h1>Compare models</h1>
   <p class="muted">Pick two to four models and see their stored specs, prices and editorial ratings side by side. Add your project's context and the engine also tells you how each one fares for it; leave it empty and this is just the dataset itself, with no verdict.</p>
 </div>
 
-<form method="get" action="/compare" class="card compare-picker">
-  <div class="compare-slots">
-    {% for i in slots %}
-    <label class="compare-slot">
-      <span class="label">Model {{ i + 1 }}{% if i >= min_compared %} <span class="optional">(optional)</span>{% endif %}</span>
-      <select name="m">
-        <option value="">Choose a model</option>
-        {% for provider, group in model_groups %}
-        <optgroup label="{{ provider }}">
-          {% for model in group %}
-          <option value="{{ model.id }}"{{ ' selected' if i < selected_ids | length and selected_ids[i] == model.id else '' }}>{{ model.name }}</option>
-          {% endfor %}
-        </optgroup>
-        {% endfor %}
-      </select>
-    </label>
-    {% endfor %}
-  </div>
-
-  <fieldset class="compare-context">
-    <legend>Your context <span class="optional">(optional: shows how the engine ranks these models for it)</span></legend>
-    {% if context_error %}<p class="form-error">{{ context_error }}</p>{% endif %}
-    <div class="compare-slots">
-      <label class="compare-slot">
-        <span class="label">Language</span>
-        <select name="language">
-          <option value="">No context</option>
-          {% for lang in languages %}
-          <option value="{{ lang }}"{{ ' selected' if form.get('language') == lang else '' }}>{{ lang | language_name }}</option>
-          {% endfor %}
-        </select>
-      </label>
-      <label class="compare-slot">
-        <span class="label">Budget</span>
-        <select name="budget">
-          <option value="">Choose a budget</option>
-          {% for b in budgets %}
-          <option value="{{ b.value }}"{{ ' selected' if form.get('budget') == b.value else '' }}>{{ b.value | humanize }}</option>
-          {% endfor %}
-        </select>
-      </label>
-      {% for rank in [1, 2, 3] %}
-      <label class="compare-slot">
-        <span class="label">Priority {{ rank }}{% if rank > 1 %} <span class="optional">(optional)</span>{% endif %}</span>
-        <select name="priority_{{ rank }}">
-          <option value="">—</option>
-          {% for p in priorities %}
-          <option value="{{ p.value }}"{{ ' selected' if form.get('priority_' ~ rank) == p.value else '' }}>{{ p.value | humanize }}</option>
-          {% endfor %}
-        </select>
-      </label>
-      {% endfor %}
-    </div>
-  </fieldset>
-
-  <button type="submit" class="primary-button">Compare</button>
-</form>
-
-{% if fit %}
-<p class="compare-banner">
-  {% if fit.winner %}For this context the engine's #1 among all {{ fit.total }} qualifying models is <strong>{{ fit.winner.name }}</strong>{% if fit.winner.id in selected_ids %}, which is in your selection.{% else %}, which is not in your selection.{% endif %}
-  {% else %}No model in the catalog qualifies for this context.{% endif %}
-</p>
-{% endif %}
+{% include "_compare_picker.html" %}
 
 {% if sections %}
-<div class="card compare-card">
-  <div class="compare-scroll">
-    <table class="compare-table">
-      <thead>
-        <tr>
-          <th scope="col"><span class="sr-only">Field</span></th>
-          {% for model in selected %}
-          <th scope="col">
-            <span class="compare-model-name">{{ model.name }}</span>
-            <span class="muted">{{ model.provider }}</span>
-            {{ notices.badges(model, compact=true) }}
-          </th>
-          {% endfor %}
-        </tr>
-      </thead>
-      {% for section in sections %}
-      <tbody>
-        <tr class="compare-section"><th colspan="{{ selected | length + 1 }}" scope="colgroup">{{ section.title }}</th></tr>
-        {% for row in section.rows %}
-        <tr>
-          <th scope="row">{{ row.label }}</th>
-          {% for cell in row.cells %}
-          <td class="{{ 'is-best' if cell.best else '' }}{{ ' tone-' ~ cell.tone if cell.tone else '' }}">
-            {% if row.segments %}
-            <span class="quality-segments" aria-hidden="true">
-              {% for i in range(cell.max_ordinal + 1) %}
-              <span class="segment{{ ' filled' if i <= cell.ordinal else '' }}"></span>
-              {% endfor %}
-            </span>
-            {% endif %}
-            {% if cell.flag is not none %}
-            <span class="flag {{ 'flag-yes' if cell.flag else 'flag-no' }}">{{ cell.text }}</span>
-            {% else %}
-            <span class="cell-text">{{ cell.text }}</span>
-            {% endif %}
-            {% if cell.best %}<span class="best-mark" title="Best value among the selected models for this row">best</span>{% endif %}
-            {% if cell.note %}<span class="cell-note">{{ cell.note }}</span>{% endif %}
-            {% if cell.reasons %}
-            <ul class="cell-items">
-              {% for reason in cell.reasons[:3] %}<li>{{ reason }}</li>{% endfor %}
-            </ul>
-            {% if cell.reasons | length > 3 %}<span class="cell-note">+ {{ cell.reasons | length - 3 }} more</span>{% endif %}
-            {% endif %}
-          </td>
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-      {% endfor %}
-    </table>
-  </div>
-  <p class="muted compare-footnote">
-    "Best" only marks the highest or lowest stored value among the selected models, and only when they differ. It is not an overall ranking. The "For your context" row, when shown, is the engine's own result for the context you entered. Ratings are editorial judgments, not benchmark scores (see SCHEMA.md); where several models share a rating, the real differences are in price, limits and access. For a recommendation tailored to your project, <a href="/">use the form</a>.
-  </p>
-</div>
+{% include "_compare_stage.html" %}
+{% include "_compare_grid.html" %}
 {% elif selected %}
 <p class="muted compare-hint">Pick at least {{ min_compared }} models to compare.</p>
 {% endif %}
 </div>
+<script src="/static/compare.js"></script>
 {% endblock %}

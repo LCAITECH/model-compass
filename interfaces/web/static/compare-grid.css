@@ -1,0 +1,341 @@
+/* The comparator's side-by-side. Wide screens: a table whose model
+   columns read as cards (tinted with the model's series color, header
+   pinned while scrolling). Narrow screens get one swipeable card per model
+   instead (compare-cards.css); only one of the two is displayed. */
+
+.compare-board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.board-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.board-toolbar p {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.diff-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.diff-toggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.switch {
+  position: relative;
+  flex: none;
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--border-strong);
+  transition: background-color 200ms ease;
+}
+
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--surface);
+  transition: transform 200ms ease;
+}
+
+.diff-toggle input:checked + .switch {
+  background: var(--accent);
+}
+
+.diff-toggle input:checked + .switch::after {
+  transform: translateX(18px);
+}
+
+.diff-toggle input:focus-visible + .switch {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Only differences: hide what reads the same for every selected model. */
+.compare-board:has(#only-diff:checked) :is(tr.is-same, tbody.is-same, .mcard-row.is-same, .mcard-section.is-same) {
+  display: none;
+}
+
+/* Table: the gaps between columns come from border-spacing. */
+
+.compare-table {
+  width: calc(100% + 20px);
+  margin: 0 -10px;
+  border-collapse: separate;
+  border-spacing: 10px 0;
+  table-layout: fixed;
+  font-size: var(--text-sm);
+}
+
+.compare-table th,
+.compare-table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  vertical-align: top;
+}
+
+.compare-table td {
+  background: color-mix(in srgb, var(--series) 5%, var(--surface));
+  border-top: 1px solid color-mix(in srgb, var(--series) 14%, var(--border));
+  transition: background-color 150ms ease;
+}
+
+.compare-table tbody tr:not(.compare-section):hover td {
+  background: color-mix(in srgb, var(--series) 12%, var(--surface));
+}
+
+.compare-table .corner {
+  width: 210px;
+}
+
+.compare-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  vertical-align: bottom;
+}
+
+.compare-table thead .corner {
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.col-head {
+  padding-top: var(--space-4);
+  border-top: 3px solid var(--series);
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: color-mix(in srgb, var(--series) 14%, var(--surface));
+  box-shadow: 0 -10px 28px -16px var(--series);
+}
+
+.col-head .muted {
+  display: block;
+  font-size: var(--text-xs);
+}
+
+.compare-model-name {
+  display: flex;
+  align-items: center;
+  color: var(--text);
+  font-size: var(--text-base);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.compare-table tbody th[scope="row"] {
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-top: 1px solid var(--border);
+}
+
+.compare-section > * {
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-2);
+}
+
+.compare-section > td {
+  border-top: 0;
+}
+
+.compare-section th[scope="rowgroup"] {
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.section-note {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-transform: none;
+}
+
+.compare-table tbody:last-of-type tr:last-child td {
+  padding-bottom: var(--space-5);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.compare-table tr.is-pinned td {
+  background: color-mix(in srgb, var(--series) 10%, var(--surface));
+}
+
+/* Cell contents, shared by the table and the cards. */
+
+.cell-text {
+  font-variant-numeric: tabular-nums;
+}
+
+.tone-good .cell-text { color: var(--positive); font-weight: 700; }
+.tone-bad .cell-text { color: var(--danger); font-weight: 700; }
+.tone-neutral .cell-text { font-weight: 700; }
+.tone-caution .cell-text { color: var(--caution); font-weight: 700; }
+.tone-new .cell-text { color: var(--accent-secondary); font-weight: 700; }
+.tone-muted .cell-text { color: var(--muted); }
+
+.is-best {
+  box-shadow: inset 3px 0 0 var(--positive);
+}
+
+.best-mark {
+  display: inline-block;
+  margin-left: var(--space-2);
+  padding: 1px var(--space-2);
+  border-radius: 999px;
+  background: var(--positive-soft);
+  color: var(--positive);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ratio-mark {
+  margin-left: var(--space-2);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.cell-bar {
+  display: block;
+  height: 6px;
+  margin-top: var(--space-2);
+  overflow: hidden;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--series) 12%, transparent);
+}
+
+.cell-bar > span {
+  display: block;
+  width: max(var(--w), 3px);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--series) 50%, transparent), var(--series));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--series) 70%, transparent);
+  transform-origin: left;
+}
+
+.cell-note {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+}
+
+.cell-items {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+.cell-action {
+  display: inline-block;
+  margin-top: var(--space-2);
+  padding: 3px 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.cell-action:hover,
+.cell-action:focus-visible {
+  background: var(--accent-soft);
+}
+
+.route-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.route-chip {
+  display: inline-flex;
+  flex-direction: column;
+  padding: 4px 10px;
+  border: 1px solid color-mix(in srgb, var(--series) 40%, var(--border));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--series) 10%, transparent);
+  color: var(--text);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.route-chip:hover,
+.route-chip:focus-visible {
+  border-color: var(--series);
+}
+
+.chip-detail {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.compare-board .quality-segments {
+  display: flex;
+  width: 76px;
+  margin-bottom: var(--space-1);
+}
+
+.compare-board .segment.filled {
+  background: var(--series);
+}
+
+.flag { font-weight: 600; }
+.flag-yes { color: var(--positive); }
+.flag-no { color: var(--muted); font-weight: 500; }
+
+.compare-footnote {
+  margin: 0;
+  font-size: var(--text-xs);
+}
+
+/* Bars grow in once the board scrolls into view (compare.js arms it). */
+html[data-effects="on"] .compare-board.is-armed .cell-bar > span {
+  transform: scaleX(0);
+  transition: transform 900ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+html[data-effects="on"] .compare-board.is-armed.is-revealed .cell-bar > span {
+  transform: scaleX(1);
+}
+
+html[data-effects="on"] .compare-board .series-2 .cell-bar > span { transition-delay: 80ms; }
+html[data-effects="on"] .compare-board .series-3 .cell-bar > span { transition-delay: 160ms; }
+html[data-effects="on"] .compare-board .series-4 .cell-bar > span { transition-delay: 240ms; }
