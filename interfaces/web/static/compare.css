@@ -111,3 +111,12 @@ body.page-compare .site-footer {
 .compare-link:hover {
   color: var(--accent-hover);
 }
+
+/* The result's "Copy link" (share.js) reads as one more of these links. */
+button.share-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}

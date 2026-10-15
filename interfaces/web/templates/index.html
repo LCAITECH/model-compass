@@ -31,7 +31,7 @@
 </section>
 
 <section id="wizard" class="wizard-panel">
-<form method="post" action="/recommend" class="context-form decision-form">
+<form method="get" action="/recommend" class="context-form decision-form">
   {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
 
   <section class="decision-stage" aria-labelledby="stage-use-case">

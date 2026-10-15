@@ -8,9 +8,10 @@ this whole package were deleted.
 
 from datetime import date
 from pathlib import Path
+from urllib.parse import urlencode
 
 from fastapi import FastAPI, Query, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -291,8 +292,22 @@ def use_case_suggestion(text: str = ""):
 
 @app.post("/recommend", response_class=HTMLResponse)
 async def recommend(request: Request):
-    form = await request.form()
+    """Kept for forms cached from before results had their own URL."""
+    return _result_response(request, await request.form())
 
+
+@app.get("/recommend", response_class=HTMLResponse)
+def recommend_link(request: Request):
+    """A result's own URL. The form submits by GET, so the context is in the
+    query string and the same link rebuilds the same result (the engine is
+    deterministic) on the current catalog. Without a context there is
+    nothing to show: back to the form."""
+    if not request.query_params:
+        return RedirectResponse("/", status_code=303)
+    return _result_response(request, request.query_params)
+
+
+def _result_response(request: Request, form):
     try:
         context = context_from_form(form)
     except InvalidFormError as error:
@@ -340,5 +355,6 @@ async def recommend(request: Request):
             "other_alternatives": _other_alternatives(recommendation),
             "access": access,
             "subscription_plan_names": subscription_plan_names,
+            "share_url": "/recommend?" + urlencode([(key, value) for key, value in form.multi_items() if value]),
         },
     )

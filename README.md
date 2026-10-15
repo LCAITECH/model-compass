@@ -51,7 +51,8 @@ much or as little detail as you have.
 ![Model Compass — recommendation result](Docs/images/result.png)
 
 Never just a model name — the reasons behind it, and what you're
-giving up by not picking something else.
+giving up by not picking something else. Every result has its own
+link, so you can send it to your team or come back to it later.
 
 ### 3. See how to access the recommended model
 

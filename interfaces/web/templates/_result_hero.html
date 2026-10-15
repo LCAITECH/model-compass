@@ -23,6 +23,7 @@
   </ul>
   {% endif %}
 
+  <button type="button" class="compare-link share-link" data-share-url="{{ share_url }}" title="The link reruns the engine on the current catalog: if a price or a model changes, the result can change too.">Copy link to this result</button>
   <a class="compare-link" href="/plans?model={{ recommendation.recommended.id }}">How should you pay for it? &rarr;</a>
   {% if recommendation.alternatives %}
   <a class="compare-link" href="/compare?m={{ recommendation.recommended.id }}{% for alt in recommendation.alternatives %}&amp;m={{ alt.model.id }}{% endfor %}&amp;language={{ context.language }}{% if context.budget %}&amp;budget={{ context.budget.value }}{% endif %}{% for p in context.priorities %}&amp;priority_{{ loop.index }}={{ p.value }}{% endfor %}">Compare with the top alternatives &rarr;</a>

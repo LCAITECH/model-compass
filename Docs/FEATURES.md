@@ -115,6 +115,12 @@ place.
 - **Deterministic Results** — the same input always produces the same
   reasoning and the same recommendation. Results come from explicit
   rules and curated data, not from an AI model's opinion.
+- **Shareable results** — every result has its own URL: the context
+  travels in the link, so opening it reruns the engine and shows the same
+  recommendation to a teammate, a manager or the developer next week. The
+  link reruns on the current catalog, so a price or a model that changed
+  in between can change the result; the result page says so next to its
+  "Copy link" button. *(Added 2026-10-15.)*
 
 ### Access
 

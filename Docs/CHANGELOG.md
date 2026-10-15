@@ -19,6 +19,17 @@ public release to version against.
 
 ---
 
+## 2026-10-15 — Results have their own link
+
+**Interface only. No change to the engine or the dataset.**
+
+- **Why:** a recommendation could not be sent to anyone, bookmarked or reopened: it only existed as the answer to the form.
+- **What changes:** the form now puts the context in the address (empty fields left out), so every result has a URL that rebuilds it. A "Copy link to this result" button sits with the result's other links. Because the engine is deterministic, the link shows the same recommendation, run on the catalog of the day it is opened: if a price or a model changed in between, so can the result, and the button's note says so.
+- **Kept working:** results sent by the old form still render and get their link in the address bar; an address with no context goes back to the form, and one with an incomplete context shows the form with what is missing.
+- **Tests:** 318 pass (5 new).
+
+---
+
 ## 2026-10-15 — Full audit: dead CSS out, light theme readable, access notes rewritten
 
 **Interface, dataset and documentation. The ranking is unchanged.**

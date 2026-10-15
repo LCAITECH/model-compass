@@ -306,6 +306,24 @@ while their routes quote "Yes" from the English page.
   two `--muted` swatches. Contrast measured on every text element
   afterwards: no failures in either theme.
 
+## Shareable results (2026-10-15)
+
+- **The URL is the share mechanism.** The context form submits by GET,
+  so a result's address already rebuilds it; nothing is stored server
+  side and there is no short-link service. `share.js` leaves empty fields
+  out of that address (and re-enables them when the visitor comes back
+  with the back button). The server also builds the canonical link from
+  whatever arrived, so a POST from a cached form gets the same address.
+- **"Copy link to this result" looks like its neighbours.** It sits
+  with "How should you pay for it?" and "Compare with the top
+  alternatives" in the result card, as a text link rather than a button
+  shape: one more thing to do with this result, not a call to action.
+  Its title says the link reruns on the current catalog.
+- **Copying works without HTTPS.** The Clipboard API needs a secure
+  context and, in some shells (the browser pane), never settles; after a
+  second it falls back to `execCommand("copy")`, and if that fails too
+  the button says to copy from the address bar.
+
 ## Guiding principle
 
 The interface should feel like a precision instrument for making a
