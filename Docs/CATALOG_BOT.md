@@ -126,9 +126,11 @@ broken PRs before:
   is never stored as a number or turned into tokens. A tier with its own
   price is its own plan (Iteration #31).
 - A subscription access route exists only where the plan's own page
-  names that exact model. A family name is not enough, and a different
-  name is a different model ("Gemini 3.1 Pro" in the app is not
-  `gemini-3.1-pro-preview` until the owner decides it is).
+  names that exact model. A family name is not enough. A plan page's
+  name matches an entry when it is the exact name the provider's own
+  model list gives that entry's id ("Gemini 3.1 Pro" is
+  `gemini-3.1-pro-preview` on Google's Gemini API model list, Iteration
+  #34); any other different name is a different model.
 - Plan prices have no date alarm. Re-check price, multiplier and
   credits of every plan in each run.
 
@@ -201,6 +203,7 @@ Don't reopen these; raise new evidence under "Owner decision needed".
 | `release_date` sourcing | Iteration #30 |
 | `has_free_access` counts a free API tier or a free consumer plan that names the model | Iteration #32 |
 | Meta: curated languages; Contributor ids, Muse Spark 1.2/1.1 and Muse Wonder Full are not entries | Iteration #33 |
+| A plan page's model name matches an entry through the provider's own model list | Iteration #34 |
 | Plans: list price, multiplier in the provider's words, no token limits | Iteration #31 |
 | Text and code LLMs only | `VISION.md` |
 
@@ -214,4 +217,3 @@ leave this list when they land on `main`.
   (Iteration #33); the owner re-checks it after 2026-10-31.
 - Self-hosted open-weights models (Liquid AI LFM2.5, Meta's Muse
   Glimmer): no policy yet.
-- A subscription route for "Gemini 3.1 Pro" in the Gemini app.

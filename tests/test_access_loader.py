@@ -55,7 +55,9 @@ def test_loads_all_real_access_routes():
     #   the model, and Gemini 2.5 is restricted to existing users.
     # + 4 direct_api routes admitted 2026-10-15: muse-wonder-1.0 and
     #   muse-spark-1.3 (Meta Model API), qwen3.8-flash and qwen3.7-plus.
-    assert len(routes) == 98
+    # + 1 (gemini-3.1-pro-preview in the Gemini app) 2026-10-15: Google's
+    #   API model list gives the id the name the plan pages use (Iteration #34).
+    assert len(routes) == 99
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
     assert len(model_ids_with_direct_api) == 43

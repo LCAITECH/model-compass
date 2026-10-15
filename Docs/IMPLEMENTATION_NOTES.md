@@ -1547,6 +1547,10 @@ found, not applied (owner decision: separate fix later): Claude Haiku
 ChatGPT Free, yet all three store `access.has_free_access: false`.
 Status: closed.
 
+**Update 2026-10-15 (later):** both open points are resolved, the free
+access in Iteration #32 and the Gemini 3.1 Pro app route in Iteration
+#34.
+
 ---
 
 ## Iteration #32
@@ -1670,3 +1674,32 @@ First Meta entries: `Docs/access-guides/meta.md` and
 **Status**
 Four admitted (43 models, 98 routes). Mistral Large 4 pending, re-check
 after 2026-10-31.
+
+---
+
+## Iteration #34
+
+**Observation**
+Iteration #31's update left `gemini-3.1-pro-preview` without a Gemini app
+route: Google's plan pages say "Gemini 3.1 Pro" ("Expanded access to
+Gemini 3.1 Pro" on AI Pro, "Higher access" on AI Ultra) and the catalog
+entry is "Gemini 3.1 Pro Preview", so the exact-name rule did not match.
+Re-read on Google's pages on 2026-10-15: the Gemini API model list
+(`ai.google.dev/gemini-api/docs/models`) shows the name "Gemini 3.1 Pro"
+with the id `gemini-3.1-pro-preview`, and there is no other 3.1 Pro id
+(the model card lists only "Preview" versions). "Gemini 3.1 Pro Preview"
+is the model card's title, which this catalog took as the display name.
+The free Gemini app names only "our Flash-Lite model".
+
+**Current decision**
+Owner decision (2026-10-15): the plan pages name the model, because the
+provider's own API model list gives that same name to this id. New route
+`gemini-3.1-pro-preview-gemini-app` (AI Pro, Ultra 5x, Ultra 20x; not for
+production), with the usual caveat that Google does not say the app
+serves the API snapshot. A plan page's name matches a catalog entry when
+it is the exact name the provider's own model list gives that entry's
+id; a family name still does not count. `has_free_access` stays
+`false`. `Docs/CATALOG_BOT.md` says the same.
+
+**Status**
+Applied (99 routes). Closed.

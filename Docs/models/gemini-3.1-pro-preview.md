@@ -97,10 +97,22 @@ Antigravity is one more surface this model happens to be available
 through, not the only way to reach it. The `cost.*` values above
 reflect the standard API, not Antigravity's subscription tiers.
 
+**Gemini app (added 2026-10-15, owner decision, Iteration #34).**
+Google's AI plans page lists "Expanded access to Gemini 3.1 Pro" on AI
+Pro and "Higher access to Gemini 3.1 Pro" on AI Ultra. Those pages say
+"Gemini 3.1 Pro", not "Preview"; the match holds because Google's own
+Gemini API model list gives exactly that name, "Gemini 3.1 Pro", to
+`gemini-3.1-pro-preview`, its only 3.1 Pro model id. "Gemini 3.1 Pro
+Preview" is this entry's display name, taken from the model card's title.
+As with every app route, Google does not say the app serves the same
+snapshot as the API.
+
 **Free access (`access.has_free_access`):** `false`. Google's own
 Gemini API pricing page marks this model's free-tier rows "Not
 available" for Standard, Batch, and Flex — confirmed directly against
-`ai.google.dev/gemini-api/docs/pricing`, 2026-08-09.
+`ai.google.dev/gemini-api/docs/pricing`, 2026-08-09. The free Gemini app
+names only "our Flash-Lite model" (gemini.google/subscriptions, checked
+2026-10-15), so the consumer path doesn't apply either.
 
 ## Ecosystem `[Editorial]`
 
@@ -115,6 +127,7 @@ available" for Standard, Batch, and Flex — confirmed directly against
 
 - [Gemini 3.1 Pro Preview model card](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-pro-preview) — capabilities, context window, max output, preview status.
 - [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost fields, including the 200k-token pricing tier.
+- [Gemini API models](https://ai.google.dev/gemini-api/docs/models), [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/) and [Gemini subscriptions](https://gemini.google/subscriptions/) — the name "Gemini 3.1 Pro" for this id, and the plans that include it in the Gemini app (2026-10-15).
 
 Both accessed 2026-08-07, official Google documentation only.
 

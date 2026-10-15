@@ -73,7 +73,7 @@ def test_unknown_never_counts_as_satisfied():
 
 
 def test_consumer_subscription_matches_declared_plan():
-    model = MODELS["gemini-3.1-pro-preview"]  # direct API + AI Studio (Pro/Ultra)
+    model = MODELS["gemini-3.1-pro-preview"]  # direct API + AI Studio and Gemini app (Pro/Ultra)
     recommendation = recommend_access(
         model, _context(has_api_billing=True, subscriptions=("google-ai-pro",)), ROUTES
     )
@@ -81,15 +81,17 @@ def test_consumer_subscription_matches_declared_plan():
     by_surface = {entry.route.access.surface.value: entry.state for entry in recommendation.routes}
     assert by_surface["direct_api"] == RouteEligibilityState.CURRENTLY_ELIGIBLE
     assert by_surface["playground_or_studio"] == RouteEligibilityState.CURRENTLY_ELIGIBLE
+    assert by_surface["consumer_subscription"] == RouteEligibilityState.CURRENTLY_ELIGIBLE
 
 
 def test_consumer_subscription_unmet_without_declared_plan():
-    model = MODELS["gemini-3.1-pro-preview"]  # direct API + AI Studio (Pro/Ultra)
+    model = MODELS["gemini-3.1-pro-preview"]  # direct API + AI Studio and Gemini app (Pro/Ultra)
     recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES)
 
     by_surface = {entry.route.access.surface.value: entry.state for entry in recommendation.routes}
     assert by_surface["direct_api"] == RouteEligibilityState.CURRENTLY_ELIGIBLE
     assert by_surface["playground_or_studio"] == RouteEligibilityState.REQUIRES_ONBOARDING
+    assert by_surface["consumer_subscription"] == RouteEligibilityState.REQUIRES_ONBOARDING
 
 
 def test_summary_highlights_unique_confirmed_direct_api():
@@ -182,7 +184,7 @@ def test_cloud_account_requires_onboarding_without_declared_account():
 
 
 def test_currently_eligible_routes_sort_before_requires_onboarding():
-    model = MODELS["gemini-3.1-pro-preview"]  # direct API + AI Studio (Pro/Ultra)
+    model = MODELS["gemini-3.1-pro-preview"]  # direct API + AI Studio and Gemini app (Pro/Ultra)
     recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES)
 
     states = [entry.state for entry in recommendation.routes]

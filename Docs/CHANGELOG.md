@@ -19,6 +19,17 @@ public release to version against.
 
 ---
 
+## 2026-10-15 — Gemini 3.1 Pro Preview is in the Gemini app
+
+**Access catalog only. Rankings unchanged.**
+
+- **Why it was missing:** Google's plan pages offer "Gemini 3.1 Pro" in the Gemini app, and the catalog's entry is called "Gemini 3.1 Pro Preview", so the rule that a plan must name the exact model kept it out.
+- **What settled it:** Google's own list of Gemini API models gives the name "Gemini 3.1 Pro" to `gemini-3.1-pro-preview`, its only 3.1 Pro model. The project owner decided that a name the provider itself gives a model id counts as naming it.
+- **What changes:** the model now shows the Gemini app route (Google AI Pro and both Ultra tiers) in the access section and on "Subscription or API?". As with every app route, Google doesn't say the app runs the same version as the API. The free Gemini app doesn't include it.
+- **Tests:** 313 pass (99 access routes).
+
+---
+
 ## 2026-10-15 — Error pages, a header that fits on phones, a readable decision graph, new screenshots
 
 **Interface only. No change to the engine or the dataset.**
