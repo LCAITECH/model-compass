@@ -80,6 +80,13 @@
 </svg>
 {%- endmacro %}
 
+{% macro lock() -%}
+<svg class="icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+  <rect x="4.5" y="9" width="11" height="8" rx="1.8" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M7 9V6.5a3 3 0 0 1 6 0V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+{%- endmacro %}
+
 {% macro item_list(items, icon) -%}
 {% for item in items %}
 <li>{{ icon() }}<span>{{ item }}</span></li>

@@ -1,6 +1,6 @@
 import pytest
 
-from decision.domain import BudgetLevel, BudgetMode, Context, Priority
+from decision.domain import BudgetLevel, BudgetMode, Context, LifecycleStatus, Priority
 from decision.evaluator import evaluate
 from decision.evaluator.evaluator import _dampen_cost_weight
 
@@ -59,6 +59,9 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     # refresh: its stale $0.435/$0.87 ($1.305 blended) was corrected to
     # the official peak rate $1.32/$3.96 ($5.28 blended), landing it in
     # "medium" instead -- see Docs/CHANGELOG.md, 2026-08-27.
+    # gemini-2.5-flash-lite ($0.50) is in the band too, but restricted
+    # since 2026-10-15 (Google limits it to developers who already used
+    # it), so it never qualifies either.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -71,7 +74,6 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     qualifying = {c.model.id for c in candidates if c.qualifies}
 
     assert qualifying == {
-        "gemini-2.5-flash-lite",
         "gpt-6-luna",
         "claude-haiku-5-5",
         "gpt-5-6-luna",
@@ -93,8 +95,8 @@ def test_high_budget_excludes_the_very_high_cost_tier(models):
     # 2026-08-27 catalog refresh corrected it to OpenAI's live
     # promotional price $4.00/$20.00 ($24 blended, in effect at least
     # through 2026-11-21) -- see Docs/CHANGELOG.md, 2026-08-27 -- which
-    # now qualifies under this $30 ceiling. Deprecated models are
-    # disqualified too, for that reason alone, never for cost.
+    # now qualifies under this $30 ceiling. Deprecated and restricted
+    # models are disqualified too, for that reason alone, never for cost.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -104,7 +106,7 @@ def test_high_budget_excludes_the_very_high_cost_tier(models):
     )
 
     candidates = evaluate(context, models)
-    over_budget = {c.model.id for c in candidates if not c.qualifies and not c.model.lifecycle.deprecated}
+    over_budget = {c.model.id for c in candidates if not c.qualifies and c.model.lifecycle.status == LifecycleStatus.ACTIVE}
 
     assert over_budget == {"claude-fable-5", "claude-fable-5-1", "gpt-6-astra"}
 
@@ -120,7 +122,7 @@ def test_very_high_budget_admits_every_language_qualifying_model(models):
 
     candidates = evaluate(context, models)
 
-    assert all(c.qualifies for c in candidates if not c.model.lifecycle.deprecated)
+    assert all(c.qualifies for c in candidates if c.model.lifecycle.status == LifecycleStatus.ACTIVE)
 
 
 def test_custom_budget_never_filters_by_cost(models):
@@ -139,7 +141,7 @@ def test_custom_budget_never_filters_by_cost(models):
 
     candidates = evaluate(context, models)
 
-    assert all(c.qualifies for c in candidates if not c.model.lifecycle.deprecated)
+    assert all(c.qualifies for c in candidates if c.model.lifecycle.status == LifecycleStatus.ACTIVE)
 
 
 def test_cost_weight_dampens_by_budget_tier_unless_cost_is_first():
@@ -247,8 +249,12 @@ def test_cost_priority_picks_the_cheapest_qualifying_model(models):
     # since the 2026-08-27 catalog refresh corrected the latter's stale
     # $0.14/$0.28 price ($0.42 blended) to the official peak rate
     # $0.44/$1.32 ($1.76 blended) -- see Docs/CHANGELOG.md, 2026-08-27.
-    # gpt-5-nano is deprecated since 2026-10-14's lifecycle pass, so the
-    # cheapest qualifying model is now gemini-2.5-flash-lite ($0.50).
+    # gpt-5-nano is deprecated since 2026-10-14's lifecycle pass, and
+    # gemini-2.5-flash-lite ($0.50) restricted since 2026-10-15, so the
+    # cheapest qualifying models are claude-haiku-5-5 and gpt-6-luna, tied
+    # at $0.60 blended. With cost as the only priority their scores are
+    # equal, and the evaluator's stable sort keeps dataset (filename)
+    # order, so claude-haiku-5-5 comes first.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -259,7 +265,7 @@ def test_cost_priority_picks_the_cheapest_qualifying_model(models):
 
     candidates = evaluate(context, models)
 
-    assert candidates[0].model.id == "gemini-2.5-flash-lite"
+    assert candidates[0].model.id == "claude-haiku-5-5"
 
 
 def test_reasoning_priority_picks_the_strongest_reasoning_model(models):

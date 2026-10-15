@@ -113,41 +113,25 @@ def test_recommend_omits_also_strong_options_when_the_winner_is_unmatched(client
 
 
 def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_routes(client):
-    # budget=high, creative_writing+cost -> gemini-2.5-pro wins. Previously
-    # reasoning+context_window produced this winner, but the 2026-08-27
-    # catalog refresh corrected gpt-5-6-sol's stale $35 blended price to
-    # OpenAI's live promotional $24 (see Docs/CHANGELOG.md), which now
-    # both qualifies under budget=high and has the largest context
-    # window (1,050,000 vs. Gemini 2.5 Pro's 1,048,576) -- so that
-    # priority pair now picks gpt-5-6-sol instead. Re-verified against a
-    # real run of the engine that creative_writing+cost still picks
-    # gemini-2.5-pro, which has two real access routes: direct-api
-    # (production_allowed=true) and ai-studio (production_allowed=false)
-    # -- the only route in the sample dataset exercising that branch.
-    # Each row must link to access.guide_ref
-    # (ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 3.5), never bare evidence,
-    # and the ai-studio row must warn it isn't for production use.
+    # budget=low, cost -> claude-haiku-5-5 wins (re-derived 2026-10-15 from
+    # a real run; the previous winner here, gemini-2.5-pro, is restricted
+    # and its AI Studio route was removed). Haiku 5.5 has both kinds of
+    # route: direct-api (production_allowed=true) and the Claude
+    # subscription (production_allowed=false). Each row must link to
+    # access.guide_ref (ACCESS_ADVISOR_AUDIT_2026-08-11.md Part 3.5), never
+    # bare evidence, and the subscription row must warn it isn't for
+    # production use.
     response = client.post(
         "/recommend",
-        data={
-            "use_case": "",
-            "language": "en",
-            "budget": "high",
-            "priority_1": "creative_writing",
-            "priority_2": "cost",
-        },
+        data={"use_case": "", "language": "en", "budget": "low", "priority_1": "cost"},
     )
 
     assert response.status_code == 200
-    assert "Gemini 2.5 Pro" in response.text
+    assert "Claude Haiku 5.5" in response.text
     assert "How to access" in response.text
-    assert "Docs/access-guides/google.md#googledirect-api" in response.text
-    assert "Docs/access-guides/google.md#googleai-studio" in response.text
+    assert "Docs/access-guides/anthropic.md#anthropicdirect-api" in response.text
+    assert "Docs/access-guides/anthropic.md#anthropicclaude-subscription" in response.text
     assert "Not allowed for production use per official docs." in response.text
-    # Regression: the ai-studio route's caveat used to ship in Spanish
-    # ("Restricciones de Google One indican...") while the rest of the
-    # page is English -- Model Compass has no i18n system and every
-    # other dataset field is English-only (see dataset/models/*.yaml),
-    # so free-text dataset fields must never mix languages either.
-    assert "Restricciones de Google One" not in response.text
-    assert "Google One" in response.text and "limit AI Studio access to Pro/Ultra subscribers" in response.text
+    # Free-text dataset fields render in English (no i18n system; an
+    # earlier route caveat once shipped in Spanish).
+    assert "can select Haiku 5.5 on Claude.ai" in response.text

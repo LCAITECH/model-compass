@@ -51,7 +51,9 @@ def test_loads_all_real_access_routes():
     # section, each named exactly on its plan page: claude-opus-5-5 and
     # claude-haiku-5-5 (Claude), gemini-4-argon (Gemini app and AI Studio),
     # and six GPT models in ChatGPT.
-    assert len(routes) == 95
+    # - 1 (gemini-2.5-pro-ai-studio) removed 2026-10-15: no plan page names
+    #   the model, and Gemini 2.5 is restricted to existing users.
+    assert len(routes) == 94
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
     assert len(model_ids_with_direct_api) == 39
@@ -115,7 +117,7 @@ def test_free_text_fields_stay_in_english():
 
 
 def test_gemini_ai_studio_route_requires_consumer_subscription():
-    route = load_access_route_file(ACCESS_ROUTES_DIR / "google" / "gemini-2.5-pro-ai-studio.yaml")
+    route = load_access_route_file(ACCESS_ROUTES_DIR / "google" / "gemini-3.1-pro-preview-ai-studio.yaml")
 
     [requirement] = route.eligibility.requirements
     assert requirement.kind == RequirementKind.CONSUMER_SUBSCRIPTION

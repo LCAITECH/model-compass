@@ -1,5 +1,6 @@
 """Dated catalog facts turned into notices: new releases, introductory
-prices, and models leaving the catalog.
+prices, and models leaving the catalog; plus models a provider has closed
+to new developers (lifecycle.status `restricted`), which are not leaving.
 
 Every fact comes from a model's own fields (lifecycle.*, cost.effective_until,
 cost.reverts_to), each sourced from the provider's page. The only thing
@@ -46,13 +47,22 @@ class Retiring:
 
 
 @dataclass(frozen=True)
+class Restricted:
+    """Still served, but closed to new developers (lifecycle.status)."""
+
+    model: AIModel
+    replacement: AIModel | None
+
+
+@dataclass(frozen=True)
 class Badges:
     new: NewRelease | None
     promo: Promo | None
     retiring: Retiring | None
+    restricted: Restricted | None = None
 
     def __bool__(self) -> bool:
-        return bool(self.new or self.promo or self.retiring)
+        return bool(self.new or self.promo or self.retiring or self.restricted)
 
 
 @dataclass(frozen=True)
@@ -66,7 +76,7 @@ class CatalogNotices:
 
 
 def _new_release(model: AIModel, today: date) -> NewRelease | None:
-    if not model.lifecycle.release_date or model.lifecycle.deprecated:
+    if not model.lifecycle.release_date or model.lifecycle.deprecated or model.lifecycle.restricted:
         return None
     days_ago = (today - date.fromisoformat(model.lifecycle.release_date)).days
     if 0 <= days_ago <= NEW_WINDOW_DAYS:
@@ -76,8 +86,9 @@ def _new_release(model: AIModel, today: date) -> NewRelease | None:
 
 def _promo(model: AIModel, today: date) -> Promo | None:
     cost = model.cost
-    if not cost.effective_until or model.lifecycle.deprecated:
-        # A deprecated model is never recommended; its promo is not an offer.
+    if not cost.effective_until or model.lifecycle.deprecated or model.lifecycle.restricted:
+        # Neither is recommended (a restricted one is closed to new
+        # developers), so its promo is not an offer.
         return None
     ends = date.fromisoformat(cost.effective_until)
     days_left = (ends - today).days
@@ -115,9 +126,18 @@ def _retiring(model: AIModel, by_id: dict[str, AIModel], today: date) -> Retirin
     )
 
 
+def _restricted(model: AIModel, by_id: dict[str, AIModel]) -> Restricted | None:
+    if not model.lifecycle.restricted:
+        return None
+    replacement = by_id.get(model.lifecycle.replacement) if model.lifecycle.replacement else None
+    return Restricted(model=model, replacement=replacement)
+
+
 def badges_for(model: AIModel, models: list[AIModel], today: date) -> Badges:
     by_id = {m.id: m for m in models}
-    return Badges(_new_release(model, today), _promo(model, today), _retiring(model, by_id, today))
+    return Badges(
+        _new_release(model, today), _promo(model, today), _retiring(model, by_id, today), _restricted(model, by_id)
+    )
 
 
 def catalog_notices(models: list[AIModel], today: date) -> CatalogNotices:

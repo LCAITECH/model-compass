@@ -1418,6 +1418,28 @@ of the model) in Access Advisor, which keeps the recommendation
 untouched, or a lifecycle status of its own, which would filter. A
 second provider doing the same would make it a schema question.
 
+**Update 2026-10-15:** the owner decided to stop recommending them and
+approved the schema change: `lifecycle.status` gains `restricted`
+(`SCHEMA.md`, Lifecycle), set on the three Gemini 2.5 models, and the
+evaluator excludes it by attribute with the reason "limited by its
+provider to developers who already used it". Owner calls on the open
+details: the name `restricted`; a successor per model even though
+Google gives only general advice (`gemini-2.5-flash-lite` ->
+`gemini-3.5-flash-lite`, `gemini-2.5-flash` -> `gemini-3.8-flash`,
+`gemini-2.5-pro` -> none), each YAML comment saying the pick is the
+owner's; their own "Existing users only" badge on the site, not the
+"leaving the catalog" notices, since Google keeps serving them; the
+unsourced `gemini-2.5-pro-ai-studio` route removed. Rankings changed and
+the affected tests were re-derived from real runs: `claude-haiku-5-5`
+now wins cost-first contexts (tied with `gpt-6-luna` at $0.60 blended,
+first by dataset order), and 26 models qualify under a high budget
+instead of 29. Two tests no longer exercised what they claimed and were
+replaced: the also-strong quality-floor case (the old model was 22%
+behind on score, so it never reached the floor check) and the low-budget
+free-access chip (no active free-access model wins under a low budget
+any more, so the chip's rule is now tested on the real winner with only
+its flag set). Status: closed.
+
 ## Iteration #30
 
 **Observation**

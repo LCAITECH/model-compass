@@ -47,10 +47,15 @@ access:
   has_free_access: true
 
 # Source: https://ai.google.dev/gemini-api/docs/deprecations (checked 2026-10-14).
-# "Not deprecated"; no shutdown date announced.
+# "Not deprecated"; no shutdown date announced. Restricted since the same
+# page limits the Gemini 2.5 models "to users who have actively used them in
+# the past" and points new projects to Gemini 3.5 Flash-Lite or 3.8 Flash
+# (IMPLEMENTATION_NOTES.md, Iteration #29; status added 2026-10-15).
+# Replacement: the project owner's per-model pick from Google's general
+# advice (Google names no successor per model).
 # Release date: https://ai.google.dev/gemini-api/docs/deprecations (release date column).
 lifecycle:
-  status: active
+  status: restricted
   release_date: "2025-07-22"
   shutdown_date: null
-  replacement: null
+  replacement: gemini-3.5-flash-lite

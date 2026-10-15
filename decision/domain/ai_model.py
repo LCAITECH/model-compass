@@ -131,6 +131,9 @@ class Access:
 class LifecycleStatus(str, Enum):
     ACTIVE = "active"
     DEPRECATED = "deprecated"
+    # Still served, not deprecated, but closed to new developers by the
+    # provider (e.g. "limited to users who have actively used them").
+    RESTRICTED = "restricted"
 
 
 @dataclass(frozen=True)
@@ -146,7 +149,9 @@ class Lifecycle:
     provider first made the model available through its API.
 
     Only `status` is read by decision/evaluator/; the dates are
-    display-only, so the engine never depends on the calendar.
+    display-only, so the engine never depends on the calendar. Both
+    `deprecated` and `restricted` keep a model out of the recommendation:
+    one is going away, the other is closed to anyone new.
     """
 
     status: LifecycleStatus
@@ -157,6 +162,10 @@ class Lifecycle:
     @property
     def deprecated(self) -> bool:
         return self.status == LifecycleStatus.DEPRECATED
+
+    @property
+    def restricted(self) -> bool:
+        return self.status == LifecycleStatus.RESTRICTED
 
 
 @dataclass(frozen=True)

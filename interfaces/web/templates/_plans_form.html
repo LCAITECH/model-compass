@@ -10,7 +10,7 @@
         {% for provider, group in model_groups %}
         <optgroup label="{{ provider }}">
           {% for m in group %}
-          <option value="{{ m.id }}"{{ ' selected' if model and model.id == m.id }}>{{ m.name }}{{ ' (deprecated)' if m.lifecycle.deprecated }}</option>
+          <option value="{{ m.id }}"{{ ' selected' if model and model.id == m.id }}>{{ m.name }}{{ ' (deprecated)' if m.lifecycle.deprecated }}{{ ' (existing users only)' if m.lifecycle.restricted }}</option>
           {% endfor %}
         </optgroup>
         {% endfor %}

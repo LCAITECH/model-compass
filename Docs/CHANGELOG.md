@@ -19,6 +19,19 @@ public release to version against.
 
 ---
 
+## 2026-10-15 — Gemini 2.5 stops being recommended
+
+**Schema (owner-approved: a `restricted` lifecycle status), dataset and Decision Engine. Rankings change.**
+
+- **Why:** Google still serves Gemini 2.5 Pro, Flash and Flash-Lite and says they are not deprecated, but limits them "to users who have actively used them in the past" and points new projects to Gemini 3.5 Flash-Lite or 3.8 Flash. Gemini 2.5 Flash-Lite was the engine's #1 for cost-first contexts, for developers who most likely cannot use it.
+- **New status `restricted`:** set on the three models. The engine excludes them the same way it excludes deprecated ones, with the reason "limited by its provider to developers who already used it" and, where set, the model to use for new projects (3.5 Flash-Lite for 2.5 Flash-Lite, 3.8 Flash for 2.5 Flash; that pairing is the project owner's, since Google gives one piece of advice for all three).
+- **On the site:** in the result they appear among the excluded models with the reason (also in the decision graph's tooltip); in the comparator they carry an "Existing users only" badge and status, with a "Swap in" for the successor. They are not listed as leaving the catalog, because they are not.
+- **Removed:** the Gemini 2.5 Pro route through AI Studio, which no plan page supports.
+- **What changes in results:** Claude Haiku 5.5 now wins cost-first contexts (tied with GPT-6 Luna at $0.60 per 1M input plus output, first by dataset order). Under a high budget 26 models qualify instead of 29.
+- **Tests:** 303 pass. Changed expectations were re-derived from real engine runs; two tests that no longer tested what they claimed were replaced with real cases.
+
+---
+
 ## 2026-10-15 — Subscription or API?
 
 **Schema (owner-approved: plan prices, multipliers and API credits), dataset, Access Advisor and interface. The ranking is unchanged: nothing about a plan affects which model is recommended.**

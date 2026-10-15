@@ -59,6 +59,8 @@ def overview_section(selected: list[AIModel]) -> dict:
 def _status_cell(model: AIModel) -> dict:
     if model.lifecycle.deprecated:
         return cell("Deprecated", tone="bad")
+    if model.lifecycle.restricted:
+        return cell("Existing users only", tone="bad", note="Its provider limits it to developers who already used it")
     if model.lifecycle.shutdown_date:
         return cell("Active", tone="caution", note="Its provider has published a shutdown date")
     return cell("Active")
@@ -69,7 +71,7 @@ def _released_cell(model: AIModel, today: date) -> dict:
     if not released:
         return cell("Not published")
     days_ago = (today - date.fromisoformat(released)).days
-    if 0 <= days_ago <= NEW_WINDOW_DAYS and not model.lifecycle.deprecated:
+    if 0 <= days_ago <= NEW_WINDOW_DAYS and not (model.lifecycle.deprecated or model.lifecycle.restricted):
         when = "released today" if days_ago == 0 else f"{_days(days_ago)} ago"
         return cell(short_date(released), tone="new", note=f"New: {when}")
     return cell(short_date(released))

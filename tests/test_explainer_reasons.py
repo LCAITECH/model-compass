@@ -16,7 +16,10 @@ def test_cost_priority_explains_the_cheapest_model_and_its_weaknesses(models):
     # handing the win to gpt-5-nano. Since 2026-10-14 gpt-5-nano is
     # deprecated and never qualifies; gemini-2.5-flash-lite ($0.50) is
     # the cheapest qualifying model, with the same "wins nothing else"
-    # profile.
+    # profile. Since 2026-10-15 gemini-2.5-flash-lite is restricted;
+    # claude-haiku-5-5 ($0.60, tied with gpt-6-luna and first by dataset
+    # order) wins, and is not the strongest on any quality dimension or
+    # context window among the qualifying pool either.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -28,7 +31,7 @@ def test_cost_priority_explains_the_cheapest_model_and_its_weaknesses(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.recommended.id == "gemini-2.5-flash-lite"
+    assert recommendation.recommended.id == "claude-haiku-5-5"
     assert recommendation.cost_tier == CostTier.LOW
     assert "your use case is High-volume low-cost bot" in recommendation.reasons[0]
     assert any("Lowest cost" in reason for reason in recommendation.reasons)

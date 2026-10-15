@@ -226,7 +226,7 @@ multi-surface access) already lives.
 
 | Field                       | Type | Category      | Allowed values |
 |-------------------------------|------|---------------|-----------------|
-| `lifecycle.status`          | enum | `[Objective]` | `active`, `deprecated` |
+| `lifecycle.status`          | enum | `[Objective]` | `active`, `deprecated`, `restricted` |
 | `lifecycle.release_date`    | date (ISO 8601 string) or `null` | `[Objective]` | The day the provider first made the model available through its API. |
 | `lifecycle.shutdown_date`   | date (ISO 8601 string) or `null` | `[Objective]` | The specific date the provider publishes for turning the model off. |
 | `lifecycle.replacement`     | model id or `null` | `[Objective]` | The successor the provider names, when it is a model in this dataset. |
@@ -242,7 +242,10 @@ to be written down, so a missing key can't pass for a checked one.
   wording). Providers use different words for the same thing (Anthropic
   "Deprecated", OpenAI "deprecated"/"shut down", Google a shutdown date
   plus a recommended replacement); the provider's page decides, and the
-  entry's YAML comment cites it. `active` is everything else, including
+  entry's YAML comment cites it. `restricted` is a model the provider
+  still serves and says is *not* deprecated, but has closed to new
+  developers (Google's "limited to users who have actively used them in
+  the past", for Gemini 2.5). `active` is everything else, including
   Anthropic's "Legacy".
 - **`shutdown_date`** is a specific date, never a "not sooner than"
   floor: Anthropic gives every active model one ("not sooner than
@@ -263,7 +266,9 @@ to be written down, so a missing key can't pass for a checked one.
 - **`replacement`** must be the id of another model in this dataset;
   the loader checks it across files. If the provider's successor isn't
   in the catalog, it is `null` and the successor is named in that
-  model's `Docs/models/{id}.md`.
+  model's `Docs/models/{id}.md`. For a `restricted` model whose provider
+  only gives general advice ("use 3.5 Flash-Lite or 3.8 Flash"), the
+  per-model pick is the project owner's and its YAML comment says so.
 
 Unlike `ecosystem.maturity` (an editorial call about stability), this
 block decides something: **the Decision Engine never recommends a
@@ -271,7 +276,10 @@ block decides something: **the Decision Engine never recommends a
 the model is listed among the exclusions with the provider's date and
 successor, so the user sees why. Recommending it for new work would be
 advice the provider itself contradicts. First added 2026-10-14; see
-`Docs/IMPLEMENTATION_NOTES.md`, Iteration #28.
+`Docs/IMPLEMENTATION_NOTES.md`, Iteration #28. A `restricted` model is
+excluded the same way, with a reason saying the provider limits it to
+developers who already used it: a new project cannot start on it. Added
+2026-10-15 (owner decision), Iteration #29.
 
 Nothing in `decision/` reads the calendar: on the shutdown date the
 engine behaves exactly as the day before. Removing the model (its YAML

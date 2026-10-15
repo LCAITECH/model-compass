@@ -73,7 +73,7 @@ def test_unknown_never_counts_as_satisfied():
 
 
 def test_consumer_subscription_matches_declared_plan():
-    model = MODELS["gemini-2.5-pro"]
+    model = MODELS["gemini-3.1-pro-preview"]  # direct API + AI Studio (Pro/Ultra)
     recommendation = recommend_access(
         model, _context(has_api_billing=True, subscriptions=("google-ai-pro",)), ROUTES
     )
@@ -84,7 +84,7 @@ def test_consumer_subscription_matches_declared_plan():
 
 
 def test_consumer_subscription_unmet_without_declared_plan():
-    model = MODELS["gemini-2.5-pro"]
+    model = MODELS["gemini-3.1-pro-preview"]  # direct API + AI Studio (Pro/Ultra)
     recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES)
 
     by_surface = {entry.route.access.surface.value: entry.state for entry in recommendation.routes}
@@ -182,7 +182,7 @@ def test_cloud_account_requires_onboarding_without_declared_account():
 
 
 def test_currently_eligible_routes_sort_before_requires_onboarding():
-    model = MODELS["gemini-2.5-pro"]
+    model = MODELS["gemini-3.1-pro-preview"]  # direct API + AI Studio (Pro/Ultra)
     recommendation = recommend_access(model, _context(has_api_billing=True), ROUTES)
 
     states = [entry.state for entry in recommendation.routes]

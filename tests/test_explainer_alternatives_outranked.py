@@ -18,6 +18,11 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
     # 2026-10-14: gpt-5-nano is deprecated and never qualifies, so
     # gemini-2.5-flash-lite wins and gpt-5-6-luna is back as the third
     # alternative, standing out on context window like gpt-6-luna.
+    # 2026-10-15: gemini-2.5-flash-lite is restricted. claude-haiku-5-5
+    # wins (tied with gpt-6-luna at $0.60, first by dataset order), and
+    # the alternatives are gpt-6-luna, gpt-5-6-luna (both standing out on
+    # context window) and deepseek-v4-flash ($1.50), which stands out on
+    # creative writing.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -30,10 +35,10 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
     recommendation = explain(context, candidates)
     by_id = {alt.model.id: alt for alt in recommendation.alternatives}
 
-    assert set(by_id) == {"claude-haiku-5-5", "gpt-6-luna", "gpt-5-6-luna"}
+    assert set(by_id) == {"gpt-6-luna", "gpt-5-6-luna", "deepseek-v4-flash"}
     assert any("context window" in reason for reason in by_id["gpt-6-luna"].reasons)
     assert any("context window" in reason for reason in by_id["gpt-5-6-luna"].reasons)
-    assert any("instruction following" in reason for reason in by_id["claude-haiku-5-5"].reasons)
+    assert any("creative writing" in reason for reason in by_id["deepseek-v4-flash"].reasons)
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
@@ -127,7 +132,9 @@ def test_total_qualifying_and_alternative_ranks(models):
     # 2026-09-08) is cheap enough to displace any of the top-3
     # alternatives here. Since 2026-10-14 the 7 deprecated models
     # (lifecycle.status) never qualify either: 39 - 3 - 7 = 29, and
-    # gemini-2.5-flash-lite replaces gpt-5-nano as the winner.
+    # gemini-2.5-flash-lite replaces gpt-5-nano as the winner. Since
+    # 2026-10-15 the 3 restricted Gemini 2.5 models don't qualify either:
+    # 29 - 3 = 26, and claude-haiku-5-5 wins.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -139,17 +146,17 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.total_qualifying == 29  # 39 - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra) - 7 deprecated
+    assert recommendation.total_qualifying == 26  # 39 - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra) - 7 deprecated - 3 restricted
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
 def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
-    # Same context as above (29 qualifying, see
-    # test_total_qualifying_and_alternative_ranks). Since 2026-10-14 the
-    # winner is gemini-2.5-flash-lite and the top-3 alternatives are
-    # claude-haiku-5-5, gpt-6-luna and gpt-5-6-luna, which leaves
-    # deepseek-v4-flash ($1.50 blended) as the first model past them,
-    # into the outranked group (rank 5 of 29).
+    # Same context as above (26 qualifying, see
+    # test_total_qualifying_and_alternative_ranks). Since 2026-10-15 the
+    # winner is claude-haiku-5-5 and the top-3 alternatives are
+    # gpt-6-luna, gpt-5-6-luna and deepseek-v4-flash, which leaves
+    # gemini-3.1-flash-lite ($1.75 blended) as the first model past them,
+    # into the outranked group (rank 5 of 26).
     # Unlike the winner's trade_offs, its reasons include "Not the
     # cheapest option" even though COST is the prioritized dimension,
     # because there's no positive "reasons" line for it to contradict;
@@ -166,11 +173,11 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 25  # 29 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 30))
+    assert len(recommendation.outranked) == 22  # 26 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 27))
 
     first = recommendation.outranked[0]
-    assert first.model.id == "deepseek-v4-flash"
+    assert first.model.id == "gemini-3.1-flash-lite"
     assert any("Not the cheapest" in reason for reason in first.reasons)
 
 

@@ -1,6 +1,32 @@
 """HTTP-level behavior of budget_mode (tier/custom/stale/default), the free-access
 chip, and the introductory-price reversion note -- all budget-tier-gated display."""
 
+from dataclasses import replace
+
+from decision.domain import Access, BudgetLevel, BudgetMode, Context, Priority
+from decision.evaluator import evaluate
+from decision.explainer import explain
+from interfaces.web.app import templates
+
+
+def _pricing_card(models, budget: BudgetLevel, *, free_access: bool) -> tuple[str, str]:
+    """The real cost-first recommendation, rendered through _result_pricing.html,
+    with only its model's has_free_access flag set as given.
+
+    Since 2026-10-15 no active model with free access wins, or reaches the
+    top alternatives, under budget=low: the only one in that price band,
+    gemini-3.1-flash-lite, always ranks lower. The chip's rule still needs
+    a test, so the flag is set on the real winner instead of pretending a
+    context exists where such a model wins.
+    """
+    context = Context(use_case="", budget_mode=BudgetMode.TIER, budget=budget, priorities=(Priority.COST,), language="en")
+    recommendation = explain(context, evaluate(context, models))
+    winner = replace(recommendation.recommended, access=Access(has_free_access=free_access))
+    html = templates.env.get_template("_result_pricing.html").render(
+        recommendation=replace(recommendation, recommended=winner), context=context
+    )
+    return winner.id, html
+
 
 def test_recommend_shows_no_match_when_nothing_qualifies(client):
     response = client.post(
@@ -57,50 +83,33 @@ def test_recommend_shows_real_savings_when_a_cheaper_option_exists(client):
     assert "DeepSeek V4.1 Flash" in response.text
 
 
-def test_free_access_chip_shown_for_low_budget_winner_with_free_access(client):
-    # Budget=low is a fixed <=$2 cost tier (SCHEMA.md). Pure
-    # context_window now picks gpt-5-6-luna (1.05M, no free access)
-    # after the 2026-10-07 admissions. context_window + cost restores
-    # gemini-2.5-flash-lite (1,048,576 context, $0.50 blended, free
-    # access) as the winner so this chip assertion stays meaningful.
-    response = client.post(
-        "/recommend",
-        data={
-            "use_case": "",
-            "language": "en",
-            "budget": "low",
-            "priority_1": "context_window",
-            "priority_2": "cost",
-        },
-    )
+def test_free_access_chip_shown_for_low_budget_winner_with_free_access(models):
+    winner_id, html = _pricing_card(models, BudgetLevel.LOW, free_access=True)
 
-    assert response.status_code == 200
-    assert "Gemini 2.5 Flash-Lite" in response.text
-    assert "Free access also documented" in response.text
-    assert (
-        "https://github.com/LCAITECH/model-compass/blob/main/Docs/models/gemini-2.5-flash-lite.md#access"
-        in response.text
-    )
+    assert "Free access also documented" in html
+    assert f"https://github.com/LCAITECH/model-compass/blob/main/Docs/models/{winner_id}.md#access" in html
 
 
-def test_free_access_chip_not_shown_above_low_budget(client):
-    # Same winner (gemini-2.5-flash) and same has_free_access=True as
-    # above, only budget differs -- isolates that the chip is
+def test_free_access_chip_not_shown_above_low_budget(models):
+    # Same flagged winner, only the budget differs: the chip is
     # budget-gated, not just tied to the model.
+    _, html = _pricing_card(models, BudgetLevel.HIGH, free_access=True)
+
+    assert "Free access also documented" not in html
+    assert "Read access docs" not in html
+
+
+def test_free_access_chip_not_shown_for_the_real_low_budget_winner(client):
+    # The real page today: claude-haiku-5-5 wins cost-first under
+    # budget=low and has no documented free access, so no chip.
     response = client.post(
         "/recommend",
-        data={
-            "use_case": "",
-            "language": "en",
-            "budget": "high",
-            "priority_1": "context_window",
-        },
+        data={"use_case": "", "language": "en", "budget": "low", "priority_1": "cost"},
     )
 
     assert response.status_code == 200
-    assert "Gemini 2.5 Flash" in response.text
+    assert "Claude Haiku 5.5" in response.text
     assert "Free access also documented" not in response.text
-    assert "Read access docs" not in response.text
 
 
 def test_pricing_shows_introductory_price_reversion_note(client):
@@ -128,8 +137,8 @@ def test_pricing_shows_introductory_price_reversion_note(client):
 
 
 def test_pricing_omits_reversion_note_for_models_without_one(client):
-    # Same free-access-chip winner as the tests above (gemini-2.5-flash-lite),
-    # which has no cost.effective_until -- the note must not appear.
+    # budget=low, context_window -> gpt-5-6-luna (re-derived 2026-10-15 from
+    # a real run), which has no cost.effective_until -- the note must not appear.
     response = client.post(
         "/recommend",
         data={

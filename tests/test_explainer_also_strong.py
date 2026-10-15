@@ -38,7 +38,8 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
     # rated very_high on reasoning. claude-sonnet-5-5 and claude-opus-5-5
     # joined at their 2026-10-04 admission, same very_high profile as their
     # predecessors. gemini-3.7-flash and gpt-5 left it on 2026-10-14:
-    # both are deprecated, so they no longer qualify.
+    # both are deprecated, so they no longer qualify. gemini-2.5-pro left
+    # it on 2026-10-15: restricted (Google limits it to existing users).
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -52,7 +53,7 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
 
     assert recommendation.recommended.id == "claude-opus-4-7"
     assert len(recommendation.alternatives) == 3
-    assert len(recommendation.also_strong_options) == 13
+    assert len(recommendation.also_strong_options) == 12
     assert {a.model.id for a in recommendation.also_strong_options} == {
         "claude-opus-4-8",
         "claude-opus-5",
@@ -60,7 +61,6 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
         "claude-sonnet-5",
         "claude-sonnet-5-5",
         "deepseek-v4-pro",
-        "gemini-2.5-pro",
         "gemini-3.1-pro-preview",
         "gemini-3.8-flash",
         "gemini-4-argon",
@@ -68,32 +68,33 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
         "gpt-6-1-sol",
         "qwen3.8-max",
     }
-    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 15))  # score-sorted, contiguous
+    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 14))  # score-sorted, contiguous
 
 
 def test_also_strong_options_excludes_close_score_but_unfair_quality_gap(models):
-    # priority_1=context_window, priority_2=reasoning: among 1.05M-context
-    # models, reasoning breaks the tie toward gpt-5-6-sol (very_high).
-    # gemini-2.5-flash-lite is close on context-driven score but
-    # medium/medium/low/medium vs Sol's very_high profile — the quality
-    # floor correctly excludes it. (Pure CONTEXT_WINDOW alone now picks
-    # gpt-5-6-luna after the 2026-10-07 Luna admissions, which would
-    # invert the floor check; the second priority restores the intended
-    # case.)
+    # budget=very_high, priority=reasoning: claude-fable-5-1 wins, and
+    # deepseek-v4-pro scores exactly the same (both very_high reasoning,
+    # gap 0%, inside the 2% window) -- but it is rated medium on creative
+    # writing against Fable's very_high, more than one tier down, so the
+    # quality floor keeps it out. Re-derived 2026-10-15 from a real run:
+    # the previous case (gemini-2.5-flash-lite against gpt-5-6-sol) was
+    # 22% behind on score, so it never reached the floor check, and the
+    # model is now restricted anyway.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
         budget=BudgetLevel.VERY_HIGH,
-        priorities=(Priority.CONTEXT_WINDOW, Priority.REASONING),
+        priorities=(Priority.REASONING,),
         language="es",
     )
     candidates = evaluate(context, models)
+    scores = {c.model.id: c.score for c in candidates}
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.recommended.id == "gpt-5-6-sol"
-    assert "gemini-2.5-flash-lite" not in {a.model.id for a in recommendation.also_strong_options}
-
+    assert recommendation.recommended.id == "claude-fable-5-1"
+    assert scores["deepseek-v4-pro"] == scores["claude-fable-5-1"]  # close score: the first condition holds
+    assert "deepseek-v4-pro" not in {a.model.id for a in recommendation.also_strong_options}
 
 def test_also_strong_options_includes_a_close_score_similar_quality_model(models):
     # priority_1=cost: gpt-5-nano now wins (its stale-but-still-cheapest
@@ -109,9 +110,13 @@ def test_also_strong_options_includes_a_close_score_similar_quality_model(models
     # more than one tier down on quality) is covered separately by
     # test_also_strong_options_excludes_close_score_but_unfair_quality_gap.
     # Since 2026-10-14 gpt-5-nano is deprecated and never qualifies:
-    # gemini-2.5-flash-lite ($0.50) wins, and gpt-6-luna ($0.60, the
-    # same medium/medium/low/medium profile) is the close-score,
-    # similar-quality option this test is about.
+    # gemini-2.5-flash-lite ($0.50) won, and gpt-6-luna ($0.60, the
+    # same medium/medium/low/medium profile) was the close-score,
+    # similar-quality option this test is about. Since 2026-10-15
+    # gemini-2.5-flash-lite is restricted: claude-haiku-5-5 and gpt-6-luna
+    # tie at $0.60 (Haiku first by dataset order), and gpt-6-luna, one
+    # tier below Haiku (high/high/medium/high) on every dimension, still
+    # passes the quality floor as the close-score option.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -124,7 +129,7 @@ def test_also_strong_options_includes_a_close_score_similar_quality_model(models
     recommendation = explain(context, candidates)
 
     also_strong_ids = {a.model.id for a in recommendation.also_strong_options}
-    assert recommendation.recommended.id == "gemini-2.5-flash-lite"
+    assert recommendation.recommended.id == "claude-haiku-5-5"
     assert "gpt-6-luna" in also_strong_ids
 
 

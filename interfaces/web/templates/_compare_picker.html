@@ -12,7 +12,7 @@
       <span class="series-dot" aria-hidden="true"></span>
       <span class="chip-text">
         <strong>{{ model.name }}</strong>
-        <span class="muted">{{ model.provider }}{% if model.lifecycle.deprecated %} · <span class="chip-warn">Deprecated</span>{% endif %}</span>
+        <span class="muted">{{ model.provider }}{% if model.lifecycle.deprecated %} · <span class="chip-warn">Deprecated</span>{% elif model.lifecycle.restricted %} · <span class="chip-warn">Existing users only</span>{% endif %}</span>
       </span>
       <a class="chip-remove" href="{{ links.remove[model.id] }}" aria-label="Remove {{ model.name }}" title="Remove">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -36,9 +36,9 @@
           <div class="picker-options">
             {% for model in group %}
             {% set chosen = model.id in selected_ids %}
-            <button type="submit" name="m" value="{{ model.id }}" class="picker-option{{ ' is-deprecated' if model.lifecycle.deprecated }}" data-search="{{ (model.name ~ ' ' ~ provider) | lower }}"{{ ' disabled' if chosen or selected | length >= max_compared }}>
+            <button type="submit" name="m" value="{{ model.id }}" class="picker-option{{ ' is-deprecated' if model.lifecycle.deprecated or model.lifecycle.restricted }}" data-search="{{ (model.name ~ ' ' ~ provider) | lower }}"{{ ' disabled' if chosen or selected | length >= max_compared }}>
               <span>{{ model.name }}</span>
-              {% if chosen %}<span class="option-tag">Added</span>{% elif model.lifecycle.deprecated %}<span class="option-tag tag-bad">Deprecated</span>{% endif %}
+              {% if chosen %}<span class="option-tag">Added</span>{% elif model.lifecycle.deprecated %}<span class="option-tag tag-bad">Deprecated</span>{% elif model.lifecycle.restricted %}<span class="option-tag tag-bad">Existing users</span>{% endif %}
             </button>
             {% endfor %}
           </div>

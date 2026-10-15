@@ -153,6 +153,8 @@ the Paid Tier explicitly states the opposite).
 
 **2026-10-14, access restricted to existing users (Iteration #29):** Google's [Gemini deprecations](https://ai.google.dev/gemini-api/docs/deprecations) page now says access to the 2.5 models is limited "to users who have actively used them in the past". They are "not deprecated" and keep being served, but new projects are pointed to 3.5 Flash-Lite or 3.8 Flash. A developer starting today may not be able to use this model. Not modeled yet: `lifecycle.status` stays `active` and the access route is unchanged, by owner decision (recorded as a first instance).
 
+**2026-10-15, modeled as `restricted`:** by owner decision, `lifecycle.status` is now `restricted` (SCHEMA.md, Lifecycle), so the engine no longer recommends this model; it is listed among the exclusions with the reason. `replacement` is `gemini-3.8-flash`, the project owner's per-model pick from Google's general advice (Google names no successor per model).
+
 ## Sources
 
 - [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost fields, free/paid tier data-policy distinction.

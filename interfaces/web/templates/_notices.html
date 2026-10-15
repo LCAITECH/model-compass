@@ -26,6 +26,9 @@ ${{ "%.2f"|format(pair[0]) }} / ${{ "%.2f"|format(pair[1]) }}
   {% if b.promo %}
   <span class="mc-badge mc-badge-promo" title="Introductory price {{ price(b.promo.now) }} per 1M tokens through {{ b.promo.ends | short_date }}; {{ price(b.promo.then) }} from {{ b.promo.reverts_on | short_date }}">{{ icons.tag() }}Intro price<span class="mc-badge-meta">ends {{ b.promo.ends | short_date }}{% if not compact %} · {{ days(b.promo.days_left) }} left{% endif %}</span></span>
   {% endif %}
+  {% if b.restricted %}
+  <span class="mc-badge mc-badge-restricted" title="Its provider limits it to developers who already used it{% if b.restricted.replacement %}; for new projects: {{ b.restricted.replacement.name }}{% endif %}">{{ icons.lock() }}Existing users only{% if b.restricted.replacement and not compact %}<span class="mc-badge-meta">new projects: {{ b.restricted.replacement.name }}</span>{% endif %}</span>
+  {% endif %}
   {% if b.retiring %}
   <span class="mc-badge mc-badge-retiring{{ ' is-deprecated' if b.retiring.deprecated }}" title="{{ 'Deprecated by its provider' if b.retiring.deprecated else 'Shutdown date published by its provider' }}{% if b.retiring.replacement %}; successor: {{ b.retiring.replacement.name }}{% endif %}">{{ icons.hourglass() }}{{ 'Deprecated' if b.retiring.deprecated else 'Retiring' }}<span class="mc-badge-meta">{% if b.retiring.shutdown_date %}{{ b.retiring.shutdown_date | short_date }}{% else %}routed to successor{% endif %}</span></span>
   {% endif %}
