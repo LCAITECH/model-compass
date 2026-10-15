@@ -89,11 +89,25 @@ notice a model entry is outdated:
 
 When a provider deprecates a model, set its `lifecycle` block (status,
 shutdown date, the successor's id) from the provider's own deprecations
-page — the engine stops recommending it from then on. On the shutdown
+page — the engine stops recommending it from then on. A model the
+provider keeps serving but closes to new developers is `restricted`, not
+`deprecated` (`SCHEMA.md`, Lifecycle); it is excluded the same way. On the shutdown
 date, remove the model's YAML and its access routes. Dated facts don't
 update themselves: `tests/test_catalog_dates.py` fails once a
 `cost.effective_until` or `lifecycle.shutdown_date` has passed, and warns
 in the 30 days before, so a stale entry can't go unnoticed.
+
+### Subscription plans and their routes
+
+Plans live in `dataset/subscriptions/{provider}/{plan_id}.yaml`. Every
+plan states its US monthly list price, and, when the provider publishes
+them, its usage multiplier against another plan (in the provider's own
+words, never in tokens) and the API credits it includes (`SCHEMA.md`,
+"Subscription plans"). A tier with its own price is its own plan. A plan
+reaches a model only through an access route that names it, and only
+when the provider's own page names that exact model; a family name is
+not enough, and the route's caveat should say that the app and API
+snapshots are matched by name.
 
 ### What makes a good dataset contribution
 

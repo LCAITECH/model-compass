@@ -165,6 +165,56 @@ sweeping gradient borders, motion only with the effects switch on).
 - **Badges wrap on phones** instead of widening the page (a long "Intro
   price" badge pushed a 375 px viewport to 393 px before that).
 
+## Model comparator, rebuilt (2026-10-14)
+
+The owner picked every improvement on a list grounded in the old page
+(a plain four-select table, about 3,700 px tall, a third of its rows
+identical across models).
+
+- **One color per picked model** (`--series-1..4` in `compare.css`,
+  indigo, cyan, pink, orange; darker in light theme), the same on its
+  chip, column, card, constellation and orbit node, so a model reads as
+  one thread down the page. Amber and green were avoided: they already
+  mean "promo" and "good".
+- **Columns as cards, header pinned.** A real `<table>` with
+  `border-spacing` gaps and per-column tints. The old wrapper with
+  `overflow-x: auto` silently broke `position: sticky`; on wide screens
+  the table now fits, and below 760 px it is replaced by one swipeable
+  card per model built from the same data.
+- **Orbit, not podium heights.** The engine's verdict uses the decision
+  graph's rings (every catalog model on its ring, the picks lit and
+  numbered), plus the picks listed in the engine's order. Step heights
+  proportional to rank were rejected: they would draw a continuous scale
+  the engine doesn't have.
+- **Constellations are discrete.** Four axes, four fixed rings; a vertex
+  always sits on a ring. Small multiples (one per model, the others as
+  dashed outlines), not one overlaid chart, because identical profiles
+  would hide each other. The caption says the shape is not a score.
+- **Bars only relative to the picked models,** never to a maximum, plus
+  an exact price ratio ("20×").
+- **Learned the hard way:** every stylesheet loads on every page, so a
+  generic class collides. `graph.css` reverses animations on `.ring-out`;
+  the podium steps that reused that class finished invisible. The
+  comparator's ring classes are `on-*` and its keyframes `cmp-*`; grep
+  `static/*.css` before naming a new class.
+
+## Subscription or API page (2026-10-15)
+
+- **Two paths and a node.** The API on the left, measured (two token
+  bounds as bars whose lengths are their real ratio, an animated stream
+  inside them); the plan on the right, in fog. The fog is the data: no
+  provider publishes a plan's limit in tokens, so the page draws that
+  absence instead of a number. Only what the provider does publish sits
+  on top of it (price, its own "5x Pro" wording, included API credits).
+- **Solid beam on the API side, dashed on the plan side,** meeting at the
+  verdict orb, whose color follows the verdict (cyan for the API,
+  violet for the plan, accent when there is no cost verdict).
+- **Included credits are green** (`--positive`), the one place a plan
+  carries a number of tokens: what its API credits buy at list prices,
+  which is exact.
+- **"Existing users only" is neutral grey,** not the rose of a model
+  leaving the catalog: Google says those models are not deprecated.
+
 ## Guiding principle
 
 The interface should feel like a precision instrument for making a

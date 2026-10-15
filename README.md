@@ -68,6 +68,21 @@ steps.
 When a fair lower-cost alternative exists, Model Compass shows the
 real trade-off side by side — not just "this is cheaper."
 
+### 5. Compare models side by side
+
+Pick two to four models at `/compare`: stored specs, prices, limits,
+lifecycle dates and access routes in columns, with an "only
+differences" switch. Add your context and the engine's own verdict for
+each model is drawn on top.
+
+### 6. Subscription or API?
+
+At `/plans`, pick a model and see what a monthly amount buys on its
+API, next to the plans that include it: their price, the usage
+multiplier the provider publishes and any API credits they come with.
+Plan limits are shown as "not published in tokens", because no provider
+publishes them that way.
+
 *Real screenshots from the app running locally against the live
 dataset — not mockups.*
 

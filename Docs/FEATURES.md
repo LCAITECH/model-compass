@@ -72,6 +72,12 @@ The core of the product: turning context into a decision.
   choosing the recommended model over another (e.g. lower cost in
   exchange for weaker reasoning), instead of presenting a decision as
   strictly "best."
+- **Provider lifecycle as a hard filter** — a model its provider has
+  deprecated (2026-10-14) or closed to new developers, `restricted`
+  (2026-10-15), is never recommended, however well it fits. It is
+  listed among the exclusions with the provider's reason and, when one
+  is set, the model to use instead. Read from the model's own
+  `lifecycle.status`, never from its name (`SCHEMA.md`, Lifecycle).
 
 ### Explain
 
@@ -128,6 +134,11 @@ itself.
   as a gap), or excluded entirely (enterprise-only routes, until an
   explicit opt-in is designed). Declaring "no AWS account" never
   removes Bedrock from the list, it just says what's missing.
+- **Subscription or API (`/plans`)** — for one model, the plans that
+  include it (named exactly on the provider's page) next to what a
+  monthly amount buys on its API, with a verdict that never turns a
+  plan's limit into tokens. Implemented 2026-10-15; see "Subscription
+  vs. API Comparator" below for the reasoning.
 - **Documented-route discipline** — "can be done in practice" isn't
   the bar; a route only enters the catalog with an official source URL,
   a confirmed status, and the exact dataset model id (never a family
