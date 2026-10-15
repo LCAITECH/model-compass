@@ -19,6 +19,20 @@ public release to version against.
 
 ---
 
+## 2026-10-15 — Error pages, a header that fits on phones, a readable decision graph, new screenshots
+
+**Interface only. No change to the engine or the dataset.**
+
+- **Error pages:** an address that doesn't exist, or a result page opened again from its link, used to show a raw line of JSON. Both now show the site's own page; opening a result without its form takes you back to the form. A server error gets the same kind of page, without technical details.
+- **Phones:** on a 375 px screen the header squeezed the site name into a narrow column and pushed the theme button off the edge. The buttons now sit beside the name and the two links get their own line. Every page was checked at 340, 375 and 768 px in an emulated browser; no real phone, Firefox or Safari yet.
+- **The decision graph can be read:** its rings spin, so a dot's details vanished within a second or two of hovering it. Clicking or tapping any dot, excluded ones included, now opens a card that stays open until you close it, with all of that model's reasons and a link to compare it with the winner; the rings stop while it is open. That link also had been going to the wrong page since the "Subscription or API?" link was added; it goes to the comparator again.
+- **Access requirements read correctly:** "an AWS account", "an Azure account", "a Google Cloud account" instead of "a AWS account".
+- **The background animation was measured:** about 0.2 ms of work per frame on the landing page, far below what a frame allows. It already stops when the tab is hidden or effects are off.
+- **README:** its screenshots predated the redesign; all four were retaken, and the comparator and "Subscription or API?" got their own.
+- **Tests:** 313 pass (new: error pages, the three cloud-account labels).
+
+---
+
 ## 2026-10-15 — Four new models: Meta's Muse Wonder and Muse Spark 1.3, Qwen3.8-Flash, Qwen3.7-Plus
 
 **Dataset and access catalog. Rankings change.**

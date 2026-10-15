@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Model Compass — {{ eyebrow }}{% endblock %}
+{% block body_class %}page-error{% endblock %}
+{% block content %}
+<div class="fade-in">
+<div class="no-match">
+  <p class="eyebrow">{{ eyebrow }}</p>
+  <h1>{{ heading }}</h1>
+  <p>{{ detail }}</p>
+</div>
+<a class="back-link" href="/">&larr; Go to the form</a>
+</div>
+{% endblock %}

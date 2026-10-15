@@ -93,6 +93,45 @@ body,
   grid-column: 1;
 }
 
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Narrow screens: beside the brand, the four actions took 265px of a
+   375px phone and pushed the toggles off-screen. The toggles stay on the
+   brand's row; the two links get a row of their own under the tagline. */
+@media (max-width: 640px) {
+  .site-header {
+    grid-template-columns: 1fr auto auto;
+  }
+
+  .site-header .header-actions {
+    display: contents;
+  }
+
+  .site-header .brand {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+  }
+
+  .site-header .theme-toggle {
+    grid-row: 1;
+  }
+
+  .site-header .tagline,
+  .site-header .header-nav {
+    grid-column: 1 / -1;
+  }
+
+  .site-header .header-nav {
+    flex-wrap: wrap;
+    margin-top: var(--space-4);
+  }
+}
+
 .theme-toggle {
   display: inline-flex;
   align-items: center;

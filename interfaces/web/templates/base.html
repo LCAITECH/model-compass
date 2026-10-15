@@ -40,6 +40,7 @@
   <link rel="stylesheet" href="/static/field.css">
   <link rel="stylesheet" href="/static/wizard.css">
   <link rel="stylesheet" href="/static/graph.css">
+  <link rel="stylesheet" href="/static/graph-card.css">
   <link rel="stylesheet" href="/static/badges.css">
   <link rel="stylesheet" href="/static/notices.css">
   <link rel="stylesheet" href="/static/radar.css">
@@ -51,8 +52,10 @@
     <a class="brand" href="/">Model Compass</a>
     <p class="tagline">Developers don't need more information. They need better decisions.</p>
     <div class="header-actions">
-    <a class="header-link" href="/compare">Compare models</a>
-    <a class="header-link" href="/plans">Subscription or API?</a>
+    <nav class="header-nav" aria-label="Site">
+      <a class="header-link" href="/compare">Compare models</a>
+      <a class="header-link" href="/plans">Subscription or API?</a>
+    </nav>
     <button type="button" id="effects-toggle" class="theme-toggle effects-toggle" aria-pressed="true" aria-label="Turn visual effects off">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>
     </button>

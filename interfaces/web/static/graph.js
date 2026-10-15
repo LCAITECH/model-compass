@@ -47,8 +47,17 @@
     },
   ];
 
+  // What each ring means, said once on the card instead of read off the legend.
+  const RING_LABELS = {
+    alt: "Top alternative",
+    tied: "Practically tied with the winner",
+    out: "Also qualifies",
+    ex: "Excluded for your context",
+  };
+
   function compareHref(centerId, otherId) {
-    const link = document.querySelector("a.compare-link");
+    // By destination: the hero also has a compare-link to /plans, listed first.
+    const link = document.querySelector('a.compare-link[href^="/compare"]');
     if (!link) return null;
     try {
       const url = new URL(link.getAttribute("href"), window.location.origin);
@@ -100,7 +109,6 @@
       const members = items.filter((m) => m.ring === key);
       members.forEach((model, index) => {
         const p = place(key, index, members.length);
-        const clickable = key !== "ex";
         if (key === "alt") {
           groups.alt.appendChild(el("line", { x1: C, y1: C, x2: p.x, y2: p.y, class: "graph-edge" }));
           const pulse = el("circle", { r: 3.2, class: "graph-pulse" });
@@ -113,7 +121,6 @@
         }
         const node = el("circle", { cx: p.x, cy: p.y, r: RINGS[key].r, class: `graph-node node-${key}${model.tied ? " is-tied" : ""}` });
         node.style.setProperty("--i", String(nodes.length));
-        if (clickable) node.setAttribute("tabindex", "0");
         node.setAttribute("aria-label", `${model.name}${model.rank ? `, rank ${model.rank}` : ", excluded"}`);
         groups[key].appendChild(node);
         MARKS.filter((mark) => mark.test(model)).forEach((mark, n) => {
@@ -140,7 +147,11 @@
     core.appendChild(one);
     svg.appendChild(core);
 
+    const stage = figure.querySelector(".graph-stage");
+    let pinned = null;
+
     function show(entry) {
+      if (pinned) return;
       const m = entry.model;
       const box = figure.querySelector(".graph-stage").getBoundingClientRect();
       const rect = entry.node.getBoundingClientRect();
@@ -148,9 +159,7 @@
       const place = m.rank ? `#${m.rank} of ${totalQualifying}` : "Excluded";
       const price = m.input ? `$${m.input} / $${m.output} per 1M tokens` : "";
       const flags = MARKS.filter((mark) => mark.test(m)).map((mark) => mark.text(m)).join(" · ");
-      tip.innerHTML = `<strong></strong><span>${place}${price ? " · " + price : ""}</span>${flags ? `<b class="graph-tip-flags">${flags}</b>` : ""}${reasons ? `<ul>${reasons}</ul>` : ""}${
-        entry.key !== "ex" && entry.key !== "center" ? "<em>Click to compare with the winner</em>" : ""
-      }`;
+      tip.innerHTML = `<strong></strong><span>${place}${price ? " · " + price : ""}</span>${flags ? `<b class="graph-tip-flags">${flags}</b>` : ""}${reasons ? `<ul>${reasons}</ul>` : ""}<em>Click to keep the details open</em>`;
       tip.querySelector("strong").textContent = m.name;
       tip.hidden = false;
       const left = rect.left - box.left + rect.width / 2;
@@ -158,19 +167,92 @@
       tip.style.top = `${rect.top - box.top - 10}px`;
     }
 
+    // A card that stays open: the rings spin, so a hover tooltip slid out
+    // from under the pointer within a second or two. While a card is open
+    // the rings stop (graph-card.css) and the chosen dot stays put.
+    const card = document.createElement("div");
+    card.className = "graph-card";
+    card.setAttribute("role", "dialog");
+    card.hidden = true;
+
+    function pin(entry, fromKeyboard) {
+      if (pinned) pinned.node.classList.remove("is-selected");
+      pinned = entry;
+      tip.hidden = true;
+      const m = entry.model;
+      const price = m.input ? `$${m.input} / $${m.output} per 1M tokens` : "";
+      const place = m.rank ? `#${m.rank} of ${totalQualifying}` : "";
+      const flags = MARKS.filter((mark) => mark.test(m)).map((mark) => mark.text(m));
+      const href = compareHref(center.id, m.id);
+      card.innerHTML = `<button type="button" class="graph-card-close" aria-label="Close details">&times;</button>
+        <p class="graph-card-ring"></p><h3 class="graph-card-name"></h3>
+        <p class="graph-card-meta"></p>
+        ${flags.length ? '<p class="graph-card-flags"></p>' : ""}
+        <ul class="graph-card-reasons"></ul>
+        ${href ? '<a class="graph-card-compare"></a>' : ""}`;
+      card.querySelector(".graph-card-ring").textContent = RING_LABELS[entry.key];
+      card.querySelector(".graph-card-name").textContent = m.name;
+      card.querySelector(".graph-card-meta").textContent = [place, price].filter(Boolean).join(" · ");
+      if (flags.length) card.querySelector(".graph-card-flags").textContent = flags.join(" · ");
+      card.setAttribute("aria-label", m.name);
+      const list = card.querySelector(".graph-card-reasons");
+      m.reasons.forEach((reason) => {
+        const li = document.createElement("li");
+        li.textContent = reason;
+        list.appendChild(li);
+      });
+      const compare = card.querySelector(".graph-card-compare");
+      if (compare) {
+        compare.setAttribute("href", href);
+        compare.textContent = `Compare with ${center.name} →`;
+      }
+      card.querySelector(".graph-card-close").addEventListener("click", () => unpin(true));
+      card.hidden = false;
+      entry.node.classList.add("is-selected");
+      stage.classList.add("is-pinned");
+      placeCard();
+      if (fromKeyboard) card.querySelector(".graph-card-close").focus();
+    }
+
+    function placeCard() {
+      if (!pinned) return;
+      const box = stage.getBoundingClientRect();
+      const rect = pinned.node.getBoundingClientRect();
+      const half = card.offsetWidth / 2;
+      const x = rect.left - box.left + rect.width / 2;
+      card.style.left = `${Math.min(Math.max(x, half + 8), box.width - half - 8)}px`;
+      const below = rect.top - box.top < card.offsetHeight + 16;
+      card.classList.toggle("is-below", below);
+      card.style.top = `${below ? rect.bottom - box.top + 12 : rect.top - box.top - 12}px`;
+    }
+
+    function unpin(restoreFocus) {
+      if (!pinned) return;
+      const node = pinned.node;
+      node.classList.remove("is-selected");
+      pinned = null;
+      card.hidden = true;
+      stage.classList.remove("is-pinned");
+      if (restoreFocus) node.focus();
+    }
+
     nodes.forEach((entry) => {
+      entry.node.setAttribute("tabindex", "0");
       entry.node.addEventListener("pointerenter", () => show(entry));
       entry.node.addEventListener("pointerleave", () => { tip.hidden = true; });
       entry.node.addEventListener("focus", () => show(entry));
       entry.node.addEventListener("blur", () => { tip.hidden = true; });
-      if (entry.key === "ex") return;
-      const go = () => {
-        const href = compareHref(center.id, entry.model.id);
-        if (href) window.location.href = href;
-      };
-      entry.node.addEventListener("click", go);
-      entry.node.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+      entry.node.addEventListener("click", () => (pinned === entry ? unpin(false) : pin(entry, false)));
+      entry.node.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pin(entry, true); }
+      });
     });
+
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") unpin(true); });
+    document.addEventListener("pointerdown", (e) => {
+      if (pinned && !card.contains(e.target) && !nodes.some((entry) => entry.node === e.target)) unpin(false);
+    });
+    window.addEventListener("resize", placeCard);
 
     // Legend entries only for the marks this result actually shows.
     const legend = figure.querySelector(".graph-legend");
@@ -180,8 +262,7 @@
       if (legend) legend.appendChild(li);
     });
 
-    const stage = figure.querySelector(".graph-stage");
-    stage.append(svg, tip);
+    stage.append(svg, tip, card);
     figure.classList.add("is-ready");
   });
 })();

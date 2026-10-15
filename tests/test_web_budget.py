@@ -3,6 +3,7 @@ chip, and the introductory-price reversion note -- all budget-tier-gated display
 
 from dataclasses import replace
 
+from conftest import visible_html
 from decision.domain import Access, BudgetLevel, BudgetMode, Context, Priority
 from decision.evaluator import evaluate
 from decision.explainer import explain
@@ -213,5 +214,7 @@ def test_recommend_still_defaults_to_tier_mode_when_budget_mode_is_absent(client
 
     assert response.status_code == 200
     assert "Recommended model" in response.text
-    assert "claude-fable-5" not in response.text  # not present as a model id/link, i.e. not the winner
+    # Not present as a model id/link outside the graph's data list (which
+    # carries every excluded model's id since 2026-10-15), i.e. not the winner.
+    assert "claude-fable-5" not in visible_html(response.text)
     assert "cost tier exceeds a &#39;high&#39; budget" in response.text or "cost tier exceeds a 'high' budget" in response.text

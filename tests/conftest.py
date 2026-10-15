@@ -1,5 +1,6 @@
 """Shared fixtures and path constants for the test suite."""
 
+import re
 from pathlib import Path
 
 import pytest
@@ -30,6 +31,15 @@ ROOT = Path(__file__).resolve().parent.parent
 DATASET_DIR = ROOT / "dataset" / "models"
 ACCESS_ROUTES_DIR = ROOT / "dataset" / "access_routes"
 SUBSCRIPTIONS_DIR = ROOT / "dataset" / "subscriptions"
+
+
+def visible_html(html: str) -> str:
+    """The result page without the hidden .graph-data list that feeds the decision graph.
+
+    That list repeats every model's name and id on purpose (graph.js draws
+    it), so a test about what the visitor reads must not count it.
+    """
+    return re.sub(r'<ul class="graph-data".*?</ul>', "", html, flags=re.S)
 
 
 @pytest.fixture(scope="module")

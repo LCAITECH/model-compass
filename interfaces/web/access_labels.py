@@ -5,7 +5,15 @@ to phrase "you need this" to a person is presentation, same split as
 model_profile.py's best_for()/less_suited_for() for AIModel.
 """
 
-from decision.domain import RequirementKind
+from decision.domain import CloudProvider, RequirementKind
+
+# Spelled out per provider: the article follows the name ("an AWS", "a
+# Google Cloud"), which uppercasing the enum value got wrong.
+_CLOUD_ACCOUNTS = {
+    CloudProvider.AWS: "an AWS account",
+    CloudProvider.AZURE: "an Azure account",
+    CloudProvider.GCP: "a Google Cloud account",
+}
 
 _LABELS = {
     RequirementKind.API_BILLING_LINKED: "an API key with billing set up",
@@ -28,7 +36,7 @@ def requirement_label(requirement, plan_names: dict[str, str] | None = None) -> 
         names = [plan_names.get(plan_id, plan_id) for plan_id in requirement.value]
         return " or ".join(names)
     if requirement.kind == RequirementKind.CLOUD_ACCOUNT and requirement.value:
-        return f"a {requirement.value.value.upper()} account"
+        return _CLOUD_ACCOUNTS[requirement.value]
     return _LABELS[requirement.kind]
 
 

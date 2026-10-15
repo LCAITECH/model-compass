@@ -70,12 +70,16 @@ real trade-off side by side — not just "this is cheaper."
 
 ### 5. Compare models side by side
 
+![Model Compass — model comparator](Docs/images/compare.png)
+
 Pick two to four models at `/compare`: stored specs, prices, limits,
 lifecycle dates and access routes in columns, with an "only
 differences" switch. Add your context and the engine's own verdict for
 each model is drawn on top.
 
 ### 6. Subscription or API?
+
+![Model Compass — subscription or API](Docs/images/plans.png)
 
 At `/plans`, pick a model and see what a monthly amount buys on its
 API, next to the plans that include it: their price, the usage

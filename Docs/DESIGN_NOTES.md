@@ -215,6 +215,74 @@ identical across models).
 - **"Existing users only" is neutral grey,** not the rose of a model
   leaving the catalog: Google says those models are not deprecated.
 
+## Error pages, the phone header and measured debt (2026-10-15)
+
+A pass over the visual debt left open since August, scoped by the owner:
+error and empty states, the README screenshots, the canvas cost and an
+emulated phone audit.
+
+- **Error pages in the site's language.** An unknown URL and a GET on
+  `/recommend` (opening a result in a new tab, sharing its link) answered
+  with FastAPI's raw JSON. Requests that accept HTML now get a page that
+  reuses the "no match" block (eyebrow, heading, one line, a link back to
+  the form), no new styles; `/recommend` without a form redirects to the
+  form, since a result has no URL of its own. `fetch()` callers keep the
+  JSON. A 500 gets the same page without the exception text.
+- **The header on phones was a layout problem, not a styling one.** The
+  header grid put the brand beside four actions; at 375 px the actions
+  took 265 px, the brand wrapped word by word and the theme toggle sat
+  off-screen (horizontal scroll). Under 640 px the two toggles now share
+  the brand's row and the two links take a row of their own
+  (`.header-actions` becomes `display: contents`, the links sit in a
+  `<nav>`). Desktop is unchanged, checked by position.
+- **Emulated audit, no device.** Landing, result, `/compare` with four
+  models and a context, `/plans` with a model, and the 404 page, at 340,
+  375 and 768 px: no element wider than the viewport once the entrance
+  animations finish (the browser pane freezes them at time 0, which
+  reads as overflow if not finished first). Not tested on a real phone,
+  Firefox or Safari; the CSS nesting in `landing.css`, `reveal.css` and
+  `graph.css` still needs 2023-or-newer browsers.
+- **Canvas cost, measured where it can be.** The landing's field (120
+  nodes, a 1600x1000 backing store at DPR 1.25) costs 0.18 ms of script
+  per frame on average, 0.30 ms at p95, against a 16.7 ms frame. The
+  pane was hidden, so rasterisation and real frame rate could not be
+  measured, and nothing ran on a slow device. The loop already stops when
+  the tab is hidden and when effects are off. No change.
+- **Empty states that already worked:** `/compare` with fewer than two
+  models (slots and the picker) and `/plans` without a model. The
+  result's "no match" state is unreachable with today's catalog: every
+  language and budget leaves at least one model.
+- **README screenshots** were from 2026-08-13, before Phases 16-17.
+  Retaken from the browser pane (its capture tops out near 800 px wide,
+  so they are taken at a 960-1100 px viewport and cropped), plus the
+  comparator and `/plans`.
+
+- **The decision graph's dots can be read now (owner request).** The
+  rings spin, so a dot slid out from under the pointer within a second or
+  two and its hover tip vanished; on a phone there was no way to read a
+  dot at all, and clicking left the page for `/compare`. A click, tap or
+  Enter now opens a card beside the dot that stays until ×, Escape or a
+  click elsewhere: what the ring means ("Practically tied with the
+  winner", "Excluded for your context"), place, price, dated notices,
+  every reason (the tip showed two), and "Compare with {winner}". The
+  rings stop while a card is open or the pointer is over the graph, and
+  the chosen dot is outlined. Excluded dots open a card too, with the
+  reason they were excluded. The card is anchored to the dot (it can
+  stay there because the ring is stopped) and flips below it near the
+  top edge (`graph-card.css`).
+- **Found while building it:** since the `/plans` link was added to the
+  result (Phase 19), the graph's "click to compare" built a `/plans` URL,
+  because it took the first `a.compare-link` on the page. It now picks
+  the link by its destination.
+
+Seen and left for the full audit: route caveats are written as audit
+notes ("primary evidence.source_url", "see docs/models/...") and the
+result shows them to users as they are; with effects on, the
+"calculating" overlay holds the form for 3.3 s although the answer takes
+milliseconds (a Phase 17 decision); the ChatGPT plan table served in
+Spanish marks GPT-6 Luna, GPT-6.1 Sol and Astra as "Limitado" on Plus
+while their routes quote "Yes" from the English page.
+
 ## Guiding principle
 
 The interface should feel like a precision instrument for making a

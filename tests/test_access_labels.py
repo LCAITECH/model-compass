@@ -1,3 +1,5 @@
+import pytest
+
 from conftest import ROOT
 from decision.domain import AccessRequirement, CloudProvider, RequirementKind
 from interfaces.web.access_labels import guide_ref_url, requirement_label
@@ -25,10 +27,18 @@ def test_consumer_subscription_uses_generic_text_without_plan_names():
     assert requirement_label(requirement) == "one of the listed subscriptions"
 
 
-def test_cloud_account_names_the_specific_provider():
-    requirement = AccessRequirement(kind=RequirementKind.CLOUD_ACCOUNT, value=CloudProvider.AWS)
+@pytest.mark.parametrize(
+    ("provider", "label"),
+    [
+        (CloudProvider.AWS, "an AWS account"),
+        (CloudProvider.AZURE, "an Azure account"),
+        (CloudProvider.GCP, "a Google Cloud account"),
+    ],
+)
+def test_cloud_account_names_the_specific_provider(provider, label):
+    requirement = AccessRequirement(kind=RequirementKind.CLOUD_ACCOUNT, value=provider)
 
-    assert requirement_label(requirement) == "a AWS account"
+    assert requirement_label(requirement) == label
 
 
 def test_api_billing_linked_uses_fixed_label():

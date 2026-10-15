@@ -48,6 +48,7 @@ from interfaces.web.comparison import (
     selection_links,
 )
 from interfaces.web.context_form import InvalidFormError, context_from_form
+from interfaces.web.error_pages import install_error_pages
 from interfaces.web.model_profile import best_for, less_suited_for, quality_profile
 from interfaces.web.plans_view import plans_context
 from interfaces.web.use_case_matcher import match_use_case
@@ -66,6 +67,7 @@ templates.env.filters["requirement_label"] = requirement_label
 templates.env.filters["guide_ref_url"] = guide_ref_url
 templates.env.filters["humanize"] = humanize
 templates.env.filters["short_date"] = short_date
+install_error_pages(app, templates)
 
 models = load_dataset(DATASET_DIR)
 languages = sorted({language for model in models for language in model.languages})
