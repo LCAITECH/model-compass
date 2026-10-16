@@ -19,6 +19,17 @@ public release to version against.
 
 ---
 
+## 2026-10-15 — Docker image and deploy guide
+
+**Tooling only. No change to the engine, the dataset or the site.**
+
+- **A container for the public instance.** One image, one worker, no database and no background work. It is meant to sit behind a Cloudflare Tunnel that already runs on the host: no port is opened on the machine, Cloudflare provides the HTTPS, and the container is capped at 256 MB of memory and half a CPU so it does not crowd other projects (the app measured about 60 MB in use after a batch of requests).
+- **A step-by-step guide** in `deploy/README.md`: first deploy, publishing the hostname, updating, and rolling back. Updating prices, models or retirements ships the same way as the code: the dataset is read when the app starts, so a rebuild picks it up.
+- **Docker is new tooling here**, used only for deploying; development still runs with `pip install -e ".[dev]"` and `uvicorn`.
+- **Not built yet.** It was checked by running the app from a tree holding only what the image copies, with a fresh Python 3.13 environment of just the runtime dependencies (FastAPI 0.143, Starlette 1.8): the landing, a static file, the comparator, the plans page, a recommendation and a 404 all answered correctly. The first real build happens on the server.
+
+---
+
 ## 2026-10-15 — Results have their own link
 
 **Interface only. No change to the engine or the dataset.**

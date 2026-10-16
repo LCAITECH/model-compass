@@ -128,6 +128,9 @@ uvicorn interfaces.web.app:app --reload
 
 Then open `http://localhost:8000`.
 
+To run it in a container, behind a Cloudflare Tunnel, on a server of your
+own, see [deploy/README.md](deploy/README.md).
+
 ## Core Principles
 
 - **Explainability** — every recommendation comes with a reason, never
