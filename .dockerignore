@@ -1,0 +1,10 @@
+# Allowlist: the image gets only what the web app reads at runtime.
+# Everything else (tests, Docs, screenshots, the catalog bot's material,
+# internal handoffs, local tool config) stays out by default.
+*
+!pyproject.toml
+!dataset
+!decision
+!interfaces
+**/__pycache__
+**/*.pyc

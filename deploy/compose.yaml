@@ -1,0 +1,29 @@
+# Model Compass behind the host's existing Cloudflare Tunnel.
+#
+# No port is published on the host: cloudflared reaches this container by
+# name (model-compass:8000) over the Docker network it already uses. Put
+# that network's name in deploy/.env as TUNNEL_NETWORK (see .env.example).
+# Limits keep it from crowding the other projects on the VM: measured at
+# ~60 MB resident after a batch of requests, so 256 MB leaves headroom.
+name: model-compass
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: model-compass:latest
+    container_name: model-compass
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    mem_limit: 256m
+    cpus: 0.5
+    networks:
+      - tunnel
+
+networks:
+  tunnel:
+    external: true
+    name: ${TUNNEL_NETWORK:?set TUNNEL_NETWORK in deploy/.env to the Docker network cloudflared is on}
