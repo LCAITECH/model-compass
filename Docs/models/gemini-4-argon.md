@@ -129,12 +129,26 @@ not modeled, consistent with how every other Gemini model's non-API
 surfaces are treated. Vertex / Gemini Enterprise Agent Platform
 availability was not verified, so no cloud route is added.
 
+**Update 2026-10-17 (AI Studio on Google AI Pro):** Google removed the
+AI Pro exclusion. The Gemini API pricing page now reads "Gemini 4 Argon
+is not available on the Free tier." (the version last updated 2026-10-15 UTC
+said "...on the Free tier or on the Google AI Pro plan"), and the Google AI plans page
+(https://ai.google.dev/gemini-api/docs/google-ai-plans, last updated
+2026-10-16 UTC) lists AI Pro with "Access to premium models like Gemini 4
+Argon, Gemini Pro, Nano Banana, and Lyria" and says "Gemini 4 Argon is not
+available on the Free plan." The `gemini-4-argon-ai-studio` route, added
+on 2026-10-14 for the two Ultra tiers only, now also lists
+`google-ai-pro`. `access.has_free_access` stays `false` (AI Pro is a paid
+plan). The `gemini-4-argon-gemini-app` route already included AI Pro and
+is unchanged.
+
 ## Sources
 
 - https://ai.google.dev/gemini-api/docs/models/gemini-4-argon — identity, modalities, token limits, capabilities, stability (page updated 2026-10-13 UTC).
 - https://ai.google.dev/gemini-api/docs/pricing — prices, caching, free-tier and AI Pro exclusion.
 - https://ai.google.dev/gemini-api/docs/models — "Stable" label.
 - https://ai.google.dev/gemini-api/docs/rate-limits — batch limits.
+- https://ai.google.dev/gemini-api/docs/google-ai-plans — AI Studio plan access (re-read 2026-10-17).
 - https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/ — positioning, Ultra mention, Fairwind context (dated 2026-09-30).
 
 All accessed 2026-10-14.
