@@ -1,0 +1,342 @@
+/* The "What if..." panel (whatif.js) and the layout around it. The panel sits
+   under the winner's card on the left and the graph stays pinned on the right
+   while the page scrolls, so the dots can be watched move as the controls
+   change. Every class is prefixed `whatif-` or `stage-`/`graph-column`
+   (all stylesheets load on every page). Motion only runs with the effects
+   switch on. */
+
+.stage-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.result-stage {
+  align-items: start;
+}
+
+.graph-column {
+  position: sticky;
+  top: var(--space-4);
+  min-width: 0;
+}
+
+/* The pinned graph and its legend have to fit one screen. */
+.graph-column .graph-stage {
+  max-height: min(80vh, calc(100vh - 200px));
+}
+
+@media (max-width: 960px) {
+  /* One column: the winner, then the graph, then the panel that drives it. */
+  .stage-main { display: contents; }
+  .stage-main > .card-featured { order: 1; }
+  .graph-column { order: 2; position: static; }
+  .whatif { order: 3; }
+}
+
+/* A scenario no model qualifies for: the picture is kept, but dimmed. */
+.decision-graph.is-empty .graph-stage {
+  opacity: 0.25;
+  filter: grayscale(0.8);
+  transition: opacity 300ms ease;
+}
+
+.whatif[hidden] {
+  display: none;
+}
+
+.whatif {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1.5px solid transparent;
+  border-radius: 20px;
+  background:
+    linear-gradient(165deg, color-mix(in srgb, var(--surface) 88%, var(--accent)), color-mix(in srgb, var(--surface) 94%, transparent)) padding-box,
+    linear-gradient(140deg, var(--accent), transparent 45%, var(--accent-secondary)) border-box;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 24px 60px -34px var(--accent), var(--shadow-md);
+}
+
+.whatif-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.whatif-glyph {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
+
+.whatif-glyph .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.whatif-head h2,
+.whatif-head p {
+  margin: 0;
+}
+
+.whatif .whatif-title {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.whatif .whatif-sub {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.whatif-reset {
+  margin-left: auto;
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font: 600 var(--text-xs) var(--font-sans);
+  cursor: pointer;
+}
+
+.whatif-reset:hover,
+.whatif-reset:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.whatif-field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.whatif-label {
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.whatif-segments {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--neutral-soft);
+}
+
+.whatif-segment {
+  padding: 8px 6px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font: 650 var(--text-xs) var(--font-sans);
+  cursor: pointer;
+  transition: background 200ms ease, color 200ms ease, box-shadow 200ms ease;
+}
+
+.whatif-segment[aria-checked="true"] {
+  background: linear-gradient(100deg, var(--accent), var(--accent-strong));
+  color: var(--accent-contrast);
+  box-shadow: 0 6px 18px -8px var(--accent);
+}
+
+.whatif-priorities {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.whatif-priority {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--neutral-soft);
+}
+
+.whatif-rank {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--accent);
+  font-size: 0.6875rem;
+  font-weight: 800;
+}
+
+.whatif-pname {
+  font-size: var(--text-sm);
+  font-weight: 650;
+}
+
+.whatif-icon {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.whatif-icon:hover:not(:disabled),
+.whatif-icon:focus-visible {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
+
+.whatif-icon:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.whatif-add select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text-secondary);
+  font: 600 var(--text-xs) var(--font-sans);
+}
+
+.whatif-add[hidden] {
+  display: none;
+}
+
+.whatif .whatif-headline {
+  min-height: 1.4em;
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.whatif .whatif-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+.whatif-note a {
+  color: var(--accent);
+  font-weight: 650;
+}
+
+.whatif-nearby-button {
+  padding: 9px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent-secondary) 55%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-secondary) 10%, transparent);
+  color: var(--text);
+  font: 700 var(--text-xs) var(--font-sans);
+  cursor: pointer;
+}
+
+.whatif-nearby-button:hover,
+.whatif-nearby-button:focus-visible {
+  border-color: var(--accent-secondary);
+}
+
+.whatif-nearby {
+  display: grid;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+}
+
+.whatif-nearby[hidden] {
+  display: none;
+}
+
+.whatif-nearby p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.whatif-nearby-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.whatif-nearby-change {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--neutral-soft);
+  color: var(--text-secondary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.whatif-nearby-change:hover,
+.whatif-nearby-change:focus-visible {
+  border-color: var(--accent);
+}
+
+.whatif-nearby-change strong {
+  color: var(--text);
+}
+
+.whatif-nearby-change em {
+  color: var(--muted);
+}
+
+html[data-effects="on"] {
+  & .whatif:not([hidden]) {
+    animation: whatif-in 600ms cubic-bezier(0.2, 0.8, 0.2, 1) 900ms both;
+  }
+
+  & .whatif-headline {
+    animation: whatif-fade 400ms ease both;
+  }
+}
+
+@keyframes whatif-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes whatif-fade {
+  from { opacity: 0.2; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .whatif-segment {
+    padding-inline: 2px;
+    font-size: 0.6875rem;
+  }
+}

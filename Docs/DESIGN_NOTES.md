@@ -324,6 +324,33 @@ while their routes quote "Yes" from the English page.
   second it falls back to `execCommand("copy")`, and if that fails too
   the button says to copy from the address bar.
 
+## What if… (2026-10-16)
+
+- **The graph stays in view while the controls move.** The first layout put
+  the panel under the graph; with a 443 px panel the graph left the screen
+  as soon as it was used. Now the panel sits under the winner's card on
+  the left and the graph column is `position: sticky` on the right. On a
+  phone (one column) the order is winner, graph, panel.
+- **Dots are created once and then move.** A dot per model is reused across
+  redraws; one that changes ring glides from where it was to where it now
+  belongs (FLIP, measured on screen because the rings rotate on their own);
+  the dot of the model that becomes the winner leaves its ring for the
+  centre. With the effects switch off the graph just updates. Whether the
+  glide looks right was only checked in the preview pane, which throttles
+  animations.
+- **An open detail card closes on a redraw** (it would be pointing at a dot
+  that is about to move).
+- **The panel answers with sentences, not numbers.** "Winner: A → B
+  (practically tied). 26 models qualify instead of 29." is read off the two
+  engine results; the only counts shown are counts of models.
+- **No continuous controls.** Budget is four levels and priorities are an
+  order, so there is nothing to slide without inventing precision. Language
+  is not offered: nobody changes language to see what happens, and moving
+  it hands the win to models (Muse Wonder, Qwen) for reasons that do not
+  help a decision.
+- **The panel needs JavaScript and says nothing without it:** it is hidden
+  until `whatif.js` has loaded, instead of showing controls that do nothing.
+
 ## Guiding principle
 
 The interface should feel like a precision instrument for making a

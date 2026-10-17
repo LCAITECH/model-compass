@@ -88,6 +88,13 @@ multiplier the provider publishes and any API credits they come with.
 Plan limits are shown as "not published in tokens", because no provider
 publishes them that way.
 
+### 7. What if…
+
+On a result, change the budget level or the order of your priorities and
+the decision graph redraws with the engine's answer for that context,
+with one sentence on what changed. "What would change the answer?" lists
+the single changes that would give a different winner.
+
 *Real screenshots from the app running locally against the live
 dataset — not mockups.*
 

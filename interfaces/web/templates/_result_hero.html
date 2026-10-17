@@ -1,6 +1,7 @@
 {% import "_icons.html" as icons -%}
 {% import "_notices.html" as notices -%}
 <section class="result-stage">
+<div class="stage-main">
 <div class="card card-featured reveal">
   <span class="reveal-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
   <div class="recommendation">
@@ -29,33 +30,25 @@
   <a class="compare-link" href="/compare?m={{ recommendation.recommended.id }}{% for alt in recommendation.alternatives %}&amp;m={{ alt.model.id }}{% endfor %}&amp;language={{ context.language }}{% if context.budget %}&amp;budget={{ context.budget.value }}{% endif %}{% for p in context.priorities %}&amp;priority_{{ loop.index }}={{ p.value }}{% endfor %}">Compare with the top alternatives &rarr;</a>
   {% endif %}
 </div>
+{% include "_result_whatif.html" %}
+</div>
 
-{% set tied_ids = recommendation.also_strong_options | map(attribute='model.id') | list %}
-{% set ns = namespace(tied=0, out=0) %}
-{% for o in recommendation.outranked %}{% if o.model.id in tied_ids %}{% set ns.tied = ns.tied + 1 %}{% else %}{% set ns.out = ns.out + 1 %}{% endif %}{% endfor %}
+{% set items = graph_items(recommendation) %}
+{% set counts = ring_counts(items) %}
+<div class="graph-column">
 <figure class="decision-graph" id="decision-graph" data-total-qualifying="{{ recommendation.total_qualifying }}">
   <div class="graph-stage"></div>
   <figcaption>
     <ul class="graph-legend">
       <li><span class="key key-center"></span>Recommended</li>
-      <li><span class="key key-alt"></span>Top alternatives ({{ recommendation.alternatives | length }})</li>
-      <li><span class="key key-tied"></span>Practically tied ({{ ns.tied }})</li>
-      <li><span class="key key-out"></span>Also qualify ({{ ns.out }})</li>
-      <li><span class="key key-ex"></span>Excluded ({{ recommendation.excluded | length }})</li>
+      <li><span class="key key-alt"></span>Top alternatives (<span data-ring-count="alt">{{ counts.alt }}</span>)</li>
+      <li><span class="key key-tied"></span>Practically tied (<span data-ring-count="tied">{{ counts.tied }}</span>)</li>
+      <li><span class="key key-out"></span>Also qualify (<span data-ring-count="out">{{ counts.out }}</span>)</li>
+      <li><span class="key key-ex"></span>Excluded (<span data-ring-count="ex">{{ counts.ex }}</span>)</li>
     </ul>
     <p class="muted">Every dot is a model in the catalog. The ring shows where it ranked for your context; position around a ring carries no meaning. Hover a dot for a quick look; click it to keep its details open and compare it with the winner.</p>
   </figcaption>
-  <ul class="graph-data" hidden>
-    <li data-ring="center" data-id="{{ recommendation.recommended.id }}" data-name="{{ recommendation.recommended.name }}" data-rank="1" {% set b = badges_for(recommendation.recommended) %} data-new="{{ 1 if b.new else 0 }}" data-promo="{{ b.promo.ends | short_date if b.promo else '' }}" data-retiring="{{ (b.retiring.shutdown_date | short_date if b.retiring.shutdown_date else 'routed') if b.retiring else '' }}" data-deprecated="{{ 1 if b.retiring and b.retiring.deprecated else 0 }}"></li>
-    {% for alt in recommendation.alternatives %}
-    <li data-ring="alt" data-id="{{ alt.model.id }}" data-name="{{ alt.model.name }}" data-rank="{{ alt.rank }}" data-tied="{{ 1 if alt.model.id in tied_ids else 0 }}" data-in="{{ '%.2f'|format(alt.model.cost.input_per_million) }}" data-out="{{ '%.2f'|format(alt.model.cost.output_per_million) }}" data-reasons='{{ alt.reasons | tojson }}' {% set b = badges_for(alt.model) %} data-new="{{ 1 if b.new else 0 }}" data-promo="{{ b.promo.ends | short_date if b.promo else '' }}" data-retiring="{{ (b.retiring.shutdown_date | short_date if b.retiring.shutdown_date else 'routed') if b.retiring else '' }}" data-deprecated="{{ 1 if b.retiring and b.retiring.deprecated else 0 }}"></li>
-    {% endfor %}
-    {% for o in recommendation.outranked %}
-    <li data-ring="{{ 'tied' if o.model.id in tied_ids else 'out' }}" data-id="{{ o.model.id }}" data-name="{{ o.model.name }}" data-rank="{{ o.rank }}" data-in="{{ '%.2f'|format(o.model.cost.input_per_million) }}" data-out="{{ '%.2f'|format(o.model.cost.output_per_million) }}" data-reasons='{{ o.reasons | tojson }}' {% set b = badges_for(o.model) %} data-new="{{ 1 if b.new else 0 }}" data-promo="{{ b.promo.ends | short_date if b.promo else '' }}" data-retiring="{{ (b.retiring.shutdown_date | short_date if b.retiring.shutdown_date else 'routed') if b.retiring else '' }}" data-deprecated="{{ 1 if b.retiring and b.retiring.deprecated else 0 }}"></li>
-    {% endfor %}
-    {% for e in recommendation.excluded %}
-    <li data-ring="ex" data-id="{{ e.model.id }}" data-name="{{ e.model.name }}" data-in="{{ '%.2f'|format(e.model.cost.input_per_million) }}" data-out="{{ '%.2f'|format(e.model.cost.output_per_million) }}" data-reasons='{{ e.reasons | tojson }}' {% set b = badges_for(e.model) %} data-new="{{ 1 if b.new else 0 }}" data-promo="{{ b.promo.ends | short_date if b.promo else '' }}" data-retiring="{{ (b.retiring.shutdown_date | short_date if b.retiring.shutdown_date else 'routed') if b.retiring else '' }}" data-deprecated="{{ 1 if b.retiring and b.retiring.deprecated else 0 }}"></li>
-    {% endfor %}
-  </ul>
+  {% include "_graph_data.html" %}
 </figure>
+</div>
 </section>

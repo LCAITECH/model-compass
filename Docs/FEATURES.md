@@ -121,6 +121,17 @@ place.
   link reruns on the current catalog, so a price or a model that changed
   in between can change the result; the result page says so next to its
   "Copy link" button. *(Added 2026-10-15.)*
+- **What if…** — on the result page, change the budget level or the
+  order of up to three priorities and watch the decision graph redraw:
+  the same engine runs on the new context, the dots move between rings,
+  and a sentence says what changed (the winner, how many models qualify,
+  who enters or leaves the top alternatives, and whether the old and new
+  winners are practically tied). "What would change the answer?" runs
+  every single-step change and lists only those that give a different
+  winner. The address and "Copy link" follow the scenario; "Back to my
+  context" returns. No scores, no confidence figures: a change is a
+  different named winner. Language is deliberately not a control.
+  *(Added 2026-10-16.)*
 
 ### Access
 

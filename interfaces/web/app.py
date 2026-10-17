@@ -29,6 +29,7 @@ from decision.loader import (
 from interfaces.web.access_context_form import access_context_from_form
 from interfaces.web.access_labels import guide_ref_url, humanize, requirement_label
 from interfaces.web.catalog_notices import badges_for, catalog_notices, short_date
+from interfaces.web.graph_data import graph_items, ring_counts
 from interfaces.web.affordability import (
     capacity_bar_widths,
     cheapest_qualifying_alternative,
@@ -54,6 +55,8 @@ from interfaces.web.model_profile import best_for, less_suited_for, quality_prof
 from interfaces.web.plans_view import plans_context
 from interfaces.web.use_case_matcher import match_use_case
 from interfaces.web.use_cases import USE_CASES
+from interfaces.web.whatif import options as whatif_options
+from interfaces.web.whatif_routes import make_router
 
 BASE_DIR = Path(__file__).resolve().parent
 DATASET_DIR = BASE_DIR.parent.parent / "dataset" / "models"
@@ -86,6 +89,12 @@ subscription_plan_names = {plan.plan_id: plan.plan_name for plan in subscription
 # midnight still counts days from the real "today".
 templates.env.globals["badges_for"] = lambda model: badges_for(model, models, date.today())
 templates.env.globals["catalog_notices"] = lambda: catalog_notices(models, date.today())
+templates.env.globals["graph_items"] = lambda recommendation: graph_items(
+    recommendation, lambda model: badges_for(model, models, date.today())
+)
+templates.env.globals["ring_counts"] = ring_counts
+templates.env.globals["whatif_options"] = whatif_options()
+app.include_router(make_router(models, lambda model: badges_for(model, models, date.today())))
 
 
 def _form_context(error: str | None = None) -> dict:

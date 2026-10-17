@@ -7,7 +7,7 @@ dimension), four fixed rings for SCHEMA.md's low/medium/high/very_high
 scale. A vertex always sits on a ring, never between two: the scale is
 discrete, so the drawing is too. The shape is not a score.
 
-Orbit: the same rings as the result page's decision graph (graph.js).
+Orbit: the same rings as the result page's decision graph (graph-draw.js).
 Every catalog model is a dot on the ring the engine put it in for the
 context; the selected models are lit. Angle inside a ring carries no
 meaning: dots are spread evenly.

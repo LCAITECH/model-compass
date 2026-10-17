@@ -36,7 +36,7 @@ SUBSCRIPTIONS_DIR = ROOT / "dataset" / "subscriptions"
 def visible_html(html: str) -> str:
     """The result page without the hidden .graph-data list that feeds the decision graph.
 
-    That list repeats every model's name and id on purpose (graph.js draws
+    That list repeats every model's name and id on purpose (graph-draw.js draws
     it), so a test about what the visitor reads must not count it.
     """
     return re.sub(r'<ul class="graph-data".*?</ul>', "", html, flags=re.S)
