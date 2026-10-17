@@ -1,0 +1,8 @@
+{#- The decision graph's hidden data list, one <li> per dot, built by
+    interfaces/web/graph_data.py. graph-draw.js reads it on load; the what-if
+    endpoint returns the same items as JSON. -#}
+<ul class="graph-data" hidden>
+  {% for it in items %}
+  <li data-ring="{{ it.ring }}" data-id="{{ it.id }}" data-name="{{ it.name }}"{% if it.rank is not none %} data-rank="{{ it.rank }}"{% endif %}{% if it.ring == 'alt' %} data-tied="{{ 1 if it.tied else 0 }}"{% endif %}{% if it.ring != 'center' %} data-in="{{ it.input }}" data-out="{{ it.output }}" data-reasons='{{ it.reasons | tojson }}'{% endif %} data-new="{{ 1 if it.is_new else 0 }}" data-promo="{{ it.promo }}" data-retiring="{{ it.retiring }}" data-deprecated="{{ 1 if it.deprecated else 0 }}"></li>
+  {% endfor %}
+</ul>

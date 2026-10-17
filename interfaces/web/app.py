@@ -29,6 +29,7 @@ from decision.loader import (
 from interfaces.web.access_context_form import access_context_from_form
 from interfaces.web.access_labels import guide_ref_url, humanize, requirement_label
 from interfaces.web.catalog_notices import badges_for, catalog_notices, short_date
+from interfaces.web.graph_data import graph_items, ring_counts
 from interfaces.web.affordability import (
     capacity_bar_widths,
     cheapest_qualifying_alternative,
@@ -86,6 +87,10 @@ subscription_plan_names = {plan.plan_id: plan.plan_name for plan in subscription
 # midnight still counts days from the real "today".
 templates.env.globals["badges_for"] = lambda model: badges_for(model, models, date.today())
 templates.env.globals["catalog_notices"] = lambda: catalog_notices(models, date.today())
+templates.env.globals["graph_items"] = lambda recommendation: graph_items(
+    recommendation, lambda model: badges_for(model, models, date.today())
+)
+templates.env.globals["ring_counts"] = ring_counts
 
 
 def _form_context(error: str | None = None) -> dict:

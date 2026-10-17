@@ -1,4 +1,4 @@
-/* The decision graph's detail card (graph.js): opened by clicking, tapping
+/* The decision graph's detail card (graph-card.js): opened by clicking, tapping
    or pressing Enter on a dot, it stays until closed, unlike the hover tip.
    While it is open, or while the pointer is over the graph, the rings stop
    so the dot being read doesn't slide away. */
