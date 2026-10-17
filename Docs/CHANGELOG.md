@@ -19,6 +19,19 @@ public release to version against.
 
 ---
 
+## 2026-10-16 — "What if…" on the result page
+
+**Interface only. No change to the engine, the dataset or the schema.**
+
+- **Try another budget or priority order without starting over.** A panel under the winner's card lets you pick one of the four budget levels and reorder, add or remove up to three priorities. The decision graph redraws with the engine's answer for that context, the dots move between rings, and one sentence says what changed: the winner, how many models qualify, who enters or leaves the top alternatives, and whether the old and new winners are practically tied.
+- **"What would change the answer?"** runs every single-step change (the other budget levels, each other priority first, swapping the top two) and lists only the ones that give a different winner, each with a click to apply it. If none does, it says the winner holds.
+- **The link follows what you are looking at.** The address and "Copy link" show the scenario; "Back to my context" restores both. The winner's card on the left stays your original result, and the panel says so.
+- **What it does not do:** no scores, percentages or confidence figures; a change is a different named winner. Language is not a control, and with a dollar budget (which never filters the ranking) only priorities can be explored.
+- **Under the hood:** two JSON endpoints (`/whatif`, `/whatif/neighbors`) that run the same `evaluate` and `explain`; the graph's data now comes from one builder used by the page and the endpoint; `graph.js` was split into three files so the graph can be redrawn. Pages render the same elements as before (checked on seven results).
+- **Tests:** 342 pass (24 new).
+
+---
+
 ## 2026-10-15 — Results have their own link
 
 **Interface only. No change to the engine or the dataset.**

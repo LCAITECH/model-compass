@@ -55,6 +55,8 @@ from interfaces.web.model_profile import best_for, less_suited_for, quality_prof
 from interfaces.web.plans_view import plans_context
 from interfaces.web.use_case_matcher import match_use_case
 from interfaces.web.use_cases import USE_CASES
+from interfaces.web.whatif import options as whatif_options
+from interfaces.web.whatif_routes import make_router
 
 BASE_DIR = Path(__file__).resolve().parent
 DATASET_DIR = BASE_DIR.parent.parent / "dataset" / "models"
@@ -91,6 +93,8 @@ templates.env.globals["graph_items"] = lambda recommendation: graph_items(
     recommendation, lambda model: badges_for(model, models, date.today())
 )
 templates.env.globals["ring_counts"] = ring_counts
+templates.env.globals["whatif_options"] = whatif_options()
+app.include_router(make_router(models, lambda model: badges_for(model, models, date.today())))
 
 
 def _form_context(error: str | None = None) -> dict:

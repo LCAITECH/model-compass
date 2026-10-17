@@ -1,6 +1,7 @@
 {% import "_icons.html" as icons -%}
 {% import "_notices.html" as notices -%}
 <section class="result-stage">
+<div class="stage-main">
 <div class="card card-featured reveal">
   <span class="reveal-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
   <div class="recommendation">
@@ -29,9 +30,12 @@
   <a class="compare-link" href="/compare?m={{ recommendation.recommended.id }}{% for alt in recommendation.alternatives %}&amp;m={{ alt.model.id }}{% endfor %}&amp;language={{ context.language }}{% if context.budget %}&amp;budget={{ context.budget.value }}{% endif %}{% for p in context.priorities %}&amp;priority_{{ loop.index }}={{ p.value }}{% endfor %}">Compare with the top alternatives &rarr;</a>
   {% endif %}
 </div>
+{% include "_result_whatif.html" %}
+</div>
 
 {% set items = graph_items(recommendation) %}
 {% set counts = ring_counts(items) %}
+<div class="graph-column">
 <figure class="decision-graph" id="decision-graph" data-total-qualifying="{{ recommendation.total_qualifying }}">
   <div class="graph-stage"></div>
   <figcaption>
@@ -46,4 +50,5 @@
   </figcaption>
   {% include "_graph_data.html" %}
 </figure>
+</div>
 </section>

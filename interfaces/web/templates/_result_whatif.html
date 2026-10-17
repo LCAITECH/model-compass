@@ -1,0 +1,45 @@
+{% import "_icons.html" as icons -%}
+{#- "What if...": the same engine on another budget or priority order, drawn
+    on the graph above. Hidden until whatif.js (which does all the work) has
+    loaded: without JavaScript it would be controls that do nothing. -#}
+<section class="whatif" data-whatif hidden aria-labelledby="whatif-title"
+  data-base-query="{{ share_url }}"
+  data-budget="{{ context.budget.value if context.budget else '' }}"
+  data-priorities='{{ context.priorities | map(attribute="value") | list | tojson }}'
+  data-options='{{ whatif_options | tojson }}'>
+  <header class="whatif-head">
+    <span class="whatif-glyph" aria-hidden="true">{{ icons.swap() }}</span>
+    <div>
+      <h2 id="whatif-title" class="whatif-title">What if&hellip;</h2>
+      <p class="whatif-sub">Same engine, different context.</p>
+    </div>
+    <button type="button" class="whatif-reset" data-whatif-reset hidden>Back to my context</button>
+  </header>
+
+  {% if context.budget %}
+  <div class="whatif-field" role="radiogroup" aria-label="Budget">
+    <span class="whatif-label">Budget</span>
+    <div class="whatif-segments" data-whatif-budgets></div>
+  </div>
+  {% else %}
+  <p class="whatif-note">Your monthly budget in dollars never filters or weighs the ranking, so only the priorities can be explored here.</p>
+  {% endif %}
+
+  <div class="whatif-field">
+    <span class="whatif-label" id="whatif-priorities-label">Priorities, most important first</span>
+    <ol class="whatif-priorities" data-whatif-priorities aria-labelledby="whatif-priorities-label"></ol>
+    <label class="whatif-add" data-whatif-add-wrap>
+      <span class="sr-only">Add a priority</span>
+      <select data-whatif-add></select>
+    </label>
+  </div>
+
+  <p class="whatif-headline" data-whatif-headline aria-live="polite"></p>
+  <p class="whatif-note" data-whatif-scenario-note hidden>The result on the left is still for your original context.
+    <a data-whatif-open href="#">Open this scenario as the main result &rarr;</a></p>
+
+  <div class="whatif-actions">
+    <button type="button" class="whatif-nearby-button" data-whatif-nearby>What would change the answer?</button>
+  </div>
+  <div class="whatif-nearby" data-whatif-nearby-box hidden aria-live="polite"></div>
+</section>
