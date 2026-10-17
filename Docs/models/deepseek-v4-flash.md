@@ -140,3 +140,20 @@ page now lists `deepseek-flash` as DeepSeek-V4.1-Flash with Vision ✓
 and peak cache-miss $0.30/$1.20. Legacy `deepseek-v4-flash` is still
 accepted but retired as a distinct model. Dataset `cost.*` and
 `capabilities.vision` updated accordingly.
+
+**2026-10-17 re-audit (model version, no field change):** DeepSeek's
+change log (https://api-docs.deepseek.com/updates, 2026-10-17) says
+"DeepSeek V4.1 Flash has been upgraded to DeepSeek-V4.1-Flash-1017 ...
+The API calling method and pricing remain unchanged — simply use
+deepseek-flash to access the latest model." The Models & Pricing page now
+shows model version DeepSeek-V4.1-Flash-1017 for `deepseek-flash`, with
+the same context (1M), max output (384K), Vision ✓ and peak cache-miss
+$0.30/$1.20, and legacy `deepseek-v4-flash` requests are "served by the
+DeepSeek-V4.1-Flash-1017 model and billed at the Flash price". The
+release note (https://api-docs.deepseek.com/news/news261017) links open
+weights on Hugging Face, so `license: open-weights` holds. No dataset
+value changed: `release_date` stays 2026-09-10, the first API
+availability of V4.1 Flash, since 1017 is an update of the same model
+under the same id. The release note publishes benchmark scores only; the
+quality ratings are not re-derived from them (`SCHEMA.md`) and are left
+as they are for the owner.

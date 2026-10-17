@@ -19,6 +19,15 @@ public release to version against.
 
 ---
 
+## 2026-10-17 — Gemini 4 Argon in AI Studio on Google AI Pro; DeepSeek Flash 1017
+
+**Dataset only. No change to the engine, the schema or the site.**
+
+- **Gemini 4 Argon now counts Google AI Pro for AI Studio.** Google dropped the line saying Argon was not available on AI Pro: its pricing page now says only "Gemini 4 Argon is not available on the Free tier", and its AI plans page lists Argon among AI Pro's premium models. The AI Studio route for Argon, Ultra-only since 2026-10-14, now also lists AI Pro. It still has no free access, and its API price is unchanged.
+- **DeepSeek V4.1 Flash is now served as DeepSeek-V4.1-Flash-1017.** DeepSeek upgraded the model behind `deepseek-flash` on 2026-10-17 and says the calling method and prices are unchanged. Context, max output, vision and the stored peak price were checked and match, so no value changed; the entry's notes record the new version.
+
+---
+
 ## 2026-10-16 — "What if…" on the result page
 
 **Interface only. No change to the engine, the dataset or the schema.**
