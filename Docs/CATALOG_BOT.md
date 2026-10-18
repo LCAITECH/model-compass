@@ -36,6 +36,8 @@ what is specific to an automated run and what has broken bot PRs before.
   and `Docs/IMPLEMENTATION_NOTES.md` always conflict.
 - Skip everything listed under "Owner work in progress" at the end of
   this file.
+- Read the last 60 days of `Docs/CATALOG_NEWS_LOG.md` before reporting
+  any news item, tip or change (section 10).
 
 ## 2. Sources
 
@@ -165,7 +167,8 @@ only).
 **Never edit:** `decision/`, `interfaces/`, any other file in `tests/`,
 `Docs/SCHEMA.md`, `Docs/ARCHITECTURE.md`, `Docs/VISION.md`,
 `Docs/ROADMAP.md`, `Docs/FEATURES.md`, `Docs/CONTRIBUTING.md`,
-`Docs/DESIGN_NOTES.md`, `README.md`, `pyproject.toml`, this file.
+`Docs/DESIGN_NOTES.md`, `Docs/CATALOG_NEWS_LOG.md`, `README.md`,
+`pyproject.toml`, this file.
 
 - **`Docs/models/{id}.md`:** add or update the section that changed.
   The rest stays as it is: the "Why" columns, per-field notes and
@@ -212,6 +215,33 @@ Don't reopen these; raise new evidence under "Owner decision needed".
 | A plan page's model name matches an entry through the provider's own model list | Iteration #34 |
 | Plans: list price, multiplier in the provider's words, no token limits | Iteration #31 |
 | Text and code LLMs only | `VISION.md` |
+
+## 10. The review log: what has already been checked
+
+`Docs/CATALOG_NEWS_LOG.md` lists the news items and tips the owner's
+review has already checked, each with an outcome (Applied, No change, Not
+admitted, Owner decision pending, Outside scope). Only the owner and the
+owner's reviewer write to it, after reading the provider's own page. You
+never edit it, so a report of yours cannot mark itself as handled.
+
+- Before you report a news item, tip or change, in a PR or in any digest,
+  look it up in the last 60 days of the log. If it is listed and the
+  provider's page still says what the entry records, don't report it
+  again. If you must mention it, one line under "Already on main" or
+  "Already reviewed" is enough.
+- If the provider's page now differs from what the entry records, report
+  it as new: quote the entry and say what changed. New evidence is a new
+  official page, price, date, availability or snapshot. An AI-written
+  summary repeating the same claim is not.
+- Never copy a value from the log into a YAML file. Values come from the
+  provider's page (section 2) or from `main`.
+- "Owner decision pending" means no PR. Raise the item again only with
+  new evidence, under "Owner decision needed".
+- Don't report what does not touch a catalog provider's text or code
+  model, price, limit, plan or retirement: funding rounds, policy,
+  lawsuits, research results, voice, image, video or music models, and
+  hosting platforms. If you want to mention one, a single line under
+  "Not included" is enough.
 
 ## Owner work in progress
 
