@@ -8,7 +8,7 @@ access:
 eligibility:
   requirements:
     - kind: consumer_subscription
-      value: [google-ai-ultra-5x, google-ai-ultra-20x]
+      value: [google-ai-pro, google-ai-ultra-5x, google-ai-ultra-20x]
   region_scope: account_dependent
 economics:
   billing_owner: Google
@@ -17,6 +17,6 @@ economics:
   production_allowed: false
 evidence:
   source_url: https://ai.google.dev/gemini-api/docs/google-ai-plans
-  consulted_at: "2026-10-14"
+  consulted_at: "2026-10-17"
   status: confirmed
-  caveat: "Ultra only: Google's Gemini API docs say 'Gemini 4 Argon is not available on the Free or Google AI Pro plans', and the AI Ultra support page lists 'highest limits with Gemini 4 Argon models' in AI Studio. The plan's AI Studio quota covers the web interface only; a paid API key linked inside AI Studio is billed separately as API usage."
+  caveat: "Included with Google AI Pro and both Ultra tiers, with the highest limits on Ultra. Not available on the free plan. The plan's quota applies only in the AI Studio web interface; use through an API key, including one linked inside AI Studio, is billed separately as API usage."

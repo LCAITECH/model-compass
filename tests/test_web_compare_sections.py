@@ -125,7 +125,9 @@ def test_access_rows_group_routes_by_surface_and_name_the_plans(models, access_r
     ]
     fable_studio, argon_studio = _row(sections, "Studio")["cells"]
     assert (fable_studio["chips"], fable_studio["text"], fable_studio["tone"]) == ((), "Not documented", "muted")
-    assert [chip["detail"] for chip in argon_studio["chips"]] == ["Google AI Ultra 5x or Google AI Ultra 20x"]
+    assert [chip["detail"] for chip in argon_studio["chips"]] == [
+        "Google AI Pro or Google AI Ultra 5x or Google AI Ultra 20x"
+    ]
     fable_api, argon_api = _row(sections, "Direct API")["cells"]
     assert [chip["label"] for chip in argon_api["chips"]] == ["Google API"]
     assert fable_api["chips"][0]["href"].endswith("anthropic.md#anthropicdirect-api")

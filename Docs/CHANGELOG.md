@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-17 — Gemini 4 Argon in AI Studio is included with Google AI Pro
+
+**Dataset correction. No change to the engine or the schema.**
+
+- **Argon in AI Studio no longer needs Ultra.** Google updated its plans and pricing pages on 2026-10-16: Google AI Pro now lists Gemini 4 Argon, and only the free plan is excluded. We had recorded it as Ultra-only. The AI Studio route now accepts AI Pro as well as both Ultra tiers (Ultra keeps the highest limits), so a developer with AI Pro sees it as available instead of "needs onboarding".
+- **What did not change:** the Gemini API route and its price ($2/$10 through 2026-11-30, then $4/$20) are as before; the plan's quota still applies only inside the AI Studio web interface and API use is billed separately. The API route's note no longer says "or with Google AI Pro".
+- **Tests:** 343 pass (one new); the two tests that assumed "Ultra only" now expect AI Pro too.
+
+---
+
 ## 2026-10-16 — "What if…" on the result page
 
 **Interface only. No change to the engine, the dataset or the schema.**

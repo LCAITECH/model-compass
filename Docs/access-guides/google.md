@@ -36,7 +36,7 @@ Sources: [Google AI Pro](https://support.google.com/googleone/answer/14534406?hl
 
 Currently listed as a Google AI Pro/Ultra benefit.
 
-1. Subscribe to Google AI Pro or one of the two Ultra tiers (Google One). Some models are Ultra-only here (for example Gemini 4 Argon).
+1. Subscribe to Google AI Pro or one of the two Ultra tiers (Google One). Ultra has the highest limits for the newest models (for example Gemini 4 Argon); the free plan does not include them.
 2. Open Google AI Studio with that account.
 3. If you link a paid API key inside AI Studio, its usage is billed
    separately as API usage.
@@ -45,4 +45,4 @@ Currently listed as a Google AI Pro/Ultra benefit.
    Pro, 40 on Ultra 5x, 100 on Ultra 20x, through the Google Developer
    Program) that apply to Cloud services, including the Gemini API.
 
-Sources: [Google One restrictions](https://support.google.com/googleone/answer/16105039?hl=en-en), consulted 2026-08-11; [Google AI plans and the Gemini API](https://ai.google.dev/gemini-api/docs/google-ai-plans), consulted 2026-10-14.
+Sources: [Google One restrictions](https://support.google.com/googleone/answer/16105039?hl=en-en), consulted 2026-08-11; [Google AI plans and the Gemini API](https://ai.google.dev/gemini-api/docs/google-ai-plans), consulted 2026-10-17.

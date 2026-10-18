@@ -12,7 +12,7 @@ from decision.loader import load_access_routes, load_subscriptions
 from tests.conftest import ACCESS_ROUTES_DIR, SUBSCRIPTIONS_DIR
 
 OPUS = "claude-opus-5-5"  # $4 / $20 per 1M; on Claude Pro, Max 5x, Max 20x
-ARGON = "gemini-4-argon"  # Gemini app on AI Pro and Ultra, AI Studio on Ultra only
+ARGON = "gemini-4-argon"  # Gemini app and AI Studio, both on AI Pro and Ultra
 NO_PLAN = "deepseek-v4-pro"  # no documented subscription route
 
 
@@ -52,12 +52,22 @@ def test_credits_count_only_where_the_plan_includes_them(by_id, routes, plans):
     assert options["claude-max-20x"].base_price_usd == 20
 
 
-def test_a_plan_route_on_one_surface_only_still_counts(by_id, routes, plans):
+def test_a_plan_lists_every_surface_that_names_the_model(by_id, routes, plans):
     options = {option.plan.plan_id: option for option in _compare(by_id, routes, plans, ARGON).options}
 
-    assert len(options["google-ai-pro"].routes) == 1  # Gemini app only; AI Studio is Ultra-only
-    assert len(options["google-ai-ultra-5x"].routes) == 2
+    # Gemini app and AI Studio, on AI Pro and on both Ultra tiers.
+    assert {plan_id: len(option.routes) for plan_id, option in options.items()} == {
+        "google-ai-pro": 2,
+        "google-ai-ultra-5x": 2,
+        "google-ai-ultra-20x": 2,
+    }
     assert options["google-ai-pro"].credits_usd == 10
+
+
+def test_a_plan_route_on_one_surface_only_still_counts(by_id, routes, plans):
+    options = {option.plan.plan_id: option for option in _compare(by_id, routes, plans, OPUS).options}
+
+    assert len(options["claude-pro"].routes) == 1  # a single route is enough for the plan to be listed
 
 
 def test_building_an_app_always_points_to_the_api(by_id, routes, plans):
