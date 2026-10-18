@@ -394,3 +394,11 @@ phases of the [Roadmap](./ROADMAP.md).
   review of the catalog bot's PRs) is the schedule. Still missing:
   anything that notices a change the dataset doesn't know about yet (a
   new price, a new deprecation), which is (b).
+  **2026-10-17, (b) partly in place:** `Docs/CATALOG_NEWS_LOG.md` is the
+  memory of the manual intake channel: every tip that gets reviewed has a
+  row with its outcome, and the bot reads it (`CATALOG_BOT.md`, section 10)
+  so it stops repeating what was already checked. Still missing: anything
+  that notices a change the dataset doesn't know about without a tip. One
+  data point: Google changed which plans include Gemini 4 Argon on
+  2026-10-16, two days after the dataset recorded AI Studio as Ultra-only,
+  and plan eligibility has no date alarm.

@@ -19,6 +19,18 @@ public release to version against.
 
 ---
 
+## 2026-10-17 — A review log, so the catalog bot stops repeating what was already checked
+
+**Documentation only. No change to the engine, the dataset or the schema.**
+
+- **The problem.** The bot already compared its findings with `main`, which only covers what ended up as a dataset change. News that was checked and needed no change (a price that was already right, a field the schema has no place for, a model waiting on an owner decision) left no trace, so it came back in the next digest.
+- **A log of what was checked.** `Docs/CATALOG_NEWS_LOG.md` records each item with an outcome (applied, no change, not admitted, waiting for the owner, outside scope) and what was checked. Only the owner or their reviewer writes to it, after reading the provider's own page; the bot reads it and never edits it. It records outcomes, never values: nothing is copied from it into a model file.
+- **The bot's rule.** `CATALOG_BOT.md` has a new section: look an item up in the last 60 days of the log before reporting it; if the provider's page still says what the entry records, don't repeat it; new evidence (a new official page, price, date or snapshot) reopens it. It also lists what isn't worth reporting: funding, policy, lawsuits, research, voice, image or video models, and hosting platforms.
+- **First entries.** The 2026-10-17 review: the Argon correction below, DeepSeek-V4.1-Flash-1017 (price already right), Claude Opus 5.5 fast mode (no field in the schema), two retirement claims that match nothing in the catalog, and the open-weights and new-provider releases that wait for an owner decision.
+- **Tests:** none affected; 343 pass.
+
+---
+
 ## 2026-10-17 — Gemini 4 Argon in AI Studio is included with Google AI Pro
 
 **Dataset correction. No change to the engine or the schema.**
