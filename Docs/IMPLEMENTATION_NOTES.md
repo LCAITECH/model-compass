@@ -1332,6 +1332,37 @@ separate top-tier models: that needs an evidence source for "better than
 (`FEATURES.md`, "Static Model Comparator") is the non-engine way to show
 the differences the scale cannot rank.
 
+**Update 2026-10-19 (the cause above was wrong)**
+"The cheaper model wins" holds only when the developer ranks `cost`. Checked
+with the real engine on the 43-model dataset (English, `very_high` budget,
+`coding` then `reasoning`): 17 of the 33 qualifying models tie at the top
+score (1.0000), because every ranked dimension sits at `very_high`, and ties
+keep the dataset's load order, which is the file-name alphabetical order of
+`dataset/models/` (the tied candidates came out in exactly that order). So
+`claude-fable-5-1` ($60 blended per million tokens) is first,
+`deepseek-v4-pro` ($5.28) ninth, `gemini-4-argon` twelfth, `gpt-6-1-sol`
+fourteenth and `gpt-6-astra` ($60) fifteenth: price does not decide it, and
+the models ahead of Argon are not all cheaper, contrary to the Observation. Price
+enters the ranking only when `cost` is one of the developer's ranked
+priorities. The tie-break is the alphabetical one already seen when Budget
+was redesigned (Fase 6 in `HANDOFF.md`), which "Also strong options" was
+built to soften. That list holds the runners-up within 2% of the winner's
+score whose quality is at most one level below the winner's on every
+dimension (`ALSO_STRONG_SCORE_GAP` and `_passes_quality_floor` in
+`decision/explainer/explainer.py`): in this context it has 11 models,
+including `gpt-6-1-sol` and `gpt-6-astra`, but not a tied model that sits two
+levels lower on a dimension the developer did not rank, such as
+`gemini-4-argon` (`medium` in creative writing against the winner's
+`very_high`). Where the models qualify at all is a separate matter: the
+budget bands are on input plus output price per million tokens, so
+`gpt-6-astra` ($60) only qualifies at a `very_high` budget and `gpt-6-1-sol`
+($12) from `high`.
+
+Owner decision (2026-10-19): leave the tie-break as it is, with "Also strong
+options" as the safety net. No `SCHEMA.md`, `decision/` or dataset change.
+Wherever the decision above says "tie broken by price", read "tie broken by
+dataset order". Status unchanged: open, accepted limitation.
+
 ## Iteration #28
 
 **Observation**

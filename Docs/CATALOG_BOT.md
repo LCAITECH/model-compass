@@ -206,7 +206,7 @@ Don't reopen these; raise new evidence under "Owner decision needed".
 | DeepSeek `cost.*` stores the peak-hours rate | YAML comments of the DeepSeek entries |
 | Prices by prompt length store the lower tier | Iteration #24 |
 | `max_output: null` when the provider publishes no ceiling | Iteration #26 |
-| The quality scale stops at `very_high`; ties are broken by price | Iteration #27 |
+| The quality scale stops at `very_high`; ties keep dataset order (alphabetical by file name), not price, with "Also strong options" as the net | Iteration #27, update 2026-10-19 |
 | `deprecated` and `restricted` models are never recommended | Iterations #28, #29 |
 | Gemini 2.5 is `restricted`, successors picked by the owner | Iteration #29 |
 | `release_date` sourcing | Iteration #30 |
