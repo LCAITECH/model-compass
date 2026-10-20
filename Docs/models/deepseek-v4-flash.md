@@ -108,6 +108,8 @@ pricing docs (same page cited below) make no mention of any free tier
 
 - [DeepSeek Models & Pricing](https://api-docs.deepseek.com/quick_start/pricing) — cost fields, context window, max output.
 - [DeepSeek List Models API](https://api-docs.deepseek.com/api/list-models) — confirmed `deepseek-v4-flash` is a currently listed model ID.
+- [DeepSeek updates](https://api-docs.deepseek.com/updates) and [DeepSeek-V4.1-Flash-1017 release note](https://api-docs.deepseek.com/news/news261017) — snapshot name, open weights link (read 2026-10-17 and 2026-10-19).
+- [Hugging Face: deepseek-ai/DeepSeek-V4.1-Flash-1017](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) — license metadata (MIT), read 2026-10-19.
 
 Pricing/models page re-fetched 2026-10-05 for V4.1-Flash rates and vision; earlier passes 2026-08-07 / 2026-08-27. Official DeepSeek documentation only.
 
@@ -140,3 +142,24 @@ page now lists `deepseek-flash` as DeepSeek-V4.1-Flash with Vision ✓
 and peak cache-miss $0.30/$1.20. Legacy `deepseek-v4-flash` is still
 accepted but retired as a distinct model. Dataset `cost.*` and
 `capabilities.vision` updated accordingly.
+
+**2026-10-19 re-audit (model snapshot, no field change):** DeepSeek's
+Models & Pricing page (raw HTML, read 2026-10-17) lists `deepseek-flash` with
+model version DeepSeek-V4.1-Flash-1017 and the values already stored: context
+1M, max output 384K, Vision ✓, peak cache-miss $0.30/$1.20 (off-peak
+$0.15/$0.60). A footnote on https://api-docs.deepseek.com/updates (read
+2026-10-19) says "It is now served by DeepSeek-V4.1-Flash-1017, and the
+calling method remains unchanged", and that requests to the legacy names are
+served by it at the Flash price. The release note
+(https://api-docs.deepseek.com/news/news261017, raw HTML, 2026-10-17) announces
+the update and links the open weights on Hugging Face; the Hugging Face
+metadata of `deepseek-ai/DeepSeek-V4.1-Flash-1017`, DeepSeek's own
+organization, says license MIT, so `license: open-weights` holds. No value
+changed: `release_date` stays 2026-09-10 (first API availability of V4.1 Flash;
+1017 is an update of the same model) and the `version` field has no place for a
+snapshot name. The release note publishes benchmark scores only; quality
+ratings are not derived from them (`SCHEMA.md`) and stay as they are. The
+Search and Fetch APIs ($0.75 per 1,000 calls) have no field in the schema.
+Prompted by the catalog bot's PR #7 (closed): the sentence that PR quoted from
+the updates page ("has been upgraded to ...") was not found there and is not
+used here.

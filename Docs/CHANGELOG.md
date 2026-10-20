@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-19 — DeepSeek V4.1 Flash is now served as the 1017 snapshot (no value changed)
+
+**Dataset comments and docs only. No change to the engine, the schema or any stored value.**
+
+- **A new snapshot, same numbers.** DeepSeek moved `deepseek-flash` to DeepSeek-V4.1-Flash-1017 on 2026-10-17. Its pricing page shows the same context (1M), maximum output (384K), vision support and prices, so nothing stored changed. The entry's comments and `Docs/models/deepseek-v4-flash.md` now name the snapshot and record that its open weights are MIT-licensed on Hugging Face.
+- **Where it came from.** The catalog bot proposed the same note in a pull request that also repeated the Gemini 4 Argon change already on `main`. That pull request conflicted with `main`, so the DeepSeek part was applied directly and the pull request was closed.
+- **Tests:** none affected; 343 pass.
+
+---
+
 ## 2026-10-17 — A review log, so the catalog bot stops repeating what was already checked
 
 **Documentation only. No change to the engine, the dataset or the schema.**
