@@ -58,7 +58,8 @@ def test_loads_all_real_access_routes():
     # + 1 (gemini-3.1-pro-preview in the Gemini app) 2026-10-15: Google's
     #   API model list gives the id the name the plan pages use (Iteration #34).
     # + 1 direct_api route 2026-10-22: qwen3.7-flash (Iteration #36).
-    assert len(routes) == 100
+    # + 1 (gemini-4-argon in Google Antigravity) 2026-10-22 (Iteration #37).
+    assert len(routes) == 101
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
     assert len(model_ids_with_direct_api) == 44

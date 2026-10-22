@@ -1809,3 +1809,53 @@ claim, `medium` elsewhere for lack of any claim.
 
 **Status**
 Proposed in the bot PR of 2026-10-22, pending the owner's review.
+
+---
+
+## Iteration #37
+
+**Observation**
+Iteration #6 kept models surfaced through Google Antigravity out of the
+dataset for two reasons: Antigravity's docs published "only
+subscription-tier rate limits", no per-token price, and a forum thread
+claimed that "Antigravity's model labels don't reliably match what's
+actually deployed". Its revisit condition: "Revisit if Google ever ships
+Antigravity models through the standard token-priced Gemini API".
+
+On 2026-10-22 Google names an existing entry in Antigravity on two of its
+own pages:
+
+- The Google One plans page: "Expanded access to Gemini 4 Argon in Google
+  Antigravity and Google AI Studio" (AI Pro), "Higher access to Gemini 4
+  Argon in Google Antigravity and Google AI Studio" (AI Ultra), and an
+  "Access to Gemini 4 Argon" row under Google Antigravity.
+- Antigravity's models page, "Reasoning model" table: Gemini 4 Argon not
+  on "Free & Google AI Plus", on Google AI Pro ("Available on Google AI
+  Pro for non-trial subscriptions only") and on Google AI Ultra; "Not
+  available in Antigravity IDE. Available in the Antigravity App,
+  Antigravity CLI, and IDE extensions."
+
+Iteration #6 was about admitting models that only Antigravity exposes.
+Gemini 4 Argon is already an entry, priced and sourced on the Gemini API,
+so the first reason does not apply to a route: routes carry no price. The
+second is about labels; Google's own Gemini API model list gives
+`gemini-4-argon` the exact name both pages use, which is the match rule
+of Iteration #34. As with the Gemini app, Google does not say Antigravity
+serves the API snapshot.
+
+**Current decision**
+Proposed, not decided (owner request, 2026-10-22): one route,
+`gemini-4-argon-antigravity`, with the shape the schema already has for
+the Gemini app (`consumer_subscription` surface; requirement
+`consumer_subscription` on `google-ai-pro`, `google-ai-ultra-5x`,
+`google-ai-ultra-20x`; `subscription_quota`; not for production). No
+schema or code change. A new `google#antigravity` section in the Google
+access guide. The Pro trial exclusion and the IDE exclusion are in the
+caveat, since the schema has no field for either.
+
+Not proposed: the same table lists other entries in Antigravity (Gemini
+3.8 Flash on every plan, Claude Sonnet 5.5 and Opus 5.5 "(Thinking)" on
+Pro and Ultra). They were not part of the owner's request.
+
+**Status**
+Proposed in the bot PR of 2026-10-22, pending the owner's review.

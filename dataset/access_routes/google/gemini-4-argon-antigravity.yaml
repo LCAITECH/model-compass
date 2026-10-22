@@ -1,0 +1,34 @@
+provider: Google
+model_id: gemini-4-argon
+access:
+  surface: consumer_subscription
+  access_method: "Google Antigravity (app, CLI and IDE extensions), signed in with a Google AI plan"
+  capabilities: [prototype, build]
+  guide_ref: google#antigravity
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [google-ai-pro, google-ai-ultra-5x, google-ai-ultra-20x]
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://antigravity.google/docs/models
+  consulted_at: "2026-10-22"
+  status: confirmed
+  caveat: "Included with Google AI Pro (paid subscriptions, not the trial) and both Ultra tiers; not on the free plan or Google AI Plus. Available in the Antigravity app, CLI and IDE extensions, but not in the Antigravity IDE itself. Use draws from a five-hour and weekly quota that Google does not publish in tokens; Pro and Ultra can buy AI credits for usage beyond it. Google does not state that the model in Antigravity is the same snapshot as the API model; the match is by the exact name on its pages."
+# Sources, read 2026-10-22:
+# - https://antigravity.google/docs/models, "Reasoning model" table: Gemini 4 Argon
+#   "❌" for "Free & Google AI Plus", "✅" for Google AI Pro (note "Available on
+#   Google AI Pro for non-trial subscriptions only"), "✅" for Google AI Ultra;
+#   note "Not available in Antigravity IDE. Available in the Antigravity App,
+#   Antigravity CLI, and IDE extensions."
+# - https://antigravity.google/docs/plans: five-hour and weekly quotas, AI credits for overages.
+# - https://one.google.com/intl/en_us/about/google-ai-plans/: "Expanded access to Gemini 4
+#   Argon in Google Antigravity and Google AI Studio" (AI Pro), "Higher access to Gemini 4
+#   Argon in Google Antigravity and Google AI Studio" (AI Ultra).
+# - Name match (Iteration #34): https://ai.google.dev/gemini-api/docs/models gives the id
+#   gemini-4-argon the name "Gemini 4 Argon".

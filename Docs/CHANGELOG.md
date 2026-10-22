@@ -19,6 +19,17 @@ public release to version against.
 
 ---
 
+## 2026-10-22 — Proposed: Gemini 4 Argon in Google Antigravity
+
+**One access route and a guide section, proposed for the owner's review. No change to the engine, the schema or any model value.**
+
+- **What Google says.** Its plans page now lists Gemini 4 Argon in Google Antigravity on AI Pro and AI Ultra, and Antigravity's own models page shows which plans get it: AI Pro (paid, not the trial) and Ultra, not the free plan or AI Plus, and not in the Antigravity IDE itself (the app, CLI and IDE extensions only).
+- **What changes here.** A new route shows Antigravity as a third way to use Argon on those plans, next to the Gemini app and AI Studio, with the same "not for production" status. `Docs/access-guides/google.md` gets an Antigravity section.
+- **Why it was out before.** Iteration #6 kept Antigravity-only models out because they had no per-token price and their labels were unreliable. Argon is already a priced entry, and Google's own pages now use its exact name (Iteration #37).
+- **Tests:** route count updated (101). One plan-comparison test that counts Argon's plan routes now sees three surfaces instead of two; it is left as it is for the owner.
+
+---
+
 ## 2026-10-22 — Proposed: Qwen3.7-Flash
 
 **Dataset addition, proposed for the owner's review. No change to the engine or the schema.**
