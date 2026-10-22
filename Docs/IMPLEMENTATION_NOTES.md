@@ -1768,3 +1768,44 @@ change.
 
 **Status**
 Applied. Closed.
+
+---
+
+## Iteration #36
+
+**Observation**
+Iteration #33 (2026-10-15) did not admit Qwen3.7-Flash, recording:
+"Qwen3.7-Flash is not in Model Studio's catalog." On 2026-10-22 Alibaba
+Cloud's own pages list it:
+
+- A model page, `model-studio/qwen3-7-flash` ("Last Updated:Oct 11,
+  2026"), under Model List, Text Generation: capabilities, context
+  limits (1,000,000 context, 131,072 output), pricing by scope, rate
+  limits and the snapshot `qwen3.7-flash-2026-07-15`.
+- Model Studio's pricing page lists `qwen3.7-flash` ("Currently
+  equivalent to qwen3.7-flash-2026-07-15"), International scope, in three
+  tiers by input length: $0.03/$0.13 up to 32k, $0.10/$0.40 to 256k,
+  $0.20/$0.80 to 1M.
+- "Model lifecycle and updates" (`newly-released-models`) dates its
+  International release 2026-07-21, and adds a US deployment scope on
+  2026-10-08 ("qwen3.7-flash is now available with the US deployment
+  scope in the US (Virginia) region").
+
+The release date shows the model was on Model Studio before Iteration
+#33's pass, so that pass most likely missed it rather than Alibaba
+adding it since. Model Studio's "Recommended models" overview does not
+list it (it lists `qwen3.8-flash`), which may be where it was looked for.
+
+**Current decision**
+Proposed, not decided: the owner asked on 2026-10-22 for every open
+owner-decision item to be proposed in the bot PR for review. The entry
+follows the existing Qwen choices: International (Singapore) scope, the
+lowest price tier as the one a typical first request hits (Iteration
+#24), the curated Qwen language list (Iteration #33), `json_mode` on the
+same basis as `qwen3.8-max`. The quality ratings are the bot's judgment
+from Alibaba's own description, recorded with their evidence in
+`Docs/models/qwen3.7-flash.md`: `coding: high` on its explicit coding
+claim, `medium` elsewhere for lack of any claim.
+
+**Status**
+Proposed in the bot PR of 2026-10-22, pending the owner's review.

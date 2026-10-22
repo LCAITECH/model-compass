@@ -19,6 +19,17 @@ public release to version against.
 
 ---
 
+## 2026-10-22 — Proposed: Qwen3.7-Flash
+
+**Dataset addition, proposed for the owner's review. No change to the engine or the schema.**
+
+- **Why now.** In October's admissions pass Qwen3.7-Flash stayed out because it could not be found in Alibaba's model catalog. It is there: Alibaba's model page, pricing page and release table list it, released internationally on 2026-07-21.
+- **What it is.** Alibaba's cheapest Qwen model in this catalog: a multimodal Flash model (text, image and video in, text out) with a 1M-token context and 131K output, at $0.03/$0.13 per million tokens for inputs up to 32K (longer inputs cost more, up to $0.20/$0.80).
+- **Ratings.** Coding is rated high on Alibaba's own coding claim; reasoning, writing and instruction following are medium because its page makes no claim for them. These are proposals, explained in `Docs/models/qwen3.7-flash.md` and Iteration #36.
+- **Tests:** model and route counts updated (44 models, 100 routes).
+
+---
+
 ## 2026-10-22 — Muse Wonder is not available in South Korea
 
 **Dataset text and docs only. No change to the engine, the schema or any stored value.**
