@@ -78,6 +78,22 @@ schema stores one rate, so it holds the tier a typical request hits, as
 for `claude-haiku-5-5` (Iteration #24). Cached input $0.08/M on the lower
 tier.
 
+**Limited-time discount, noted 2026-10-22 (owner request).** Model
+Studio's pricing page shows `qwen3.7-plus` (International) as "List price
+$0.4 (Limited-time 20% off)" for input and "List price $1.6
+(Limited-time 20% off)" for output on the lower tier (and the same label
+on $1.20/$4.80 above 256k), with no end date. The snapshot
+`qwen3.7-plus-2026-05-26` is listed at $0.4/$1.6 with no discount label,
+and the model page shows "the original pricing ... excluding any
+limited-time promotions". The dataset keeps the list price: a
+temporary price can only be stored with `cost.effective_until` and
+`cost.reverts_to`, and those need a date the provider publishes
+(`SCHEMA.md`, Cost; Iteration #13), which Alibaba does not. The same
+rule kept Mistral Large 4's undated sale price out (Iteration #33). If
+Alibaba publishes an end date, the discounted price can be stored with
+it. Source: https://www.alibabacloud.com/help/en/model-studio/model-pricing,
+read 2026-10-22.
+
 ## Ecosystem `[Editorial]`
 
 | Field                | Value    | Why |
