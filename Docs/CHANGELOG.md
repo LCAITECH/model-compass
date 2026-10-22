@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-22 — Muse Wonder is not available in South Korea
+
+**Dataset text and docs only. No change to the engine, the schema or any stored value.**
+
+- **What Meta added.** Meta's models page now says "Muse Wonder and Muse Wonder Full aren't currently available in South Korea, on Model API or in Muse Code." Until now it only pointed to its Geographic Use Policy for country restrictions.
+- **What changed here.** The caveat on Muse Wonder's API route, which the result page shows, now names South Korea; the route was already marked as region-dependent, so no field moved. `Docs/models/muse-wonder-1.0.md` and the Meta access guide say the same.
+- **Tests:** none affected; 343 pass.
+
+---
+
 ## 2026-10-19 — DeepSeek V4.1 Flash is now served as the 1017 snapshot (no value changed)
 
 **Dataset comments and docs only. No change to the engine, the schema or any stored value.**

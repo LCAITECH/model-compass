@@ -103,6 +103,11 @@ country", Geographic Use Policy). Rate limits are per team: 3,000 RPM,
 4,000,000 TPM. Also in Muse Code, pay-as-you-go or any plan; no
 subscription route, since this catalog has no Muse Code plans.
 
+**South Korea (2026-10-22):** Meta's models page now names one country:
+"Muse Wonder and Muse Wonder Full aren't currently available in South
+Korea, on Model API or in Muse Code." The route's caveat says so; its
+`region_scope` was already `region_dependent`, so no field changed.
+
 **Free access (`access.has_free_access`):** `false`. No free API tier
 and no free consumer plan names the model.
 
@@ -120,7 +125,8 @@ deprecation or shutdown published.
 - [Put your ideas to work with Muse Wonder and Muse Wonder Full](https://dev.meta.ai/resources/blog/build-with-muse-wonder) — release date, audio note.
 - [Structured output](https://dev.meta.ai/docs/structured-output) and [Quickstart](https://dev.meta.ai/docs/quickstart).
 
-All accessed 2026-10-15, Meta's own pages only.
+All accessed 2026-10-15, Meta's own pages only; the models page re-read
+on 2026-10-22 for the South Korea note.
 
 ## Verification result
 
