@@ -115,6 +115,19 @@ API pricing page lists this model's standard input/output as "Free of
 charge" under the free tier — confirmed directly against
 `ai.google.dev/gemini-api/docs/pricing`, 2026-08-09.
 
+**Gemini app route, proposed 2026-10-22 (owner request).** Google's
+plans page names this model on Google AI Plus: "Gemini app with access
+to Gemini 3.6 Flash and limited access to Gemini Omni Flash", and "Access
+to Gemini 3.6 Flash and Deep Research in Gemini" on the Plus card. The
+Gemini API model list gives `gemini-3.6-flash` the same name, so the
+plan page names this entry (Iteration #34). The route
+`gemini-3.6-flash-gemini-app` lists Plus and, by the page's own wording,
+AI Pro ("everything in Plus") and both Ultra tiers ("everything in
+Google AI Pro"); neither of those plans names the model directly, so the
+owner may prefer Plus only. Google AI Plus is a new plan in the catalog
+(`dataset/subscriptions/google/google-ai-plus.yaml`, US $4.99 a month).
+`has_free_access` was already `true` through the API free tier.
+
 **How to access:**
 
 1. Sign in with a Google account.
@@ -169,6 +182,7 @@ the Paid Tier explicitly states the opposite).
 - [Gemini API rate limits](https://ai.google.dev/gemini-api/docs/rate-limits) — RPM/TPM/RPD definitions and per-project/per-model behavior.
 - [Gemini API billing](https://ai.google.dev/gemini-api/docs/billing) — Free vs. Paid Tier requirements.
 - [Gemini API quickstart](https://ai.google.dev/gemini-api/docs/quickstart) — access setup steps.
+- [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/) — the model in the Gemini app on Google AI Plus (read 2026-10-22).
 - Google AI Studio rate-limit dashboard (`aistudio.google.com/rate-limit`) — one project's observed Free Tier limits, 2026-08-09. Account-specific, not a public document — see caveat above.
 
 Identity/capabilities/cost/quality fields accessed 2026-08-07; Access

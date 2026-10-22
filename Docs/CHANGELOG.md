@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-22 — Proposed: Google AI Plus, with Gemini 3.6 Flash in the Gemini app
+
+**One plan and one access route, proposed for the owner's review. No change to the engine, the schema or any model value.**
+
+- **The plan.** Google AI Plus, Google's cheapest AI plan, at the US list price of $4.99 a month. Google publishes its "2x" usage only against having no AI plan, so no multiplier is stored, and it includes no Google Cloud credits. It does not include Gemini 4 Argon.
+- **The route.** Google's plans page lists the "Gemini app with access to Gemini 3.6 Flash" on AI Plus, the exact name Google's API model list gives `gemini-3.6-flash`. The route lists Plus and, since Pro and Ultra include "everything in Plus", those plans too; the owner may prefer Plus only.
+- **Tests:** route and plan counts updated (102 routes, 11 plans). The test that lists every plan id by name is not a count and is left as it is for the owner.
+
+---
+
 ## 2026-10-22 — Proposed: Gemini 4 Argon in Google Antigravity
 
 **One access route and a guide section, proposed for the owner's review. No change to the engine, the schema or any model value.**

@@ -25,12 +25,14 @@ Ultra 20x give 5x or 20x the AI Pro quota.
 
 1. Subscribe to Google AI Pro or one of the two Ultra tiers (Google One),
    at [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/).
+   Google AI Plus (US $4.99 a month) also includes the Gemini app, with
+   Gemini 3.6 Flash but not Gemini 4 Argon.
 2. Open the Gemini app with that account and pick the model.
 3. The app quota is not usable through the Gemini API; API use is billed
    separately (see `google#direct-api`), although the plans include
    Google Cloud credits that apply to it.
 
-Sources: [Google AI Pro](https://support.google.com/googleone/answer/14534406?hl=en) and [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/), consulted 2026-10-14.
+Sources: [Google AI Pro](https://support.google.com/googleone/answer/14534406?hl=en) and [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/), consulted 2026-10-14; Google AI Plus from the same plans page and [Google AI Plus](https://support.google.com/googleone/answer/16548195), consulted 2026-10-22.
 
 ## `google#ai-studio`
 
