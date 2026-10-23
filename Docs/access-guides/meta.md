@@ -12,7 +12,8 @@ the OpenAI SDK and the Anthropic SDK, so most stacks need only a base
 URL (`https://api.meta.ai/v1`) and a key. Availability varies by
 country: check Meta's
 [Geographic Use Policy](https://dev.meta.ai/legal/geographic-use-policy)
-first.
+first. Muse Wonder is not currently available in South Korea, on Model
+API or in Muse Code.
 
 1. Sign in at [dev.meta.ai](https://dev.meta.ai) and set up
    pay-as-you-go billing.
@@ -27,4 +28,5 @@ first.
 
 Source: [Models](https://dev.meta.ai/docs/models) and
 [Pricing and rate limits](https://dev.meta.ai/docs/pricing-rate-limits),
-consulted 2026-10-15.
+consulted 2026-10-15; the South Korea note from the Models page,
+2026-10-22.

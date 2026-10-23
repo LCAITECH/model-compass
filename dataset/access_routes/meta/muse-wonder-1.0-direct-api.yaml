@@ -16,6 +16,9 @@ economics:
   production_allowed: true
 evidence:
   source_url: https://dev.meta.ai/docs/models
-  consulted_at: "2026-10-15"
+  consulted_at: "2026-10-22"
   status: confirmed
-  caveat: "Pay-as-you-go on Meta Model API, Standard mode only (Contributor mode is not offered for Muse Wonder). The model is in preview. Availability varies by country (Meta's Geographic Use Policy). Rate limits apply per team, not per key. Muse Wonder Full, the higher-capability variant, is only in Muse Code with a subscription and is not this model."
+  caveat: "Pay-as-you-go on Meta Model API, Standard mode only (Contributor mode is not offered for Muse Wonder). The model is in preview. Not currently available in South Korea; elsewhere, availability varies by country (Meta's Geographic Use Policy). Rate limits apply per team, not per key. Muse Wonder Full, the higher-capability variant, is only in Muse Code with a subscription and is not this model."
+# South Korea, read 2026-10-22 on https://dev.meta.ai/docs/models:
+# "Muse Wonder and Muse Wonder Full aren't currently available in South Korea,
+# on Model API or in Muse Code."

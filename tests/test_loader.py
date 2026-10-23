@@ -48,13 +48,14 @@ EXPECTED_IDS = {
     "muse-spark-1.3",
     "qwen3.8-flash",
     "qwen3.7-plus",
+    "qwen3.7-flash",
 }
 
 
 def test_loads_all_real_models():
     models = load_dataset(DATASET_DIR)
 
-    assert len(models) == 43  # +muse-wonder-1.0, muse-spark-1.3, qwen3.8-flash, qwen3.7-plus (2026-10-15)
+    assert len(models) == 44  # +muse-wonder-1.0, muse-spark-1.3, qwen3.8-flash, qwen3.7-plus (2026-10-15); +qwen3.7-flash (2026-10-22)
     assert all(isinstance(model, AIModel) for model in models)
     assert {model.id for model in models} == EXPECTED_IDS
 

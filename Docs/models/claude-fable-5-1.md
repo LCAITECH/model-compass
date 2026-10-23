@@ -122,6 +122,24 @@ re-checked for `claude-fable-5-1` this pass — **one did not confirm**:
   updated; not treated as "no Vertex access exists," just "not
   citable yet."
 
+**Update 2026-10-23: Google Cloud Vertex AI confirmed, route added.**
+Google's own model page for Fable 5.1
+([docs.cloud.google.com/.../partner-models/claude/fable-5-1](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/fable-5-1),
+read as raw HTML on 2026-10-23, "Last updated 2026-10-22 UTC") now says
+"Model ID claude-fable-5-1", "Launch stage GA", "Release date:
+September 1, 2026", available on the United States and Europe
+multi-regions and the global endpoint; Google's
+[Claude on Google Cloud](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-claude)
+overview lists "Anthropic's Claude Fable 5.1 on Google Cloud". This
+closes the documentation-lag gap recorded above (Iteration #16's
+"revisit once Google's page is updated"):
+`dataset/access_routes/anthropic/claude-fable-5-1-gcp-vertex.yaml` is
+added, built from `claude-fable-5-gcp-vertex.yaml` with its evidence
+re-read for 5.1. The direct-API route's caveat no longer says Vertex
+doesn't list the model. The `integration_ease` rating stays `high`;
+the earlier note above that 3 of 4 surfaces were confirmed is kept as
+the record of that pass.
+
 Access route YAML files added for the four confirmed surfaces only,
 same pattern as `claude-fable-5`'s own five (see
 `dataset/access_routes/anthropic/claude-fable-5-*.yaml` for the

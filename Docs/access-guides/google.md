@@ -25,12 +25,14 @@ Ultra 20x give 5x or 20x the AI Pro quota.
 
 1. Subscribe to Google AI Pro or one of the two Ultra tiers (Google One),
    at [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/).
+   Google AI Plus (US $4.99 a month) also includes the Gemini app, with
+   Gemini 3.6 Flash but not Gemini 4 Argon.
 2. Open the Gemini app with that account and pick the model.
 3. The app quota is not usable through the Gemini API; API use is billed
    separately (see `google#direct-api`), although the plans include
    Google Cloud credits that apply to it.
 
-Sources: [Google AI Pro](https://support.google.com/googleone/answer/14534406?hl=en) and [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/), consulted 2026-10-14.
+Sources: [Google AI Pro](https://support.google.com/googleone/answer/14534406?hl=en) and [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/), consulted 2026-10-14; Google AI Plus from the same plans page and [Google AI Plus](https://support.google.com/googleone/answer/16548195), consulted 2026-10-22.
 
 ## `google#ai-studio`
 
@@ -46,3 +48,24 @@ Currently listed as a Google AI Pro/Ultra benefit.
    Program) that apply to Cloud services, including the Gemini API.
 
 Sources: [Google One restrictions](https://support.google.com/googleone/answer/16105039?hl=en-en), consulted 2026-08-11; [Google AI plans and the Gemini API](https://ai.google.dev/gemini-api/docs/google-ai-plans), consulted 2026-10-17.
+
+## `google#antigravity`
+
+Google Antigravity, Google's agentic development platform (app, CLI, IDE
+and IDE extensions), signed in with a Google AI plan. Which models you
+can pick depends on the plan; usage draws from a quota refreshed every
+five hours and capped weekly, not published in tokens.
+
+1. Subscribe to Google AI Pro (a paid subscription, not the trial) or one
+   of the two Ultra tiers for models such as Gemini 4 Argon; the free plan
+   and Google AI Plus get a smaller model set.
+2. Install Antigravity and sign in with that account
+   ([Quickstart](https://antigravity.google/docs)).
+3. Pick the model in the model selector. Gemini 4 Argon is not offered in
+   the Antigravity IDE itself, only in the app, the CLI and the IDE
+   extensions.
+4. On Pro and Ultra, usage beyond the quota can draw on purchased AI
+   credits. Antigravity offers no bring-your-own-key option, and its quota
+   is not usable through the Gemini API.
+
+Sources: [Antigravity models](https://antigravity.google/docs/models) and [Antigravity plans](https://antigravity.google/docs/plans), consulted 2026-10-22.

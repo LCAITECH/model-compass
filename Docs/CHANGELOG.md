@@ -19,6 +19,58 @@ public release to version against.
 
 ---
 
+## 2026-10-23 — Claude Fable 5.1 is now on Google Cloud Vertex AI
+
+**Dataset and docs only. No change to the engine or the schema.**
+
+- **A missing route, now citable.** When Fable 5.1 entered the catalog on 2026-09-01, Google Cloud's pages did not list it yet, so only the direct API, AWS Bedrock and Microsoft Foundry routes were added. Google's own model page for Fable 5.1 now lists it as generally available (model id `claude-fable-5-1`, US and Europe multi-regions and the global endpoint), so the Vertex AI route is added, the same as Fable 5's.
+- **Caveat corrected.** The direct-API route no longer tells visitors that Vertex doesn't list the model.
+- **Tests:** the route count goes from 102 to 103.
+
+---
+
+## 2026-10-22 — Proposed: Google AI Plus, with Gemini 3.6 Flash in the Gemini app
+
+**One plan and one access route, proposed for the owner's review. No change to the engine, the schema or any model value.**
+
+- **The plan.** Google AI Plus, Google's cheapest AI plan, at the US list price of $4.99 a month. Google publishes its "2x" usage only against having no AI plan, so no multiplier is stored, and it includes no Google Cloud credits. It does not include Gemini 4 Argon.
+- **The route.** Google's plans page lists the "Gemini app with access to Gemini 3.6 Flash" on AI Plus, the exact name Google's API model list gives `gemini-3.6-flash`. The route lists Plus and, since Pro and Ultra include "everything in Plus", those plans too; the owner may prefer Plus only.
+- **Tests:** route and plan counts updated (102 routes, 11 plans). The test that lists every plan id by name is not a count and is left as it is for the owner.
+
+---
+
+## 2026-10-22 — Proposed: Gemini 4 Argon in Google Antigravity
+
+**One access route and a guide section, proposed for the owner's review. No change to the engine, the schema or any model value.**
+
+- **What Google says.** Its plans page now lists Gemini 4 Argon in Google Antigravity on AI Pro and AI Ultra, and Antigravity's own models page shows which plans get it: AI Pro (paid, not the trial) and Ultra, not the free plan or AI Plus, and not in the Antigravity IDE itself (the app, CLI and IDE extensions only).
+- **What changes here.** A new route shows Antigravity as a third way to use Argon on those plans, next to the Gemini app and AI Studio, with the same "not for production" status. `Docs/access-guides/google.md` gets an Antigravity section.
+- **Why it was out before.** Iteration #6 kept Antigravity-only models out because they had no per-token price and their labels were unreliable. Argon is already a priced entry, and Google's own pages now use its exact name (Iteration #37).
+- **Tests:** route count updated (101). One plan-comparison test that counts Argon's plan routes now sees three surfaces instead of two; it is left as it is for the owner.
+
+---
+
+## 2026-10-22 — Proposed: Qwen3.7-Flash
+
+**Dataset addition, proposed for the owner's review. No change to the engine or the schema.**
+
+- **Why now.** In October's admissions pass Qwen3.7-Flash stayed out because it could not be found in Alibaba's model catalog. It is there: Alibaba's model page, pricing page and release table list it, released internationally on 2026-07-21.
+- **What it is.** Alibaba's cheapest Qwen model in this catalog: a multimodal Flash model (text, image and video in, text out) with a 1M-token context and 131K output, at $0.03/$0.13 per million tokens for inputs up to 32K (longer inputs cost more, up to $0.20/$0.80).
+- **Ratings.** Coding is rated high on Alibaba's own coding claim; reasoning, writing and instruction following are medium because its page makes no claim for them. These are proposals, explained in `Docs/models/qwen3.7-flash.md` and Iteration #36.
+- **Tests:** model and route counts updated (44 models, 100 routes).
+
+---
+
+## 2026-10-22 — Muse Wonder is not available in South Korea
+
+**Dataset text and docs only. No change to the engine, the schema or any stored value.**
+
+- **What Meta added.** Meta's models page now says "Muse Wonder and Muse Wonder Full aren't currently available in South Korea, on Model API or in Muse Code." Until now it only pointed to its Geographic Use Policy for country restrictions.
+- **What changed here.** The caveat on Muse Wonder's API route, which the result page shows, now names South Korea; the route was already marked as region-dependent, so no field moved. `Docs/models/muse-wonder-1.0.md` and the Meta access guide say the same.
+- **Tests:** none affected; 343 pass.
+
+---
+
 ## 2026-10-19 — DeepSeek V4.1 Flash is now served as the 1017 snapshot (no value changed)
 
 **Dataset comments and docs only. No change to the engine, the schema or any stored value.**

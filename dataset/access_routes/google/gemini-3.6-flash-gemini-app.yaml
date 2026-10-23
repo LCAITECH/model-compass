@@ -1,0 +1,31 @@
+provider: Google
+model_id: gemini-3.6-flash
+access:
+  surface: consumer_subscription
+  access_method: "Gemini app (web and mobile), signed in with a Google AI plan"
+  capabilities: [prototype]
+  guide_ref: google#gemini-app
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [google-ai-plus, google-ai-pro, google-ai-ultra-5x, google-ai-ultra-20x]
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://one.google.com/intl/en_us/about/google-ai-plans/
+  consulted_at: "2026-10-22"
+  status: confirmed
+  caveat: "Google's plans page lists the 'Gemini app with access to Gemini 3.6 Flash' on Google AI Plus, and AI Pro and Ultra include everything in Plus. Use draws from the app quota, which is not published in tokens. Google does not state that the model in its apps is the same snapshot as the API model; the match is by the exact name on its page."
+# Sources, read 2026-10-22:
+# - https://one.google.com/intl/en_us/about/google-ai-plans/: "Google AI Plus gives
+#   you more access to Google AI, including: Gemini app with access to Gemini 3.6
+#   Flash and limited access to Gemini Omni Flash"; card: "Access to Gemini 3.6
+#   Flash and Deep Research in Gemini." Pro and Ultra by reference: "Google AI Pro
+#   gives you everything in Plus, with expanded access to Google AI", "Google AI
+#   Ultra gives you a higher level of access to everything in Google AI Pro".
+# - Name match (Iteration #34): https://ai.google.dev/gemini-api/docs/models gives
+#   the id gemini-3.6-flash the name "Gemini 3.6 Flash".

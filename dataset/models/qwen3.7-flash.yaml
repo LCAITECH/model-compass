@@ -1,0 +1,76 @@
+id: qwen3.7-flash
+name: Qwen3.7-Flash
+provider: Alibaba Cloud
+version: "3.7"
+license: proprietary
+
+# Model page, Model Capabilities (Singapore, "Scope: International"): Input
+# Modality "Image Text Video", Output Modality "Text"; Function Calling and
+# Structured Outputs "Supported". json_mode not itemized, same basis as
+# qwen3.8-max.
+# Source: https://www.alibabacloud.com/help/en/model-studio/qwen3-7-flash (checked 2026-10-22).
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+
+# Editorial, proposed 2026-10-22 for owner review; reasoning per field in
+# Docs/models/qwen3.7-flash.md.
+quality:
+  reasoning: medium
+  coding: high
+  creative_writing: medium
+  instruction_following: medium
+
+# Alibaba publishes no per-model language list; the curated Qwen set
+# (qwen3.8-max, reused for every Qwen entry per Iteration #33).
+languages: [en, zh, es, fr, de, ja, ko, ar, ru, pt]
+language_quality:
+  en: very_high
+  zh: very_high
+  es: high
+  fr: high
+  de: high
+  ja: medium
+  ko: medium
+  ar: medium
+  ru: medium
+  pt: high
+
+# Model page, Context Limits: "Context Window 1000000", "Max Output Length
+# 131072" (also 131072 in thinking mode).
+# Source: https://www.alibabacloud.com/help/en/model-studio/qwen3-7-flash (checked 2026-10-22).
+operational:
+  context_window: 1000000
+  max_output: 131072
+
+# Three tiers by input length; the schema stores one, so this is the tier a
+# typical first request hits, inputs up to 32k tokens (Iteration #24).
+# International (Singapore) scope, same scope choice as qwen3.8-max.
+# 32k-256k: $0.10/$0.40; 256k-1M: $0.20/$0.80.
+# Source: https://www.alibabacloud.com/help/en/model-studio/qwen3-7-flash (checked 2026-10-22),
+# same figures on https://www.alibabacloud.com/help/en/model-studio/model-pricing.
+cost:
+  input_per_million: 0.03
+  output_per_million: 0.13
+
+ecosystem:
+  integration_ease: high
+  maturity: stable
+
+# The Singapore free quota (1 million tokens, valid 90 days) is a one-time
+# allowance, not continuous free access (SCHEMA.md, Access).
+access:
+  has_free_access: false
+
+# Release date: https://www.alibabacloud.com/help/en/model-studio/newly-released-models
+# (Singapore table, International, 2026-07-21; not the 2026-07-15 date in the
+# id of its snapshot qwen3.7-flash-2026-07-15). Checked 2026-10-22.
+lifecycle:
+  status: active
+  release_date: "2026-07-21"
+  shutdown_date: null
+  replacement: null

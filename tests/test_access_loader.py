@@ -57,17 +57,23 @@ def test_loads_all_real_access_routes():
     #   muse-spark-1.3 (Meta Model API), qwen3.8-flash and qwen3.7-plus.
     # + 1 (gemini-3.1-pro-preview in the Gemini app) 2026-10-15: Google's
     #   API model list gives the id the name the plan pages use (Iteration #34).
-    assert len(routes) == 99
+    # + 1 direct_api route 2026-10-22: qwen3.7-flash (Iteration #36).
+    # + 1 (gemini-4-argon in Google Antigravity) 2026-10-22 (Iteration #37).
+    # + 1 (gemini-3.6-flash in the Gemini app, Google AI Plus) 2026-10-22.
+    # + 1 (claude-fable-5-1 on Google Cloud Vertex AI) 2026-10-23: Google's
+    #   own model page now lists it (Iteration #16's revisit).
+    assert len(routes) == 103
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
-    assert len(model_ids_with_direct_api) == 43
+    assert len(model_ids_with_direct_api) == 44
 
 
 def test_loads_all_real_subscriptions():
     plans = load_subscriptions(SUBSCRIPTIONS_DIR)
 
     # Max and Ultra split into their 5x/20x tiers, ChatGPT added (2026-10-14).
-    assert len(plans) == 10
+    # + google-ai-plus (2026-10-22).
+    assert len(plans) == 11
     assert all(isinstance(plan, SubscriptionPlan) for plan in plans)
     assert {plan.plan_id for plan in plans} == {
         "google-ai-pro",
