@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-23 — Claude Fable 5.1 is now on Google Cloud Vertex AI
+
+**Dataset and docs only. No change to the engine or the schema.**
+
+- **A missing route, now citable.** When Fable 5.1 entered the catalog on 2026-09-01, Google Cloud's pages did not list it yet, so only the direct API, AWS Bedrock and Microsoft Foundry routes were added. Google's own model page for Fable 5.1 now lists it as generally available (model id `claude-fable-5-1`, US and Europe multi-regions and the global endpoint), so the Vertex AI route is added, the same as Fable 5's.
+- **Caveat corrected.** The direct-API route no longer tells visitors that Vertex doesn't list the model.
+- **Tests:** the route count goes from 102 to 103.
+
+---
+
 ## 2026-10-22 — Proposed: Google AI Plus, with Gemini 3.6 Flash in the Gemini app
 
 **One plan and one access route, proposed for the owner's review. No change to the engine, the schema or any model value.**

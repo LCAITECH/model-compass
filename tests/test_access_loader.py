@@ -60,7 +60,9 @@ def test_loads_all_real_access_routes():
     # + 1 direct_api route 2026-10-22: qwen3.7-flash (Iteration #36).
     # + 1 (gemini-4-argon in Google Antigravity) 2026-10-22 (Iteration #37).
     # + 1 (gemini-3.6-flash in the Gemini app, Google AI Plus) 2026-10-22.
-    assert len(routes) == 102
+    # + 1 (claude-fable-5-1 on Google Cloud Vertex AI) 2026-10-23: Google's
+    #   own model page now lists it (Iteration #16's revisit).
+    assert len(routes) == 103
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
     assert len(model_ids_with_direct_api) == 44
