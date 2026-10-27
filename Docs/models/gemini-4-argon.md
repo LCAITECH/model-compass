@@ -142,6 +142,21 @@ Gemini API key") agrees, without naming a tier. That dialog is a UI
 screen, not a source; the plans page is. Vertex / Gemini Enterprise Agent
 Platform availability was not verified, so no cloud route is added.
 
+**Antigravity route, proposed 2026-10-22 (owner request, Iteration #37).**
+Google now names the model in Antigravity on two of its own pages. The
+Google One plans page: "Expanded access to Gemini 4 Argon in Google
+Antigravity and Google AI Studio" (AI Pro) and "Higher access to Gemini 4
+Argon in Google Antigravity and Google AI Studio" (AI Ultra).
+Antigravity's models page, "Reasoning model" table: Argon is not
+available on "Free & Google AI Plus", available on Google AI Pro
+("non-trial subscriptions only") and on Google AI Ultra, and "Not
+available in Antigravity IDE. Available in the Antigravity App,
+Antigravity CLI, and IDE extensions." The route
+`gemini-4-argon-antigravity` uses the same shape as the Gemini app route
+(a `consumer_subscription` surface on the three plans, not for
+production). Antigravity's quota is refreshed every five hours with a
+weekly cap, not published in tokens (Antigravity plans page).
+
 ## Sources
 
 - https://ai.google.dev/gemini-api/docs/models/gemini-4-argon — identity, modalities, token limits, capabilities, stability (page updated 2026-10-13 UTC).
@@ -151,6 +166,8 @@ Platform availability was not verified, so no cloud route is added.
 - https://ai.google.dev/gemini-api/docs/models — "Stable" label.
 - https://ai.google.dev/gemini-api/docs/rate-limits — batch limits.
 - https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/ — positioning, Ultra mention, Fairwind context (dated 2026-09-30).
+- https://antigravity.google/docs/models and https://antigravity.google/docs/plans — Antigravity availability by plan and quotas (read 2026-10-22).
+- https://one.google.com/intl/en_us/about/google-ai-plans/ — Argon in Antigravity on AI Pro and Ultra (read 2026-10-22).
 
 All accessed 2026-10-14.
 

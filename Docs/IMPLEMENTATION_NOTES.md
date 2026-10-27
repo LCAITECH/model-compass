@@ -1768,3 +1768,130 @@ change.
 
 **Status**
 Applied. Closed.
+
+---
+
+## Iteration #36
+
+**Observation**
+Iteration #33 (2026-10-15) did not admit Qwen3.7-Flash, recording:
+"Qwen3.7-Flash is not in Model Studio's catalog." On 2026-10-22 Alibaba
+Cloud's own pages list it:
+
+- A model page, `model-studio/qwen3-7-flash` ("Last Updated:Oct 11,
+  2026"), under Model List, Text Generation: capabilities, context
+  limits (1,000,000 context, 131,072 output), pricing by scope, rate
+  limits and the snapshot `qwen3.7-flash-2026-07-15`.
+- Model Studio's pricing page lists `qwen3.7-flash` ("Currently
+  equivalent to qwen3.7-flash-2026-07-15"), International scope, in three
+  tiers by input length: $0.03/$0.13 up to 32k, $0.10/$0.40 to 256k,
+  $0.20/$0.80 to 1M.
+- "Model lifecycle and updates" (`newly-released-models`) dates its
+  International release 2026-07-21, and adds a US deployment scope on
+  2026-10-08 ("qwen3.7-flash is now available with the US deployment
+  scope in the US (Virginia) region").
+
+The release date shows the model was on Model Studio before Iteration
+#33's pass, so that pass most likely missed it rather than Alibaba
+adding it since. Model Studio's "Recommended models" overview does not
+list it (it lists `qwen3.8-flash`), which may be where it was looked for.
+
+**Current decision**
+Proposed, not decided: the owner asked on 2026-10-22 for every open
+owner-decision item to be proposed in the bot PR for review. The entry
+follows the existing Qwen choices: International (Singapore) scope, the
+lowest price tier as the one a typical first request hits (Iteration
+#24), the curated Qwen language list (Iteration #33), `json_mode` on the
+same basis as `qwen3.8-max`. The quality ratings are the bot's judgment
+from Alibaba's own description, recorded with their evidence in
+`Docs/models/qwen3.7-flash.md`: `coding: high` on its explicit coding
+claim, `medium` elsewhere for lack of any claim.
+
+**Status**
+Proposed in the bot PR of 2026-10-22, pending the owner's review.
+
+---
+
+## Iteration #37
+
+**Observation**
+Iteration #6 kept models surfaced through Google Antigravity out of the
+dataset for two reasons: Antigravity's docs published "only
+subscription-tier rate limits", no per-token price, and a forum thread
+claimed that "Antigravity's model labels don't reliably match what's
+actually deployed". Its revisit condition: "Revisit if Google ever ships
+Antigravity models through the standard token-priced Gemini API".
+
+On 2026-10-22 Google names an existing entry in Antigravity on two of its
+own pages:
+
+- The Google One plans page: "Expanded access to Gemini 4 Argon in Google
+  Antigravity and Google AI Studio" (AI Pro), "Higher access to Gemini 4
+  Argon in Google Antigravity and Google AI Studio" (AI Ultra), and an
+  "Access to Gemini 4 Argon" row under Google Antigravity.
+- Antigravity's models page, "Reasoning model" table: Gemini 4 Argon not
+  on "Free & Google AI Plus", on Google AI Pro ("Available on Google AI
+  Pro for non-trial subscriptions only") and on Google AI Ultra; "Not
+  available in Antigravity IDE. Available in the Antigravity App,
+  Antigravity CLI, and IDE extensions."
+
+Iteration #6 was about admitting models that only Antigravity exposes.
+Gemini 4 Argon is already an entry, priced and sourced on the Gemini API,
+so the first reason does not apply to a route: routes carry no price. The
+second is about labels; Google's own Gemini API model list gives
+`gemini-4-argon` the exact name both pages use, which is the match rule
+of Iteration #34. As with the Gemini app, Google does not say Antigravity
+serves the API snapshot.
+
+**Current decision**
+Proposed, not decided (owner request, 2026-10-22): one route,
+`gemini-4-argon-antigravity`, with the shape the schema already has for
+the Gemini app (`consumer_subscription` surface; requirement
+`consumer_subscription` on `google-ai-pro`, `google-ai-ultra-5x`,
+`google-ai-ultra-20x`; `subscription_quota`; not for production). No
+schema or code change. A new `google#antigravity` section in the Google
+access guide. The Pro trial exclusion and the IDE exclusion are in the
+caveat, since the schema has no field for either.
+
+Not proposed: the same table lists other entries in Antigravity (Gemini
+3.8 Flash on every plan, Claude Sonnet 5.5 and Opus 5.5 "(Thinking)" on
+Pro and Ultra). They were not part of the owner's request.
+
+**Status**
+Proposed in the bot PR of 2026-10-22, pending the owner's review.
+
+---
+
+## Iteration #38
+
+**Observation**
+On 2026-10-27 OpenAI's pages list a model the catalog does not have:
+GPT-6.1 Terra (`gpt-6.1-terra`). The API changelog dates it "Oct 26 ...
+Released GPT-6.1 Terra"; the models index lists it under Flagship models
+between GPT-6.1 Sol and GPT-6 Luna; the pricing page's Flagship table
+gives $1.00 / $5.00 short context and $2.00 / $7.50 over 272K input
+tokens; the model page gives text and image input, text output, a
+1,050,000-token context and 128,000 max output tokens. It is not on the
+deprecations page, and GPT-5.6 Terra is not deprecated by it.
+`Docs/IMPLEMENTATION_NOTES.md` has no earlier record of the model.
+
+**Current decision**
+Proposed, not decided: `gpt-6-1-terra` with a direct API route, on the
+same choices as `gpt-6-1-sol` (short-context tier, Iteration #24; curated
+OpenAI language list; `json_mode` on structured outputs). The quality
+ratings are the bot's judgment from OpenAI's positioning against
+GPT-5.6 Terra and GPT-6.1 Sol, recorded with their evidence in
+`Docs/models/gpt-6-1-terra.md`. `has_free_access: false`: no free API
+tier, and the announcement names only paid ChatGPT plans. No ChatGPT
+route: ChatGPT's plan page returned HTTP 403 to the audit, and the
+announcement is not a plan page (section 5 of `CATALOG_BOT.md`).
+
+With the model in the catalog, two engine tests change their result:
+`test_each_priority_order_is_offered_once` now also offers "Creative
+writing as your first priority", and
+`test_alternatives_section_is_omitted_when_every_alternative_is_also_strong`
+no longer finds "Also strong options". Neither test was edited.
+
+**Status**
+Proposed in the bot PR of 2026-10-22, pending the owner's review.
+

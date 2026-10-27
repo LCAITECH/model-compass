@@ -1,0 +1,21 @@
+provider: Alibaba Cloud
+model_id: qwen3.7-flash
+access:
+  surface: direct_api
+  access_method: "API key (Model Studio, DashScope/OpenAI-compatible endpoints)"
+  capabilities: [prototype, build, automation]
+  guide_ref: alibaba#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Alibaba Cloud
+  billing_scheme: api_token
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://www.alibabacloud.com/help/en/model-studio/qwen3-7-flash
+  consulted_at: "2026-10-22"
+  status: confirmed
+  caveat: "Pricing here is the International (Singapore) scope and the tier for inputs up to 32k tokens; inputs from 32k to 256k are billed $0.10/$0.40 and from 256k to 1M $0.20/$0.80. The China (Beijing) scope is cheaper but requires a Mainland China account. Same scope choice as qwen3.8-max."

@@ -1,0 +1,34 @@
+provider: Google
+plan_name: Google AI Plus
+surface_entitlements: [consumer_subscription]
+documented_exclusions:
+  - "Gemini 4 Argon is not included (Google AI Pro and Ultra only, in the Gemini app, AI Studio and Antigravity)"
+  - "No Google Cloud credits: the Google Developer Program credits come with Google AI Pro or AI Ultra only"
+  - "Direct Gemini API use is billed separately"
+region_scope: account_dependent
+source_url: https://support.google.com/googleone/answer/16548195
+consulted_at: "2026-10-22"
+status: confirmed
+price:
+  monthly_usd: 4.99
+usage_multiplier: null
+api_credits: null
+# Sources, consulted 2026-10-22 (proposed for owner review):
+# - price: https://one.google.com/intl/en_us/about/google-ai-plans/ (rendered page,
+#   "United States", "Google AI Plus $4.99 /mo", 400 GB storage); the same
+#   $4.99 on https://one.google.com/about/. The plan also has a 2 TB storage
+#   option ("Choose from 400 GB or 2 TB of storage",
+#   https://support.google.com/googleone/answer/16548195) whose price neither
+#   page shows; its AI benefits are described as the same plan.
+#   The page's structured data still says "Starting at $7.99/mo" (dateModified
+#   2026-03-06); the visible US price is $4.99 and is the one stored.
+# - No multiplier stored: the "2x*" row is "In comparison to non-AI
+#   subscribers", not a plan in this catalog (same rule as google-ai-pro's 4x).
+# - No credits: "With Google AI Pro or AI Ultra, you will receive $10, $40, or
+#   $100 in Google Cloud credits" (https://developers.google.com/profile/help/benefits);
+#   the plans table's credit row has no Plus entry.
+# - Argon exclusion: https://antigravity.google/docs/models ("Free & Google AI Plus":
+#   ❌ for Gemini 4 Argon); on the plans page "Includes Gemini 4 Argon" heads
+#   only the Pro and Ultra cards.
+# - No playground_or_studio entitlement: the plans table gives Plus the same
+#   "Limited" AI Studio and Antigravity levels as no plan.
