@@ -17,15 +17,16 @@ economics:
   production_allowed: false
 evidence:
   source_url: https://antigravity.google/docs/models
-  consulted_at: "2026-10-22"
+  consulted_at: "2026-10-27"
   status: confirmed
-  caveat: "Included with Google AI Pro (paid subscriptions, not the trial) and both Ultra tiers; not on the free plan or Google AI Plus. Available in the Antigravity app, CLI and IDE extensions, but not in the Antigravity IDE itself. Use draws from a five-hour and weekly quota that Google does not publish in tokens; Pro and Ultra can buy AI credits for usage beyond it. Google does not state that the model in Antigravity is the same snapshot as the API model; the match is by the exact name on its pages."
-# Sources, read 2026-10-22:
+  caveat: "Included with Google AI Pro (a paid plan, or a trial on eligible premium devices) and both Ultra tiers; not on the free plan or Google AI Plus. Use draws from a five-hour and weekly quota that Google does not publish in tokens; Pro and Ultra can buy AI credits for usage beyond it. Google does not state that the model in Antigravity is the same snapshot as the API model; the match is by the exact name on its pages."
+# Sources, read 2026-10-22 and re-read rendered in a browser on 2026-10-27 (English):
 # - https://antigravity.google/docs/models, "Reasoning model" table: Gemini 4 Argon
-#   "❌" for "Free & Google AI Plus", "✅" for Google AI Pro (note "Available on
-#   Google AI Pro for non-trial subscriptions only"), "✅" for Google AI Ultra;
-#   note "Not available in Antigravity IDE. Available in the Antigravity App,
-#   Antigravity CLI, and IDE extensions."
+#   "❌" for "Free & Google AI Plus", "✅" with the dagger note for Google AI Pro
+#   ("Available with paid Google AI Pro plans or on trial with eligible premium
+#   devices"), "✅" for Google AI Ultra. The "non-trial subscriptions only" note
+#   belongs to the Claude rows, not to Argon, and the page no longer carries the
+#   "Not available in Antigravity IDE" sentence the 2026-10-22 pass quoted.
 # - https://antigravity.google/docs/plans: five-hour and weekly quotas, AI credits for overages.
 # - https://one.google.com/intl/en_us/about/google-ai-plans/: "Expanded access to Gemini 4
 #   Argon in Google Antigravity and Google AI Studio" (AI Pro), "Higher access to Gemini 4

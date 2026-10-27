@@ -1860,6 +1860,15 @@ Pro and Ultra). They were not part of the owner's request.
 **Status**
 Proposed in the bot PR of 2026-10-22, pending the owner's review.
 
+**Update 2026-10-27 (owner accepted; caveat corrected)**
+The owner merged the route. Before merging, the page was re-read rendered in
+a browser: Argon's dagger note says "Available with paid Google AI Pro plans
+or on trial with eligible premium devices", the "non-trial subscriptions
+only" text belongs to the Claude rows, and the "Not available in Antigravity
+IDE" sentence is not on the page. The caveat and the guide were corrected, so
+the Pro trial exclusion and the IDE exclusion described above are no longer
+in the caveat. Status: accepted.
+
 ---
 
 ## Iteration #38

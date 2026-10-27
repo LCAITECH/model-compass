@@ -157,6 +157,14 @@ Antigravity CLI, and IDE extensions." The route
 production). Antigravity's quota is refreshed every five hours with a
 weekly cap, not published in tokens (Antigravity plans page).
 
+**Correction, 2026-10-27.** Re-read with the page rendered in a browser
+(English), Argon's row on Antigravity's models page carries a dagger note,
+not the Claude rows' note: "Available with paid Google AI Pro plans or on
+trial with eligible premium devices." The "non-trial subscriptions only" text
+quoted above belongs to the Claude rows, and the "Not available in
+Antigravity IDE" sentence is not on the page. The route caveat and the
+`google#antigravity` guide no longer say either.
+
 ## Sources
 
 - https://ai.google.dev/gemini-api/docs/models/gemini-4-argon — identity, modalities, token limits, capabilities, stability (page updated 2026-10-13 UTC).

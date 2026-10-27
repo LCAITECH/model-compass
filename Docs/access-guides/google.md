@@ -56,16 +56,15 @@ and IDE extensions), signed in with a Google AI plan. Which models you
 can pick depends on the plan; usage draws from a quota refreshed every
 five hours and capped weekly, not published in tokens.
 
-1. Subscribe to Google AI Pro (a paid subscription, not the trial) or one
-   of the two Ultra tiers for models such as Gemini 4 Argon; the free plan
-   and Google AI Plus get a smaller model set.
+1. Subscribe to Google AI Pro or one of the two Ultra tiers for models
+   such as Gemini 4 Argon; the free plan and Google AI Plus get a smaller
+   model set. On Pro, Google lists Argon for paid plans, or on trial with
+   eligible premium devices.
 2. Install Antigravity and sign in with that account
    ([Quickstart](https://antigravity.google/docs)).
-3. Pick the model in the model selector. Gemini 4 Argon is not offered in
-   the Antigravity IDE itself, only in the app, the CLI and the IDE
-   extensions.
+3. Pick the model in the model selector.
 4. On Pro and Ultra, usage beyond the quota can draw on purchased AI
    credits. Antigravity offers no bring-your-own-key option, and its quota
    is not usable through the Gemini API.
 
-Sources: [Antigravity models](https://antigravity.google/docs/models) and [Antigravity plans](https://antigravity.google/docs/plans), consulted 2026-10-22.
+Sources: [Antigravity models](https://antigravity.google/docs/models) and [Antigravity plans](https://antigravity.google/docs/plans), consulted 2026-10-22 and 2026-10-27.
