@@ -1859,3 +1859,39 @@ Pro and Ultra). They were not part of the owner's request.
 
 **Status**
 Proposed in the bot PR of 2026-10-22, pending the owner's review.
+
+---
+
+## Iteration #38
+
+**Observation**
+On 2026-10-27 OpenAI's pages list a model the catalog does not have:
+GPT-6.1 Terra (`gpt-6.1-terra`). The API changelog dates it "Oct 26 ...
+Released GPT-6.1 Terra"; the models index lists it under Flagship models
+between GPT-6.1 Sol and GPT-6 Luna; the pricing page's Flagship table
+gives $1.00 / $5.00 short context and $2.00 / $7.50 over 272K input
+tokens; the model page gives text and image input, text output, a
+1,050,000-token context and 128,000 max output tokens. It is not on the
+deprecations page, and GPT-5.6 Terra is not deprecated by it.
+`Docs/IMPLEMENTATION_NOTES.md` has no earlier record of the model.
+
+**Current decision**
+Proposed, not decided: `gpt-6-1-terra` with a direct API route, on the
+same choices as `gpt-6-1-sol` (short-context tier, Iteration #24; curated
+OpenAI language list; `json_mode` on structured outputs). The quality
+ratings are the bot's judgment from OpenAI's positioning against
+GPT-5.6 Terra and GPT-6.1 Sol, recorded with their evidence in
+`Docs/models/gpt-6-1-terra.md`. `has_free_access: false`: no free API
+tier, and the announcement names only paid ChatGPT plans. No ChatGPT
+route: ChatGPT's plan page returned HTTP 403 to the audit, and the
+announcement is not a plan page (section 5 of `CATALOG_BOT.md`).
+
+With the model in the catalog, two engine tests change their result:
+`test_each_priority_order_is_offered_once` now also offers "Creative
+writing as your first priority", and
+`test_alternatives_section_is_omitted_when_every_alternative_is_also_strong`
+no longer finds "Also strong options". Neither test was edited.
+
+**Status**
+Proposed in the bot PR of 2026-10-22, pending the owner's review.
+

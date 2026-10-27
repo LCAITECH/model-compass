@@ -19,6 +19,17 @@ public release to version against.
 
 ---
 
+## 2026-10-27 — Proposed: GPT-6.1 Terra
+
+**One model and one access route, proposed for the owner's review. No change to the engine or the schema.**
+
+- **The model.** OpenAI released GPT-6.1 Terra on 2026-10-26: its fast, efficient model for visual reasoning, computer use and writing, between GPT-6.1 Sol and GPT-6 Luna. $1 input and $5 output per million tokens on the standard short-context rate, a 1.05M-token context and 128K output. Text and image in, text out.
+- **The route.** The direct OpenAI API. A ChatGPT route waits until ChatGPT's own plan page can be read: OpenAI's announcement names Plus, Pro, Enterprise and Edu, but that is not the plan page the catalog requires.
+- **GPT-5.6 Terra stays.** OpenAI has not deprecated it.
+- **Tests:** model and route counts updated (45 models, 104 routes). Two ranking tests now pick differently with the new model in the catalog; they are left as they are for the owner.
+
+---
+
 ## 2026-10-23 — Claude Fable 5.1 is now on Google Cloud Vertex AI
 
 **Dataset and docs only. No change to the engine or the schema.**
