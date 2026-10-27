@@ -120,11 +120,19 @@ def test_also_strong_options_includes_a_close_score_similar_quality_model(models
     # tie at $0.60 (Haiku first by dataset order), and gpt-6-luna, one
     # tier below Haiku (high/high/medium/high) on every dimension, still
     # passes the quality floor as the close-score option.
+    # 2026-10-27: qwen3.7-flash ($0.16 blended) is now far cheaper than
+    # claude-haiku-5-5 and gpt-6-luna ($0.60), so in a cost-only context no
+    # runner-up is inside the 2% window any more (also_strong_options is
+    # empty). The scenario that still shows this mechanism on real data is a
+    # tie on the ranked dimensions: with coding then reasoning at a
+    # very_high budget, claude-fable-5-1 wins and gpt-6-1-sol ties its score
+    # (both very_high on coding and reasoning, at most one tier apart on the
+    # other two dimensions), so it passes the quality floor.
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
-        budget=BudgetLevel.MEDIUM,
-        priorities=(Priority.COST,),
+        budget=BudgetLevel.VERY_HIGH,
+        priorities=(Priority.CODING, Priority.REASONING),
         language="es",
     )
     candidates = evaluate(context, models)
@@ -132,8 +140,8 @@ def test_also_strong_options_includes_a_close_score_similar_quality_model(models
     recommendation = explain(context, candidates)
 
     also_strong_ids = {a.model.id for a in recommendation.also_strong_options}
-    assert recommendation.recommended.id == "claude-haiku-5-5"
-    assert "gpt-6-luna" in also_strong_ids
+    assert recommendation.recommended.id == "claude-fable-5-1"
+    assert "gpt-6-1-sol" in also_strong_ids
 
 
 def test_also_strong_options_is_empty_when_the_runner_up_fails_both_conditions(make_model):

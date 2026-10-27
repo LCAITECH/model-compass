@@ -38,7 +38,15 @@ def test_disqualifies_models_that_dont_support_the_language(models):
     candidates = evaluate(context, models)
     qualifying = [c for c in candidates if c.qualifies]
 
-    assert {c.model.id for c in qualifying} == {"mistral-large-3", "qwen3.8-max", "qwen3.8-flash", "qwen3.7-plus"}
+    # qwen3.7-flash joined on 2026-10-27: its curated Qwen language list includes the
+    # context's language like the other Qwen entries.
+    assert {c.model.id for c in qualifying} == {
+        "mistral-large-3",
+        "qwen3.8-max",
+        "qwen3.8-flash",
+        "qwen3.7-plus",
+        "qwen3.7-flash",
+    }
     other = by_id(candidates, "gemini-2.5-flash")
     assert not other.qualifies
     assert any("language" in reason for reason in other.disqualified_reasons)
@@ -63,6 +71,7 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     # since 2026-10-15 (Google limits it to developers who already used
     # it), so it never qualifies either. qwen3.8-flash (0.62) and
     # qwen3.7-plus (2.00, <=256k-token tier) joined the band on 2026-10-15.
+    # qwen3.7-flash (0.16, <=32k-token tier) joined on 2026-10-27.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -83,6 +92,7 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
         "mistral-large-3",
         "qwen3.8-flash",
         "qwen3.7-plus",
+        "qwen3.7-flash",
     }
 
 

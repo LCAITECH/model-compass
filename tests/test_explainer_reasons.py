@@ -20,6 +20,9 @@ def test_cost_priority_explains_the_cheapest_model_and_its_weaknesses(models):
     # claude-haiku-5-5 ($0.60, tied with gpt-6-luna and first by dataset
     # order) wins, and is not the strongest on any quality dimension or
     # context window among the qualifying pool either.
+    # 2026-10-27: qwen3.7-flash ($0.03/$0.13, $0.16 blended) is cheaper
+    # than both and wins; same profile (medium reasoning, high coding, no
+    # best-in-pool dimension), so the assertions below still hold.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -31,7 +34,7 @@ def test_cost_priority_explains_the_cheapest_model_and_its_weaknesses(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.recommended.id == "claude-haiku-5-5"
+    assert recommendation.recommended.id == "qwen3.7-flash"
     assert recommendation.cost_tier == CostTier.LOW
     assert "your use case is High-volume low-cost bot" in recommendation.reasons[0]
     assert any("Lowest cost" in reason for reason in recommendation.reasons)

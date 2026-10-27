@@ -101,19 +101,30 @@ def test_free_access_chip_not_shown_above_low_budget(models):
 
 
 def test_free_access_chip_shown_for_the_real_low_budget_winner(client):
-    # The real page today: claude-haiku-5-5 wins cost-first under
-    # budget=low, and Claude.ai's Free plan reaches it (has_free_access
-    # counts a free consumer plan since Iteration #32), so the chip
-    # shows and links to the Access notes that say it is the app.
+    # The real page today: claude-haiku-5-5 wins under budget=low with
+    # instruction following first, and Claude.ai's Free plan reaches it
+    # (has_free_access counts a free consumer plan since Iteration #32), so
+    # the chip shows and links to the Access notes that say it is the app.
+    # 2026-10-27: it used to win cost-first too; qwen3.7-flash ($0.16
+    # blended, no free access) now does, so the cost-first page must not show
+    # the chip.
     response = client.post(
         "/recommend",
-        data={"use_case": "", "language": "en", "budget": "low", "priority_1": "cost"},
+        data={"use_case": "", "language": "en", "budget": "low", "priority_1": "instruction_following"},
     )
 
     assert response.status_code == 200
     assert "Claude Haiku 5.5" in response.text
     assert "Free access also documented" in response.text
     assert "Docs/models/claude-haiku-5-5.md#access" in response.text
+
+    cost_first = client.post(
+        "/recommend",
+        data={"use_case": "", "language": "en", "budget": "low", "priority_1": "cost"},
+    )
+
+    assert "Qwen3.7-Flash" in cost_first.text
+    assert "Free access also documented" not in cost_first.text
 
 
 def test_pricing_shows_introductory_price_reversion_note(client):

@@ -34,12 +34,15 @@ def test_the_scenario_is_the_same_result_the_normal_page_would_show(client):
 def test_headline_when_the_winner_changes_and_the_top_reshuffles(client):
     data = _agent_low(client)
 
+    # 2026-10-27: qwen3.7-flash and gpt-6-1-terra joined the catalog, so 32
+    # models qualify at a high budget (was 30) and 9 at a low one (was 8);
+    # Qwen3.7-Flash replaces GPT-6 Luna among the alternatives that move up.
     assert data["headline"] == (
-        "Winner: Gemini 3.8 Flash → Claude Haiku 5.5. 8 models qualify instead of 30. "
-        "DeepSeek V4.1 Flash, GPT-6 Luna and Qwen3.8-Flash move into the top alternatives. "
+        "Winner: Gemini 3.8 Flash → Claude Haiku 5.5. 9 models qualify instead of 32. "
+        "DeepSeek V4.1 Flash, Qwen3.7-Flash and Qwen3.8-Flash move into the top alternatives. "
         "Claude Sonnet 5.5, DeepSeek V4 Pro and Qwen3.8-Max drop out of the top alternatives."
     )
-    assert data["diff"]["qualifying"] == {"from": 30, "to": 8}
+    assert data["diff"]["qualifying"] == {"from": 32, "to": 9}
     assert not data["diff"]["practically_tied"]
 
 
@@ -51,9 +54,18 @@ def test_headline_when_nothing_changes(client):
 
 
 def test_a_new_winner_that_was_practically_tied_says_so(client):
-    data = _scenario(client, CHEAP_BOT, language="en", budget="low", priority_1="context_window", priority_2="cost").json()
+    # 2026-10-27: this used to be context window first, then cost (Claude
+    # Haiku 5.5 -> GPT-6 Luna). With Qwen3.7-Flash as the cost-first winner
+    # that scenario no longer changes the winner at all, so the practically
+    # tied case is now coding first, then creative writing: Qwen3.7-Flash ->
+    # Claude Haiku 5.5, found by running the engine over the real dataset.
+    data = _scenario(client, CHEAP_BOT, language="en", budget="low", priority_1="coding", priority_2="creative_writing").json()
 
-    assert data["headline"] == "Winner: Claude Haiku 5.5 → GPT-6 Luna (practically tied)."
+    assert data["headline"] == (
+        "Winner: Qwen3.7-Flash → Claude Haiku 5.5 (practically tied). "
+        "DeepSeek V4.1 Flash and Mistral Large 3 move into the top alternatives. "
+        "GPT-6 Luna and Qwen3.8-Flash drop out of the top alternatives."
+    )
     assert data["diff"]["practically_tied"]
 
 
@@ -86,24 +98,47 @@ def test_nearby_changes_that_give_a_different_winner(client):
     data = client.get("/whatif/neighbors", params={"language": "es", "budget": "medium", "priority_1": "cost"}).json()
 
     assert data["tested"] == 8
+    # 2026-10-27: gpt-6-1-terra (high on every dimension) now wins creative
+    # writing first at a medium budget, and claude-haiku-5-5 wins instruction
+    # following first, so two more single-step changes give a different winner.
     assert [(c["label"], c["winner"]["name"]) for c in data["changes"]] == [
         ("Reasoning as your first priority", "Gemini 3.8 Flash"),
         ("Coding as your first priority", "Gemini 3.8 Flash"),
+        ("Creative writing as your first priority", "GPT-6.1 Terra"),
+        ("Instruction following as your first priority", "Claude Haiku 5.5"),
         ("Context window as your first priority", "GPT-6 Luna"),
     ]
     assert data["changes"][0]["set"] == {"priority_1": "reasoning", "priority_2": "cost", "priority_3": ""}
 
 
 def test_nearby_changes_flag_a_practically_tied_winner(client):
-    data = client.get("/whatif/neighbors", params={"language": "en", "budget": "low", "priority_1": "cost"}).json()
+    # 2026-10-27: at a low budget cost-first no neighbor is practically tied any
+    # more (Qwen3.7-Flash is far cheaper than Haiku and Luna). The flag is now
+    # shown on real data at a high budget, where context window first gives GPT-6
+    # Luna, practically tied with Qwen3.7-Flash; the other four changes are not.
+    data = client.get("/whatif/neighbors", params={"language": "en", "budget": "high", "priority_1": "cost"}).json()
 
-    assert [(c["winner"]["name"], c["practically_tied"]) for c in data["changes"]] == [("GPT-6 Luna", True)]
+    assert [(c["winner"]["name"], c["practically_tied"]) for c in data["changes"]] == [
+        ("Gemini 3.8 Flash", False),
+        ("Gemini 3.8 Flash", False),
+        ("GPT-6.1 Terra", False),
+        ("Claude Sonnet 5.5", False),
+        ("GPT-6 Luna", True),
+    ]
 
 
 def test_a_winner_that_holds_under_every_single_step_change_is_reported_as_such(client):
-    data = client.get("/whatif/neighbors", params={"language": "en", "budget": "low", "priority_1": "cost", "priority_2": "creative_writing"}).json()
+    # 2026-10-27: the old context (English, low budget, cost then creative writing)
+    # stopped holding once Terra and Qwen3.7-Flash joined: a very_high budget now
+    # gives GPT-6.1 Terra and two priority changes give Claude Haiku 5.5. A real
+    # run over the dataset found contexts that still hold; Russian, low budget,
+    # context window first then cost, is one of them (it only qualifies the models
+    # whose curated list has Russian, so the winner has no close rival).
+    data = client.get(
+        "/whatif/neighbors", params={"language": "ru", "budget": "low", "priority_1": "context_window", "priority_2": "cost"}
+    ).json()
 
-    # 3 budgets + 4 other priorities first; "creative writing first" is the same scenario as the swap.
+    # 3 budgets + 4 other priorities first; the second priority moved to the front is the same scenario as the swap.
     assert data == {"tested": 8, "changes": []}
 
 
@@ -125,7 +160,14 @@ def test_each_priority_order_is_offered_once(models):
     sets = [tuple(sorted(change["set"].items())) for change in changes]
 
     assert len(sets) == len(set(sets))
-    assert [c["label"] for c in changes] == ["Budget → Low", "Cost as your first priority"]
+    # 2026-10-27: gpt-6-1-terra (high on creative writing, cheap enough for a
+    # medium budget) makes "creative writing first" a third single-step change that
+    # gives a different winner; the uniqueness check above is what this test is about.
+    assert [c["label"] for c in changes] == [
+        "Budget → Low",
+        "Cost as your first priority",
+        "Creative writing as your first priority",
+    ]
 
 
 def test_neighbors_agree_with_running_the_engine_by_hand(models):

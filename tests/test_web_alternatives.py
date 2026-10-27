@@ -51,23 +51,27 @@ def test_also_strong_options_are_not_duplicated_in_the_alternatives_section(clie
 
 
 def test_alternatives_section_is_omitted_when_every_alternative_is_also_strong(client):
-    # Same context at budget=medium: all 6 tied models (winner +
-    # 5 also-strong) exhaust the top-3 "alternatives" slots entirely,
-    # so the plain "Alternatives" section should not render at all --
-    # nothing left to show there once the also-strong ones are excluded.
+    # 2026-10-27: the old context (budget=medium, creative_writing then
+    # instruction_following) stopped working when gpt-6-1-terra, rated high
+    # on all four dimensions, became the outright winner there with no
+    # also-strong options. The mechanism is shown now by budget=low with
+    # coding as the priority: claude-haiku-5-5 wins and its top-3
+    # alternatives (deepseek-v4-flash, mistral-large-3, qwen3.7-flash) are all
+    # also-strong (5 also-strong in total), so they exhaust the "alternatives"
+    # slots entirely and the plain "Alternatives" section should not render at
+    # all -- nothing left to show there once the also-strong ones are excluded.
     response = client.post(
         "/recommend",
         data={
             "use_case": "Customer support",
             "language": "en",
-            "budget": "medium",
-            "priority_1": "creative_writing",
-            "priority_2": "instruction_following",
+            "budget": "low",
+            "priority_1": "coding",
         },
     )
 
     assert response.status_code == 200
-    assert "Claude Haiku 4.5" in response.text
+    assert "Claude Haiku 5.5" in response.text
     assert "Also strong options" in response.text
     assert "<h2 class=\"eyebrow section-eyebrow\">" not in response.text  # the "Alternatives" heading markup
 
@@ -109,9 +113,11 @@ def test_recommend_omits_also_strong_options_when_the_winner_is_unmatched(client
 
 
 def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_routes(client):
-    # budget=low, cost -> claude-haiku-5-5 wins (re-derived 2026-10-15 from
-    # a real run; the previous winner here, gemini-2.5-pro, is restricted
-    # and its AI Studio route was removed). Haiku 5.5 has both kinds of
+    # budget=low, instruction_following -> claude-haiku-5-5 wins (re-derived
+    # 2026-10-27 from a real run: with cost first, qwen3.7-flash now wins,
+    # and it has a direct-API route only; before that this test used
+    # cost-first, and 2026-10-15 replaced gemini-2.5-pro, which is
+    # restricted and lost its AI Studio route). Haiku 5.5 has both kinds of
     # route: direct-api (production_allowed=true) and the Claude
     # subscription (production_allowed=false). Each row must link to
     # access.guide_ref (the curated Docs/access-guides/ section), never
@@ -119,7 +125,7 @@ def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_rou
     # production use.
     response = client.post(
         "/recommend",
-        data={"use_case": "", "language": "en", "budget": "low", "priority_1": "cost"},
+        data={"use_case": "", "language": "en", "budget": "low", "priority_1": "instruction_following"},
     )
 
     assert response.status_code == 200

@@ -87,6 +87,7 @@ def test_loads_all_real_subscriptions():
         "chatgpt-pro-100",
         "chatgpt-pro-200",
         "chatgpt-pro-500",
+        "google-ai-plus",
     }
 
 

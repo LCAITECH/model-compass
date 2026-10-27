@@ -120,8 +120,11 @@ def test_access_rows_group_routes_by_surface_and_name_the_plans(models, access_r
 
     fable, argon = _row(sections, "Subscription apps")["cells"]
     assert [chip["detail"] for chip in fable["chips"]] == ["Claude Max 5x or Claude Max 20x"]  # Pro pays Fable at API rates
+    # Antigravity joined the Gemini app on 2026-10-27; both sit on the same three plans.
+    plans_text = "Google AI Pro or Google AI Ultra 5x or Google AI Ultra 20x"
     assert [(chip["label"], chip["detail"]) for chip in argon["chips"]] == [
-        ("Gemini app", "Google AI Pro or Google AI Ultra 5x or Google AI Ultra 20x")
+        ("Google Antigravity", plans_text),
+        ("Gemini app", plans_text),
     ]
     fable_studio, argon_studio = _row(sections, "Studio")["cells"]
     assert (fable_studio["chips"], fable_studio["text"], fable_studio["tone"]) == ((), "Not documented", "muted")

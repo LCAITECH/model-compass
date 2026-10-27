@@ -2,6 +2,9 @@
 
 import re
 
+# Cost-first at a low budget: Qwen3.7-Flash wins since 2026-10-27 (it was Claude Haiku 5.5). The
+# tests only compare the winner across the form, the link and the share URL, so the name just has
+# to be the real one.
 CONTEXT = {"use_case": "Customer support bot", "language": "en", "budget": "low", "priority_1": "cost"}
 
 
@@ -18,7 +21,7 @@ def test_a_result_url_rebuilds_the_same_result_as_the_form(client):
     linked = client.get("/recommend", params=CONTEXT)
 
     assert linked.status_code == 200
-    assert _winner(linked.text) == _winner(posted.text) == "Claude Haiku 5.5"
+    assert _winner(linked.text) == _winner(posted.text) == "Qwen3.7-Flash"
 
 
 def test_the_share_link_leaves_empty_fields_out_and_round_trips(client):
@@ -27,7 +30,7 @@ def test_the_share_link_leaves_empty_fields_out_and_round_trips(client):
     share_url = re.search(r'data-share-url="([^"]+)"', response.text).group(1).replace("&amp;", "&")
     assert share_url.startswith("/recommend?")
     assert "priority_2" not in share_url and "monthly_budget_usd" not in share_url
-    assert _winner(client.get(share_url).text) == "Claude Haiku 5.5"
+    assert _winner(client.get(share_url).text) == "Qwen3.7-Flash"
 
 
 def test_access_context_survives_the_link(client):

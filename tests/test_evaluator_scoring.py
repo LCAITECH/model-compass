@@ -114,10 +114,10 @@ def test_cost_priority_picks_the_cheapest_qualifying_model(models):
     # $0.44/$1.32 ($1.76 blended) -- see Docs/CHANGELOG.md, 2026-08-27.
     # gpt-5-nano is deprecated since 2026-10-14's lifecycle pass, and
     # gemini-2.5-flash-lite ($0.50) restricted since 2026-10-15, so the
-    # cheapest qualifying models are claude-haiku-5-5 and gpt-6-luna, tied
-    # at $0.60 blended. With cost as the only priority their scores are
-    # equal, and the evaluator's stable sort keeps dataset (filename)
-    # order, so claude-haiku-5-5 comes first.
+    # cheapest qualifying models were claude-haiku-5-5 and gpt-6-luna, tied
+    # at $0.60 blended. qwen3.7-flash (2026-10-27, $0.03/$0.13, $0.16
+    # blended) is now cheaper than both and wins on cost alone, so the
+    # winner changes from claude-haiku-5-5 to qwen3.7-flash.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -128,7 +128,9 @@ def test_cost_priority_picks_the_cheapest_qualifying_model(models):
 
     candidates = evaluate(context, models)
 
-    assert candidates[0].model.id == "claude-haiku-5-5"
+    assert candidates[0].model.id == "qwen3.7-flash"
+    # The two models that used to tie for first still come right after it.
+    assert {candidates[1].model.id, candidates[2].model.id} == {"claude-haiku-5-5", "gpt-6-luna"}
 
 
 def test_reasoning_priority_picks_the_strongest_reasoning_model(models):

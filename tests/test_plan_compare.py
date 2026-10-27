@@ -12,7 +12,7 @@ from decision.loader import load_access_routes, load_subscriptions
 from tests.conftest import ACCESS_ROUTES_DIR, SUBSCRIPTIONS_DIR
 
 OPUS = "claude-opus-5-5"  # $4 / $20 per 1M; on Claude Pro, Max 5x, Max 20x
-ARGON = "gemini-4-argon"  # Gemini app and AI Studio, both on AI Pro and Ultra
+ARGON = "gemini-4-argon"  # Gemini app, AI Studio and Antigravity, all on AI Pro and Ultra
 NO_PLAN = "deepseek-v4-pro"  # no documented subscription route
 
 
@@ -55,11 +55,11 @@ def test_credits_count_only_where_the_plan_includes_them(by_id, routes, plans):
 def test_a_plan_lists_every_surface_that_names_the_model(by_id, routes, plans):
     options = {option.plan.plan_id: option for option in _compare(by_id, routes, plans, ARGON).options}
 
-    # Gemini app and AI Studio, on AI Pro and on both Ultra tiers.
+    # Gemini app, AI Studio and (since 2026-10-27) Google Antigravity, on AI Pro and on both Ultra tiers.
     assert {plan_id: len(option.routes) for plan_id, option in options.items()} == {
-        "google-ai-pro": 2,
-        "google-ai-ultra-5x": 2,
-        "google-ai-ultra-20x": 2,
+        "google-ai-pro": 3,
+        "google-ai-ultra-5x": 3,
+        "google-ai-ultra-20x": 3,
     }
     assert options["google-ai-pro"].credits_usd == 10
 

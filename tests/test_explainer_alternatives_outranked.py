@@ -25,6 +25,12 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
     # creative writing.
     # 2026-10-15: qwen3.8-flash ($0.62 blended) takes deepseek-v4-flash's
     # slot; it stands out on creative writing and instruction following.
+    # 2026-10-27: qwen3.7-flash ($0.16 blended) is the new winner. The
+    # alternatives are claude-haiku-5-5 and gpt-6-luna (tied at $0.60) and
+    # qwen3.8-flash; gpt-5-6-luna drops out of the top 3. Against the new
+    # winner (medium on every quality dimension except coding) claude-haiku-5-5
+    # and qwen3.8-flash stand out on instruction following, and gpt-6-luna on
+    # context window (1.05M vs 1M).
     context = Context(
         use_case="Bot",
         budget_mode=BudgetMode.TIER,
@@ -37,10 +43,11 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
     recommendation = explain(context, candidates)
     by_id = {alt.model.id: alt for alt in recommendation.alternatives}
 
-    assert set(by_id) == {"gpt-6-luna", "gpt-5-6-luna", "qwen3.8-flash"}
+    assert recommendation.recommended.id == "qwen3.7-flash"
+    assert set(by_id) == {"claude-haiku-5-5", "gpt-6-luna", "qwen3.8-flash"}
     assert any("context window" in reason for reason in by_id["gpt-6-luna"].reasons)
-    assert any("context window" in reason for reason in by_id["gpt-5-6-luna"].reasons)
-    assert any("creative writing" in reason for reason in by_id["qwen3.8-flash"].reasons)
+    assert any("instruction following" in reason for reason in by_id["claude-haiku-5-5"].reasons)
+    assert any("instruction following" in reason for reason in by_id["qwen3.8-flash"].reasons)
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
@@ -65,6 +72,10 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     # 2026-10-15: qwen3.8-flash and qwen3.7-plus reuse that Qwen list, so
     # qwen3.8-flash ($0.62 blended) now wins; muse-wonder-1.0 and
     # muse-spark-1.3 (curated Meta list, no "ko") join the excluded.
+    # 2026-10-27: qwen3.7-flash reuses the same Qwen list (it includes "ko")
+    # and, at $0.16 blended, becomes the winner with qwen3.8-flash as the
+    # first alternative; gpt-6-1-terra (curated OpenAI list, no "ko") joins
+    # the excluded: 5 qualify (was 4) and 40 are excluded (was 39).
     context = Context(
         use_case="Korean support assistant",
         budget_mode=BudgetMode.TIER,
@@ -76,8 +87,8 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.recommended.id == "qwen3.8-flash"
-    assert [alt.model.id for alt in recommendation.alternatives] == ["mistral-large-3", "qwen3.7-plus", "qwen3.8-max"]
+    assert recommendation.recommended.id == "qwen3.7-flash"
+    assert [alt.model.id for alt in recommendation.alternatives] == ["qwen3.8-flash", "mistral-large-3", "qwen3.7-plus"]
     assert {excl.model.id for excl in recommendation.excluded} == {
         "gemini-2.5-flash",
         "gemini-2.5-flash-lite",
@@ -114,6 +125,7 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "gemini-3.8-flash",
         "gpt-6-astra",
         "gpt-6-1-sol",
+        "gpt-6-1-terra",
         "gpt-6-luna",
         "gemini-4-argon",
         "muse-wonder-1.0",
@@ -142,7 +154,9 @@ def test_total_qualifying_and_alternative_ranks(models):
     # gemini-2.5-flash-lite replaces gpt-5-nano as the winner. Since
     # 2026-10-15 the 3 restricted Gemini 2.5 models don't qualify either:
     # 29 - 3 = 26, and claude-haiku-5-5 wins. The four 2026-10-15
-    # admissions all qualify: 26 + 4 = 30.
+    # admissions all qualify: 26 + 4 = 30. The two 2026-10-27 admissions
+    # (qwen3.7-flash, gpt-6-1-terra) qualify too: 30 + 2 = 32, and
+    # qwen3.7-flash wins.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -154,17 +168,18 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.total_qualifying == 30  # 43 - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra) - 7 deprecated - 3 restricted
+    assert recommendation.total_qualifying == 32  # 45 - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra) - 7 deprecated - 3 restricted
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
 def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
-    # Same context as above (30 qualifying, see
-    # test_total_qualifying_and_alternative_ranks). Since 2026-10-15 the
-    # winner is claude-haiku-5-5 and the top-3 alternatives are
-    # gpt-6-luna, qwen3.8-flash and gpt-5-6-luna, which leaves
-    # deepseek-v4-flash ($1.50 blended) as the first model past them,
-    # into the outranked group (rank 5 of 30).
+    # Same context as above (32 qualifying, see
+    # test_total_qualifying_and_alternative_ranks). Since 2026-10-27 the
+    # winner is qwen3.7-flash and the top-3 alternatives are
+    # claude-haiku-5-5, gpt-6-luna and qwen3.8-flash, which leaves
+    # gpt-5-6-luna ($1.40 blended) as the first model past them, into
+    # the outranked group (rank 5 of 32). (Before that, deepseek-v4-flash
+    # at $1.50 was the first outranked model.)
     # Unlike the winner's trade_offs, its reasons include "Not the
     # cheapest option" even though COST is the prioritized dimension,
     # because there's no positive "reasons" line for it to contradict;
@@ -181,11 +196,11 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 26  # 30 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 31))
+    assert len(recommendation.outranked) == 28  # 32 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 33))
 
     first = recommendation.outranked[0]
-    assert first.model.id == "deepseek-v4-flash"
+    assert first.model.id == "gpt-5-6-luna"
     assert any("Not the cheapest" in reason for reason in first.reasons)
 
 
