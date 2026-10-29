@@ -1904,3 +1904,33 @@ no longer finds "Also strong options". Neither test was edited.
 **Status**
 Proposed in the bot PR of 2026-10-22, pending the owner's review.
 
+## Iteration #39
+
+**Observation**
+On 2026-10-29 OpenAI's API changelog has a new entry, "Oct 28 ... API
+credits for ChatGPT subscribers": "Eligible ChatGPT Pro and Business
+subscribers can now claim up to $500 per month in free API credits as a
+subscription benefit." Its guide
+(`developers.openai.com/api/docs/guides/chatgpt-api-credits`, read as raw
+markdown) gives the amounts per tier ("Pro ($100 tier) | $100", "Pro ($200
+tier) | $200", "Pro ($500 tier) | $500"), the conditions (a paid
+subscription at least seven days old, no free trials; one link to an API
+organization the subscriber owns, with the same email; a prorated first
+grant; "Unused credits expire at the end of the billing cycle and don't
+roll over") and the exclusions ("Codex usage through API keys is not
+supported by this benefit"; the credits "don't increase your ChatGPT or
+signed-in Codex usage limits"). Plus, Go and Free are named as ineligible.
+The three `chatgpt-pro-*` plans had `api_credits: null` and an exclusion
+saying API usage is not included, from the Pro tiers help article read on
+2026-10-14; that article returns HTTP 403 to the audit.
+
+**Current decision**
+Proposed, not decided: `api_credits` on `chatgpt-pro-100`, `-200` and
+`-500` with the tier's amount, `surface: direct_api` and the conditions
+above, the same shape as Claude Max (Iteration #31). The exclusion line is
+rewritten from the developer guide, and the OpenAI access guide says the
+Pro tiers include the credits. `chatgpt-plus` is unchanged. Business is
+not a plan in the catalog.
+
+**Status**
+Proposed in the bot PR of 2026-10-29, pending the owner's review.

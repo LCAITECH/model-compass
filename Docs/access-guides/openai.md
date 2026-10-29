@@ -7,7 +7,9 @@ console. Model Compass does not replace that documentation (`VISION.md`).
 
 ## `openai#direct-api`
 
-The API is billed and managed separately from any ChatGPT subscription.
+The API is billed and managed separately from any ChatGPT subscription,
+except for the monthly API credits that the Pro tiers include (see
+`openai#chatgpt-subscription`).
 
 1. Create/use an OpenAI platform account.
 2. Add a payment method under API billing settings.
@@ -26,7 +28,11 @@ publish in tokens.
    tiers (USD 100, 200 or 500 a month) at [chatgpt.com/pricing](https://chatgpt.com/pricing/).
 2. Pick the model in ChatGPT; the plan comparison table on the pricing
    page shows which models each plan includes.
-3. API usage is not included in any ChatGPT plan and is billed to a
-   separate API account (see `openai#direct-api`).
+3. ChatGPT Plus includes no API usage. The three Pro tiers include
+   monthly API credits equal to their price (USD 100, 200 or 500), claimed
+   once by linking the subscription to an API organization you own; they
+   expire at the end of each billing cycle, don't cover Codex usage through
+   API keys and don't raise ChatGPT's own limits. API usage beyond them is
+   billed to that API account (see `openai#direct-api`).
 
-Sources: [ChatGPT pricing](https://chatgpt.com/pricing/), [What is ChatGPT Plus?](https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus) and [ChatGPT Pro tiers](https://help.openai.com/en/articles/9793128-about-chatgpt-pro-tiers), consulted 2026-10-14.
+Sources: [ChatGPT pricing](https://chatgpt.com/pricing/), [What is ChatGPT Plus?](https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus) and [ChatGPT Pro tiers](https://help.openai.com/en/articles/9793128-about-chatgpt-pro-tiers), consulted 2026-10-14; [API credits for ChatGPT subscribers](https://developers.openai.com/api/docs/guides/chatgpt-api-credits), consulted 2026-10-29.

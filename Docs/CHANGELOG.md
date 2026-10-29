@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-29 — Proposed: monthly API credits on the ChatGPT Pro tiers
+
+**Dataset and docs only. No change to the engine or the schema.**
+
+- **What changed at OpenAI.** On 2026-10-28 OpenAI started giving eligible ChatGPT Pro and Business subscribers free monthly API credits. Each Pro tier gets credits equal to its price: USD 100, 200 or 500 a month. They are claimed once by linking the subscription to an API organization you own, expire at the end of each billing cycle, and don't cover Codex usage through API keys.
+- **What changes here.** The three ChatGPT Pro plans now carry those credits, so the plan comparison can show what they buy at a model's list price, the same as Claude Max and Google AI Pro. Their exclusion line no longer says API usage is not included, and the OpenAI access guide says the same. ChatGPT Plus is not eligible and stays as it was. Business is not a plan in the catalog.
+- **Tests:** no count changes.
+
+---
+
 ## 2026-10-27 — Proposed: GPT-6.1 Terra
 
 **One model and one access route, proposed for the owner's review. No change to the engine or the schema.**
