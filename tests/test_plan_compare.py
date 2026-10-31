@@ -11,7 +11,7 @@ from decision.domain import MonthlyUsage, UseMode, Verdict
 from decision.loader import load_access_routes, load_subscriptions
 from tests.conftest import ACCESS_ROUTES_DIR, SUBSCRIPTIONS_DIR
 
-OPUS = "claude-opus-5-5"  # $4 / $20 per 1M; on Claude Pro, Max 5x, Max 20x
+OPUS = "claude-opus-5-5"  # $4 / $20 per 1M; on Claude Pro, Max, Ultra
 ARGON = "gemini-4-argon"  # Gemini app, AI Studio and Antigravity, all on AI Pro and Ultra
 NO_PLAN = "deepseek-v4-pro"  # no documented subscription route
 
@@ -38,7 +38,7 @@ def _compare(by_id, routes, plans, model_id, use_mode=UseMode.MANUAL, **kwargs):
 def test_lists_the_plans_that_name_the_model_cheapest_first(by_id, routes, plans):
     comparison = _compare(by_id, routes, plans, OPUS)
 
-    assert [option.plan.plan_id for option in comparison.options] == ["claude-pro", "claude-max-5x", "claude-max-20x"]
+    assert [option.plan.plan_id for option in comparison.options] == ["claude-pro", "claude-max-5x", "claude-ultra"]
     assert comparison.chosen.plan.plan_id == "claude-pro"
     assert comparison.monthly_usd == 20
 
@@ -47,9 +47,9 @@ def test_credits_count_only_where_the_plan_includes_them(by_id, routes, plans):
     options = {option.plan.plan_id: option for option in _compare(by_id, routes, plans, OPUS).options}
 
     assert options["claude-pro"].credits_usd is None
-    assert (options["claude-max-5x"].credits_usd, options["claude-max-20x"].credits_usd) == (100, 200)
-    # The multiplier's base plan, for "10x the price for 20x the usage".
-    assert options["claude-max-20x"].base_price_usd == 20
+    assert (options["claude-max-5x"].credits_usd, options["claude-ultra"].credits_usd) == (100, 200)
+    # The multiplier's base plan, for "10x the price for 10x the usage".
+    assert options["claude-ultra"].base_price_usd == 20
 
 
 def test_a_plan_lists_every_surface_that_names_the_model(by_id, routes, plans):

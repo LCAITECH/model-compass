@@ -1978,3 +1978,4 @@ multiplier; neither is a file the bot may edit.
 **Status**
 Proposed in the bot PR of 2026-10-29 (PR #9, commit of 2026-10-31),
 pending the owner's review.
+Owner's one-off test exception of 2026-10-31: the seven tests and the `Docs/SCHEMA.md` example were updated for the rename only; the suite passes.
