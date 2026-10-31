@@ -1971,9 +1971,9 @@ decision `claude-max-5x` keeps its id; its name becomes "Claude Max" and
 its scope "usage every 5 hours and every week" (factor 5, USD 100). Both
 plans cite the new API-credits article. The four Claude subscription
 routes name `claude-ultra`, and the Anthropic access guide, the Haiku
-5.5 and Fable 5.1 model docs are updated. `Docs/SCHEMA.md` still uses
-`claude-max-20x` as an example and seven tests still name the old id or
-multiplier; neither is a file the bot may edit.
+5.5 and Fable 5.1 model docs are updated. Under the owner's one-off
+exception of 2026-10-31, the `Docs/SCHEMA.md` example and the seven tests
+that named the old id or multiplier were updated for the rename only.
 
 **Status**
 Proposed in the bot PR of 2026-10-29 (PR #9, commit of 2026-10-31),
