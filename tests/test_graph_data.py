@@ -55,9 +55,27 @@ def test_a_dot_carries_only_what_its_ring_can_say(models):
 
 
 def test_ring_counts_add_up_to_everything_but_the_winner(models):
-    counts = ring_counts(_items(models))
+    items = _items(models)
+    counts = ring_counts(items)
+    tied_alternatives = sum(1 for item in items if item["ring"] == "alt" and item["tied"])
 
-    assert sum(counts.values()) == len(models) - 1
+    # A tied top alternative is counted under both labels on purpose (ring_counts).
+    assert sum(counts.values()) - tied_alternatives == len(models) - 1
+
+
+def test_the_legend_counts_a_tied_top_alternative_as_practically_tied(models):
+    # 2026-10-31 audit: here deepseek-v4-pro is #2 and within 2% of
+    # gemini-3.8-flash, so the "Also strong options" card lists it, but the
+    # legend said "Practically tied (0)": it counted only the tied ring.
+    context = Context(
+        "Python development", BudgetMode.TIER, BudgetLevel.MEDIUM,
+        (Priority.CODING, Priority.REASONING, Priority.COST), "es",
+    )
+    recommendation = explain(context, evaluate(context, models))
+    tied_ids = {option.model.id for option in recommendation.also_strong_options}
+
+    assert any(alt.model.id in tied_ids for alt in recommendation.alternatives)  # the case under test
+    assert ring_counts(graph_items(recommendation, lambda model: _NO_BADGES))["tied"] == len(tied_ids)
 
 
 def test_dated_facts_become_marks_on_the_dot(models):

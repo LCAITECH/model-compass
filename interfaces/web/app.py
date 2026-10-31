@@ -6,6 +6,7 @@ of its own — per ARCHITECTURE.md, decision/ would work identically if
 this whole package were deleted.
 """
 
+import math
 from datetime import date
 from pathlib import Path
 from urllib.parse import urlencode
@@ -150,6 +151,19 @@ def _other_alternatives(recommendation):
         return ()
     also_strong_ids = {opt.model.id for opt in recommendation.also_strong_options}
     return tuple(alt for alt in recommendation.alternatives if alt.model.id not in also_strong_ids)
+
+
+def _exact_ties(recommendation, candidates) -> set[str]:
+    """Also-strong options whose score equals the winner's. Only for these is
+    the order a tie-break (dataset order); the rest scored a little lower, and
+    the page must not say otherwise."""
+    if not recommendation:
+        return set()
+    scores = {c.model.id: c.score for c in candidates}
+    top = scores[recommendation.recommended.id]
+    return {
+        o.model.id for o in recommendation.also_strong_options if math.isclose(scores[o.model.id], top, rel_tol=1e-9)
+    }
 
 
 def _savings_summary(recommendation, candidates, budget_usd, priority_1) -> dict | None:
@@ -362,6 +376,7 @@ def _result_response(request: Request, form):
             "output_capacity_pct": output_capacity_pct,
             "savings": savings,
             "other_alternatives": _other_alternatives(recommendation),
+            "exact_ties": _exact_ties(recommendation, candidates),
             "access": access,
             "subscription_plan_names": subscription_plan_names,
             "share_url": "/recommend?" + urlencode([(key, value) for key, value in form.multi_items() if value]),

@@ -56,9 +56,14 @@ def graph_items(recommendation: Recommendation, badges_of: Callable[[AIModel], B
 
 
 def ring_counts(items: list[dict]) -> dict[str, int]:
-    """How many dots sit on each ring (the legend's numbers)."""
+    """The legend's numbers: dots per ring, except "tied", which counts every
+    practically tied model. A tied model that is also a top alternative sits on
+    the inner ring (marked tied) and is counted in both, so the legend agrees
+    with the "Also strong options" card instead of saying 0."""
     counts = {"alt": 0, "tied": 0, "out": 0, "ex": 0}
     for item in items:
         if item["ring"] in counts:
             counts[item["ring"]] += 1
+        if item["ring"] == "alt" and item["tied"]:
+            counts["tied"] += 1
     return counts

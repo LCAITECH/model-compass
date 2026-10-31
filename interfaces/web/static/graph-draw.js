@@ -125,7 +125,12 @@
 
     function updateLegend(items) {
       const counts = { alt: 0, tied: 0, out: 0, ex: 0 };
-      items.forEach((m) => { if (counts[m.ring] !== undefined) counts[m.ring] += 1; });
+      // Same rule as ring_counts() in graph_data.py: a tied top alternative
+      // also counts as practically tied.
+      items.forEach((m) => {
+        if (counts[m.ring] !== undefined) counts[m.ring] += 1;
+        if (m.ring === "alt" && m.tied) counts.tied += 1;
+      });
       figure.querySelectorAll("[data-ring-count]").forEach((span) => { span.textContent = String(counts[span.dataset.ringCount]); });
       if (!legend) return;
       legend.querySelectorAll(".is-mark-key").forEach((li) => li.remove());

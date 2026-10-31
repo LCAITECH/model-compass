@@ -96,6 +96,28 @@ def test_no_opening_reason_when_use_case_is_blank(models):
     assert all("use case" not in reason for reason in recommendation.reasons)
 
 
+def test_a_dollar_budget_is_never_said_to_be_fitted(models):
+    # 2026-10-31 audit: under BudgetMode.CUSTOM nothing filters on the amount,
+    # yet the cost reason said "fit your budget". Cost first makes the winner
+    # the cheapest; coding first leaves cost as a plain price.
+    reasons = {}
+    for priorities in ((Priority.COST,), (Priority.CODING, Priority.COST)):
+        context = Context("", BudgetMode.CUSTOM, None, priorities, "en")
+        reasons[priorities[0]] = explain(context, evaluate(context, models)).reasons
+
+    assert all("budget" not in reason for group in reasons.values() for reason in group)
+    assert "Lowest cost among the qualifying models" in reasons[Priority.COST]
+    assert any(reason.startswith("Priced at $") for reason in reasons[Priority.CODING])
+
+
+def test_a_budget_tier_still_says_the_winner_fits_it(models):
+    context = Context("", BudgetMode.TIER, BudgetLevel.MEDIUM, (Priority.CODING, Priority.COST), "en")
+
+    reasons = explain(context, evaluate(context, models)).reasons
+
+    assert any(reason.startswith("Cost fits your budget ($") for reason in reasons)
+
+
 def test_raises_when_no_model_qualifies(models):
     # No model in the dataset lists this made-up language code.
     context = Context(

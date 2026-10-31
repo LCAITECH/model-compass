@@ -112,6 +112,43 @@ def test_recommend_omits_also_strong_options_when_the_winner_is_unmatched(client
     assert "Qwen3.8-Flash" in response.text  # a real, unfiltered alternative
 
 
+def _also_strong_sentence(client, params) -> str:
+    html = " ".join(client.get("/recommend", params=params).text.split())
+    start = html.index("Also strong options")
+    return html[start:html.index("</p>", start)]
+
+
+def test_the_tie_break_is_named_only_for_an_exact_tie(client):
+    # 2026-10-31 audit: the card always said the winner was first "because of a
+    # deterministic tie-break, not because it scored higher", even when it had
+    # scored higher. Reasoning only, budget=low: claude-haiku-5-5 and all its
+    # also-strong options score exactly the same.
+    sentence = _also_strong_sentence(client, {"language": "en", "budget": "low", "priority_1": "reasoning"})
+
+    assert "because of a deterministic tie-break, not because it scored higher" in sentence
+
+
+def test_a_winner_that_scored_higher_is_not_called_a_tie_break(client):
+    # Reasoning then cost, budget=low: claude-haiku-5-5 ($0.60 blended) is
+    # cheaper than its only also-strong option, qwen3.8-flash ($0.62), so it
+    # scored higher, by less than 2%.
+    sentence = _also_strong_sentence(
+        client, {"language": "en", "budget": "low", "priority_1": "reasoning", "priority_2": "cost"}
+    )
+
+    assert "Claude Haiku 5.5 is listed first because it scored slightly higher, by less than 2%." in sentence
+    assert "tie-break" not in sentence
+
+
+def test_a_mixed_group_says_which_option_is_an_exact_tie(client):
+    # Context window only, budget=low: gpt-5-6-luna wins; gpt-6-luna has the
+    # same 1.05M window (an exact tie), gemini-3.1-flash-lite a slightly smaller
+    # one (1,048,576), so a lower score.
+    sentence = _also_strong_sentence(client, {"language": "en", "budget": "low", "priority_1": "context_window"})
+
+    assert "scored slightly higher than Gemini 3.1 Flash-Lite; with GPT-6 Luna the score is exactly equal" in sentence
+
+
 def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_routes(client):
     # budget=low, instruction_following -> claude-haiku-5-5 wins (re-derived
     # 2026-10-27 from a real run: with cost first, qwen3.7-flash now wins,

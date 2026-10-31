@@ -14,7 +14,7 @@ logic already picked.
 
 from decision.domain.ai_model import AIModel
 from decision.domain.candidate import Candidate
-from decision.domain.context import QUALITY_DIMENSION_ATTR, Context, Priority
+from decision.domain.context import QUALITY_DIMENSION_ATTR, BudgetMode, Context, Priority
 from decision.domain.languages import language_name
 from decision.domain.recommendation import Alternative, Exclusion, Outranked, Recommendation
 from decision.explainer.errors import NoQualifyingModelsError
@@ -76,7 +76,7 @@ def _build_reasons(context: Context, winner: AIModel, qualifying: list[AIModel])
     opening = _opening_reason(context)
     if opening:
         reasons.append(opening)
-    reasons.extend(_priority_reason(priority, winner, qualifying) for priority in context.priorities)
+    reasons.extend(_priority_reason(context, priority, winner, qualifying) for priority in context.priorities)
     reasons.append(_language_reason(context, winner))
     return tuple(reasons)
 
@@ -103,16 +103,17 @@ def _join_naturally(items: list[str]) -> str:
     return f"{', '.join(items[:-1])}, and {items[-1]}"
 
 
-def _priority_reason(priority: Priority, winner: AIModel, qualifying: list[AIModel]) -> str:
+def _priority_reason(context: Context, priority: Priority, winner: AIModel, qualifying: list[AIModel]) -> str:
     label = _PRIORITY_LABEL[priority]
 
     if priority == Priority.COST:
+        # Only a budget tier filters (BudgetMode). A dollar amount never does,
+        # so under it nothing "fits your budget": the claim would be unchecked.
+        by_tier = context.budget_mode == BudgetMode.TIER
+        price = f"${winner.cost.input_per_million:g}/${winner.cost.output_per_million:g} per million tokens"
         if _is_cheapest(winner, qualifying):
-            return "Lowest cost among the models that fit your budget"
-        return (
-            f"Cost fits your budget "
-            f"(${winner.cost.input_per_million:g}/${winner.cost.output_per_million:g} per million tokens)"
-        )
+            return f"Lowest cost among {'the models that fit your budget' if by_tier else 'the qualifying models'}"
+        return f"Cost fits your budget ({price})" if by_tier else f"Priced at {price}"
 
     if priority == Priority.CONTEXT_WINDOW:
         if _has_largest_context(winner, qualifying):

@@ -1,14 +1,27 @@
 {% import "_icons.html" as icons -%}
 {% import "_notices.html" as notices -%}
 {% if recommendation.also_strong_options %}
+{#- Only an exact tie is ordered by the tie-break (dataset order); every other
+    option here scored a little lower, and the sentence says which is which. -#}
+{% set winner = recommendation.recommended.name %}
+{% set tied_names = recommendation.also_strong_options | selectattr("model.id", "in", exact_ties) | map(attribute="model.name") | list %}
+{% set lower_names = recommendation.also_strong_options | rejectattr("model.id", "in", exact_ties) | map(attribute="model.name") | list %}
 <div class="card also-strong-card">
   <h2>{{ icons.swap() }}Also strong options</h2>
   <p class="muted">
     {{ recommendation.also_strong_options | length }} other qualifying model{{ 's' if recommendation.also_strong_options | length != 1 }}
-    scored within 2% of {{ recommendation.recommended.name }} and stayed within one quality tier of it
+    scored within 2% of {{ winner }} and stayed within one quality tier of it
     on every dimension — practically tied, not clearly behind.
-    {{ recommendation.recommended.name }} is listed first because of a deterministic tie-break, not
+    {% if not lower_names %}
+    {{ winner }} is listed first because of a deterministic tie-break, not
     because it scored higher.
+    {% elif not tied_names %}
+    {{ winner }} is listed first because it scored slightly higher, by less than 2%.
+    {% else %}
+    {{ winner }} scored slightly higher than {{ lower_names | join(", ") }}; with
+    {{ tied_names | join(", ") }} the score is exactly equal, and a deterministic tie-break lists
+    {{ winner }} first.
+    {% endif %}
   </p>
   <div class="alternatives-grid">
     {% for opt in recommendation.also_strong_options %}
