@@ -1904,3 +1904,78 @@ no longer finds "Also strong options". Neither test was edited.
 **Status**
 Proposed in the bot PR of 2026-10-22, pending the owner's review.
 
+## Iteration #39
+
+**Observation**
+On 2026-10-29 OpenAI's API changelog has a new entry, "Oct 28 ... API
+credits for ChatGPT subscribers": "Eligible ChatGPT Pro and Business
+subscribers can now claim up to $500 per month in free API credits as a
+subscription benefit." Its guide
+(`developers.openai.com/api/docs/guides/chatgpt-api-credits`, read as raw
+markdown) gives the amounts per tier ("Pro ($100 tier) | $100", "Pro ($200
+tier) | $200", "Pro ($500 tier) | $500"), the conditions (a paid
+subscription at least seven days old, no free trials; one link to an API
+organization the subscriber owns, with the same email; a prorated first
+grant; "Unused credits expire at the end of the billing cycle and don't
+roll over") and the exclusions ("Codex usage through API keys is not
+supported by this benefit"; the credits "don't increase your ChatGPT or
+signed-in Codex usage limits"). Plus, Go and Free are named as ineligible.
+The three `chatgpt-pro-*` plans had `api_credits: null` and an exclusion
+saying API usage is not included, from the Pro tiers help article read on
+2026-10-14; that article returns HTTP 403 to the audit.
+
+**Current decision**
+Proposed, not decided: `api_credits` on `chatgpt-pro-100`, `-200` and
+`-500` with the tier's amount, `surface: direct_api` and the conditions
+above, the same shape as Claude Max (Iteration #31). The exclusion line is
+rewritten from the developer guide, and the OpenAI access guide says the
+Pro tiers include the credits. `chatgpt-plus` is unchanged. Business is
+not a plan in the catalog.
+
+**Status**
+Proposed in the bot PR of 2026-10-29, pending the owner's review.
+
+## Iteration #40
+
+**Observation**
+On 2026-10-31 Anthropic's pricing page (`claude.com/pricing`) lists
+"Max ... $100 Per month ... 5x Pro usage every 5 hours and every week*"
+and "Ultra ... $200 Per month ... No 5-hour limit ‡ 10x Pro usage every
+week* $200 a month in API credits", with "‡ No 5-hour limit for verified
+accounts." Its help articles agree: Max gives "five times the Pro plan's
+usage every five hours and every week"
+(`support.claude.com/en/articles/11049741-what-is-the-max-plan`); Ultra
+gives "10 times the Pro plan's usage every week", and "Verified Ultra
+accounts don't have a five-hour limit. If your account isn't verified
+yet, a temporary limit applies"; "The Max 20x plan is now called the
+Ultra plan" (`.../17728952-what-is-the-ultra-plan`). The Claude Code
+article says "Pro and Max plans have a five-hour session limit and a
+weekly limit. Ultra plans have a weekly limit, and verified Ultra
+accounts don't have a five-hour session limit"
+(`.../11145838-use-claude-code-with-your-pro-max-or-ultra-plan`). The
+API-credits article moved to
+`.../17154008-monthly-api-credits-for-max-ultra-and-team-plans`: "Max |
+$100", "Ultra | $200". The catalog stored `claude-max-20x` ("Claude Max
+20x", 20x Pro per 5-hour session) and `claude-max-5x` ("Claude Max 5x",
+5x per 5-hour session), from the pages read on 2026-10-14. The Opus 5.5,
+Haiku 5.5 and Fable pages and the Fable-by-plan article now name Ultra
+next to Max.
+
+**Current decision**
+The owner's decision of 2026-10-31: rename `claude-max-20x` to
+`claude-ultra` ("Claude Ultra") and store its multiplier as factor 10,
+scope "weekly usage", relative to `claude-pro`. Price (USD 200) and API
+credits (USD 200 a month) are unchanged. The verified-account condition
+on the no-5-hour-limit is a documented exclusion of the plan. By the same
+decision `claude-max-5x` keeps its id; its name becomes "Claude Max" and
+its scope "usage every 5 hours and every week" (factor 5, USD 100). Both
+plans cite the new API-credits article. The four Claude subscription
+routes name `claude-ultra`, and the Anthropic access guide, the Haiku
+5.5 and Fable 5.1 model docs are updated. Under the owner's one-off
+exception of 2026-10-31, the `Docs/SCHEMA.md` example and the seven tests
+that named the old id or multiplier were updated for the rename only.
+
+**Status**
+Proposed in the bot PR of 2026-10-29 (PR #9, commit of 2026-10-31),
+pending the owner's review.
+Owner's one-off test exception of 2026-10-31: the seven tests and the `Docs/SCHEMA.md` example were updated for the rename only; the suite passes.

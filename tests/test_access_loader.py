@@ -82,7 +82,7 @@ def test_loads_all_real_subscriptions():
         "google-ai-ultra-20x",
         "claude-pro",
         "claude-max-5x",
-        "claude-max-20x",
+        "claude-ultra",
         "chatgpt-plus",
         "chatgpt-pro-100",
         "chatgpt-pro-200",

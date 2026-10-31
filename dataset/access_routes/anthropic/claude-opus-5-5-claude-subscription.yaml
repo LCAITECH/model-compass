@@ -8,7 +8,7 @@ access:
 eligibility:
   requirements:
     - kind: consumer_subscription
-      value: [claude-pro, claude-max-5x, claude-max-20x]
+      value: [claude-pro, claude-max-5x, claude-ultra]
   region_scope: account_dependent
 economics:
   billing_owner: Anthropic
@@ -17,6 +17,6 @@ economics:
   production_allowed: false
 evidence:
   source_url: https://www.anthropic.com/claude/opus
-  consulted_at: "2026-10-14"
+  consulted_at: "2026-10-31"
   status: confirmed
-  caveat: "Anthropic's Opus page: 'Opus 5.5 is available on Claude for Pro, Max, Team, and Enterprise users'; Claude Code's model configuration docs say Pro and Max default to Opus 5.5. Use draws from the plan's shared usage limits, which are not published in tokens. Anthropic does not state that the model in its apps is the same snapshot as the API model; the match is by the exact name on its page."
+  caveat: "Anthropic's Opus page: 'Opus 5.5 is available on Claude for Pro, Max, Ultra, Team, and Enterprise users'; Claude Code's model configuration docs say Pro, Max and Ultra default to Opus 5.5. Use draws from the plan's shared usage limits, which are not published in tokens. Anthropic does not state that the model in its apps is the same snapshot as the API model; the match is by the exact name on its page."

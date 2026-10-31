@@ -29,13 +29,13 @@ Claude.ai and Claude Code can both be used under a paid Claude
 subscription instead of an API key -- usage draws from the plan's
 shared weekly limit ("usage credits"), not per-token billing.
 
-1. Subscribe to Claude Pro (USD 20 a month) or Claude Max (two tiers: Max 5x at USD 100, Max 20x at USD 200) at [claude.com/pricing](https://claude.com/pricing).
+1. Subscribe to Claude Pro (USD 20 a month), Claude Max (USD 100 a month, 5x Pro usage every 5 hours and every week) or Claude Ultra (USD 200 a month, 10x Pro usage every week) at [claude.com/pricing](https://claude.com/pricing). Ultra has no 5-hour limit for verified accounts only; an account that is not verified yet may have a temporary limit.
 2. Sign in to [Claude.ai](https://claude.ai/) or [Claude Code](https://code.claude.com/docs/en/overview) with that account -- no separate API key needed for this path.
 3. Model availability and the exact usage-credit split per model change over time; check the pricing page's comparison table for current terms.
-4. Fable models are included in Max only (up to 50% of the weekly limit). On Pro they run on pay-as-you-go usage credits at standard API rates, outside the plan's limits.
-5. Max also includes monthly Claude API credits (USD 100 on Max 5x, USD 200 on Max 20x, since 2026-10-07). They live in a separate Console organization, expire each billing cycle and do not cover Claude Code; the plan's own usage limits are never usable through the API.
+4. Fable models are included in Max and Ultra only (up to 50% of the weekly limit). On Pro they run on pay-as-you-go usage credits at standard API rates, outside the plan's limits.
+5. Max and Ultra also include monthly Claude API credits (USD 100 on Max, USD 200 on Ultra). They live in a separate Console organization, expire each billing cycle and do not cover Claude Code; the plan's own usage limits are never usable through the API.
 
-Sources: [Pricing](https://claude.com/pricing), consulted 2026-08-13; [Fable models on your plan](https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan) and [API credits for subscribers](https://platform.claude.com/docs/en/about-claude/api-credits-for-subscribers), consulted 2026-10-14.
+Sources: [Pricing](https://claude.com/pricing), [What is the Max plan?](https://support.claude.com/en/articles/11049741-what-is-the-max-plan), [What is the Ultra plan?](https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan), [Use Claude Code with your Pro, Max, or Ultra plan](https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-max-or-ultra-plan), [Fable models on your plan](https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan) and [Monthly API credits for Max, Ultra, and Team plans](https://support.claude.com/en/articles/17154008-monthly-api-credits-for-max-ultra-and-team-plans), consulted 2026-10-31.
 
 ## `anthropic#aws-bedrock`
 

@@ -8,7 +8,7 @@ access:
 eligibility:
   requirements:
     - kind: consumer_subscription
-      value: [claude-pro, claude-max-5x, claude-max-20x]
+      value: [claude-pro, claude-max-5x, claude-ultra]
   region_scope: account_dependent
 economics:
   billing_owner: Anthropic
@@ -17,6 +17,6 @@ economics:
   production_allowed: false
 evidence:
   source_url: https://www.anthropic.com/claude/haiku
-  consulted_at: "2026-10-14"
+  consulted_at: "2026-10-31"
   status: confirmed
-  caveat: "Anthropic's Haiku page: 'Free, Pro, Max, Team, and Enterprise users can select Haiku 5.5 on Claude.ai'. Claude Code is mentioned on the same page without naming a plan, so it is not claimed here. Use draws from the plan's shared usage limits, which are not published in tokens. Anthropic does not state that the model in its apps is the same snapshot as the API model; the match is by the exact name on its page."
+  caveat: "Anthropic's Haiku page: 'Free, Pro, Max, Ultra, Team, and Enterprise users can select Haiku 5.5 on Claude.ai'. Claude Code is mentioned on the same page without naming a plan, so it is not claimed here. Use draws from the plan's shared usage limits, which are not published in tokens. Anthropic does not state that the model in its apps is the same snapshot as the API model; the match is by the exact name on its page."

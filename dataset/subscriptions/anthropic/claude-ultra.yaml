@@ -1,0 +1,39 @@
+provider: Anthropic
+plan_name: Claude Ultra
+surface_entitlements: [consumer_subscription]
+documented_exclusions:
+  - "The plan's usage limits cover Claude and Claude Code only, never API calls"
+  - "The no-5-hour-limit applies only to verified accounts; an account that is not verified yet may have a temporary limit"
+region_scope: account_dependent
+source_url: https://claude.com/pricing
+consulted_at: "2026-10-31"
+status: confirmed
+price:
+  monthly_usd: 200.00
+usage_multiplier:
+  relative_to: claude-pro
+  factor: 10
+  scope: "weekly usage"
+api_credits:
+  monthly_usd: 200.00
+  surface: direct_api
+  conditions: "Claude API credits in a separate Console organization; they refresh and expire each billing cycle with no rollover, do not cover Claude Code or extra usage in the apps, and apply to the Claude API in the Console only (not Bedrock, Vertex or Foundry)"
+# Sources, consulted 2026-10-31 (US English pages):
+# - price and weekly multiplier: https://claude.com/pricing
+#   ("Ultra ... $200 Per month ... No 5-hour limit ‡ 10x Pro usage every week*
+#   $200 a month in API credits"; "‡ No 5-hour limit for verified accounts.")
+#   and https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan
+#   ("Get 10 times the Pro plan's usage every week"; "Verified Ultra accounts
+#   don't have a five-hour limit. If your account isn't verified yet, a
+#   temporary limit applies."; "The Max 20x plan is now called the Ultra plan.
+#   Existing Max 20x subscribers move to Ultra automatically, with no price
+#   change."; monthly billing only; prices exclude tax).
+# - Claude Code limits: https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-max-or-ultra-plan
+#   ("Ultra plans have a weekly limit, and verified Ultra accounts don't have a
+#   five-hour session limit").
+# - API credits: https://support.claude.com/en/articles/17154008-monthly-api-credits-for-max-ultra-and-team-plans
+#   ("Ultra | $200"; "Unused credits expire at the end of each billing cycle";
+#   not for interactive Claude Code, extra usage, Bedrock, Vertex AI or Foundry).
+# - id and multiplier: renamed from claude-max-20x (factor 20, per 5-hour
+#   session) to claude-ultra (factor 10, weekly) by the owner's decision of
+#   2026-10-31 (Docs/IMPLEMENTATION_NOTES.md, Iteration #40).

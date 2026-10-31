@@ -28,18 +28,18 @@ def test_a_model_with_plans_shows_both_paths_and_no_cost_verdict(client):
     response = client.get("/plans", params={"model": OPUS})
 
     assert response.status_code == 200
-    assert "Claude Pro" in response.text and "Claude Max 20x" in response.text
+    assert "Claude Pro" in response.text and "Claude Ultra" in response.text
     assert "Add your monthly usage to compare costs" in response.text
     assert 'value="20.00"' in response.text  # the cheapest plan's list price, prefilled
     assert "5.00M tokens" in response.text  # $20 / $4 per 1M input, the API side
 
 
 def test_the_plan_limit_is_never_given_in_tokens(client):
-    fog = _fog(client.get("/plans", params={"model": OPUS, "plan": "claude-max-20x"}).text)
+    fog = _fog(client.get("/plans", params={"model": OPUS, "plan": "claude-ultra"}).text)
 
     assert "not published in tokens" in fog
     assert not re.search(r"\d[\d.,]*\s*[KMB]?\s*tokens", fog)
-    assert "20× Claude Pro (usage per 5-hour session) for 10.0× its price" in fog
+    assert "10× Claude Pro (weekly usage) for 10.0× its price" in fog
 
 
 def test_included_api_credits_are_shown_with_what_they_buy(client):
