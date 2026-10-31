@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-10-31 — Proposed: Claude Max 20x becomes Claude Ultra
+
+**Dataset and docs only. No change to the engine or the schema.**
+
+- **What changed at Anthropic.** Anthropic's pricing page now lists two plans above Pro: Max at USD 100 a month with "5x Pro usage every 5 hours and every week", and Ultra at USD 200 a month with "10x Pro usage every week" and "No 5-hour limit", the last for verified accounts only. Anthropic's Ultra help article says the Max 20x plan is now called the Ultra plan. Both plans keep their monthly API credits: USD 100 on Max, USD 200 on Ultra.
+- **What changes here.** By the owner's decision of 2026-10-31, the `claude-max-20x` plan is renamed `claude-ultra` ("Claude Ultra") and its multiplier becomes 10x Pro's weekly usage instead of 20x per 5-hour session. Ultra also says that the no-5-hour-limit applies only to verified accounts, and that other accounts may have a temporary limit. `claude-max-5x` keeps its id, by the same decision, and is now named "Claude Max", with its 5x multiplier applying every 5 hours and every week. The four Claude subscription routes (Opus 5.5, Haiku 5.5, Fable 5, Fable 5.1) now name `claude-ultra`, and the Anthropic access guide describes Max and Ultra. Prices and API credits are unchanged.
+- **Tests:** no count changes. Seven tests that still name `claude-max-20x`, "Claude Max 20x" or its old multiplier are red. They are left as they are for the owner.
+
+---
+
 ## 2026-10-29 — Proposed: monthly API credits on the ChatGPT Pro tiers
 
 **Dataset and docs only. No change to the engine or the schema.**

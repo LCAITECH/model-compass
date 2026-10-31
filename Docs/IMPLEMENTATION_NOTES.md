@@ -1934,3 +1934,47 @@ not a plan in the catalog.
 
 **Status**
 Proposed in the bot PR of 2026-10-29, pending the owner's review.
+
+## Iteration #40
+
+**Observation**
+On 2026-10-31 Anthropic's pricing page (`claude.com/pricing`) lists
+"Max ... $100 Per month ... 5x Pro usage every 5 hours and every week*"
+and "Ultra ... $200 Per month ... No 5-hour limit ‡ 10x Pro usage every
+week* $200 a month in API credits", with "‡ No 5-hour limit for verified
+accounts." Its help articles agree: Max gives "five times the Pro plan's
+usage every five hours and every week"
+(`support.claude.com/en/articles/11049741-what-is-the-max-plan`); Ultra
+gives "10 times the Pro plan's usage every week", and "Verified Ultra
+accounts don't have a five-hour limit. If your account isn't verified
+yet, a temporary limit applies"; "The Max 20x plan is now called the
+Ultra plan" (`.../17728952-what-is-the-ultra-plan`). The Claude Code
+article says "Pro and Max plans have a five-hour session limit and a
+weekly limit. Ultra plans have a weekly limit, and verified Ultra
+accounts don't have a five-hour session limit"
+(`.../11145838-use-claude-code-with-your-pro-max-or-ultra-plan`). The
+API-credits article moved to
+`.../17154008-monthly-api-credits-for-max-ultra-and-team-plans`: "Max |
+$100", "Ultra | $200". The catalog stored `claude-max-20x` ("Claude Max
+20x", 20x Pro per 5-hour session) and `claude-max-5x` ("Claude Max 5x",
+5x per 5-hour session), from the pages read on 2026-10-14. The Opus 5.5,
+Haiku 5.5 and Fable pages and the Fable-by-plan article now name Ultra
+next to Max.
+
+**Current decision**
+The owner's decision of 2026-10-31: rename `claude-max-20x` to
+`claude-ultra` ("Claude Ultra") and store its multiplier as factor 10,
+scope "weekly usage", relative to `claude-pro`. Price (USD 200) and API
+credits (USD 200 a month) are unchanged. The verified-account condition
+on the no-5-hour-limit is a documented exclusion of the plan. By the same
+decision `claude-max-5x` keeps its id; its name becomes "Claude Max" and
+its scope "usage every 5 hours and every week" (factor 5, USD 100). Both
+plans cite the new API-credits article. The four Claude subscription
+routes name `claude-ultra`, and the Anthropic access guide, the Haiku
+5.5 and Fable 5.1 model docs are updated. `Docs/SCHEMA.md` still uses
+`claude-max-20x` as an example and seven tests still name the old id or
+multiplier; neither is a file the bot may edit.
+
+**Status**
+Proposed in the bot PR of 2026-10-29 (PR #9, commit of 2026-10-31),
+pending the owner's review.
