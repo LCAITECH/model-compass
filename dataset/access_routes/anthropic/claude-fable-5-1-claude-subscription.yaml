@@ -8,7 +8,7 @@ access:
 eligibility:
   requirements:
     - kind: consumer_subscription
-      value: [claude-max-5x, claude-max-20x]
+      value: [claude-max-5x, claude-ultra]
   region_scope: account_dependent
 economics:
   billing_owner: Anthropic
@@ -17,6 +17,6 @@ economics:
   production_allowed: false
 evidence:
   source_url: https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan
-  consulted_at: "2026-10-14"
+  consulted_at: "2026-10-31"
   status: confirmed
-  caveat: "Included in Claude Max only, up to 50% of the plan's weekly usage limit (not an additional 50%), per Anthropic's support article on Fable models by plan. On Claude Pro, Fable 5.1 runs on pay-as-you-go usage credits billed at standard API rates, outside the plan's quota, so Pro is not listed as satisfying this route; the marketing page's 'available to Pro, Max, Team, and Enterprise users' is true only in that sense. The Fable quota split has changed several times, so confirm current terms before relying on this. Team and Enterprise tiers were not independently confirmed."
+  caveat: "Included in Claude Max and Claude Ultra only, up to 50% of the plan's weekly usage limit (not an additional 50%), per Anthropic's support article on Fable models by plan. On Claude Pro, Fable 5.1 runs on pay-as-you-go usage credits billed at standard API rates, outside the plan's quota, so Pro is not listed as satisfying this route; the marketing page's 'available to Pro, Max, Ultra, Team, and Enterprise users' is true only in that sense. The Fable quota split has changed several times, so confirm current terms before relying on this. Team and Enterprise tiers were not independently confirmed."

@@ -19,6 +19,27 @@ public release to version against.
 
 ---
 
+## 2026-10-31 — Proposed: Claude Max 20x becomes Claude Ultra
+
+**Dataset and docs only. No change to the engine or the schema.**
+
+- **What changed at Anthropic.** Anthropic's pricing page now lists two plans above Pro: Max at USD 100 a month with "5x Pro usage every 5 hours and every week", and Ultra at USD 200 a month with "10x Pro usage every week" and "No 5-hour limit", the last for verified accounts only. Anthropic's Ultra help article says the Max 20x plan is now called the Ultra plan. Both plans keep their monthly API credits: USD 100 on Max, USD 200 on Ultra.
+- **What changes here.** By the owner's decision of 2026-10-31, the `claude-max-20x` plan is renamed `claude-ultra` ("Claude Ultra") and its multiplier becomes 10x Pro's weekly usage instead of 20x per 5-hour session. Ultra also says that the no-5-hour-limit applies only to verified accounts, and that other accounts may have a temporary limit. `claude-max-5x` keeps its id, by the same decision, and is now named "Claude Max", with its 5x multiplier applying every 5 hours and every week. The four Claude subscription routes (Opus 5.5, Haiku 5.5, Fable 5, Fable 5.1) now name `claude-ultra`, and the Anthropic access guide describes Max and Ultra. Prices and API credits are unchanged.
+- **Tests:** no count changes. The seven tests that named `claude-max-20x`, "Claude Max 20x" or its old multiplier were updated under the owner's one-off exception of 2026-10-31, and all 345 tests pass.
+- **Owner's test exception (2026-10-31).** As a one-off exception to the bot contract, the owner allowed those seven tests and the `Docs/SCHEMA.md` example to be updated only for this rename: they now name `claude-ultra`, "Claude Max" / "Claude Ultra" and Ultra's 10x weekly multiplier, and the full suite passes.
+
+---
+
+## 2026-10-29 — Proposed: monthly API credits on the ChatGPT Pro tiers
+
+**Dataset and docs only. No change to the engine or the schema.**
+
+- **What changed at OpenAI.** On 2026-10-28 OpenAI started giving eligible ChatGPT Pro and Business subscribers free monthly API credits. Each Pro tier gets credits equal to its price: USD 100, 200 or 500 a month. They are claimed once by linking the subscription to an API organization you own, expire at the end of each billing cycle, and don't cover Codex usage through API keys.
+- **What changes here.** The three ChatGPT Pro plans now carry those credits, so the plan comparison can show what they buy at a model's list price, the same as Claude Max and Google AI Pro. Their exclusion line no longer says API usage is not included, and the OpenAI access guide says the same. ChatGPT Plus is not eligible and stays as it was. Business is not a plan in the catalog.
+- **Tests:** no count changes.
+
+---
+
 ## 2026-10-27 — Proposed: GPT-6.1 Terra
 
 **One model and one access route, proposed for the owner's review. No change to the engine or the schema.**

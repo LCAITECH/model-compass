@@ -2,7 +2,7 @@ provider: OpenAI
 plan_name: ChatGPT Pro 200
 surface_entitlements: [consumer_subscription]
 documented_exclusions:
-  - "API usage is not included; it is billed to a separate OpenAI API account"
+  - "The monthly API credits do not cover Codex usage through API keys and do not raise ChatGPT or Codex usage limits; API usage beyond the credits is billed to the linked API organization"
 region_scope: account_dependent
 source_url: https://help.openai.com/en/articles/9793128-about-chatgpt-pro-tiers
 consulted_at: "2026-10-14"
@@ -10,8 +10,19 @@ status: confirmed
 price:
   monthly_usd: 200.00
 usage_multiplier: null
-api_credits: null
+api_credits:
+  monthly_usd: 200.00
+  surface: direct_api
+  conditions: "Claimed once by linking the subscription to an API organization you own, with the same email; the plan must be paid and at least seven days old (no free trials). The first grant is prorated, and credits expire at the end of each billing cycle with no rollover"
 # Consulted 2026-10-14: three Pro tiers, "Pro is billed monthly".
 # No multiplier stored: OpenAI publishes none between tiers, only that
 # "Pro 200 includes more usage than Pro 100" and Pro 500 "offers the highest
 # included usage of the three plans".
+# API credits (added 2026-10-29): OpenAI's API changelog, "Oct 28 ...
+# Eligible ChatGPT Pro and Business subscribers can now claim up to $500 per
+# month in free API credits". Amount and conditions from https://developers.openai.com/api/docs/guides/chatgpt-api-credits
+# ("Credit amounts" table: "Pro ($200 tier) | $200"; eligibility, expiry and
+# "Codex usage through API keys is not supported by this benefit"), read as
+# raw markdown on 2026-10-29. The help article above (source_url) returned
+# HTTP 403 to the audit, so its "API usage is not included" wording could not
+# be re-read; the exclusion now follows the developer page.

@@ -99,7 +99,12 @@ stage GA), Microsoft Foundry (Microsoft's Claude-models page lists
 `claude-haiku-5-5` as "Hosted on Azure: GA"). A fifth route, the Claude
 subscription (Pro, Max 5x, Max 20x), was added on 2026-10-14 from
 Anthropic's Haiku page, which names the plans; the admission pass had
-found no page that did.
+found no page that did. **Update 2026-10-31:** Max 20x is now Claude
+Ultra (plan id `claude-ultra`, owner's decision of 2026-10-31, Iteration
+#40); the Haiku page now reads "Free, Pro, Max, Ultra, Team, and
+Enterprise users can select Haiku 5.5 on Claude.ai"
+(https://www.anthropic.com/claude/haiku, consulted 2026-10-31), so the
+route lists `claude-pro`, `claude-max-5x` and `claude-ultra`.
 
 **Free access (`access.has_free_access`):** `true` since 2026-10-15,
 through the consumer app, not the API. Anthropic's Haiku page: "Free,

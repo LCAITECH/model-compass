@@ -44,12 +44,12 @@ def test_every_real_plan_has_a_positive_price(plans):
 
 
 def test_max_tiers_state_their_multiplier_and_api_credits(plans):
-    max_5x, max_20x = plans["claude-max-5x"], plans["claude-max-20x"]
+    max_5x, ultra = plans["claude-max-5x"], plans["claude-ultra"]
 
     assert (max_5x.usage_multiplier.relative_to, max_5x.usage_multiplier.factor) == ("claude-pro", 5)
-    assert max_20x.usage_multiplier.factor == 20
+    assert ultra.usage_multiplier.factor == 10
     assert (max_5x.api_credits.monthly_usd, max_5x.api_credits.surface) == (100, Surface.DIRECT_API)
-    assert max_20x.api_credits.monthly_usd == 200
+    assert ultra.api_credits.monthly_usd == 200
 
 
 def test_plans_without_published_multiplier_or_credits_store_none(plans):

@@ -103,6 +103,15 @@ re-checked for `claude-fable-5-1` this pass — **one did not confirm**:
   pay-as-you-go usage credits" (billed at standard API rates), while Max
   includes them up to 50% of the weekly limit. The subscription route now
   lists Claude Max only (`IMPLEMENTATION_NOTES.md`, Iteration #31).
+  **Update 2026-10-31:** Max 20x is now Claude Ultra (plan id
+  `claude-ultra`, owner's decision of 2026-10-31, Iteration #40). The
+  marketing page now reads "available to Pro, Max, Ultra, Team, and
+  Enterprise users" (https://www.anthropic.com/claude/fable), and the
+  Fable-by-plan article says "On Max and Ultra plans ... both are a
+  standard part of your plan"
+  (https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan),
+  both consulted 2026-10-31. The route lists `claude-max-5x` and
+  `claude-ultra`.
 - **Amazon Bedrock**: confirmed. AWS's own Bedrock model-cards page
   explicitly lists "Claude Fable 5.1" under Anthropic's Claude 5.x
   lineup, alongside Claude Mythos 5.1, Opus 5, Sonnet 5, Mythos 5, and

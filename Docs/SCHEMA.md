@@ -411,7 +411,7 @@ in a YAML comment, the same rule as `lifecycle`.
 - **`price.monthly_usd`** is the US list price. Regional prices and
   taxes differ, which is why the site prefills it and lets the visitor
   change it. A plan with several tiers at different prices is several
-  plans (`claude-max-5x`, `claude-max-20x`).
+  plans (`claude-max-5x`, `claude-ultra`).
 - **`usage_multiplier`** is `null` when the provider publishes no
   number, or only one against a tier that is not a plan in this catalog
   (Free). `relative_to` must name another plan in the catalog; the
