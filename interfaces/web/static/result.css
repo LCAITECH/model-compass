@@ -225,6 +225,11 @@
   margin: var(--space-1) 0 0;
 }
 
+/* A route note that matches the visitor's stated use (RouteNote.FOR_PERSONAL_USE). */
+.access-fit {
+  color: var(--positive);
+}
+
 .access-disclaimer {
   margin-top: var(--space-3);
 }

@@ -10,6 +10,7 @@ from decision.domain.access_recommendation import (
     AccessSummary,
     RouteEligibilityState,
     RouteEntry,
+    RouteNote,
 )
 from decision.domain.access_route import (
     AccessRequirement,
@@ -95,6 +96,7 @@ __all__ = [
     "RequirementKind",
     "RouteEligibilityState",
     "RouteEntry",
+    "RouteNote",
     "SubscriptionPlan",
     "MonthlyUsage",
     "PlanComparison",

@@ -27,7 +27,7 @@ from decision.loader import (
     validate_subscription_references,
 )
 from interfaces.web.access_context_form import access_context_from_form
-from interfaces.web.access_labels import guide_ref_url, humanize, requirement_label
+from interfaces.web.access_labels import guide_ref_url, humanize, requirement_label, route_note
 from interfaces.web.catalog_notices import badges_for, catalog_notices, short_date
 from interfaces.web.graph_data import graph_items, ring_counts
 from interfaces.web.affordability import (
@@ -68,6 +68,7 @@ templates.env.filters["language_name"] = language_name
 templates.env.filters["requirement_label"] = requirement_label
 templates.env.filters["guide_ref_url"] = guide_ref_url
 templates.env.filters["humanize"] = humanize
+templates.env.filters["route_note"] = route_note
 templates.env.filters["short_date"] = short_date
 install_error_pages(app, templates)
 

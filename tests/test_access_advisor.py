@@ -12,6 +12,7 @@ from decision.domain import (
     Intensity,
     RequirementKind,
     RouteEligibilityState,
+    RouteNote,
     UseMode,
     WorkloadType,
 )
@@ -239,3 +240,63 @@ def _make_enterprise_route(model_id: str) -> AccessRoute:
             caveat="test fixture",
         ),
     )
+
+
+# 2026-11-01: use_mode, workload_type and intensity used to be collected and
+# ignored. Each now adds a note read from a documented route field; none
+# reorders the routes. claude-haiku-5-5 has a direct API route (production
+# allowed, automation documented, per-token billing) and a Claude subscription
+# route (no production, no automation, subscription quota).
+
+
+def _notes(**overrides):
+    model = MODELS["claude-haiku-5-5"]
+    recommendation = recommend_access(model, _context(**overrides), ROUTES)
+    return {entry.route.access.surface.value: entry.notes for entry in recommendation.routes}
+
+
+def test_building_on_it_flags_routes_that_forbid_production():
+    notes = _notes(use_mode=UseMode.API_INTEGRATION)
+
+    assert RouteNote.NOT_FOR_PRODUCTION in notes["consumer_subscription"]
+    assert RouteNote.NOT_FOR_PRODUCTION not in notes["direct_api"]
+
+
+def test_using_it_yourself_marks_the_subscription_as_a_fit():
+    notes = _notes(use_mode=UseMode.MANUAL)
+
+    assert RouteNote.FOR_PERSONAL_USE in notes["consumer_subscription"]
+    assert RouteNote.NOT_FOR_PRODUCTION not in notes["consumer_subscription"]
+    assert notes["direct_api"] == ()
+
+
+def test_batch_or_agent_work_flags_routes_without_documented_automation():
+    for workload in (WorkloadType.BATCH, WorkloadType.AGENTIC):
+        notes = _notes(use_mode=UseMode.PROTOTYPE, workload_type=workload)
+
+        assert notes["consumer_subscription"] == (RouteNote.NO_AUTOMATION,)
+        assert notes["direct_api"] == ()
+
+
+def test_heavy_use_flags_quotas_not_published_in_tokens():
+    for intensity in (Intensity.FREQUENT, Intensity.INTENSIVE):
+        notes = _notes(use_mode=UseMode.PROTOTYPE, intensity=intensity)
+
+        assert notes["consumer_subscription"] == (RouteNote.QUOTA_NOT_IN_TOKENS,)
+        assert notes["direct_api"] == ()
+
+
+def test_light_exploratory_prototyping_adds_no_note():
+    notes = _notes(use_mode=UseMode.PROTOTYPE, workload_type=WorkloadType.EXPLORATORY, intensity=Intensity.OCCASIONAL)
+
+    assert all(entry_notes == () for entry_notes in notes.values())
+
+
+def test_notes_never_reorder_the_routes():
+    model = MODELS["claude-haiku-5-5"]
+    quiet = recommend_access(model, _context(use_mode=UseMode.PROTOTYPE), ROUTES)
+    busy = recommend_access(
+        model, _context(use_mode=UseMode.AUTOMATION, workload_type=WorkloadType.AGENTIC, intensity=Intensity.INTENSIVE), ROUTES
+    )
+
+    assert [e.route.route_id for e in quiet.routes] == [e.route.route_id for e in busy.routes]

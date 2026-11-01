@@ -186,3 +186,17 @@ def test_a_practically_tied_option_states_how_much_dearer_it_is(client):
     ).text.split())
 
     assert "$0.10 / $0.50 per 1M tokens (3.3× / 3.8× Qwen3.7-Flash's)" in html
+
+
+def test_access_rows_say_what_fits_the_stated_use(client):
+    # 2026-11-01: budget=low, instruction_following -> claude-haiku-5-5 wins
+    # (see the access-route test above); its Claude subscription route gets
+    # the notes for using it yourself, agent work and intensive use.
+    html = " ".join(client.get("/recommend", params={
+        "language": "en", "budget": "low", "priority_1": "instruction_following",
+        "use_mode": "manual", "workload_type": "agentic", "intensity": "intensive",
+    }).text.split())
+
+    assert "Fits using it yourself: the provider&#39;s own apps, signed in with your plan." in html
+    assert "This route doesn&#39;t document automated use, which batch and agent workloads rely on." in html
+    assert "mind the plan&#39;s limit: its provider doesn&#39;t publish it in tokens." in html

@@ -15,6 +15,19 @@ from decision.domain.access_route import AccessRequirement, AccessRoute
 from decision.domain.ai_model import AIModel
 
 
+class RouteNote(str, Enum):
+    """A fact about one route that matters for what the developer said about
+    their use (AccessContext.use_mode / workload_type / intensity), read from
+    the route's own documented fields. Notes never reorder routes (see the
+    module docstring): they only say what a route does or does not document.
+    """
+
+    NOT_FOR_PRODUCTION = "not_for_production"  # building on it; route forbids production
+    FOR_PERSONAL_USE = "for_personal_use"  # using it yourself; a consumer subscription
+    NO_AUTOMATION = "no_automation"  # batch or agentic; route not documented for automation
+    QUOTA_NOT_IN_TOKENS = "quota_not_in_tokens"  # frequent or intensive; quota unpublished
+
+
 class RouteEligibilityState(str, Enum):
     CURRENTLY_ELIGIBLE = "currently_eligible"
     REQUIRES_ONBOARDING = "requires_onboarding"
@@ -27,6 +40,7 @@ class RouteEntry:
     route: AccessRoute
     state: RouteEligibilityState
     unmet_requirements: tuple[AccessRequirement, ...]  # empty when CURRENTLY_ELIGIBLE
+    notes: tuple[RouteNote, ...] = ()
 
 
 @dataclass(frozen=True)

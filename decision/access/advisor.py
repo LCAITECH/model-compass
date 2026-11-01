@@ -30,16 +30,18 @@ correction -- so it was dropped. Flagged here instead of buried in a
 commit message.
 """
 
-from decision.domain.access_context import AccessContext
+from decision.domain.access_context import AccessContext, Intensity, UseMode, WorkloadType
 from decision.domain.access_recommendation import (
     AccessRecommendation,
     AccessSummary,
     RouteEligibilityState,
     RouteEntry,
+    RouteNote,
 )
 from decision.domain.access_route import (
     AccessRequirement,
     AccessRoute,
+    BillingScheme,
     Capability,
     EvidenceStatus,
     RequirementKind,
@@ -70,7 +72,7 @@ def recommend_access(
             if unmet
             else RouteEligibilityState.CURRENTLY_ELIGIBLE
         )
-        entries.append(RouteEntry(route=route, state=state, unmet_requirements=unmet))
+        entries.append(RouteEntry(route=route, state=state, unmet_requirements=unmet, notes=_notes(route, context)))
 
     entries.sort(key=lambda entry: (entry.state != RouteEligibilityState.CURRENTLY_ELIGIBLE, entry.route.route_id))
 
@@ -79,6 +81,25 @@ def recommend_access(
         routes=tuple(entries),
         summary=_build_summary(entries),
     )
+
+
+def _notes(route: AccessRoute, context: AccessContext) -> tuple[RouteNote, ...]:
+    """What this route documents that bears on the stated use. Every note is a
+    field of the route (production_allowed, surface, capabilities,
+    billing_scheme) set against an answer; none estimates usage or cost."""
+    notes = []
+    building = context.use_mode in (UseMode.API_INTEGRATION, UseMode.AUTOMATION)
+    if building and route.economics.production_allowed is False:
+        notes.append(RouteNote.NOT_FOR_PRODUCTION)
+    if context.use_mode == UseMode.MANUAL and route.access.surface == Surface.CONSUMER_SUBSCRIPTION:
+        notes.append(RouteNote.FOR_PERSONAL_USE)
+    unattended = context.workload_type in (WorkloadType.BATCH, WorkloadType.AGENTIC)
+    if unattended and Capability.AUTOMATION not in route.access.capabilities:
+        notes.append(RouteNote.NO_AUTOMATION)
+    heavy = context.intensity in (Intensity.FREQUENT, Intensity.INTENSIVE)
+    if heavy and route.economics.billing_scheme == BillingScheme.SUBSCRIPTION_QUOTA:
+        notes.append(RouteNote.QUOTA_NOT_IN_TOKENS)
+    return tuple(notes)
 
 
 def _is_satisfied(requirement: AccessRequirement, context: AccessContext) -> bool:

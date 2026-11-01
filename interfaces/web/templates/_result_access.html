@@ -30,6 +30,9 @@
           <strong>{{ entry.route.access.access_method }}</strong>
           <span class="muted">({{ entry.route.provider }})</span>
         </div>
+        {% for note in entry.notes %}{% set text, fits = note | route_note %}
+        <p class="{{ 'access-fit' if fits else 'muted access-caveat' }}">{{ text }}</p>
+        {% endfor %}
         {% if entry.unmet_requirements %}
         <p class="muted">Requires: {{ entry.unmet_requirements | map('requirement_label', subscription_plan_names) | join(', ') }}</p>
         {% endif %}

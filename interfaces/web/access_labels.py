@@ -61,3 +61,18 @@ def guide_ref_url(guide_ref: str) -> str:
     """
     provider, _, anchor = guide_ref.partition("#")
     return f"{_GUIDE_BASE_URL}/{provider}.md#{provider}{anchor}"
+
+
+# Each RouteNote phrased for the visitor. "fits" marks the one positive note,
+# so the template can style it apart from the cautions.
+ROUTE_NOTES = {
+    "not_for_production": ("You're building on it, and this route doesn't allow production use.", False),
+    "for_personal_use": ("Fits using it yourself: the provider's own apps, signed in with your plan.", True),
+    "no_automation": ("This route doesn't document automated use, which batch and agent workloads rely on.", False),
+    "quota_not_in_tokens": ("At frequent or intensive use, mind the plan's limit: its provider doesn't publish it in tokens.", False),
+}
+
+
+def route_note(note) -> tuple[str, bool]:
+    """(text, fits) for a decision.domain.RouteNote."""
+    return ROUTE_NOTES[note.value]
