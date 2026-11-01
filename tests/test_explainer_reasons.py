@@ -36,7 +36,7 @@ def test_cost_priority_explains_the_cheapest_model_and_its_weaknesses(models):
 
     assert recommendation.recommended.id == "qwen3.7-flash"
     assert recommendation.cost_tier == CostTier.LOW
-    assert "your use case is High-volume low-cost bot" in recommendation.reasons[0]
+    assert recommendation.reasons[0] == "For High-volume low-cost bot, you ranked cost first."
     assert any("Lowest cost" in reason for reason in recommendation.reasons)
     assert any("Supports Spanish" in reason and "quality" in reason for reason in recommendation.reasons)
     assert len(recommendation.trade_offs) == 5  # every other factor, none of which it wins
@@ -72,7 +72,7 @@ def test_reasoning_priority_explains_a_model_that_dominates_most_factors(models)
 
     assert recommendation.recommended.id == "claude-fable-5-1"
     assert recommendation.cost_tier == CostTier.VERY_HIGH
-    assert "your use case is Complex agentic workflow" in recommendation.reasons[0]
+    assert recommendation.reasons[0] == "For Complex agentic workflow, you ranked reasoning first."
     assert any("Strongest reasoning" in reason for reason in recommendation.reasons)
     assert recommendation.trade_offs == (
         "Not the cheapest option among the qualifying alternatives",
@@ -92,7 +92,7 @@ def test_no_opening_reason_when_use_case_is_blank(models):
 
     recommendation = explain(context, candidates)
 
-    assert not recommendation.reasons[0].startswith("Because your use case")
+    assert not recommendation.reasons[0].startswith("For ")
     assert all("use case" not in reason for reason in recommendation.reasons)
 
 

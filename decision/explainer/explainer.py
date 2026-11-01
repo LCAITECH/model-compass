@@ -84,6 +84,9 @@ def _build_reasons(context: Context, winner: AIModel, qualifying: list[AIModel])
 def _opening_reason(context: Context) -> str | None:
     """A framing sentence tying the priorities back to the use case, when given.
 
+    The developer ranked the priorities (or accepted a preset's); the engine
+    never derives them from the use case, so the sentence says who did.
+
     Still fully deterministic string formatting over Context — no model
     is asked to write this, and the same Context always produces the
     same sentence.
@@ -92,7 +95,7 @@ def _opening_reason(context: Context) -> str | None:
         return None
 
     labels = [_PRIORITY_LABEL[priority] for priority in context.priorities]
-    return f"Because your use case is {context.use_case}, we weighted {_join_naturally(labels)} most heavily."
+    return f"For {context.use_case}, you ranked {_join_naturally(labels)} first."
 
 
 def _join_naturally(items: list[str]) -> str:

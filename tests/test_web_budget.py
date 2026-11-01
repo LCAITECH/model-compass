@@ -229,3 +229,15 @@ def test_recommend_still_defaults_to_tier_mode_when_budget_mode_is_absent(client
     # carries every excluded model's id since 2026-10-15), i.e. not the winner.
     assert "claude-fable-5" not in visible_html(response.text)
     assert "cost tier exceeds a &#39;high&#39; budget" in response.text or "cost tier exceeds a 'high' budget" in response.text
+
+
+def test_the_budget_tier_tooltip_states_the_engines_own_bands(client):
+    # 2026-11-01: the tooltip called the tier a "monthly API budget"; it is a
+    # band of blended price per million tokens. Its numbers must follow the
+    # evaluator's ceilings, so this fails if either side changes alone.
+    from decision.evaluator.evaluator import _COST_TIER_CEILINGS
+
+    html = client.get("/").text
+    for ceiling, tier in _COST_TIER_CEILINGS:
+        assert f"{tier.name.replace('_', ' ').capitalize()} up to ${ceiling:g}" in html
+    assert "monthly API budget" not in html
