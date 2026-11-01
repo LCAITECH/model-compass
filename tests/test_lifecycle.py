@@ -2,50 +2,16 @@
 
 import pytest
 
+from conftest import ACTIVE_LIFECYCLE as _ACTIVE
+from conftest import model_yaml
 from decision.domain import BudgetLevel, BudgetMode, Context, Lifecycle, LifecycleStatus, Priority
 from decision.evaluator import evaluate
 from decision.loader import DatasetValidationError, load_dataset, load_model_file
 
-_TEMPLATE = """
-id: {model_id}
-name: Test
-provider: Test
-version: "1"
-license: proprietary
-capabilities:
-  vision: false
-  audio: false
-  image_generation: false
-  tool_calling: true
-  structured_output: true
-  json_mode: true
-quality:
-  reasoning: high
-  coding: high
-  creative_writing: high
-  instruction_following: high
-languages: [en]
-language_quality:
-  en: high
-operational:
-  context_window: 1000
-  max_output: 1000
-cost:
-  input_per_million: 1.0
-  output_per_million: 1.0
-ecosystem:
-  integration_ease: high
-  maturity: stable
-access:
-  has_free_access: false
-{lifecycle}"""
-
-_ACTIVE = "lifecycle:\n  status: active\n  release_date: null\n  shutdown_date: null\n  replacement: null\n"
-
 
 def _write(directory, model_id, lifecycle):
     path = directory / f"{model_id}.yaml"
-    path.write_text(_TEMPLATE.format(model_id=model_id, lifecycle=lifecycle), encoding="utf-8")
+    path.write_text(model_yaml(model_id, lifecycle=lifecycle), encoding="utf-8")
     return path
 
 

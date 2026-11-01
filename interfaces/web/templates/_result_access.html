@@ -41,7 +41,7 @@
         {% if entry.route.evidence.caveat %}
         <p class="muted access-caveat">{{ entry.route.evidence.caveat }}</p>
         {% endif %}
-        <p class="access-evidence"><a href="{{ entry.route.access.guide_ref | guide_ref_url }}" target="_blank" rel="noopener">How to access</a> · Source: <a href="{{ entry.route.evidence.source_url }}" target="_blank" rel="noopener">official docs</a> — checked {{ entry.route.evidence.consulted_at }}</p>
+        <p class="access-evidence"><a href="{{ entry.route.access.guide_ref | guide_ref_url }}" target="_blank" rel="noopener">How to access</a> · Source: <a href="{{ entry.route.evidence.source_url }}" target="_blank" rel="noopener">official docs</a> — checked {{ entry.route.evidence.consulted_at | short_date }}</p>
       </div>
       {% endfor %}
     </div>

@@ -30,13 +30,13 @@
         <span class="alt-name">{{ opt.model.name }}</span>
         <span class="chip chip-positive">Practically tied</span>
         {{ notices.badges(opt.model, compact=true) }}
-        {% if opt.model.cost.blended < recommendation.recommended.cost.blended %}
-        <span class="chip chip-muted">Cheaper</span>
-        {% elif opt.model.cost.blended > recommendation.recommended.cost.blended %}
-        <span class="chip chip-muted">More expensive</span>
+        {% set ratio = price_ratio(opt.model, recommendation.recommended) %}
+        {% set cheaper = opt.model.cost.blended < recommendation.recommended.cost.blended %}
+        {% if opt.model.cost.blended != recommendation.recommended.cost.blended %}
+        <span class="chip chip-muted">{{ 'Cheaper' if cheaper else 'More expensive' }}</span>
         {% endif %}
       </div>
-      <span class="muted">#{{ opt.rank }} of {{ recommendation.total_qualifying }} — ${{ "%.2f"|format(opt.model.cost.input_per_million) }} / ${{ "%.2f"|format(opt.model.cost.output_per_million) }} per 1M tokens</span>
+      <span class="muted">#{{ opt.rank }} of {{ recommendation.total_qualifying }} — ${{ "%.2f"|format(opt.model.cost.input_per_million) }} / ${{ "%.2f"|format(opt.model.cost.output_per_million) }} per 1M tokens{% if ratio %} ({{ ratio }} {{ winner }}'s){% endif %}</span>
       {% if opt.reasons %}
       <ul class="standout-reasons">
         {{ icons.item_list(opt.reasons, icons.check) }}

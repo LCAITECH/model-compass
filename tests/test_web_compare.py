@@ -128,7 +128,7 @@ def test_introductory_price_is_noted_on_the_cell(models, access_routes):
 
     note = _row(sections, "Input")["cells"][0]["note"]
 
-    assert note is not None and "2026-11-30" in note and "$4.00" in note
+    assert note is not None and "Nov 30, 2026" in note and "$4.00" in note  # short_date since 2026-10-31
 
 
 def test_result_page_links_to_a_prefilled_comparison(client):

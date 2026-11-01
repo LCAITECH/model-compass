@@ -40,6 +40,19 @@ public release to version against.
 
 ---
 
+## 2026-10-27 — The bot's PR #8 is merged: two new models, three new routes and a new plan
+
+**Dataset, docs and tests. No change to the engine or the schema.**
+
+- **What came in.** Qwen3.7-Flash and GPT-6.1 Terra (44 and 45 models), a Gemini 4 Argon route in Google Antigravity, a Claude Fable 5.1 route on Google Cloud Vertex AI, the Google AI Plus plan ($4.99) with a Gemini 3.6 Flash route in the Gemini app, and Meta's note that Muse Wonder is not available in South Korea. Now 45 models, 104 routes and 11 plans. Each one has its own entry below, written by the bot.
+- **Ratings are the owner's call, and were accepted.** Qwen3.7-Flash: coding `high`, the rest `medium`. GPT-6.1 Terra: `high` on all four dimensions.
+- **Results change.** Qwen3.7-Flash costs $0.03/$0.13 per million tokens, the cheapest in the catalog, so it now wins the cost-first, low-budget contexts that Claude Haiku 5.5 won; GPT-6.1 Terra wins creative writing first at a medium budget. 23 tests that encoded the old winners and counts were updated, each with a dated comment, and the ones whose scenario no longer showed their mechanism moved to a real context found by running the engine.
+- **One correction before merging.** Antigravity's own page says Argon is available "with paid Google AI Pro plans or on trial with eligible premium devices", and it does not say the model is missing from the Antigravity IDE; the bot had written both. The route and the guide follow the page.
+- **Still out.** DeepSeek on Alibaba Model Studio (the schema cannot say it) and the Qwen3.7-Plus limited-time discount (no end date).
+- **Tests:** 345 pass.
+
+---
+
 ## 2026-10-27 — Proposed: GPT-6.1 Terra
 
 **One model and one access route, proposed for the owner's review. No change to the engine or the schema.**
@@ -100,19 +113,6 @@ public release to version against.
 - **What Meta added.** Meta's models page now says "Muse Wonder and Muse Wonder Full aren't currently available in South Korea, on Model API or in Muse Code." Until now it only pointed to its Geographic Use Policy for country restrictions.
 - **What changed here.** The caveat on Muse Wonder's API route, which the result page shows, now names South Korea; the route was already marked as region-dependent, so no field moved. `Docs/models/muse-wonder-1.0.md` and the Meta access guide say the same.
 - **Tests:** none affected; 343 pass.
-
----
-
-## 2026-10-27 — The bot's PR #8 is merged: two new models, three new routes and a new plan
-
-**Dataset, docs and tests. No change to the engine or the schema.**
-
-- **What came in.** Qwen3.7-Flash and GPT-6.1 Terra (44 and 45 models), a Gemini 4 Argon route in Google Antigravity, a Claude Fable 5.1 route on Google Cloud Vertex AI, the Google AI Plus plan ($4.99) with a Gemini 3.6 Flash route in the Gemini app, and Meta's note that Muse Wonder is not available in South Korea. Now 45 models, 104 routes and 11 plans. Each one has its own entry below, written by the bot.
-- **Ratings are the owner's call, and were accepted.** Qwen3.7-Flash: coding `high`, the rest `medium`. GPT-6.1 Terra: `high` on all four dimensions.
-- **Results change.** Qwen3.7-Flash costs $0.03/$0.13 per million tokens, the cheapest in the catalog, so it now wins the cost-first, low-budget contexts that Claude Haiku 5.5 won; GPT-6.1 Terra wins creative writing first at a medium budget. 23 tests that encoded the old winners and counts were updated, each with a dated comment, and the ones whose scenario no longer showed their mechanism moved to a real context found by running the engine.
-- **One correction before merging.** Antigravity's own page says Argon is available "with paid Google AI Pro plans or on trial with eligible premium devices", and it does not say the model is missing from the Antigravity IDE; the bot had written both. The route and the guide follow the page.
-- **Still out.** DeepSeek on Alibaba Model Studio (the schema cannot say it) and the Qwen3.7-Plus limited-time discount (no end date).
-- **Tests:** 345 pass.
 
 ---
 

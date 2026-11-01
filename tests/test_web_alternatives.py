@@ -174,3 +174,15 @@ def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_rou
     # Free-text dataset fields render in English (no i18n system; an
     # earlier route caveat once shipped in Spanish).
     assert "can select Haiku 5.5 on Claude.ai" in response.text
+
+
+def test_a_practically_tied_option_states_how_much_dearer_it_is(client):
+    # 2026-11-01: with Cost first and a dollar budget, Claude Haiku 5.5
+    # ($0.10/$0.50) is within 2% of Qwen3.7-Flash ($0.03/$0.13) because a $60
+    # model stretches the cost scale. The tie stays (the owner kept the linear
+    # scale); the card now says the real price multiple, input and output apart.
+    html = " ".join(client.get(
+        "/recommend", params={"language": "en", "priority_1": "cost", "budget_mode": "custom", "monthly_budget_usd": "50"}
+    ).text.split())
+
+    assert "$0.10 / $0.50 per 1M tokens (3.3× / 3.8× Qwen3.7-Flash's)" in html

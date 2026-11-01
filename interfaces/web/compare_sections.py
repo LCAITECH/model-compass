@@ -160,7 +160,7 @@ def _cost_cell(model: AIModel, field: str) -> dict:
     item = cell(price(getattr(model.cost, field)))
     if model.cost.effective_until:
         reverted = getattr(model.cost.reverts_to, field)
-        item["note"] = f"Introductory, through {model.cost.effective_until}; then {price(reverted)}"
+        item["note"] = f"Introductory, through {short_date(model.cost.effective_until)}; then {price(reverted)}"
     return item
 
 

@@ -122,7 +122,7 @@ class Access:
 
     Deliberately just this one boolean — see SCHEMA.md's Access section
     for the strict definition. Rate limits and other unstable detail
-    stay out of the schema entirely and live in docs/models/*.md prose.
+    stay out of the schema entirely and live in Docs/models/*.md prose.
     """
 
     has_free_access: bool

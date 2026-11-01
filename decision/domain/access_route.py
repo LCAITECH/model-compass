@@ -87,7 +87,7 @@ class Access:
     surface: Surface
     access_method: str
     capabilities: tuple[Capability, ...]
-    guide_ref: str  # section id in docs/access-guides/{provider}.md
+    guide_ref: str  # section id in Docs/access-guides/{provider}.md
 
 
 @dataclass(frozen=True)

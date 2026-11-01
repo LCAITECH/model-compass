@@ -46,9 +46,6 @@ class AccessContext:
     use_mode: UseMode
     workload_type: WorkloadType
     intensity: Intensity
-    country: str | None  # ISO 3166-1 alpha-2, None = unknown; informational
-    # only in v1 -- never gates a route (no stable per-country match data,
-    # see spec Part 5.1).
     subscriptions: tuple[str, ...]  # plan_id values from subscriptions/*.yaml
     has_api_billing: bool | None
     cloud_accounts: tuple[CloudProvider, ...]

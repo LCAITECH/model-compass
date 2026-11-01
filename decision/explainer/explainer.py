@@ -197,7 +197,7 @@ def _standout_reasons(model: AIModel, qualifying: list[AIModel]) -> tuple[str, .
         reasons.append("Choose this if cost matters most to you — it's the cheapest qualifying option")
     if _has_largest_context(model, qualifying):
         reasons.append("Choose this if you need the largest context window")
-    for priority, attr in _QUALITY_ATTR.items():
+    for priority in _QUALITY_ATTR:
         if _is_best_quality(priority, model, qualifying):
             reasons.append(f"Choose this if {_PRIORITY_LABEL[priority]} matters most to you")
 

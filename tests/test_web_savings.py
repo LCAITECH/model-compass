@@ -1,10 +1,11 @@
-"""_savings_summary at the unit level, plus one HTTP sanity check that the
+"""savings_summary at the unit level, plus one HTTP sanity check that the
 muted "no fair swap" state doesn't leak into a query where one exists."""
 
 from types import SimpleNamespace
 
 from decision.domain import Priority
-from interfaces.web.app import _savings_summary, models
+from interfaces.web.app import models
+from interfaces.web.result_view import savings_summary
 
 
 def test_savings_summary_shows_comparison_rows_for_a_fair_cheaper_alternative(candidate_factory):
@@ -17,7 +18,7 @@ def test_savings_summary_shows_comparison_rows_for_a_fair_cheaper_alternative(ca
     recommendation = SimpleNamespace(recommended=next(m for m in models if m.id == "claude-opus-4-7"))
     candidates = [candidate_factory("claude-opus-4-7"), candidate_factory("deepseek-v4-flash")]
 
-    summary = _savings_summary(recommendation, candidates, budget_usd=None, priority_1=Priority.REASONING)
+    summary = savings_summary(recommendation, candidates, budget_usd=None, priority_1=Priority.REASONING)
 
     assert summary["is_cheapest"] is False
     assert summary["filtered_by_quality"] is False
@@ -38,7 +39,7 @@ def test_savings_summary_reports_filtered_by_quality_when_only_unfair_alternativ
     recommendation = SimpleNamespace(recommended=next(m for m in models if m.id == "claude-fable-5"))
     candidates = [candidate_factory("claude-fable-5"), candidate_factory("gemini-3.5-flash-lite")]
 
-    summary = _savings_summary(recommendation, candidates, budget_usd=None, priority_1=Priority.CREATIVE_WRITING)
+    summary = savings_summary(recommendation, candidates, budget_usd=None, priority_1=Priority.CREATIVE_WRITING)
 
     assert summary["is_cheapest"] is False
     assert summary["filtered_by_quality"] is True

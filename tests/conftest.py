@@ -42,6 +42,50 @@ def visible_html(html: str) -> str:
     return re.sub(r'<ul class="graph-data".*?</ul>', "", html, flags=re.S)
 
 
+ACTIVE_LIFECYCLE = "lifecycle:\n  status: active\n  release_date: null\n  shutdown_date: null\n  replacement: null\n"
+
+
+def model_yaml(
+    model_id: str = "broken",
+    *,
+    max_output: str = "  max_output: 1000\n",
+    cost: str = "  input_per_million: 1.0\n  output_per_million: 1.0\n",
+    lifecycle: str = ACTIVE_LIFECYCLE,
+) -> str:
+    """A model file that passes validation. Each argument swaps one block so a
+    loader test breaks exactly one thing; an empty string drops the block."""
+    return f"""
+id: {model_id}
+name: Test
+provider: Test
+version: "1"
+license: proprietary
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+quality:
+  reasoning: high
+  coding: high
+  creative_writing: high
+  instruction_following: high
+languages: [en]
+language_quality:
+  en: high
+operational:
+  context_window: 1000
+{max_output}cost:
+{cost}ecosystem:
+  integration_ease: high
+  maturity: stable
+access:
+  has_free_access: false
+{lifecycle}"""
+
+
 @pytest.fixture(scope="module")
 def models():
     return load_dataset(DATASET_DIR)

@@ -60,14 +60,15 @@ select:focus {
 fieldset.priorities {
   border: none;
   padding: 0;
-  margin: var(--space-5) 0 0;
+  margin: var(--space-4) 0 0;
 }
 
 fieldset.priorities legend {
-  font-weight: 600;
-  font-size: var(--text-sm);
+  font-weight: 400;
+  font-size: var(--text-xs);
+  color: var(--muted);
   padding: 0;
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-3);
 }
 
 .primary-button {
@@ -150,11 +151,7 @@ fieldset.priorities legend {
   margin-top: 0;
 }
 
-/* How it works */
-
-.how-it-works {
-  padding: var(--space-6) 0 var(--space-2);
-}
+/* How it works (the box itself is styled in landing.css) */
 
 .how-it-works ol {
   list-style: none;
@@ -245,8 +242,7 @@ fieldset.priorities legend {
 /* Supported models: provider neutrality as a feature, not an afterthought */
 
 .supported-models {
-  padding: var(--space-2) 0 var(--space-6);
-  text-align: center;
+  text-align: center;  /* box and padding in landing.css */
 }
 
 .provider-row {

@@ -2,10 +2,6 @@
    card floating on the page. Layout/composition only -- field ids,
    names, and form.js hooks are untouched. */
 
-body.page-index main {
-  max-width: 900px;
-}
-
 .decision-form {
   margin-top: var(--space-2);
 }
@@ -106,16 +102,6 @@ body.page-index main {
   vertical-align: middle;
 }
 
-fieldset.priorities {
-  margin-top: var(--space-4);
-}
-
-fieldset.priorities legend {
-  font-weight: 400;
-  font-size: var(--text-xs);
-  color: var(--muted);
-  margin-bottom: var(--space-3);
-}
 
 .rank-label {
   display: block;

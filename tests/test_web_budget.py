@@ -146,7 +146,7 @@ def test_pricing_shows_introductory_price_reversion_note(client):
 
     assert response.status_code == 200
     assert "Gemini 3.7 Flash" in response.text
-    assert "Introductory price, in effect until 2026-12-31" in response.text
+    assert "Introductory price, in effect until Dec 31, 2026" in response.text  # short_date since 2026-10-31
     assert "$1.50 input" in response.text
     assert "$7.50 output" in response.text
 

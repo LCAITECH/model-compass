@@ -6,7 +6,6 @@ of its own — per ARCHITECTURE.md, decision/ would work identically if
 this whole package were deleted.
 """
 
-import math
 from datetime import date
 from pathlib import Path
 from urllib.parse import urlencode
@@ -33,8 +32,6 @@ from interfaces.web.catalog_notices import badges_for, catalog_notices, short_da
 from interfaces.web.graph_data import graph_items, ring_counts
 from interfaces.web.affordability import (
     capacity_bar_widths,
-    cheapest_qualifying_alternative,
-    cost_savings_pct,
     estimated_input_capacity,
     estimated_output_capacity,
     parse_budget_usd,
@@ -52,8 +49,8 @@ from interfaces.web.comparison import (
 )
 from interfaces.web.context_form import InvalidFormError, context_from_form
 from interfaces.web.error_pages import install_error_pages
-from interfaces.web.model_profile import best_for, less_suited_for, quality_profile
 from interfaces.web.plans_view import plans_context
+from interfaces.web.result_view import exact_ties, model_profile, other_alternatives, price_ratio, savings_summary
 from interfaces.web.use_case_matcher import match_use_case
 from interfaces.web.use_cases import USE_CASES
 from interfaces.web.whatif import options as whatif_options
@@ -75,7 +72,7 @@ templates.env.filters["short_date"] = short_date
 install_error_pages(app, templates)
 
 models = load_dataset(DATASET_DIR)
-languages = sorted({language for model in models for language in model.languages})
+languages = sorted({language for model in models for language in model.languages}, key=language_name)
 providers = sorted({model.provider for model in models})
 
 use_case_priorities = {label: priorities for label, priorities in USE_CASES}
@@ -94,6 +91,7 @@ templates.env.globals["graph_items"] = lambda recommendation: graph_items(
     recommendation, lambda model: badges_for(model, models, date.today())
 )
 templates.env.globals["ring_counts"] = ring_counts
+templates.env.globals["price_ratio"] = price_ratio
 templates.env.globals["whatif_options"] = whatif_options()
 app.include_router(make_router(models, lambda model: badges_for(model, models, date.today())))
 
@@ -112,106 +110,6 @@ def _form_context(error: str | None = None) -> dict:
         "cloud_providers": list(CloudProvider),
         "subscription_plans": subscriptions,
     }
-
-
-def _model_profile(model) -> dict:
-    return {
-        "model": model,
-        "best_for": best_for(model, models),
-        "less_suited_for": less_suited_for(model),
-        "quality_profile": quality_profile(model),
-    }
-
-
-def _comparison_rows(recommended, alternative) -> list[dict]:
-    """Zips the two models' quality_profile() outputs into side-by-side rows."""
-    return [
-        {
-            "label": r["label"],
-            "recommended_level": r["level"],
-            "recommended_ordinal": r["ordinal"],
-            "alternative_level": a["level"],
-            "alternative_ordinal": a["ordinal"],
-            "max_ordinal": r["max_ordinal"],
-        }
-        for r, a in zip(quality_profile(recommended), quality_profile(alternative))
-    ]
-
-
-def _other_alternatives(recommendation):
-    """`alternatives`, minus whatever's already shown as an also-strong option.
-
-    also_strong_options isn't capped at MAX_ALTERNATIVES (see
-    decision/explainer/explainer.py), so it frequently contains the
-    same models as the top-ranked `alternatives` list -- rendering both
-    sections unfiltered would show the same model twice on the page,
-    once framed as "practically tied" and once as a plain alternative.
-    """
-    if not recommendation:
-        return ()
-    also_strong_ids = {opt.model.id for opt in recommendation.also_strong_options}
-    return tuple(alt for alt in recommendation.alternatives if alt.model.id not in also_strong_ids)
-
-
-def _exact_ties(recommendation, candidates) -> set[str]:
-    """Also-strong options whose score equals the winner's. Only for these is
-    the order a tie-break (dataset order); the rest scored a little lower, and
-    the page must not say otherwise."""
-    if not recommendation:
-        return set()
-    scores = {c.model.id: c.score for c in candidates}
-    top = scores[recommendation.recommended.id]
-    return {
-        o.model.id for o in recommendation.also_strong_options if math.isclose(scores[o.model.id], top, rel_tol=1e-9)
-    }
-
-
-def _savings_summary(recommendation, candidates, budget_usd, priority_1) -> dict | None:
-    """Whether a cheaper, still-fair-swap qualifying model exists, and how it compares.
-
-    Always returns a dict when there's a recommendation -- silently
-    omitting this when there's nothing to show left the UI unable to
-    say *why*, which read as a gap rather than a (genuinely good or
-    genuinely non-existent) answer. Three distinct states, per
-    HANDOFF.md's "Rediseño de Budget":
-
-    - `is_cheapest`: no qualifying model is cheaper at all, full stop.
-    - `filtered_by_quality`: a cheaper model exists, but none stays
-      within one quality tier of the winner on `priority_1` (see
-      cheapest_qualifying_alternative's docstring) -- there IS
-      something cheaper, it's just not a fair comparison, and saying
-      "already the cheapest" here would be false.
-    - otherwise: a fair, cheaper alternative exists -- `comparison_rows`
-      carries the full side-by-side table, not just a savings percentage.
-    """
-    if not recommendation:
-        return None
-
-    qualifying_models = [c.model for c in candidates if c.qualifies]
-    winner = recommendation.recommended
-    any_cheaper_exists = any(
-        m.cost.blended < winner.cost.blended for m in qualifying_models if m.id != winner.id
-    )
-    cheaper = cheapest_qualifying_alternative(winner, qualifying_models, priority_1)
-
-    if not cheaper:
-        return {"is_cheapest": not any_cheaper_exists, "filtered_by_quality": any_cheaper_exists}
-
-    input_pct, output_pct = cost_savings_pct(winner, cheaper)
-    summary = {
-        "is_cheapest": False,
-        "filtered_by_quality": False,
-        "model": cheaper,
-        "input_pct": round(input_pct),
-        "output_pct": round(output_pct),
-        "comparison_rows": _comparison_rows(winner, cheaper),
-    }
-
-    if budget_usd:
-        summary["input_capacity"] = estimated_input_capacity(budget_usd, cheaper)
-        summary["output_capacity"] = estimated_output_capacity(budget_usd, cheaper)
-
-    return summary
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -344,7 +242,7 @@ def _result_response(request: Request, form):
     except NoQualifyingModelsError:
         recommendation = None
 
-    profile = _model_profile(recommendation.recommended) if recommendation else None
+    profile = model_profile(recommendation.recommended, models) if recommendation else None
 
     access_context = access_context_from_form(form)
     access = (
@@ -360,7 +258,7 @@ def _result_response(request: Request, form):
         output_capacity = estimated_output_capacity(budget_usd, recommendation.recommended)
         input_capacity_pct, output_capacity_pct = capacity_bar_widths(input_capacity, output_capacity)
 
-    savings = _savings_summary(recommendation, candidates, budget_usd, context.priorities[0]) if recommendation else None
+    savings = savings_summary(recommendation, candidates, budget_usd, context.priorities[0]) if recommendation else None
 
     return templates.TemplateResponse(
         request,
@@ -375,8 +273,8 @@ def _result_response(request: Request, form):
             "input_capacity_pct": input_capacity_pct,
             "output_capacity_pct": output_capacity_pct,
             "savings": savings,
-            "other_alternatives": _other_alternatives(recommendation),
-            "exact_ties": _exact_ties(recommendation, candidates),
+            "other_alternatives": other_alternatives(recommendation),
+            "exact_ties": exact_ties(recommendation, candidates),
             "access": access,
             "subscription_plan_names": subscription_plan_names,
             "share_url": "/recommend?" + urlencode([(key, value) for key, value in form.multi_items() if value]),

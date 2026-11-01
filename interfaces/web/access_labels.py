@@ -40,9 +40,14 @@ def requirement_label(requirement, plan_names: dict[str, str] | None = None) -> 
     return _LABELS[requirement.kind]
 
 
+_ACRONYMS = {"api": "API"}
+
+
 def humanize(value: str) -> str:
-    """Turns a snake_case enum value into a readable label ("very_high" -> "Very high")."""
-    return value.replace("_", " ").capitalize()
+    """Turns a snake_case enum value into a readable label ("very_high" -> "Very high",
+    "api_integration" -> "API integration")."""
+    words = value.replace("_", " ").capitalize().split(" ")
+    return " ".join(_ACRONYMS.get(word.lower(), word) for word in words)
 
 
 def guide_ref_url(guide_ref: str) -> str:

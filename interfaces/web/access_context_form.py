@@ -18,7 +18,6 @@ def access_context_from_form(form) -> AccessContext:
         use_mode=_enum_or_default(UseMode, form.get("use_mode"), UseMode.MANUAL),
         workload_type=_enum_or_default(WorkloadType, form.get("workload_type"), WorkloadType.EXPLORATORY),
         intensity=_enum_or_default(Intensity, form.get("intensity"), Intensity.OCCASIONAL),
-        country=(form.get("country") or "").strip().upper() or None,
         subscriptions=tuple(form.getlist("subscriptions")),
         has_api_billing=_tri_state(form.get("has_api_billing")),
         cloud_accounts=tuple(

@@ -1,9 +1,4 @@
-.fade-in {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
+/* Layout of .fade-in lives in graph.css (it sets the same properties, later). */
 @media (prefers-reduced-motion: no-preference) {
   .fade-in {
     animation: fade-in-up 250ms ease-out;

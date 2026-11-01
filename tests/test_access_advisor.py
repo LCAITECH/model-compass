@@ -26,7 +26,6 @@ def _context(**overrides):
         use_mode=UseMode.API_INTEGRATION,
         workload_type=WorkloadType.INTERACTIVE,
         intensity=Intensity.OCCASIONAL,
-        country=None,
         subscriptions=(),
         has_api_billing=None,
         cloud_accounts=(),
