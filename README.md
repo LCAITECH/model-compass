@@ -59,8 +59,8 @@ link, so you can send it to your team or come back to it later.
 ![Model Compass — Access Advisor](Docs/images/access-advisor.png)
 
 Access Advisor shows every documented route to the model — what's
-available right now, what needs onboarding, and a link to the exact
-steps.
+available right now, what needs onboarding, which routes fit how you'll
+use it, and a link to the exact steps.
 
 ### 4. Compare the economics
 

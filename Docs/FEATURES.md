@@ -67,7 +67,10 @@ The core of the product: turning context into a decision.
   within one quality tier of it on every dimension (not just the
   ranked priority), it's shown as a practically-tied "also strong"
   option instead of being silently outranked by an arbitrary
-  tie-break. Honest about when the "winner" isn't a clear one.
+  tie-break. Honest about when the "winner" isn't a clear one. The card
+  names the tie-break only when the scores are exactly equal, and shows
+  each option's input and output price as multiples of the winner's, so a
+  tie on score never hides a large price gap (2026-11-01).
 - **Trade-off Analysis** — makes explicit what is being given up by
   choosing the recommended model over another (e.g. lower cost in
   exchange for weaker reasoning), instead of presenting a decision as
@@ -150,7 +153,12 @@ itself.
   API key, cloud account, or subscription — never hidden, just marked
   as a gap), or excluded entirely (enterprise-only routes, until an
   explicit opt-in is designed). Declaring "no AWS account" never
-  removes Bedrock from the list, it just says what's missing.
+  removes Bedrock from the list, it just says what's missing. How the
+  developer will use the model, the kind of workload and its intensity
+  add notes to the routes where they matter (no production allowed, made
+  for personal use, no documented automation, a limit not published in
+  tokens), read from each route's documented fields; they never reorder
+  the routes (2026-11-01).
 - **Subscription or API (`/plans`)** — for one model, the plans that
   include it (named exactly on the provider's page) next to what a
   monthly amount buys on its API, with a verdict that never turns a

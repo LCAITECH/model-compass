@@ -19,6 +19,19 @@ public release to version against.
 
 ---
 
+## 2026-11-01 — What the result page says now matches what the engine does
+
+**Web text, the access notes and code cleanups, from an audit of the whole project. No change to the ranking, the dataset or the schema.**
+
+- **Four statements the page could not back.** The "Also strong options" card said the winner was listed first "because of a deterministic tie-break, not because it scored higher" even when it had scored higher; it now names the tie-break only for exact ties. The graph legend said "Practically tied (0)" next to a card listing one; a tied model that is also a top alternative now counts. With a dollar budget, which never filters, the reasons no longer say the winner "fits your budget". The access step no longer claims that skipping it hides the access details.
+- **How much dearer a tied option is.** A practically tied option now shows its input and output price as multiples of the winner's, e.g. "(3.3× / 3.8× Qwen3.7-Flash's)". With cost ranked and a $60 model in the pool, the cost score compresses every cheap model, so one nearly four times dearer can tie. Scoring cost on a log scale was tried and dropped: it changed 158 of 568 cost-ranked winners, 28 of them against the visitor's own top priority.
+- **The access answers now do something.** How you'll use the model, the kind of workload and its intensity add notes to the routes where they matter, read from each route's documented fields: a route that doesn't allow production when you're building on it, a consumer subscription when you'll use it yourself, a route with no documented automated use for batch or agent work, a plan whose limit isn't published in tokens for frequent or intensive use. Routes are never reordered. The country field, which never gated anything, is gone.
+- **Clearer wording.** The budget-tier tooltip states the real price bands per million tokens ($2, $10, $30) instead of calling the tier a monthly budget, and the opening reason says "For X, you ranked Y first", since the engine never derives priorities from the use case. Dates read the same everywhere ("Dec 31, 2026"), "API integration" is spelled right, languages are listed by name.
+- **Cleanups.** Overridden CSS rules removed, the result page's helpers moved out of `app.py` into `result_view.py`, the test suite's copied model YAML turned into one helper.
+- **Tests:** 345 to 360, all passing on Python 3.11 and 3.13.
+
+---
+
 ## 2026-10-31 — Proposed: Claude Max 20x becomes Claude Ultra
 
 **Dataset and docs only. No change to the engine or the schema.**
