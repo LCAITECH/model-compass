@@ -18,7 +18,7 @@ page (not a summarization tool) plus cross-check against the model
 cards index (`deepmind.google/models/model-cards/`), which lists it as
 the most recently updated entry in the entire Gemini family, above
 Gemini 3.6 Flash (2026-07-21). As of this same date, the Gemini API
-models listing (`ai.google.dev/gemini-api/docs/models`, page dated
+models listing (`aistudio.google.com/docs/models`, page dated
 2026-08-04) does not yet list it — read as ordinary documentation lag
 (the API page predates the model card by 9 days), not evidence against
 the model's existence. See `ecosystem.maturity` below for how this
@@ -50,8 +50,8 @@ source, read directly.
 | `vision`               | true  | Model card, Inputs: "Text strings..., images, audio, and video files." |
 | `audio`                | true  | Same Inputs statement; output is text-only (see below). |
 | `image_generation`     | false | Model card, Outputs: "Text, with a 64K token output." No image output modality stated. |
-| `tool_calling`         | true  | Not stated directly on the model card. Confirmed via `ai.google.dev/gemini-api/docs/function-calling`, which scopes reasoning-enhanced function calling, parallel/compositional calls, and multimodal function responses to "Gemini 3 series models" generically, no exclusions listed. Gemini 3.7 Flash is explicitly "the next iteration in the Gemini 3 model family" per its own model card. |
-| `structured_output`    | true  | Confirmed via `ai.google.dev/gemini-api/docs/structured-output`: JSON-schema-constrained output ("Puedes configurar los modelos de Gemini para que generen respuestas que cumplan con un esquema JSON") stated generically for Gemini models; the enhanced structured-output-plus-tools mode is explicitly scoped to "los modelos de la serie Gemini 3." |
+| `tool_calling`         | true  | Not stated directly on the model card. Confirmed via `aistudio.google.com/docs/function-calling`, which scopes reasoning-enhanced function calling, parallel/compositional calls, and multimodal function responses to "Gemini 3 series models" generically, no exclusions listed. Gemini 3.7 Flash is explicitly "the next iteration in the Gemini 3 model family" per its own model card. |
+| `structured_output`    | true  | Confirmed via `aistudio.google.com/docs/structured-output`: JSON-schema-constrained output ("Puedes configurar los modelos de Gemini para que generen respuestas que cumplan con un esquema JSON") stated generically for Gemini models; the enhanced structured-output-plus-tools mode is explicitly scoped to "los modelos de la serie Gemini 3." |
 | `json_mode`            | true  | Same source as `structured_output` — `response_format` with `mime_type: application/json` is this feature under a different name. |
 
 ## Quality `[Editorial]`
@@ -102,7 +102,7 @@ will need the same follow-up correction on 2027-01-01 that
 | Field                | Value    | Why |
 |------------------------|----------|-----|
 | `integration_ease`      | `high`   | Same Gemini API surface as Gemini 3.6 Flash — identical distribution channel list, and the function-calling/structured-output docs scope their features to "Gemini 3 series models" without carving out exceptions for this specific model. |
-| `maturity`              | `experimental` | New editorial principle established this session, applied here for the first time: **maturity is not derived from technical availability alone — it requires evidence of stability in public, provider-maintained documentation.** As of this entry's research date, `ai.google.dev/gemini-api/docs/models` (the page that labels each Gemini model "Estable"/"Vista previa"/experimental) does not list Gemini 3.7 Flash at all yet, only Gemini 3.6 Flash as the newest stable entry. The model card's existence and GA-sounding language aren't treated as equivalent to that catalog listing. Revisit once the model appears in that catalog with an explicit stability label. |
+| `maturity`              | `experimental` | New editorial principle established this session, applied here for the first time: **maturity is not derived from technical availability alone — it requires evidence of stability in public, provider-maintained documentation.** As of this entry's research date, `aistudio.google.com/docs/models` (the page that labels each Gemini model "Estable"/"Vista previa"/experimental) does not list Gemini 3.7 Flash at all yet, only Gemini 3.6 Flash as the newest stable entry. The model card's existence and GA-sounding language aren't treated as equivalent to that catalog listing. Revisit once the model appears in that catalog with an explicit stability label. |
 
 ---
 
@@ -117,7 +117,7 @@ itself a valid pricing source — see `IMPLEMENTATION_NOTES.md`,
 Iteration #6).
 
 **Free access (`access.has_free_access`):** `true`, with a caveat.
-`ai.google.dev/gemini-api/docs/rate-limits` confirms Gemini 3.7 Flash
+`aistudio.google.com/docs/rate-limits` confirms Gemini 3.7 Flash
 is listed among the models covered by Google's tiered rate-limit
 system (which includes a Free tier reachable with just a Google
 account, no billing) — but, per that same page, Google does not
@@ -156,7 +156,7 @@ verbatim Google billing-docs quote, not repeated here.
 Same situation as every other Gemini model in this dataset: Google
 defines RPM/TPM/RPD per project, varying by model and usage tier, with
 no fixed public table — only viewable per-account in Google AI Studio.
-Source: `ai.google.dev/gemini-api/docs/rate-limits`. The observed
+Source: `aistudio.google.com/docs/rate-limits`. The observed
 dashboard numbers above (0/5, 0/250K, 0/20) are one project's snapshot
 on one date, not a specification.
 
@@ -172,7 +172,7 @@ accurate then; Google has since made explicit that the endpoint stays
 up.) The model no longer appears on Google's models, pricing, or
 rate-limits pages. The dataset entry is kept (remove-vs-flag policy,
 Iteration #22, is still open); treat `gemini-3.8-flash` as the official
-successor. Source: https://ai.google.dev/gemini-api/docs/deprecations
+successor. Source: https://aistudio.google.com/docs/deprecations
 
 **2026-10-14, `lifecycle` block (Iteration #28):** the policy above is decided. The YAML now records `status: deprecated`, `shutdown_date: null` (Google publishes none: the endpoint stays up and serves `gemini-3.8-flash`), `replacement: gemini-3.8-flash`. Since requests to this id already get `gemini-3.8-flash`, recommending it would describe a model nobody receives. The Decision Engine never recommends a `deprecated` model; this one is listed among the exclusions with its date and successor. The YAML and its access routes are removed on the shutdown date (`tests/test_catalog_dates.py` fails from that day).
 
@@ -181,10 +181,10 @@ successor. Source: https://ai.google.dev/gemini-api/docs/deprecations
 - [Gemini 3.7 Flash model card](https://deepmind.google/models/model-cards/gemini-3-7-flash/) — description, model dependencies, inputs/outputs, distribution, pricing table, benchmark results, safety evaluation. Read directly in-browser, two independent passes, 2026-08-13.
 - [Gemini 3.6 Flash model card](https://deepmind.google/models/model-cards/gemini-3-6-flash/) — cross-check for the shared introductory-pricing pattern and "based on" lineage claim.
 - [Model cards index](https://deepmind.google/models/model-cards/) — confirmed publish date (2026-08-13) and that this is the most recently updated entry in the Gemini family, read directly in-browser.
-- [Gemini API — Function calling](https://ai.google.dev/gemini-api/docs/function-calling) — `tool_calling` scoped to "Gemini 3 series models."
-- [Gemini API — Structured output](https://ai.google.dev/gemini-api/docs/structured-output) — `structured_output`/`json_mode` scoped generically to Gemini models, enhanced mode scoped to "Gemini 3 series."
-- [Gemini API — Models](https://ai.google.dev/gemini-api/docs/models) — checked directly, page dated 2026-08-04, does not yet list this model; basis for the `maturity: experimental` call.
-- [Gemini API — Rate limits](https://ai.google.dev/gemini-api/docs/rate-limits) — free-tier/paid-tier structure, no static table.
+- [Gemini API — Function calling](https://aistudio.google.com/docs/function-calling) — `tool_calling` scoped to "Gemini 3 series models."
+- [Gemini API — Structured output](https://aistudio.google.com/docs/structured-output) — `structured_output`/`json_mode` scoped generically to Gemini models, enhanced mode scoped to "Gemini 3 series."
+- [Gemini API — Models](https://aistudio.google.com/docs/models) — checked directly, page dated 2026-08-04, does not yet list this model; basis for the `maturity: experimental` call.
+- [Gemini API — Rate limits](https://aistudio.google.com/docs/rate-limits) — free-tier/paid-tier structure, no static table.
 - Google AI Studio rate-limit dashboard (`aistudio.google.com/u/4/rate-limit`) — one project's observed Free Tier limits, 2026-08-13. Account-specific, not a public document — see caveat above.
 
 All fields accessed and cross-checked 2026-08-13. Official Google

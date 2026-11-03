@@ -49,16 +49,21 @@ ecosystem:
 access:
   has_free_access: false
 
-# Source: https://ai.google.dev/gemini-api/docs/deprecations (checked 2026-10-14).
-# "Not deprecated"; no shutdown date announced. Restricted since the same
-# page limits the Gemini 2.5 models "to users who have actively used them in
-# the past" and points new projects to Gemini 3.5 Flash-Lite or 3.8 Flash
-# (IMPLEMENTATION_NOTES.md, Iteration #29; status added 2026-10-15).
-# Replacement: null. Google's advice names only Flash and Flash-Lite
-# models, none of them a Pro successor.
-# Release date: https://ai.google.dev/gemini-api/docs/deprecations (release date column).
+# Source: https://aistudio.google.com/docs/deprecations (formerly
+# ai.google.dev/gemini-api/docs/deprecations, which now redirects; checked 2026-11-03).
+# Google release notes, November 2, 2026 (https://aistudio.google.com/docs/changelog):
+# "gemini-2.5-pro is deprecated and is no longer available to select in Google
+# AI Studio. Effective December 1, 2026, all API requests to gemini-2.5-pro will
+# automatically route to gemini-3.8-flash and be billed at Gemini 3.8 Flash rates."
+# Deprecations table: shutdown date "December 1, 2026"; recommended
+# replacement "gemini-3.8-flash".
+# Replacement: gemini-3.8-flash, the successor Google names in the
+# deprecations table and the release note. Owner decision of 2026-11-03 to
+# follow Google (was null under Iteration #29, when Google named no Pro
+# successor).
+# Release date: https://aistudio.google.com/docs/deprecations (release date column).
 lifecycle:
-  status: restricted
+  status: deprecated
   release_date: "2025-06-17"
-  shutdown_date: null
-  replacement: null
+  shutdown_date: "2026-12-01"
+  replacement: gemini-3.8-flash

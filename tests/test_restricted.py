@@ -14,7 +14,9 @@ from interfaces.web.comparison import build_comparison
 from tests.conftest import ACCESS_ROUTES_DIR
 
 TODAY = date(2026, 10, 15)
-RESTRICTED = {"gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite"}
+# gemini-2.5-pro and gemini-2.5-flash moved to deprecated on 2026-11-03
+# (Google release notes of 2026-11-02; owner decision, Iteration #41).
+RESTRICTED = {"gemini-2.5-flash-lite"}
 
 
 @pytest.fixture(scope="module")
@@ -37,8 +39,8 @@ def test_successors_follow_the_owners_per_model_pick(models):
     by_id = {m.id: m for m in models}
 
     assert by_id["gemini-2.5-flash-lite"].lifecycle.replacement == "gemini-3.5-flash-lite"
-    assert by_id["gemini-2.5-flash"].lifecycle.replacement == "gemini-3.8-flash"
-    assert by_id["gemini-2.5-pro"].lifecycle.replacement is None
+    assert by_id["gemini-2.5-flash"].lifecycle.replacement == "gemini-3.5-flash-lite"
+    assert by_id["gemini-2.5-pro"].lifecycle.replacement == "gemini-3.8-flash"
 
 
 def test_a_restricted_model_never_qualifies_and_says_why(make_model):

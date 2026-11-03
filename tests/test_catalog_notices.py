@@ -69,13 +69,14 @@ def test_retiring_lists_dated_shutdowns_first_then_routed_ones(models):
 
     assert [r.model.id for r in retiring] == [
         "claude-sonnet-4-5",  # 47 days
+        "gemini-2.5-flash", "gemini-2.5-pro",  # 48 days
         "gpt-5", "gpt-5-mini", "gpt-5-nano",  # 58 days
         "gpt-4o",  # 92 days
         "gemini-3.1-flash-lite",  # 205 days, active
         "gemini-3.5-flash", "gemini-3.7-flash",  # no date: already routed
     ]
     assert retiring[0].days_left == 47 and retiring[0].replacement.name == "Claude Sonnet 5.5"
-    assert not retiring[5].deprecated
+    assert not retiring[7].deprecated
 
 
 def test_catalog_lists_new_releases_and_promos_soonest_first(models):
@@ -119,7 +120,7 @@ def test_result_page_dock_explains_the_winners_introductory_price(client, pinned
     assert "data-notice-dock" in html
     assert "Gemini 3.8 Flash costs $0.75 / $3.75 per 1M tokens until Dec 31, 2026" in html
     assert "This ranking used today&#39;s price." in html or "This ranking used today's price." in html
-    assert "7 models deprecated by their providers" in html
+    assert "9 models deprecated by their providers" in html
     assert 'data-promo="Dec 31, 2026"' in html
 
 

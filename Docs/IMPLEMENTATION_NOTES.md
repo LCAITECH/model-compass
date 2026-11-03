@@ -1979,3 +1979,63 @@ that named the old id or multiplier were updated for the rename only.
 Proposed in the bot PR of 2026-10-29 (PR #9, commit of 2026-10-31),
 pending the owner's review.
 Owner's one-off test exception of 2026-10-31: the seven tests and the `Docs/SCHEMA.md` example were updated for the rename only; the suite passes.
+
+## Iteration #41
+
+**Observation**
+Google's release notes of 2026-11-02 (`aistudio.google.com/docs/changelog`)
+and its deprecations page (`aistudio.google.com/docs/deprecations`) say
+`gemini-2.5-pro` and `gemini-2.5-flash` are deprecated, no longer
+selectable in Google AI Studio, and that from December 1, 2026 their API
+requests "automatically route to" `gemini-3.8-flash` and
+`gemini-3.5-flash-lite` respectively, billed at the new model's rates. The
+deprecations table gives "December 1, 2026" as the shutdown date and those
+two ids as the recommended replacements. `gemini-2.5-flash-lite` "is not
+deprecated and remains available through the API until further notice".
+The Gemini API docs moved from `ai.google.dev/gemini-api/docs/*` to
+`aistudio.google.com/docs/*`; the old addresses answer with a 301 to the
+new ones.
+
+**Current decision**
+The owner's decision of 2026-11-03, which changes the Iteration #29
+decision for these two models: `gemini-2.5-pro` and `gemini-2.5-flash` go
+from `restricted` to `deprecated`, and their successors follow Google:
+`gemini-2.5-pro` → `gemini-3.8-flash` (was `null`), `gemini-2.5-flash` →
+`gemini-3.5-flash-lite` (was `gemini-3.8-flash`, the owner's earlier
+pick). Both replacement ids exist in `dataset/models/`. `gemini-2.5-flash-lite`
+stays `restricted` with `gemini-3.5-flash-lite`. `shutdown_date` stays
+`2026-12-01` for now: the owner has not yet decided whether to read the
+deprecations table's "earliest possible dates" as a floor.
+
+By the same decision, every Gemini API source URL in `dataset/`,
+`Docs/models/` and `Docs/access-guides/google.md` was rewritten from
+`ai.google.dev/gemini-api/docs/...` to the `aistudio.google.com/docs/...`
+address the old one redirects to, after checking that the new address
+answers HTTP 200 (`quickstart` became `get-started`; query strings such
+as `?hl=es-419` were kept). All 23 distinct addresses had a working
+equivalent, so no old URL was kept as a source. The only remaining
+`ai.google.dev` mentions are prose (the domain named as a source family,
+and the "formerly ... which now redirects" notes in the two 2.5 YAML
+comments). The routes' `consulted_at` dates were not changed: the pages
+were not re-read for their content, only their address was checked.
+Older entries in `CHANGELOG.md`, `IMPLEMENTATION_NOTES.md` and
+`CATALOG_NEWS_LOG.md` keep the old URLs.
+
+Under the owner's one-off exception of 2026-11-03, the six tests that
+hard-coded the old status or successors were updated for this change only:
+`test_lifecycle.py::test_the_real_dataset_marks_exactly_the_provider_deprecated_models`
+(the two models added to the deprecated set),
+`test_restricted.py::test_the_real_dataset_marks_exactly_the_gemini_2_5_models`
+and `::test_restricted_models_are_not_listed_as_leaving_the_catalog`
+(`RESTRICTED` is now `gemini-2.5-flash-lite` alone),
+`test_catalog_notices.py::test_retiring_lists_dated_shutdowns_first_then_routed_ones`
+(the two models at 48 days, the active entry now at index 7) and
+`::test_result_page_dock_explains_the_winners_introductory_price`
+("9 models deprecated") and
+`test_restricted.py::test_successors_follow_the_owners_per_model_pick`
+(its two expectations only: `gemini-2.5-flash` → `gemini-3.5-flash-lite`,
+`gemini-2.5-pro` → `gemini-3.8-flash`; the owner extended the exception
+to it the same day). The suite passes.
+
+**Status**
+Proposed in the bot PR of 2026-11-03 (PR #10), pending the owner's review.
