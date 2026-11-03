@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-11-03 — Proposed: Gemini 2.5 Pro and 2.5 Flash are deprecated
+
+**Dataset and docs only. No change to the engine or the schema.**
+
+- **What changed at Google.** Google's release notes of November 2, 2026 say `gemini-2.5-pro` and `gemini-2.5-flash` are deprecated and no longer selectable in Google AI Studio. From December 1, 2026, API requests to `gemini-2.5-pro` route to Gemini 3.8 Flash and requests to `gemini-2.5-flash` route to Gemini 3.5 Flash-Lite, billed at those models' rates. Gemini 2.5 Flash-Lite is not deprecated and stays available "until further notice".
+- **What changes here.** Both models go from `restricted` to `deprecated`, with a shutdown date of December 1, 2026. Neither was recommended before (restricted models are excluded too), so the ranking doesn't change. Their successors stay as the owner picked them for now: none for 2.5 Pro and Gemini 3.8 Flash for 2.5 Flash. Google now names its own, and the owner decides whether to follow them.
+- **Where Google's docs live now.** The Gemini API docs moved from ai.google.dev to aistudio.google.com/docs. The old links redirect, so the sources in the dataset still work.
+
+---
+
 ## 2026-11-01 — What the result page says now matches what the engine does
 
 **Web text, the access notes and code cleanups, from an audit of the whole project. No change to the ranking, the dataset or the schema.**

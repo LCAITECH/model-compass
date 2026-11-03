@@ -155,6 +155,8 @@ the Paid Tier explicitly states the opposite).
 
 **2026-10-15, modeled as `restricted`:** by owner decision, `lifecycle.status` is now `restricted` (SCHEMA.md, Lifecycle), so the engine no longer recommends this model; it is listed among the exclusions with the reason. `replacement` is `gemini-3.8-flash`, the project owner's per-model pick from Google's general advice (Google names no successor per model).
 
+**2026-11-03, deprecated, shutdown December 1, 2026:** Google's [release notes](https://aistudio.google.com/docs/changelog) of November 2, 2026 say "`gemini-2.5-flash` is deprecated and is no longer available to select in Google AI Studio. Effective December 1, 2026, all API requests to `gemini-2.5-flash` will automatically route to `gemini-3.5-flash-lite`" and are billed at that model's rates. The [deprecations page](https://aistudio.google.com/docs/deprecations) (the Gemini API docs moved from ai.google.dev to aistudio.google.com, and the old URLs redirect) lists the shutdown date as "December 1, 2026" and the recommended replacement as `gemini-3.5-flash-lite`. The same page says its table dates are "the earliest possible dates" a model might be retired; the release note gives December 1 as the date requests start routing. `lifecycle.status` is now `deprecated` and `shutdown_date` is `2026-12-01`. `replacement` stays `gemini-3.8-flash`, the owner's pick under Iteration #29, until the owner decides whether to follow Google's `gemini-3.5-flash-lite`.
+
 ## Sources
 
 - [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost fields, free/paid tier data-policy distinction.
