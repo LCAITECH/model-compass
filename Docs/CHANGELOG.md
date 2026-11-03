@@ -26,7 +26,7 @@ public release to version against.
 - **Successors.** The owner decided to follow the successors Google names for the two deprecated Gemini 2.5 models: Gemini 2.5 Pro now points to Gemini 3.8 Flash (it had none) and Gemini 2.5 Flash to Gemini 3.5 Flash-Lite (it pointed to Gemini 3.8 Flash). Those are the models Google routes their requests to from December 1, 2026. The shutdown date stays December 1, 2026 while the owner decides how to read Google's "earliest possible dates".
 - **Why this changes an earlier call.** Iteration #29 modeled the Gemini 2.5 models as `restricted` and left their successors to the owner. Google has now deprecated 2.5 Pro and 2.5 Flash and named a successor for each, so both are `deprecated` with Google's successor. Gemini 2.5 Flash-Lite stays `restricted`.
 - **Sources moved.** Every Gemini API link in the dataset, the model docs and the Google access guide now points to aistudio.google.com/docs instead of ai.google.dev, each new address checked to load before it was used. The quickstart is now the "Get started" page.
-- **Tests.** Five tests that listed which models are deprecated or restricted, and how many, were updated for this change only, under the owner's one-off exception of 2026-11-03. A sixth, which checks the earlier successor picks, still fails and waits for the owner.
+- **Tests.** Six tests that listed which models are deprecated or restricted, how many, and their successors were updated for this change only, under the owner's one-off exception of 2026-11-03.
 
 ---
 

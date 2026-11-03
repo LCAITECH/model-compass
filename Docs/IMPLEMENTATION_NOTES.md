@@ -2021,8 +2021,8 @@ were not re-read for their content, only their address was checked.
 Older entries in `CHANGELOG.md`, `IMPLEMENTATION_NOTES.md` and
 `CATALOG_NEWS_LOG.md` keep the old URLs.
 
-Under the owner's one-off exception of 2026-11-03, the five tests that
-hard-coded the old status were updated for this change only:
+Under the owner's one-off exception of 2026-11-03, the six tests that
+hard-coded the old status or successors were updated for this change only:
 `test_lifecycle.py::test_the_real_dataset_marks_exactly_the_provider_deprecated_models`
 (the two models added to the deprecated set),
 `test_restricted.py::test_the_real_dataset_marks_exactly_the_gemini_2_5_models`
@@ -2031,13 +2031,11 @@ and `::test_restricted_models_are_not_listed_as_leaving_the_catalog`
 `test_catalog_notices.py::test_retiring_lists_dated_shutdowns_first_then_routed_ones`
 (the two models at 48 days, the active entry now at index 7) and
 `::test_result_page_dock_explains_the_winners_introductory_price`
-("9 models deprecated"). A sixth test,
-`test_restricted.py::test_successors_follow_the_owners_per_model_pick`,
-asserts the earlier picks (`gemini-2.5-flash` → `gemini-3.8-flash`,
-`gemini-2.5-pro` → `None`) and fails with the new successors. It was
-outside the exception and was not edited.
+("9 models deprecated") and
+`test_restricted.py::test_successors_follow_the_owners_per_model_pick`
+(its two expectations only: `gemini-2.5-flash` → `gemini-3.5-flash-lite`,
+`gemini-2.5-pro` → `gemini-3.8-flash`; the owner extended the exception
+to it the same day). The suite passes.
 
 **Status**
 Proposed in the bot PR of 2026-11-03 (PR #10), pending the owner's review.
-`test_successors_follow_the_owners_per_model_pick` is red until the owner
-updates it or extends the exception.
