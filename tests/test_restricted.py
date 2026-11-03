@@ -14,7 +14,9 @@ from interfaces.web.comparison import build_comparison
 from tests.conftest import ACCESS_ROUTES_DIR
 
 TODAY = date(2026, 10, 15)
-RESTRICTED = {"gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite"}
+# gemini-2.5-pro and gemini-2.5-flash moved to deprecated on 2026-11-03
+# (Google release notes of 2026-11-02; owner decision, Iteration #41).
+RESTRICTED = {"gemini-2.5-flash-lite"}
 
 
 @pytest.fixture(scope="module")

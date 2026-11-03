@@ -13,9 +13,9 @@ tiers.
 1. Create/use a Google Cloud project.
 2. Link a Cloud Billing account (a small prepay may be required).
 3. Generate an API key via Google AI Studio or the Cloud Console.
-4. Follow the official docs for your first call: [Gemini API docs](https://ai.google.dev/gemini-api/docs?hl=es-419).
+4. Follow the official docs for your first call: [Gemini API docs](https://aistudio.google.com/docs?hl=es-419).
 
-Source: [Billing](https://ai.google.dev/gemini-api/docs/billing?hl=es-419), consulted 2026-08-11.
+Source: [Billing](https://aistudio.google.com/docs/billing?hl=es-419), consulted 2026-08-11.
 
 ## `google#gemini-app`
 
@@ -47,7 +47,7 @@ Currently listed as a Google AI Pro/Ultra benefit.
    Pro, 40 on Ultra 5x, 100 on Ultra 20x, through the Google Developer
    Program) that apply to Cloud services, including the Gemini API.
 
-Sources: [Google One restrictions](https://support.google.com/googleone/answer/16105039?hl=en-en), consulted 2026-08-11; [Google AI plans and the Gemini API](https://ai.google.dev/gemini-api/docs/google-ai-plans), consulted 2026-10-17.
+Sources: [Google One restrictions](https://support.google.com/googleone/answer/16105039?hl=en-en), consulted 2026-08-11; [Google AI plans and the Gemini API](https://aistudio.google.com/docs/google-ai-plans), consulted 2026-10-17.
 
 ## `google#antigravity`
 

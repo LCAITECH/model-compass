@@ -22,6 +22,6 @@ api_credits:
 #   (the URL without /intl/en_us/ shows local currency; the multiplier row
 #   reads "5x Pro plan" / "20x Pro plan" and applies to the Gemini app and Antigravity).
 # - credits apply to "Cloud services, including the Gemini API":
-#   https://ai.google.dev/gemini-api/docs/google-ai-plans ; amounts also in
+#   https://aistudio.google.com/docs/google-ai-plans ; amounts also in
 #   https://developers.google.com/profile/help/benefits ("$10, $40, or $100").
 # Replaces google-ai-ultra.yaml (one plan for two tiers).

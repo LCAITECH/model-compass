@@ -55,12 +55,12 @@ access:
 # Flash-Lite rates."
 # Deprecations table: shutdown date "December 1, 2026"; recommended
 # replacement "gemini-3.5-flash-lite".
-# Replacement: still gemini-3.8-flash, the owner's per-model pick under
-# Iteration #29. Google now names gemini-3.5-flash-lite: owner decision
-# pending in the 2026-11-03 bot PR.
+# Replacement: gemini-3.5-flash-lite, the successor Google names in the
+# deprecations table and the release note. Owner decision of 2026-11-03 to
+# follow Google (was gemini-3.8-flash, the owner's pick under Iteration #29).
 # Release date: https://aistudio.google.com/docs/deprecations (release date column).
 lifecycle:
   status: deprecated
   release_date: "2025-06-17"
   shutdown_date: "2026-12-01"
-  replacement: gemini-3.8-flash
+  replacement: gemini-3.5-flash-lite

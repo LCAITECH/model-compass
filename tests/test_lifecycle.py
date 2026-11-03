@@ -140,11 +140,14 @@ def test_deprecation_is_listed_with_any_other_reason(make_model):
 
 def test_the_real_dataset_marks_exactly_the_provider_deprecated_models(models):
     # Verified 2026-10-14 against each provider's own deprecations page
-    # (sources in each YAML's lifecycle comment).
+    # (sources in each YAML's lifecycle comment); Gemini 2.5 Pro and 2.5
+    # Flash added 2026-11-03 (Iteration #41).
     deprecated = {m.id for m in models if m.lifecycle.deprecated}
 
     assert deprecated == {
         "claude-sonnet-4-5",
+        "gemini-2.5-flash",
+        "gemini-2.5-pro",
         "gemini-3.5-flash",
         "gemini-3.7-flash",
         "gpt-4o",

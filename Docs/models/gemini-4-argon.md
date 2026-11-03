@@ -33,7 +33,7 @@ API; nothing about the invite-only program is modeled.
 
 ## Capabilities `[Objective]`
 
-Source for all rows: https://ai.google.dev/gemini-api/docs/models/gemini-4-argon
+Source for all rows: https://aistudio.google.com/docs/models/gemini-4-argon
 
 | Field               | Value | Notes |
 |---------------------|-------|-------|
@@ -87,7 +87,7 @@ Rate limits: the rate-limits page lists no RPM/TPM/RPD for this model
 ## Cost `[Objective]`
 
 Paid Tier, Standard, USD per 1M tokens
-(https://ai.google.dev/gemini-api/docs/pricing):
+(https://aistudio.google.com/docs/pricing):
 
 | Field                | Through 2026-11-30 | From 2026-12-01 |
 |----------------------|--------------------|-----------------|
@@ -112,7 +112,7 @@ newer), then $14 per 1,000.
 | Field              | Value    | Why |
 |--------------------|----------|-----|
 | `integration_ease` | `high`   | Same Gemini API surface as the rest of the family; also on AI Studio. |
-| `maturity`         | `stable` | The Gemini API models index (https://ai.google.dev/gemini-api/docs/models) lists Gemini 4 Argon under "Stable" and the model page lists "Stable: gemini-4-argon". This is the explicit stability label the `gemini-3.8-flash` entry was waiting for; it applies from day one. Computer use is separately marked Preview. |
+| `maturity`         | `stable` | The Gemini API models index (https://aistudio.google.com/docs/models) lists Gemini 4 Argon under "Stable" and the model page lists "Stable: gemini-4-argon". This is the explicit stability label the `gemini-3.8-flash` entry was waiting for; it applies from day one. Computer use is separately marked Preview. |
 
 ---
 
@@ -167,12 +167,12 @@ Antigravity IDE" sentence is not on the page. The route caveat and the
 
 ## Sources
 
-- https://ai.google.dev/gemini-api/docs/models/gemini-4-argon — identity, modalities, token limits, capabilities, stability (page updated 2026-10-13 UTC).
-- https://ai.google.dev/gemini-api/docs/pricing — prices, caching, free-tier exclusion (re-read 2026-10-17: prices unchanged, "AI Pro" no longer named as excluded).
-- https://ai.google.dev/gemini-api/docs/google-ai-plans — which plans include the model in AI Studio (read 2026-10-17, page updated 2026-10-16 UTC).
+- https://aistudio.google.com/docs/models/gemini-4-argon — identity, modalities, token limits, capabilities, stability (page updated 2026-10-13 UTC).
+- https://aistudio.google.com/docs/pricing — prices, caching, free-tier exclusion (re-read 2026-10-17: prices unchanged, "AI Pro" no longer named as excluded).
+- https://aistudio.google.com/docs/google-ai-plans — which plans include the model in AI Studio (read 2026-10-17, page updated 2026-10-16 UTC).
 - https://support.google.com/googleone/answer/14534406 — Gemini app on AI Pro.
-- https://ai.google.dev/gemini-api/docs/models — "Stable" label.
-- https://ai.google.dev/gemini-api/docs/rate-limits — batch limits.
+- https://aistudio.google.com/docs/models — "Stable" label.
+- https://aistudio.google.com/docs/rate-limits — batch limits.
 - https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/ — positioning, Ultra mention, Fairwind context (dated 2026-09-30).
 - https://antigravity.google/docs/models and https://antigravity.google/docs/plans — Antigravity availability by plan and quotas (read 2026-10-22).
 - https://one.google.com/intl/en_us/about/google-ai-plans/ — Argon in Antigravity on AI Pro and Ultra (read 2026-10-22).

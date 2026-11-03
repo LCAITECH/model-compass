@@ -103,7 +103,7 @@ in `cost.*` above. No other access surface checked for this entry.
 **Free access (`access.has_free_access`):** `true`. Google's own Gemini
 API pricing page lists this model's standard input/output as "Free of
 charge" under the free tier — confirmed directly against
-`ai.google.dev/gemini-api/docs/pricing`, 2026-08-09.
+`aistudio.google.com/docs/pricing`, 2026-08-09.
 
 **How to access:**
 
@@ -131,7 +131,7 @@ three dimensions — RPM (requests/minute), TPM (tokens/minute), RPD
 (requests/day) — applied per project (not per API key), varying by
 model and usage tier. Google does not publish a fixed public table of
 these values; active limits are only viewable per-account in Google AI
-Studio. Source: `ai.google.dev/gemini-api/docs/rate-limits`.
+Studio. Source: `aistudio.google.com/docs/rate-limits`.
 
 **Observed — Free Tier, one Google AI Studio project, 2026-08-09:**
 
@@ -151,20 +151,22 @@ its products — confirmed directly against Google's official pricing
 page ("Content used to improve our products: Yes" for the Free Tier;
 the Paid Tier explicitly states the opposite).
 
-**2026-10-14, access restricted to existing users (Iteration #29):** Google's [Gemini deprecations](https://ai.google.dev/gemini-api/docs/deprecations) page now says access to the 2.5 models is limited "to users who have actively used them in the past". They are "not deprecated" and keep being served, but new projects are pointed to 3.5 Flash-Lite or 3.8 Flash. A developer starting today may not be able to use this model. Not modeled yet: `lifecycle.status` stays `active` and the access route is unchanged, by owner decision (recorded as a first instance).
+**2026-10-14, access restricted to existing users (Iteration #29):** Google's [Gemini deprecations](https://aistudio.google.com/docs/deprecations) page now says access to the 2.5 models is limited "to users who have actively used them in the past". They are "not deprecated" and keep being served, but new projects are pointed to 3.5 Flash-Lite or 3.8 Flash. A developer starting today may not be able to use this model. Not modeled yet: `lifecycle.status` stays `active` and the access route is unchanged, by owner decision (recorded as a first instance).
 
 **2026-10-15, modeled as `restricted`:** by owner decision, `lifecycle.status` is now `restricted` (SCHEMA.md, Lifecycle), so the engine no longer recommends this model; it is listed among the exclusions with the reason. `replacement` is `gemini-3.8-flash`, the project owner's per-model pick from Google's general advice (Google names no successor per model).
 
 **2026-11-03, deprecated, shutdown December 1, 2026:** Google's [release notes](https://aistudio.google.com/docs/changelog) of November 2, 2026 say "`gemini-2.5-flash` is deprecated and is no longer available to select in Google AI Studio. Effective December 1, 2026, all API requests to `gemini-2.5-flash` will automatically route to `gemini-3.5-flash-lite`" and are billed at that model's rates. The [deprecations page](https://aistudio.google.com/docs/deprecations) (the Gemini API docs moved from ai.google.dev to aistudio.google.com, and the old URLs redirect) lists the shutdown date as "December 1, 2026" and the recommended replacement as `gemini-3.5-flash-lite`. The same page says its table dates are "the earliest possible dates" a model might be retired; the release note gives December 1 as the date requests start routing. `lifecycle.status` is now `deprecated` and `shutdown_date` is `2026-12-01`. `replacement` stays `gemini-3.8-flash`, the owner's pick under Iteration #29, until the owner decides whether to follow Google's `gemini-3.5-flash-lite`.
 
+**2026-11-03, successor follows Google (owner decision):** the owner decided to follow the successor Google names. `replacement` is now `gemini-3.5-flash-lite`, the model the [deprecations page](https://aistudio.google.com/docs/deprecations) gives as the recommended replacement and the one requests route to from December 1, 2026 (it was `gemini-3.8-flash`, the owner's pick under Iteration #29). `shutdown_date` stays `2026-12-01` until the owner decides how to read the deprecations table's "earliest possible dates" (Iteration #41). The same day, this file's Gemini API source links moved from ai.google.dev to their aistudio.google.com/docs equivalents.
+
 ## Sources
 
-- [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost fields, free/paid tier data-policy distinction.
-- [Gemini API models index](https://ai.google.dev/gemini-api/docs/models) — model listing, endpoint identifier.
-- [Gemini 2.5 Flash model card](https://ai.google.dev/gemini-api/docs/models/gemini-2.5-flash) — capabilities, context window, max output, knowledge cutoff.
-- [Gemini API rate limits](https://ai.google.dev/gemini-api/docs/rate-limits) — RPM/TPM/RPD definitions and per-project/per-model behavior.
-- [Gemini API billing](https://ai.google.dev/gemini-api/docs/billing) — Free vs. Paid Tier requirements.
-- [Gemini API quickstart](https://ai.google.dev/gemini-api/docs/quickstart) — access setup steps.
+- [Gemini API pricing](https://aistudio.google.com/docs/pricing) — cost fields, free/paid tier data-policy distinction.
+- [Gemini API models index](https://aistudio.google.com/docs/models) — model listing, endpoint identifier.
+- [Gemini 2.5 Flash model card](https://aistudio.google.com/docs/models/gemini-2.5-flash) — capabilities, context window, max output, knowledge cutoff.
+- [Gemini API rate limits](https://aistudio.google.com/docs/rate-limits) — RPM/TPM/RPD definitions and per-project/per-model behavior.
+- [Gemini API billing](https://aistudio.google.com/docs/billing) — Free vs. Paid Tier requirements.
+- [Gemini API quickstart](https://aistudio.google.com/docs/get-started) — access setup steps.
 - Google AI Studio rate-limit dashboard (`aistudio.google.com/rate-limit`) — one project's observed Free Tier limits, 2026-08-09. Account-specific, not a public document — see caveat above.
 
 All accessed 2026-08-07 (identity/capabilities/cost/quality fields) or
