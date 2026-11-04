@@ -140,7 +140,8 @@ def test_deprecation_is_listed_with_any_other_reason(make_model):
 
 def test_the_real_dataset_marks_exactly_the_provider_deprecated_models(models):
     # Verified 2026-10-14 against each provider's own deprecations page
-    # (sources in each YAML's lifecycle comment).
+    # (sources in each YAML's lifecycle comment); mistral-large-3 added
+    # 2026-11-04 (Mistral's models overview, Iteration #42).
     deprecated = {m.id for m in models if m.lifecycle.deprecated}
 
     assert deprecated == {
@@ -151,6 +152,7 @@ def test_the_real_dataset_marks_exactly_the_provider_deprecated_models(models):
         "gpt-5",
         "gpt-5-mini",
         "gpt-5-nano",
+        "mistral-large-3",
     }
 
 

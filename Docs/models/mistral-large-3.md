@@ -1,7 +1,7 @@
 # Mistral Large 3
 
 Dataset entry: [`dataset/models/mistral-large-3.yaml`](../../dataset/models/mistral-large-3.yaml)
-Last verified: 2026-08-11 (Cost section only — see below; everything else last touched 2026-08-07)
+Last verified: 2026-08-11 (Cost section only — see below; everything else last touched 2026-08-07); lifecycle re-read 2026-11-04
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -118,9 +118,27 @@ restricted to smaller models — defaults to `false` per the strict,
 no-inference rule in `SCHEMA.md`'s Access section. Revisit if Mistral
 publishes a model-by-model free-tier breakdown.
 
+**2026-11-04, deprecated, retirement April 30, 2027:** Mistral's
+[model card](https://docs.mistral.ai/models/mistral-large-3-25-12) now says
+"This model is deprecated. Use Mistral Large 4 for new integrations.", with
+deprecation date 10/31/2026 and replacement Mistral Large 4, and the
+"Deprecated & retired models" table of its
+[models overview](https://docs.mistral.ai/getting-started/models/models_overview/)
+adds retirement 4/30/2027. Mistral's
+[lifecycle policy](https://docs.mistral.ai/inference/model-lifecycle) defines
+Deprecated as "Retirement announced. Still accessible until the retirement
+date.", so the date is a firm one, not a floor (a General Availability model
+gets six months' notice, which is what 10/31 to 4/30 is). `lifecycle.status`
+is now `deprecated`, `shutdown_date` `2027-04-30` and `replacement`
+`mistral-large-4` (admitted 2026-11-03, Iteration #42), and the engine no
+longer recommends the model (Iterations #28, #29). Before this the block said
+`active` with no dates, read on 2026-10-14, when the overview still listed
+the model among the generalist models. Owner decision of 2026-11-04.
+
 ## Sources
 
-- [Mistral models overview](https://docs.mistral.ai/getting-started/models/models_overview/) — identity, license, version tag.
+- [Mistral models overview](https://docs.mistral.ai/getting-started/models/models_overview/) — identity, license, version tag; since 2026-11-04 also the deprecation and retirement dates.
+- [Mistral model lifecycle policy](https://docs.mistral.ai/inference/model-lifecycle) — what "Deprecated" and the retirement date mean, 2026-11-04.
 - [Mistral pricing](https://mistral.ai/pricing) — cost fields, 2026-08-07 pass (superseded, see below).
 - [Mistral Large 3 model card](https://docs.mistral.ai/models/model-cards/mistral-large-3-25-12) — corrected cost fields, 2026-08-11 pass. Note the path changed from
   `docs.mistral.ai/getting-started/models/model-cards/...` (404 on

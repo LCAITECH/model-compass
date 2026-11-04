@@ -51,7 +51,7 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
-    # Only mistral-large-3 and qwen3.8-max (admitted 2026-09-08, first
+    # Only mistral-large-3 (see below) and qwen3.8-max (admitted 2026-09-08, first
     # Alibaba Cloud entry) support "ko" -- none of the other 31 models
     # list it either, since every curated language list in this dataset
     # was inherited from a same-provider sibling, none of which support
@@ -76,6 +76,11 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     # and, at $0.16 blended, becomes the winner with qwen3.8-flash as the
     # first alternative; gpt-6-1-terra (curated OpenAI list, no "ko") joins
     # the excluded: 5 qualify (was 4) and 40 are excluded (was 39).
+    # 2026-11-03: mistral-large-4 (curated list with "ko") qualifies: 6
+    # qualify, 40 are excluded. 2026-11-04: mistral-large-3 supports "ko" but
+    # is deprecated (Iteration #42), so it joins the excluded for that reason
+    # alone: 5 qualify, 41 are excluded, and mistral-large-4 becomes the
+    # third alternative.
     context = Context(
         use_case="Korean support assistant",
         budget_mode=BudgetMode.TIER,
@@ -88,8 +93,9 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     recommendation = explain(context, candidates)
 
     assert recommendation.recommended.id == "qwen3.7-flash"
-    assert [alt.model.id for alt in recommendation.alternatives] == ["qwen3.8-flash", "mistral-large-3", "qwen3.7-plus"]
+    assert [alt.model.id for alt in recommendation.alternatives] == ["qwen3.8-flash", "qwen3.7-plus", "mistral-large-4"]
     assert {excl.model.id for excl in recommendation.excluded} == {
+        "mistral-large-3",
         "gemini-2.5-flash",
         "gemini-2.5-flash-lite",
         "gemini-3.1-flash-lite",
@@ -131,10 +137,15 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "muse-wonder-1.0",
         "muse-spark-1.3",
     }
+    # Every excluded model lacks "ko", except mistral-large-3, which is
+    # excluded for being deprecated.
     assert all(
         any("language" in reason for reason in excl.reasons)
         for excl in recommendation.excluded
+        if excl.model.id != "mistral-large-3"
     )
+    large_3 = next(excl for excl in recommendation.excluded if excl.model.id == "mistral-large-3")
+    assert any("deprecated" in reason for reason in large_3.reasons)
 
 
 def test_total_qualifying_and_alternative_ranks(models):
@@ -168,7 +179,7 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.total_qualifying == 33  # 46 - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra) - 7 deprecated - 3 restricted
+    assert recommendation.total_qualifying == 32  # 46 - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra) - 8 deprecated - 3 restricted
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
@@ -196,8 +207,8 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 29  # 33 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 34))
+    assert len(recommendation.outranked) == 28  # 32 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 33))
 
     first = recommendation.outranked[0]
     assert first.model.id == "gpt-5-6-luna"

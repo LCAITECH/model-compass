@@ -136,8 +136,9 @@ owner's call).
 **Related:** Mistral's models overview lists Mistral Large 3
 (`mistral-large-2512`) under "Deprecated & retired models" with
 deprecation 10/31/2026, retirement 4/30/2027 and Mistral Large 4 as the
-alternative. `mistral-large-3` is not changed by this entry; see
-Iteration #42.
+alternative. `mistral-large-3` was not changed by the entry that admitted
+this model; the owner marked it `deprecated` on 2026-11-04 (Iteration #42,
+update).
 
 ## Sources
 

@@ -24,10 +24,11 @@ def test_every_model_gets_a_candidate(models):
 
 
 def test_disqualifies_models_that_dont_support_the_language(models):
-    # Only mistral-large-3, mistral-large-4 (admitted 2026-11-03) and the
-    # Qwen entries (qwen3.8-max, admitted 2026-09-08; qwen3.8-flash and
-    # qwen3.7-plus, 2026-10-15, same curated Qwen list) have "ko" among
-    # their supported languages.
+    # Only mistral-large-4 (admitted 2026-11-03) and the Qwen entries
+    # (qwen3.8-max, admitted 2026-09-08; qwen3.8-flash and qwen3.7-plus,
+    # 2026-10-15, same curated Qwen list) qualify with "ko" among their
+    # supported languages. mistral-large-3 also lists it but is deprecated
+    # since 2026-11-04, so it never qualifies.
     context = Context(
         use_case="Korean support assistant",
         budget_mode=BudgetMode.TIER,
@@ -42,7 +43,6 @@ def test_disqualifies_models_that_dont_support_the_language(models):
     # qwen3.7-flash joined on 2026-10-27: its curated Qwen language list includes the
     # context's language like the other Qwen entries.
     assert {c.model.id for c in qualifying} == {
-        "mistral-large-3",
         "mistral-large-4",
         "qwen3.8-max",
         "qwen3.8-flash",
@@ -74,6 +74,8 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
     # it), so it never qualifies either. qwen3.8-flash (0.62) and
     # qwen3.7-plus (2.00, <=256k-token tier) joined the band on 2026-10-15.
     # qwen3.7-flash (0.16, <=32k-token tier) joined on 2026-10-27.
+    # mistral-large-3 (2.00) is in the band too, but deprecated since
+    # 2026-11-04 (retires 2027-04-30), so it never qualifies either.
     context = Context(
         use_case="High-volume low-cost bot",
         budget_mode=BudgetMode.TIER,
@@ -91,7 +93,6 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
         "gpt-5-6-luna",
         "gemini-3.1-flash-lite",
         "deepseek-v4-flash",
-        "mistral-large-3",
         "qwen3.8-flash",
         "qwen3.7-plus",
         "qwen3.7-flash",

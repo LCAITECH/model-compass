@@ -19,6 +19,17 @@ public release to version against.
 
 ---
 
+## 2026-11-04 — Mistral Large 3 is deprecated
+
+**Dataset, docs and tests. No change to the engine or the schema. Rankings change.**
+
+- **What changed at Mistral.** Its model card for Mistral Large 3 now says "This model is deprecated. Use Mistral Large 4 for new integrations.", with deprecation on 2026-10-31 and Mistral Large 4 as the replacement. The "Deprecated & retired models" table of its models overview adds retirement on 2027-04-30, and Mistral's lifecycle policy says a deprecated model stays accessible until the retirement date.
+- **What changes here.** Mistral Large 3 goes from active to deprecated, with shutdown 2027-04-30 and Mistral Large 4 as its replacement. The engine stops recommending it; the entry stays until the retirement date. The entry below left this open for the owner, who decided it on 2026-11-04.
+- **What it moves.** Across 216 engine scenarios (three budgets, one or two priorities, English and Korean) Mistral Large 3 was the winner in 24 and one of the top three alternatives in 80. Without it, 45 winners change: Mistral Large 4 takes 19 (mostly Korean contexts), Qwen3.7-Plus 12, GPT-6 Luna 6, Qwen3.7-Flash 4 and GPT-5.6 Luna 4. Twenty-one of the 45 were never Large 3's wins; every one of them has the context window as a priority, where scores are relative to the models that qualify.
+- **Tests:** 361 pass. Twelve tests failed with the catalog change and now expect what the engine returns: 8 models deprecated, 32 qualifying at a high budget, the Korean and low-budget lists, the retirement order, two what-if headlines, and two web checks (one counted Mistral Large 3 as a tied option; the exact-tie one now uses another real scenario that gives the same sentence). A thirteenth test had kept passing only because the model's name still shows up in the list of excluded models; it was corrected too.
+
+---
+
 ## 2026-11-03 — Mistral Large 4 joins the catalog
 
 **Dataset, access catalog and docs. No change to the engine or the schema.**

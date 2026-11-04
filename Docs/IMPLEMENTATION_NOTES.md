@@ -2052,3 +2052,38 @@ winner changed and no assertion was weakened.
 **Status**
 Mistral Large 4 admitted (46 models, 106 routes). Mistral Large 3's
 deprecation: owner decision pending.
+
+**Update 2026-11-04:** the owner decided to mark `mistral-large-3`
+`deprecated`: `shutdown_date` `2027-04-30`, `replacement` `mistral-large-4`.
+Sources: Mistral's model card ("This model is deprecated. Use Mistral Large
+4 for new integrations.", deprecation date 10/31/2026), the retirement date
+in the "Deprecated & retired models" table of its models overview, and its
+lifecycle policy (`docs.mistral.ai/inference/model-lifecycle`), which defines
+Deprecated as "Retirement announced. Still accessible until the retirement
+date." So the date is a firm one, not a floor, and a General Availability
+model gets six months' notice (10/31 to 4/30). The same policy says a Public
+Preview model allows silent updates and has no guaranteed path to General
+Availability, which supports `maturity: experimental` for `mistral-large-4`.
+Nothing else in the Large 3 entry changes; its two routes stay until the
+retirement date.
+
+Twelve tests failed with the catalog change and were updated to what the
+engine returns over the real dataset. A thirteenth kept passing for the wrong
+reason. Three of the thirteen needed more than a number:
+- `test_recommend_shows_also_strong_options_when_practically_tied` kept
+  passing, but only because "Mistral Large 3" is still named on the page as
+  an excluded and retiring model. It now checks the options that are tied
+  (`Qwen3.7-Plus`, `Qwen3.8-Flash`).
+- `test_excluded_models_carry_their_disqualification_reasons` required a
+  language reason on every excluded model. Large 3 supports Korean and is
+  excluded as deprecated, so the check exempts it and requires its
+  deprecation reason; every other excluded model must still lack Korean.
+- `test_a_mixed_group_says_which_option_is_an_exact_tie` moves from context
+  window alone to instruction following then context window (budget low). It
+  gives the same sentence; with Large 3 out, context window alone leaves only
+  the exact tie, because scores are relative to the models that qualify.
+No assertion was weakened. Over 216 engine scenarios Large 3 was the winner
+in 24 and a top-three alternative in 80; 45 winners change in all.
+
+Status after the update: Mistral Large 3 deprecated (owner decision of
+2026-11-04); counts unchanged at 46 models and 106 routes.

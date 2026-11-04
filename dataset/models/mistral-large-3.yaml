@@ -50,11 +50,18 @@ ecosystem:
 access:
   has_free_access: false
 
-# Source: https://docs.mistral.ai/models (checked 2026-10-14).
-# Listed under generalist models, not under deprecated & retired.
+# Source: https://docs.mistral.ai/getting-started/models/models_overview/
+# ("Deprecated & retired models": Mistral Large 3, mistral-large-2512,
+# deprecation 10/31/2026, retirement 4/30/2027, alternative Mistral Large 4)
+# and the model card https://docs.mistral.ai/models/mistral-large-3-25-12:
+# "This model is deprecated. Use Mistral Large 4 for new integrations."
+# Mistral's lifecycle policy (https://docs.mistral.ai/inference/model-lifecycle)
+# defines Deprecated as "Retirement announced. Still accessible until the
+# retirement date." (checked 2026-11-04). On 2026-10-14 the overview still
+# listed it among the generalist models.
 # Release date: https://docs.mistral.ai/models/mistral-large-3-25-12 (model card date).
 lifecycle:
-  status: active
+  status: deprecated
   release_date: "2025-12-02"
-  shutdown_date: null
-  replacement: null
+  shutdown_date: "2027-04-30"
+  replacement: mistral-large-4
