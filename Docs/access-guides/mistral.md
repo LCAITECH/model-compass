@@ -31,3 +31,22 @@ own compute.
    parallelism across the 8 GPUs.
 
 Source: [Mistral Large 3 model repository, Hugging Face](https://huggingface.co/mistralai/Mistral-Large-3-675B-Instruct-2512), consulted 2026-08-13.
+
+## `mistral#self-hosted-large-4`
+
+Mistral Large 4 is released as open weights under the Mistral Ecosystem
+Open-Weight License, a modified MIT license: free to use, modify and
+commercialize, except that a business that operates a Model-as-a-Service
+offering needs a separate commercial license from Mistral. No Mistral
+account or billing needed, but you provide and pay for your own compute.
+
+1. Download the weights from [Hugging Face](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B).
+   An NVFP4 checkpoint for Blackwell GPUs is a separate repository,
+   [Mistral-Large-4-1T-A52B-NVFP4](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B-NVFP4).
+2. Provision GPU infrastructure for a mixture-of-experts model of about
+   1 trillion parameters (52B active). Mistral's serving examples use a
+   node of 8 GPUs; they are examples, not a stated minimum.
+3. Serve it with vLLM or SGLang, which Mistral's repository documents,
+   using tensor parallelism across the GPUs.
+
+Source: [Mistral Large 4 model repository, Hugging Face](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B), consulted 2026-11-03.

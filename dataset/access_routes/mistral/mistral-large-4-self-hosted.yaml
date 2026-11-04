@@ -1,0 +1,21 @@
+provider: Mistral
+model_id: mistral-large-4
+access:
+  surface: self_hosted
+  access_method: "Self-hosted open weights (vLLM or SGLang)"
+  capabilities: [prototype, build, deploy]
+  guide_ref: mistral#self-hosted-large-4
+eligibility:
+  requirements:
+    - kind: gpu_infrastructure
+  region_scope: global
+economics:
+  billing_owner: "You (infrastructure cost, no Mistral billing)"
+  billing_scheme: gpu_license
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B
+  consulted_at: "2026-11-03"
+  status: confirmed
+  caveat: "Free to use, modify and commercialize under Mistral's Ecosystem Open-Weight License, a modified MIT license, with one condition: a business that operates a Model-as-a-Service offering needs a separate commercial license from Mistral. It is a mixture-of-experts model of about 1 trillion parameters (52B active): Mistral's serving examples spread it across a node of 8 GPUs, and it publishes an NVFP4 checkpoint for Blackwell GPUs."

@@ -168,7 +168,7 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.total_qualifying == 32  # 45 - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra) - 7 deprecated - 3 restricted
+    assert recommendation.total_qualifying == 33  # 46 - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra) - 7 deprecated - 3 restricted
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
@@ -196,8 +196,8 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 28  # 32 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 33))
+    assert len(recommendation.outranked) == 29  # 33 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 34))
 
     first = recommendation.outranked[0]
     assert first.model.id == "gpt-5-6-luna"

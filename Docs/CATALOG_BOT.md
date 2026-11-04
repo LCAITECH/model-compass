@@ -249,7 +249,5 @@ The owner is working on these right now. Don't open PRs about them; if
 you find something new, mention it under "Owner decision needed". Items
 leave this list when they land on `main`.
 
-- Mistral Large 4: not admitted until its weights and license are out
-  (Iteration #33); the owner re-checks it after 2026-10-31.
 - Self-hosted open-weights models (Liquid AI LFM2.5, Meta's Muse
   Glimmer): no policy yet.

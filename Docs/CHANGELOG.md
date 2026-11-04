@@ -19,6 +19,19 @@ public release to version against.
 
 ---
 
+## 2026-11-03 — Mistral Large 4 joins the catalog
+
+**Dataset, access catalog and docs. No change to the engine or the schema.**
+
+- **What came in.** Mistral Large 4 ($0.70/$2.10 per million tokens, 1M context, text and images in, open weights), with two routes: Mistral's API and self-hosting. It was held back on 2026-10-15 because its license said "Coming soon", its weights were not out and its price was a temporary sale with no end date. Mistral released the weights on 2026-10-29 under its own Ecosystem Open-Weight License, and its announcement states $0.70/$2.10 as the price.
+- **The license has one condition.** Free to use, modify, fine-tune and commercialize, but a business that operates a Model-as-a-Service offering needs a separate commercial license from Mistral. The self-hosted route says so.
+- **Marked experimental.** Mistral's model card is still labeled Public Preview, and the weights it released are described as an improved version of the preview.
+- **Not changed, for the owner.** Mistral's models overview now lists Mistral Large 3 as deprecated (deprecation 2026-10-31, retirement 2027-04-30) with Mistral Large 4 as the alternative. The dataset still has Large 3 active; marking it deprecated would stop the engine recommending it.
+- **Ratings:** the editorial ratings were proposed with Mistral's own words as evidence and approved by the project owner.
+- **Tests:** 361 pass. Catalog counts were updated (46 models, 106 routes) and so were four expectations that list catalog members: 33 models qualify at a high budget instead of 32. No winner changed.
+
+---
+
 ## 2026-11-01 — What the result page says now matches what the engine does
 
 **Web text, the access notes and code cleanups, from an audit of the whole project. No change to the ranking, the dataset or the schema.**

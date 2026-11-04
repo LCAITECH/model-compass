@@ -1,0 +1,21 @@
+provider: Mistral
+model_id: mistral-large-4
+access:
+  surface: direct_api
+  access_method: "API key (La Plateforme)"
+  capabilities: [prototype, build, automation]
+  guide_ref: mistral#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Mistral
+  billing_scheme: api_token
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://docs.mistral.ai/models/mistral-large-4
+  consulted_at: "2026-11-03"
+  status: confirmed
+  caveat: "Billed per token: $0.70 input, $0.07 cached input and $2.10 output per million. Mistral still labels the model Public Preview on its model card and describes the open weights it released later as an improved version of the preview. Mistral's API has a free tier for trying models, but no official page says Mistral Large 4 is included, so this route assumes paid billing."

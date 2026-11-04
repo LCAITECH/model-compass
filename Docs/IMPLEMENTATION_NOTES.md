@@ -1979,3 +1979,76 @@ that named the old id or multiplier were updated for the rename only.
 Proposed in the bot PR of 2026-10-29 (PR #9, commit of 2026-10-31),
 pending the owner's review.
 Owner's one-off test exception of 2026-10-31: the seven tests and the `Docs/SCHEMA.md` example were updated for the rename only; the suite passes.
+
+## Iteration #42
+
+**Observation**
+On 2026-11-03 the three conditions Iteration #33 set for Mistral Large 4
+hold on Mistral's own pages. The weights are public
+(`huggingface.co/mistralai/Mistral-Large-4-1T-A52B`, released with the
+announcement of 2026-10-29); the license, which the card showed as
+"Coming soon", is the Mistral Ecosystem Open-Weight License; and the
+price is stated as permanent: "Starting today, Mistral Large 4 is priced
+at $0.70 input / M, $0.07 cached input / M, and $2.10 output / M
+tokens", with the docs card showing those figures and no sale marker
+(the October 6 launch pricing was "50% off for 2 weeks"). Five frictions:
+
+1. **A license with a condition.** The license is a modified MIT: free
+   to use, modify, fine-tune and commercialize, except that a business
+   that operates a "Model as a Service" offering needs a separate
+   commercial license from Mistral (internal use, end-user products with
+   the model embedded and use through Mistral's own products are exempt).
+   The schema's `license` offers `proprietary`, `open-weights` and
+   `open-source`, with no field for conditions.
+2. **Context size.** The docs card says "1M" and has no token count. The
+   exact figure, 1,048,576, is `max_position_embeddings` in the
+   `config.json` of Mistral's own Hugging Face repository.
+3. **Status.** The docs card, dated October 6, 2026, still says "Public
+   Preview", and the announcement calls the weights "this improved
+   Mistral Large 4", a later checkpoint than the preview. The models
+   overview lists the model in its public catalog.
+4. **Other places it is served.** The announcement lists Microsoft
+   Foundry, NVIDIA-hosted endpoints and OpenRouter. No route was added:
+   a cloud route needs the cloud's own docs and a hosting platform is the
+   owner's call.
+5. **Mistral Large 3 is now listed as deprecated.** The "Deprecated &
+   retired models" table of Mistral's models overview lists Mistral Large
+   3 (`mistral-large-2512`) with deprecation 10/31/2026, retirement
+   4/30/2027 and Mistral Large 4 as the alternative. The dataset has it
+   `active` (read on 2026-10-14 under the generalist models). Mistral
+   Medium 3.5 has the same dates and alternative; it is not in the
+   catalog.
+
+**Current decision**
+The owner's decision of 2026-11-03: admit `mistral-large-4` with every
+field filled from Mistral's pages (`Docs/models/mistral-large-4.md`).
+`license: open-weights`, the condition written in the self-hosted
+route's caveat; `release_date: 2026-10-06` (the card's date, first API
+availability in Public Preview); `context_window: 1048576`;
+`max_output: null` (Iteration #26); `cost` $0.70/$2.10, the price in
+force, with no `effective_until` because Mistral states no end date;
+`has_free_access: false` (Iteration #32); `maturity: experimental`,
+because the card's label outweighs the catalog listing. Two routes, the
+Mistral API and self-hosted open weights, and a new access-guide
+section, `mistral#self-hosted-large-4`, since the existing self-hosted
+section describes Large 3's repository and hardware. Editorial ratings:
+`reasoning` high, `coding` high, `creative_writing` medium,
+`instruction_following` high, `integration_ease` medium, and the
+language ratings of the model doc, proposed with Mistral's own words as
+evidence and approved by the owner before the commit.
+
+Mistral Large 3 is not changed in this iteration. Marking it
+`deprecated` (shutdown 2027-04-30, replacement `mistral-large-4`) would
+stop the engine recommending it and touches the tests that name it, so
+it is the owner's decision.
+
+Counts: 46 models, 106 routes, 46 models with a direct-API route. Four
+expectations that list catalog members were updated for the new entry
+(`test_evaluator`'s Korean-language set gains the model;
+`test_explainer_alternatives_outranked` expects 33 qualifying and 29
+outranked; `test_whatif` expects 33 qualifying before the change). No
+winner changed and no assertion was weakened.
+
+**Status**
+Mistral Large 4 admitted (46 models, 106 routes). Mistral Large 3's
+deprecation: owner decision pending.

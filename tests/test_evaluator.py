@@ -24,9 +24,10 @@ def test_every_model_gets_a_candidate(models):
 
 
 def test_disqualifies_models_that_dont_support_the_language(models):
-    # Only mistral-large-3 and the Qwen entries (qwen3.8-max, admitted
-    # 2026-09-08; qwen3.8-flash and qwen3.7-plus, 2026-10-15, same curated
-    # Qwen list) have "ko" among their supported languages.
+    # Only mistral-large-3, mistral-large-4 (admitted 2026-11-03) and the
+    # Qwen entries (qwen3.8-max, admitted 2026-09-08; qwen3.8-flash and
+    # qwen3.7-plus, 2026-10-15, same curated Qwen list) have "ko" among
+    # their supported languages.
     context = Context(
         use_case="Korean support assistant",
         budget_mode=BudgetMode.TIER,
@@ -42,6 +43,7 @@ def test_disqualifies_models_that_dont_support_the_language(models):
     # context's language like the other Qwen entries.
     assert {c.model.id for c in qualifying} == {
         "mistral-large-3",
+        "mistral-large-4",
         "qwen3.8-max",
         "qwen3.8-flash",
         "qwen3.7-plus",

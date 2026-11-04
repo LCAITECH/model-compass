@@ -1,0 +1,64 @@
+id: mistral-large-4
+name: Mistral Large 4
+provider: Mistral AI
+version: "4"
+license: open-weights
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+quality:
+  reasoning: high
+  coding: high
+  creative_writing: medium
+  instruction_following: high
+languages: [en, es, pt, fr, de, it, nl, zh, ja, ko, ar]
+language_quality:
+  en: very_high
+  es: high
+  pt: high
+  fr: high
+  de: high
+  it: high
+  nl: high
+  zh: medium
+  ja: medium
+  ko: medium
+  ar: medium
+# Model card: context "1M". Mistral's own Hugging Face repository gives the
+# exact figure, max_position_embeddings 1048576, stored here. No output
+# ceiling is published, so max_output is null (Iteration #26).
+# Sources: https://docs.mistral.ai/models/mistral-large-4 (model card) and
+# https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B (config.json),
+# checked 2026-11-03.
+operational:
+  context_window: 1048576
+  max_output: null
+# Source: https://docs.mistral.ai/models/mistral-large-4 ($0.7 input, $0.07
+# cached input, $2.1 output per million tokens, no sale marker) and Mistral's
+# announcement of 2026-10-29, https://mistral.ai/news/mistral-large-4-oss/:
+# "Starting today, Mistral Large 4 is priced at $0.70 input / M, $0.07 cached
+# input / M, and $2.10 output / M tokens." (checked 2026-11-03).
+cost:
+  input_per_million: 0.70
+  output_per_million: 2.10
+ecosystem:
+  integration_ease: medium
+  maturity: experimental
+# Free consumer plan or free API tier: no official page names Mistral Large 4
+# (Iteration #32). The model card's price block also marks it as not free.
+# Source: https://docs.mistral.ai/models/mistral-large-4 (checked 2026-11-03).
+access:
+  has_free_access: false
+# Source: https://docs.mistral.ai/models/mistral-large-4 (checked 2026-11-03).
+# Model card date "October 6, 2026", label "Public Preview"; Mistral's
+# changelog of October 6 lists the model as available in Public Preview.
+# Not deprecated, no shutdown date, no successor named.
+lifecycle:
+  status: active
+  release_date: "2026-10-06"
+  shutdown_date: null
+  replacement: null
