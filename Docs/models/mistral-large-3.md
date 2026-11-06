@@ -68,6 +68,12 @@ published, so `max_output` is `null` (Iteration #26). The same card
 confirms GA, Apache 2.0, the API id `mistral-large-2512` and $0.5/$1.5
 per million tokens.
 
+**2026-11-06, deprecated:** the same card now says the model is deprecated
+as of 2026-10-31 and to use Mistral Large 4 for new integrations. No
+shutdown date is published, and the card still documents this model.
+`status` is `deprecated`. `replacement` stays `null` because
+`mistral-large-4` is not in the dataset yet (Iteration #33).
+
 Before this, both values came from the original dataset curation and
 were never matched to a source: the card returned a 404 on 2026-08-07,
 and `max_output` had been set equal to the context window, the

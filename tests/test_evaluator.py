@@ -40,8 +40,8 @@ def test_disqualifies_models_that_dont_support_the_language(models):
 
     # qwen3.7-flash joined on 2026-10-27: its curated Qwen language list includes the
     # context's language like the other Qwen entries.
+    # 2026-11-06: mistral-large-3 is deprecated, so it no longer qualifies.
     assert {c.model.id for c in qualifying} == {
-        "mistral-large-3",
         "qwen3.8-max",
         "qwen3.8-flash",
         "qwen3.7-plus",
@@ -89,7 +89,6 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
         "gpt-5-6-luna",
         "gemini-3.1-flash-lite",
         "deepseek-v4-flash",
-        "mistral-large-3",
         "qwen3.8-flash",
         "qwen3.7-plus",
         "qwen3.7-flash",

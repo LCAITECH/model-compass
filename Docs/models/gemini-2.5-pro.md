@@ -97,6 +97,8 @@ input, not standard usage — confirmed directly against
 
 **2026-10-15, modeled as `restricted`:** by owner decision, `lifecycle.status` is now `restricted` (SCHEMA.md, Lifecycle), so the engine no longer recommends this model; it is listed among the exclusions with the reason. `replacement` is `null`: Google's advice names only Flash and Flash-Lite models, none of them a Pro successor. The AI Studio subscription route was removed: no plan page names this model.
 
+**2026-11-06, deprecated:** Google's deprecations page now says `gemini-2.5-pro` is deprecated, no longer selectable in AI Studio, and that on 2026-12-01 API requests route to `gemini-3.8-flash` and are billed at that model's rates. The table's shutdown date is 2026-12-01 and its recommended replacement is `gemini-3.8-flash`. `status` is `deprecated`, `shutdown_date` is that date, and `replacement` is `gemini-3.8-flash`.
+
 ## Sources
 
 - [Gemini 2.5 Pro model card](https://ai.google.dev/gemini-api/docs/models/gemini-2.5-pro) — capabilities, context window, max output, knowledge cutoff (January 2025).

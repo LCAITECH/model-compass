@@ -1935,6 +1935,35 @@ not a plan in the catalog.
 **Status**
 Proposed in the bot PR of 2026-10-29, pending the owner's review.
 
+## Iteration #41
+
+**Observation**
+On 2026-11-06 Google's deprecations page says `gemini-2.5-pro` and
+`gemini-2.5-flash` are deprecated, with shutdown date 2026-12-01 and
+recommended replacements `gemini-3.8-flash` and `gemini-3.5-flash-lite`.
+From that date the API routes requests and bills the successor's rates.
+Both entries were `restricted` (Iteration #29), Flash with the owner's
+stand-in successor `gemini-3.8-flash` and Pro with `replacement: null`.
+`gemini-2.5-flash-lite` is still "not deprecated" on that page.
+
+The same day, Mistral's Large 3 card says the model is deprecated as of
+2026-10-31 and names Mistral Large 4. No shutdown date. Large 4's own
+card is GA (2026-10-06), id `mistral-large-4`, context 1M, $0.70/$2.10,
+license "Mistral Ecosystem Open Weight License". Iteration #33 held it
+out because the license and weights were not published yet.
+
+**Current decision**
+Pro and Flash are `deprecated` with the dates and replacements Google
+names. Flash-Lite stays `restricted`. Large 3 is `deprecated` with
+`shutdown_date: null` and `replacement: null`, because Large 4 is not
+in the dataset and a replacement must name a model that is. Large 4
+is still not admitted: the license blocker is gone, and an admission
+still needs a full entry, including editorial ratings.
+
+**Status**
+Applied for the three deprecations. Large 4 remains owner work in
+progress.
+
 ## Iteration #40
 
 **Observation**

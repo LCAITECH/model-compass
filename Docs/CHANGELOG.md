@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-11-06 — Gemini 2.5 Pro and Flash, and Mistral Large 3, are deprecated
+
+**Dataset and docs. The engine already refuses a deprecated model, so no engine change.**
+
+- **Gemini 2.5 Pro and Gemini 2.5 Flash.** Google's deprecations page, read 2026-11-06, now calls both deprecated. They leave Google AI Studio. On 2026-12-01, API requests to Pro route to Gemini 3.8 Flash and requests to Flash route to Gemini 3.5 Flash-Lite, billed at the successor's rates. Both had been `restricted` since 2026-10-15, with Flash pointing at 3.8 Flash as an owner pick and Pro with no successor. `status` is now `deprecated`, `shutdown_date` is 2026-12-01, and `replacement` is the model Google names. Gemini 2.5 Flash-Lite is unchanged: the same page says it is not deprecated.
+- **Mistral Large 3.** Its model card, read the same day, says it is deprecated as of 2026-10-31 and to use Mistral Large 4 for new integrations. No shutdown date is published. `status` is `deprecated`. `replacement` stays empty because Large 4 is not in the dataset yet.
+- **What the recommendation does.** These three were already out of the ranking (the Gemini models as restricted, and Large 3 still competing). Large 3 no longer qualifies, so Korean and low-budget results that used it move to the remaining qualifying models. Tests were re-derived from those runs.
+
+---
+
 ## 2026-11-01 — What the result page says now matches what the engine does
 
 **Web text, the access notes and code cleanups, from an audit of the whole project. No change to the ranking, the dataset or the schema.**

@@ -145,12 +145,15 @@ def test_the_real_dataset_marks_exactly_the_provider_deprecated_models(models):
 
     assert deprecated == {
         "claude-sonnet-4-5",
+        "gemini-2.5-flash",
+        "gemini-2.5-pro",
         "gemini-3.5-flash",
         "gemini-3.7-flash",
         "gpt-4o",
         "gpt-5",
         "gpt-5-mini",
         "gpt-5-nano",
+        "mistral-large-3",
     }
 
 

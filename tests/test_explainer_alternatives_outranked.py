@@ -88,9 +88,11 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     recommendation = explain(context, candidates)
 
     assert recommendation.recommended.id == "qwen3.7-flash"
-    assert [alt.model.id for alt in recommendation.alternatives] == ["qwen3.8-flash", "mistral-large-3", "qwen3.7-plus"]
+    # 2026-11-06: mistral-large-3 is deprecated and no longer an alternative.
+    assert [alt.model.id for alt in recommendation.alternatives] == ["qwen3.8-flash", "qwen3.7-plus", "qwen3.8-max"]
     assert {excl.model.id for excl in recommendation.excluded} == {
         "gemini-2.5-flash",
+        "mistral-large-3",
         "gemini-2.5-flash-lite",
         "gemini-3.1-flash-lite",
         "gemini-3.5-flash",
@@ -131,9 +133,15 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "muse-wonder-1.0",
         "muse-spark-1.3",
     }
+    # mistral-large-3 supports Korean and is excluded only because it is
+    # deprecated (2026-11-06). Every other exclusion in this context is
+    # the missing language.
+    by_reason = {excl.model.id: excl.reasons for excl in recommendation.excluded}
+    assert by_reason["mistral-large-3"] == ("deprecated by its provider",)
     assert all(
-        any("language" in reason for reason in excl.reasons)
-        for excl in recommendation.excluded
+        any("language" in reason for reason in reasons)
+        for model_id, reasons in by_reason.items()
+        if model_id != "mistral-large-3"
     )
 
 
@@ -168,7 +176,10 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    assert recommendation.total_qualifying == 32  # 45 - 3 very_high cost (fable-5, fable-5-1, gpt-6-astra) - 7 deprecated - 3 restricted
+    # 2026-11-06: mistral-large-3 and the two Gemini 2.5 models moved from
+    # restricted/active into deprecated. 45 - 3 very_high cost - 10 deprecated
+    # - 1 restricted (gemini-2.5-flash-lite) = 31.
+    assert recommendation.total_qualifying == 31
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
@@ -196,8 +207,8 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 28  # 32 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 33))
+    assert len(recommendation.outranked) == 27  # 31 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 32))
 
     first = recommendation.outranked[0]
     assert first.model.id == "gpt-5-6-luna"

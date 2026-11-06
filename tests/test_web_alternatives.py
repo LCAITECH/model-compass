@@ -12,8 +12,9 @@ def test_recommend_shows_also_strong_options_when_practically_tied(client):
     # price, pushing its $5.28 blended cost out of the "low" budget
     # tier entirely (see Docs/CHANGELOG.md), so it no longer qualifies
     # here. deepseek-v4-flash wins this pair's deterministic
-    # alphabetical tie-break; mistral-large-3 should show up as an
-    # also-strong option, not silently vanish.
+    # alphabetical tie-break. 2026-11-06: mistral-large-3 is deprecated, so
+    # the tie is among the models that still qualify; Claude Haiku 5.5 wins
+    # and DeepSeek V4.1 Flash is an also-strong option.
     response = client.post(
         "/recommend",
         data={
@@ -26,16 +27,16 @@ def test_recommend_shows_also_strong_options_when_practically_tied(client):
     )
 
     assert response.status_code == 200
-    assert "DeepSeek V4.1 Flash" in response.text
+    assert "Claude Haiku 5.5" in response.text
     assert "Also strong options" in response.text
-    assert "Mistral Large 3" in response.text
+    assert "DeepSeek V4.1 Flash" in response.text
     assert "practically tied" in response.text.lower()
 
 
 def test_also_strong_options_are_not_duplicated_in_the_alternatives_section(client):
-    # Same scenario as above. Mistral Large 3 must appear once (in
-    # "Also strong options"), not a second time in "Alternatives" --
-    # even though it also holds alternative rank 2 internally.
+    # Same scenario as above. DeepSeek V4.1 Flash is an also-strong option
+    # and must not be repeated in the plain "Alternatives" section. The
+    # hidden decision-graph list is already stripped by visible_html.
     response = client.post(
         "/recommend",
         data={
@@ -47,7 +48,7 @@ def test_also_strong_options_are_not_duplicated_in_the_alternatives_section(clie
         },
     )
 
-    assert visible_html(response.text).count("Mistral Large 3") == 1
+    assert visible_html(response.text).count("DeepSeek V4.1 Flash") == 1
 
 
 def test_alternatives_section_is_omitted_when_every_alternative_is_also_strong(client):
@@ -141,12 +142,13 @@ def test_a_winner_that_scored_higher_is_not_called_a_tie_break(client):
 
 
 def test_a_mixed_group_says_which_option_is_an_exact_tie(client):
-    # Context window only, budget=low: gpt-5-6-luna wins; gpt-6-luna has the
-    # same 1.05M window (an exact tie), gemini-3.1-flash-lite a slightly smaller
-    # one (1,048,576), so a lower score.
+    # Context window only, budget=low. 2026-11-06 re-run: with Mistral Large 3
+    # deprecated, one other qualifying model remains and the scores are an
+    # exact tie, so the card names the tie-break and not a mixed group.
     sentence = _also_strong_sentence(client, {"language": "en", "budget": "low", "priority_1": "context_window"})
 
-    assert "scored slightly higher than Gemini 3.1 Flash-Lite; with GPT-6 Luna the score is exactly equal" in sentence
+    assert "1 other qualifying model scored within 2% of GPT-5.6 Luna" in sentence
+    assert "because of a deterministic tie-break, not because it scored higher" in sentence
 
 
 def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_routes(client):
