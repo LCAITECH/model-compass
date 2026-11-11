@@ -1,0 +1,26 @@
+provider: Anthropic
+model_id: claude-fable-5-2
+access:
+  surface: cloud_hosted
+  access_method: "Google Cloud Vertex AI (Model Garden, Partner Models)"
+  capabilities: [prototype, build, deploy, automation]
+  guide_ref: anthropic#gcp-vertex
+eligibility:
+  requirements:
+    - kind: cloud_account
+      value: gcp
+  region_scope: region_dependent
+economics:
+  billing_owner: Google Cloud
+  billing_scheme: cloud_paygo
+  quota_scope: project
+  production_allowed: true
+evidence:
+  source_url: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/fable-5-2
+  consulted_at: "2026-11-10"
+  status: confirmed
+  caveat: "Billed through Google Cloud, not Anthropic directly; needs Cloud Billing linked to the project, consent to Google's Advanced AI Safety Addendum (prompts and responses stored up to 30 days for abuse monitoring) and the model enabled in Model Garden. Google Cloud lists it as generally available, model id claude-fable-5-2, on the US and Europe multi-regions and the global endpoint."
+# Consulted 2026-11-10: "Model ID claude-fable-5-2", "Launch stage GA",
+# "Release date: November 9, 2026", "Retirement date not sooner than: November 9, 2027",
+# availability "United States us (US multi-region)", "Europe eu (Europe multi-region)",
+# "Global global (global endpoint)".

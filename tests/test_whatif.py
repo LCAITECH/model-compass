@@ -38,11 +38,11 @@ def test_headline_when_the_winner_changes_and_the_top_reshuffles(client):
     # models qualify at a high budget (was 30) and 9 at a low one (was 8);
     # Qwen3.7-Flash replaces GPT-6 Luna among the alternatives that move up.
     assert data["headline"] == (
-        "Winner: Gemini 3.8 Flash → Claude Haiku 5.5. 8 models qualify instead of 31. "
+        "Winner: Gemini 3.8 Flash → Claude Haiku 5.5. 9 models qualify instead of 33. "
         "DeepSeek V4.1 Flash, Qwen3.7-Flash and Qwen3.8-Flash move into the top alternatives. "
         "Claude Sonnet 5.5, DeepSeek V4 Pro and Qwen3.8-Max drop out of the top alternatives."
     )
-    assert data["diff"]["qualifying"] == {"from": 31, "to": 8}
+    assert data["diff"]["qualifying"] == {"from": 33, "to": 9}
     assert not data["diff"]["practically_tied"]
 
 
@@ -64,7 +64,7 @@ def test_a_new_winner_that_was_practically_tied_says_so(client):
     assert data["headline"] == (
         "Winner: Qwen3.7-Flash → Claude Haiku 5.5 (practically tied). "
         "DeepSeek V4.1 Flash and Qwen3.7-Plus move into the top alternatives. "
-        "GPT-6 Luna and Qwen3.8-Flash drop out of the top alternatives."
+        "GPT-6 Luna and Muse Ember drop out of the top alternatives."
     )
     assert data["diff"]["practically_tied"]
 

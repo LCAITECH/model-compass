@@ -43,11 +43,14 @@ def test_alternatives_get_honest_standout_reasons_or_none(models):
     recommendation = explain(context, candidates)
     by_id = {alt.model.id: alt for alt in recommendation.alternatives}
 
+    # 2026-11-10: muse-ember-1.0 ($0.60 blended, medium on every quality
+    # dimension) takes the third alternative. It has no standout, so its
+    # reasons stay empty. qwen3.8-flash drops to the outranked group.
     assert recommendation.recommended.id == "qwen3.7-flash"
-    assert set(by_id) == {"claude-haiku-5-5", "gpt-6-luna", "qwen3.8-flash"}
+    assert set(by_id) == {"claude-haiku-5-5", "gpt-6-luna", "muse-ember-1.0"}
     assert any("context window" in reason for reason in by_id["gpt-6-luna"].reasons)
     assert any("instruction following" in reason for reason in by_id["claude-haiku-5-5"].reasons)
-    assert any("instruction following" in reason for reason in by_id["qwen3.8-flash"].reasons)
+    assert by_id["muse-ember-1.0"].reasons == ()
 
 
 def test_excluded_models_carry_their_disqualification_reasons(models):
@@ -132,6 +135,9 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
         "gemini-4-argon",
         "muse-wonder-1.0",
         "muse-spark-1.3",
+        "claude-fable-5-2",
+        "gemini-4-carbon",
+        "muse-ember-1.0",
     }
     # mistral-large-3 supports Korean and is excluded only because it is
     # deprecated (2026-11-06). Every other exclusion in this context is
@@ -176,10 +182,10 @@ def test_total_qualifying_and_alternative_ranks(models):
 
     recommendation = explain(context, candidates)
 
-    # 2026-11-06: mistral-large-3 and the two Gemini 2.5 models moved from
-    # restricted/active into deprecated. 45 - 3 very_high cost - 10 deprecated
-    # - 1 restricted (gemini-2.5-flash-lite) = 31.
-    assert recommendation.total_qualifying == 31
+    # 2026-11-10: 48 models. claude-fable-5-2 joins the very_high cost tier
+    # (4). gemini-4-carbon and muse-ember-1.0 qualify. 48 - 4 - 10
+    # deprecated - 1 restricted = 33.
+    assert recommendation.total_qualifying == 33
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
@@ -187,10 +193,8 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
     # Same context as above (32 qualifying, see
     # test_total_qualifying_and_alternative_ranks). Since 2026-10-27 the
     # winner is qwen3.7-flash and the top-3 alternatives are
-    # claude-haiku-5-5, gpt-6-luna and qwen3.8-flash, which leaves
-    # gpt-5-6-luna ($1.40 blended) as the first model past them, into
-    # the outranked group (rank 5 of 32). (Before that, deepseek-v4-flash
-    # at $1.50 was the first outranked model.)
+    # claude-haiku-5-5, gpt-6-luna and muse-ember-1.0, which leaves
+    # qwen3.8-flash as the first model past them (rank 5 of 33).
     # Unlike the winner's trade_offs, its reasons include "Not the
     # cheapest option" even though COST is the prioritized dimension,
     # because there's no positive "reasons" line for it to contradict;
@@ -207,11 +211,11 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 27  # 31 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 32))
+    assert len(recommendation.outranked) == 29  # 33 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 34))
 
     first = recommendation.outranked[0]
-    assert first.model.id == "gpt-5-6-luna"
+    assert first.model.id == "qwen3.8-flash"
     assert any("Not the cheapest" in reason for reason in first.reasons)
 
 

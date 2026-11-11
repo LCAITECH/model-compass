@@ -87,7 +87,11 @@ def test_catalog_lists_new_releases_and_promos_soonest_first(models):
     # muse-wonder-1.0 (released 2026-10-12, admitted 2026-10-15) sits
     # between gemini-4-argon (2026-10-13) and claude-haiku-5-5 (2026-10-07).
     assert [n.model.id for n in notices.new][:3] == ["gemini-4-argon", "muse-wonder-1.0", "claude-haiku-5-5"]
-    assert [p.model.id for p in notices.promos] == ["gpt-5-6-sol", "gemini-4-argon", "gemini-3.6-flash", "gemini-3.8-flash"]
+    # 2026-11-10: gemini-4-carbon's introductory price ($2/$10 through
+    # 2026-11-30) sits with the other promos, soonest end date first.
+    assert [p.model.id for p in notices.promos] == [
+        "gpt-5-6-sol", "gemini-4-argon", "gemini-4-carbon", "gemini-3.6-flash", "gemini-3.8-flash"
+    ]
 
 
 def test_nothing_is_retiring_after_its_shutdown_date(make_model):

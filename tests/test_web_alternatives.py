@@ -92,25 +92,25 @@ def test_recommend_omits_also_strong_options_when_the_winner_is_unmatched(client
     # turned that into a practical tie too, so priority_2 is now cost:
     # claude-haiku-5-5 wins outright, no also-strong card. 2026-10-15:
     # qwen3.8-flash ($0.62 blended, same ratings) tied it as well, so the
-    # scenario is now cost then context window, found by searching every
-    # low/medium priority pair for one without a tie: gpt-6-luna wins
-    # outright on its 1.05M context window, and claude-haiku-5-5,
-    # qwen3.8-flash and gpt-5-6-luna are the ordinary alternatives.
+    # 2026-11-10: cost then context window now ties GPT-6 Luna with Muse
+    # Ember. The unmatched case, found by running the engine, is context
+    # window then cost: GPT-6 Luna still wins on its 1.05M window, and
+    # Muse Ember is an ordinary alternative.
     response = client.post(
         "/recommend",
         data={
             "use_case": "Customer support",
             "language": "en",
             "budget": "low",
-            "priority_1": "cost",
-            "priority_2": "context_window",
+            "priority_1": "context_window",
+            "priority_2": "cost",
         },
     )
 
     assert response.status_code == 200
     assert "GPT-6 Luna" in response.text
     assert "Also strong options" not in response.text
-    assert "Qwen3.8-Flash" in response.text  # a real, unfiltered alternative
+    assert "Muse Ember" in response.text  # a real, unfiltered alternative
 
 
 def _also_strong_sentence(client, params) -> str:

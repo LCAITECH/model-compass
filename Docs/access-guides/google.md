@@ -27,18 +27,19 @@ Ultra 20x give 5x or 20x the AI Pro quota.
    at [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/).
    Google AI Plus (US $4.99 a month) also includes the Gemini app, with
    Gemini 3.6 Flash but not Gemini 4 Argon.
+   Gemini 4 Carbon is on the Ultra tiers only, "in select countries".
 2. Open the Gemini app with that account and pick the model.
 3. The app quota is not usable through the Gemini API; API use is billed
    separately (see `google#direct-api`), although the plans include
    Google Cloud credits that apply to it.
 
-Sources: [Google AI Pro](https://support.google.com/googleone/answer/14534406?hl=en) and [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/), consulted 2026-10-14; Google AI Plus from the same plans page and [Google AI Plus](https://support.google.com/googleone/answer/16548195), consulted 2026-10-22.
+Sources: [Google AI Pro](https://support.google.com/googleone/answer/14534406?hl=en) and [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/), consulted 2026-10-14; Google AI Plus from the same plans page and [Google AI Plus](https://support.google.com/googleone/answer/16548195), consulted 2026-10-22; Gemini 4 Carbon from the same plans page, consulted 2026-11-10.
 
 ## `google#ai-studio`
 
 Currently listed as a Google AI Pro/Ultra benefit.
 
-1. Subscribe to Google AI Pro or one of the two Ultra tiers (Google One). Ultra has the highest limits for the newest models (for example Gemini 4 Argon); the free plan does not include them.
+1. Subscribe to Google AI Pro or one of the two Ultra tiers (Google One). Ultra has the highest limits for the newest models (for example Gemini 4 Argon); the free plan does not include them. Gemini 4 Carbon needs an Ultra plan in AI Studio; it is not on the Free or AI Pro plans.
 2. Open Google AI Studio with that account.
 3. If you link a paid API key inside AI Studio, its usage is billed
    separately as API usage.
@@ -47,7 +48,7 @@ Currently listed as a Google AI Pro/Ultra benefit.
    Pro, 40 on Ultra 5x, 100 on Ultra 20x, through the Google Developer
    Program) that apply to Cloud services, including the Gemini API.
 
-Sources: [Google One restrictions](https://support.google.com/googleone/answer/16105039?hl=en-en), consulted 2026-08-11; [Google AI plans and the Gemini API](https://ai.google.dev/gemini-api/docs/google-ai-plans), consulted 2026-10-17.
+Sources: [Google One restrictions](https://support.google.com/googleone/answer/16105039?hl=en-en), consulted 2026-08-11; [Google AI plans and the Gemini API](https://ai.google.dev/gemini-api/docs/google-ai-plans), consulted 2026-10-17; the Carbon requirement from [the same page at its new address](https://aistudio.google.com/docs/google-ai-plans), consulted 2026-11-10.
 
 ## `google#antigravity`
 
@@ -59,7 +60,8 @@ five hours and capped weekly, not published in tokens.
 1. Subscribe to Google AI Pro or one of the two Ultra tiers for models
    such as Gemini 4 Argon; the free plan and Google AI Plus get a smaller
    model set. On Pro, Google lists Argon for paid plans, or on trial with
-   eligible premium devices.
+   eligible premium devices. Gemini 4 Carbon is on Google AI
+   Ultra (and Enterprise) only.
 2. Install Antigravity and sign in with that account
    ([Quickstart](https://antigravity.google/docs)).
 3. Pick the model in the model selector.
@@ -67,4 +69,4 @@ five hours and capped weekly, not published in tokens.
    credits. Antigravity offers no bring-your-own-key option, and its quota
    is not usable through the Gemini API.
 
-Sources: [Antigravity models](https://antigravity.google/docs/models) and [Antigravity plans](https://antigravity.google/docs/plans), consulted 2026-10-22 and 2026-10-27.
+Sources: [Antigravity models](https://antigravity.google/docs/models) and [Antigravity plans](https://antigravity.google/docs/plans), consulted 2026-10-22 and 2026-10-27; Gemini 4 Carbon from the models page, consulted 2026-11-10.

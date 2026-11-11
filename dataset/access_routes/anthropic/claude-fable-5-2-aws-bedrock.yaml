@@ -1,0 +1,22 @@
+provider: Anthropic
+model_id: claude-fable-5-2
+access:
+  surface: cloud_hosted
+  access_method: "Amazon Bedrock (Converse/InvokeModel API)"
+  capabilities: [prototype, build, deploy, automation]
+  guide_ref: anthropic#aws-bedrock
+eligibility:
+  requirements:
+    - kind: cloud_account
+      value: aws
+  region_scope: region_dependent
+economics:
+  billing_owner: Amazon Web Services
+  billing_scheme: cloud_paygo
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html
+  consulted_at: "2026-11-10"
+  status: confirmed
+  caveat: "Billed through AWS, not Anthropic directly; access must be requested per model in the Bedrock console before first use, and availability depends on the region. AWS lists Claude Fable 5.2 among Anthropic's Claude 5.x models, model id anthropic.claude-fable-5-2. Bedrock sets its own retirement dates."

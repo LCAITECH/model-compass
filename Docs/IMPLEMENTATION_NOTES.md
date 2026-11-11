@@ -2008,3 +2008,80 @@ that named the old id or multiplier were updated for the rename only.
 Proposed in the bot PR of 2026-10-29 (PR #9, commit of 2026-10-31),
 pending the owner's review.
 Owner's one-off test exception of 2026-10-31: the seven tests and the `Docs/SCHEMA.md` example were updated for the rename only; the suite passes.
+
+## Iteration #42
+
+**Observation**
+The bot's audit of 2026-11-10 found three models that are not in the
+dataset. All three were read on the providers' own pages that day.
+
+- **Claude Fable 5.2** (`claude-fable-5-2`). Model page: "Released
+  November 9, 2026", 1M context, 128K output, $8 / $40. Deprecations page:
+  "Active | N/A | Not sooner than November 9, 2027". It is on Bedrock,
+  Foundry (Anthropic-hosted, Preview) and Vertex AI (GA), and on Claude
+  Max and Ultra per the Fable-by-plan article. Fable 5.1 left the
+  overview's compare table for its "Legacy models (still available)"
+  list, but the deprecations page still says "Active".
+- **Gemini 4 Carbon** (`gemini-4-carbon`). The release notes say GA on
+  November 10, 2026. Pricing: "$2.00 through November 30, 2026. $4.00
+  starting December 1, 2026" (input) and $10.00 → $20.00 (output), "not
+  available on the Free tier". AI Studio needs AI Ultra; the Gemini app
+  and Antigravity list it on Ultra only. The review log of 2026-10-31
+  recorded that it was "still not on Google's models page"; it is on that
+  page now.
+- **Muse Ember** (`muse-ember-1.0`). Meta's new small model line, in
+  Standard mode only. Two price tiers by input length ($0.10 / $0.50 up
+  to 200K input tokens, $0.30 / $1.50 above it, billed in full).
+  1,048,576 context, 524,288 output, text, image, video, audio and PDF
+  input. Released November 9, 2026 (Meta AI Research post).
+
+`IMPLEMENTATION_NOTES.md` had no earlier record of any of the three
+being refused. Muse Ember is none of the Meta ids Iteration #33 keeps
+out (Contributor ids, Spark 1.2/1.1, Wonder Full) and is not
+open-weight.
+
+**Current decision**
+Owner decision (2026-11-10): add all three ("Todos"), with the
+editorial ratings marked as the bot's criterion. The bot proposed the
+entries on the existing conventions. Fable 5.2 uses the Claude routes
+and curated Claude languages, with `shutdown_date: null` because a "not
+sooner than" floor is not a date (`CATALOG_BOT.md`, section 3). Carbon
+uses the Argon shape: the default `max_output`, the introductory price
+with `effective_until` and `reverts_to`, and Ultra-only subscription
+routes. Muse Ember uses the lower price tier (Iteration #24) and the
+curated Meta languages (Iteration #33). Fable 5.1's lifecycle is not
+changed, because Anthropic publishes no deprecation for it. The quality
+ratings and their reasoning are in each `Docs/models/{id}.md`. Fable
+5.2's `creative_writing` is `high`, not Fable 5.1's `very_high`,
+because no page claims creative writing and 5.1's value was inherited.
+
+Adding the models changes eleven engine tests' results (new entries in
+budget-tier sets, qualifying counts, "Also strong options" and what-if
+headlines, and the catalog notices). Only the catalog counts were
+updated (`CATALOG_BOT.md`, section 6). The others were left as they are.
+
+**Status**
+Proposed in the bot branch of 2026-11-10, pending the owner's review of the
+ratings and the eleven red tests.
+
+## Iteration #43
+
+**Observation**
+The 2026-11-10 branch never opened a pull request. Re-read on 2026-11-11,
+the objective fields match the pages the entries cite: Fable 5.2 is
+$8 / $40, 1M context, 128K output, released 2026-11-09, "Not sooner than
+November 9, 2027". Carbon is GA on 2026-11-10 at $2 / $10 through
+2026-11-30, then $4 / $20, default output 65,536. Ember is
+`muse-ember-1.0` at $0.10 / $0.50 up to 200K input tokens and $0.30 /
+$1.50 above that, context 1,048,576, output 524,288, released 2026-11-09.
+
+**Current decision**
+Keep the bot's editorial ratings as proposed. Re-derive the eleven tests
+from runs of this dataset. One scenario changed on purpose: cost then
+context window at a low budget now ties GPT-6 Luna with Muse Ember, so
+the "unmatched winner" check uses context window then cost, which still
+has no tie.
+
+**Status**
+Applied on the review branch. Ratings still want the owner's eye.
+

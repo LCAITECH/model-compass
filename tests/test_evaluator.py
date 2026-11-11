@@ -92,6 +92,7 @@ def test_low_budget_only_admits_the_cheapest_cost_tier(models):
         "qwen3.8-flash",
         "qwen3.7-plus",
         "qwen3.7-flash",
+        "muse-ember-1.0",  # $0.10/$0.50, admitted 2026-11-10
     }
 
 
@@ -120,7 +121,8 @@ def test_high_budget_excludes_the_very_high_cost_tier(models):
     candidates = evaluate(context, models)
     over_budget = {c.model.id for c in candidates if not c.qualifies and c.model.lifecycle.status == LifecycleStatus.ACTIVE}
 
-    assert over_budget == {"claude-fable-5", "claude-fable-5-1", "gpt-6-astra"}
+    # 2026-11-10: claude-fable-5-2 is $8/$40, still above the $30 ceiling.
+    assert over_budget == {"claude-fable-5", "claude-fable-5-1", "claude-fable-5-2", "gpt-6-astra"}
 
 
 def test_very_high_budget_admits_every_language_qualifying_model(models):
