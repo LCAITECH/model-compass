@@ -19,6 +19,14 @@ public release to version against.
 
 ---
 
+## 2026-11-11 — The eleven tests the new models turned red
+
+**Tests and a news-log row. No dataset change.**
+
+The three entries from 2026-11-10 were checked again on the providers' own pages (Fable 5.2 at $8/$40, 1M/128K, retirement "not sooner than" 2027-11-09; Carbon GA at $2/$10 through 2026-11-30 then $4/$20; Ember at $0.10/$0.50 up to 200K input tokens). The editorial ratings stay the bot's. The eleven tests that pinned the old rankings were re-derived from engine runs on this dataset.
+
+---
+
 ## 2026-11-10 — Three new models: Claude Fable 5.2, Gemini 4 Carbon and Muse Ember
 
 **Dataset, access routes and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**

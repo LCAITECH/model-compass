@@ -2061,6 +2061,27 @@ headlines, and the catalog notices). Only the catalog counts were
 updated (`CATALOG_BOT.md`, section 6). The others were left as they are.
 
 **Status**
-Proposed in the bot PR of 2026-11-10, pending the owner's review of the
+Proposed in the bot branch of 2026-11-10, pending the owner's review of the
 ratings and the eleven red tests.
+
+## Iteration #43
+
+**Observation**
+The 2026-11-10 branch never opened a pull request. Re-read on 2026-11-11,
+the objective fields match the pages the entries cite: Fable 5.2 is
+$8 / $40, 1M context, 128K output, released 2026-11-09, "Not sooner than
+November 9, 2027". Carbon is GA on 2026-11-10 at $2 / $10 through
+2026-11-30, then $4 / $20, default output 65,536. Ember is
+`muse-ember-1.0` at $0.10 / $0.50 up to 200K input tokens and $0.30 /
+$1.50 above that, context 1,048,576, output 524,288, released 2026-11-09.
+
+**Current decision**
+Keep the bot's editorial ratings as proposed. Re-derive the eleven tests
+from runs of this dataset. One scenario changed on purpose: cost then
+context window at a low budget now ties GPT-6 Luna with Muse Ember, so
+the "unmatched winner" check uses context window then cost, which still
+has no tie.
+
+**Status**
+Applied on the review branch. Ratings still want the owner's eye.
 
