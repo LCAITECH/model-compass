@@ -1,0 +1,21 @@
+provider: Google
+model_id: gemini-4-carbon
+access:
+  surface: direct_api
+  access_method: "API key (Gemini API)"
+  capabilities: [prototype, build, automation]
+  guide_ref: google#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: api_token
+  quota_scope: project
+  production_allowed: true
+evidence:
+  source_url: https://aistudio.google.com/docs/pricing
+  consulted_at: "2026-11-10"
+  status: confirmed
+  caveat: "Not available on the Gemini API's free tier. The paid tier needs Cloud Billing linked to the project, with quota per project. Introductory price until 2026-11-30, then double. Every token is billed, including thinking tokens."

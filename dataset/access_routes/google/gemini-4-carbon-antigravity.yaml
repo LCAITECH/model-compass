@@ -1,0 +1,26 @@
+provider: Google
+model_id: gemini-4-carbon
+access:
+  surface: consumer_subscription
+  access_method: "Google Antigravity (app, CLI and IDE extensions), signed in with a Google AI plan"
+  capabilities: [prototype, build]
+  guide_ref: google#antigravity
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [google-ai-ultra-5x, google-ai-ultra-20x]
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://antigravity.google/docs/models
+  consulted_at: "2026-11-10"
+  status: confirmed
+  caveat: "Included with Google AI Ultra only; not on the free plan, Google AI Plus or Google AI Pro. Use draws from a five-hour and weekly quota that Google does not publish in tokens. Google does not state that the model in Antigravity is the same snapshot as the API model; the match is by the exact name on its pages."
+# Source, read 2026-11-10 (raw HTML): "Reasoning model" table, "Gemini 4 Carbon ❌ ❌ ✅ ✅"
+# for Free & Google AI Plus, Google AI Pro, Google AI Ultra, Enterprise. Also
+# https://one.google.com/intl/en_us/about/google-ai-plans/: "access to Gemini 4 Carbon and
+# Gemini 4 Argon in Google Antigravity" (AI Ultra).

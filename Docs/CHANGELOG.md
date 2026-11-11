@@ -19,6 +19,18 @@ public release to version against.
 
 ---
 
+## 2026-11-10 — Three new models: Claude Fable 5.2, Gemini 4 Carbon and Muse Ember
+
+**Dataset, access routes and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**
+
+- **Claude Fable 5.2** (`claude-fable-5-2`), released 2026-11-09. It costs $8 / $40 per million tokens, down from Fable 5.1's $10 / $50, with a 1M context and 128K output. Anthropic's only retirement statement is "Not sooner than November 9, 2027", a floor rather than a date, so there is no shutdown date. It has five routes: the Claude API, Claude Max and Ultra, Amazon Bedrock, Microsoft Foundry (Anthropic-hosted, in preview) and Vertex AI. Fable 5.1 moved to Anthropic's "Legacy models (still available)" list but is still "Active" on the deprecations page, so its entry is unchanged.
+- **Gemini 4 Carbon** (`gemini-4-carbon`), generally available 2026-11-10. The introductory price is $2 / $10 through 2026-11-30, then $4 / $20 from 2026-12-01. It has a 1M context and 65,536 default output, takes text, image, audio, video and PDF input, and is not on the free tier. It has four routes: the Gemini API, plus AI Studio, the Gemini app and Antigravity on Google AI Ultra only.
+- **Muse Ember** (`muse-ember-1.0`), released 2026-11-09. Meta's small execution model costs $0.10 / $0.50 for requests up to 200K input tokens. Above that the whole request is billed at $0.30 / $1.50, and the entry stores the lower tier. It has a 1M context and 524,288 output, multimodal input, and one route on Meta Model API. It fits the Meta policy of Iteration #33: a Standard-mode API id, not a Contributor variant, not a subscription-only model.
+- **Ratings are the bot's judgment.** The quality and ecosystem values were proposed by the bot from each provider's own description, with the reasoning in `Docs/models/`, and are flagged for the owner's review.
+- **What the recommendation does.** The new models enter rankings: Fable 5.2 at the very-high cost tier, Muse Ember as one of the cheapest models, Carbon in the new-releases and promotions notice. Eleven tests that pin the old results fail and were left as they are, for the owner to review (`IMPLEMENTATION_NOTES.md`, Iteration #42).
+
+---
+
 ## 2026-11-06 — Gemini 2.5 Pro and Flash, and Mistral Large 3, are deprecated
 
 **Dataset and docs. The engine already refuses a deprecated model, so no engine change.**

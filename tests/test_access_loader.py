@@ -63,10 +63,12 @@ def test_loads_all_real_access_routes():
     # + 1 (claude-fable-5-1 on Google Cloud Vertex AI) 2026-10-23: Google's
     #   own model page now lists it (Iteration #16's revisit).
     # + 1 direct_api route 2026-10-27: gpt-6-1-terra (Iteration #38).
-    assert len(routes) == 104
+    # + 10 routes 2026-11-10 (Iteration #42): claude-fable-5-2 (5),
+    #   gemini-4-carbon (4), muse-ember-1.0 (1).
+    assert len(routes) == 114
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
-    assert len(model_ids_with_direct_api) == 45
+    assert len(model_ids_with_direct_api) == 48
 
 
 def test_loads_all_real_subscriptions():

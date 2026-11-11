@@ -1,0 +1,21 @@
+provider: Anthropic
+model_id: claude-fable-5-2
+access:
+  surface: direct_api
+  access_method: "API key (Messages API), also usable via Claude Code"
+  capabilities: [prototype, build, automation]
+  guide_ref: anthropic#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Anthropic
+  billing_scheme: api_token
+  quota_scope: organization
+  production_allowed: true
+evidence:
+  source_url: https://platform.claude.com/docs/en/about-claude/pricing
+  consulted_at: "2026-11-10"
+  status: confirmed
+  caveat: "Billed per token, separately from any Claude subscription (the subscription path is its own route). Requires 30-day data retention; not available under zero data retention unless Anthropic expressly authorizes it. Queries flagged by its cybersecurity and biology safeguards are answered by other Claude models. Also on Amazon Bedrock, Microsoft Foundry and Google Cloud Vertex AI."
