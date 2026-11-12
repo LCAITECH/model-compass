@@ -65,10 +65,11 @@ def test_loads_all_real_access_routes():
     # + 1 direct_api route 2026-10-27: gpt-6-1-terra (Iteration #38).
     # + 10 routes 2026-11-10 (Iteration #42): claude-fable-5-2 (5),
     #   gemini-4-carbon (4), muse-ember-1.0 (1).
-    assert len(routes) == 114
+    # + 1 direct_api route 2026-11-12: gemini-decision-1 (Iteration #44).
+    assert len(routes) == 115
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
-    assert len(model_ids_with_direct_api) == 48
+    assert len(model_ids_with_direct_api) == 49
 
 
 def test_loads_all_real_subscriptions():

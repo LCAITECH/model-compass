@@ -1,0 +1,21 @@
+provider: Google
+model_id: gemini-decision-1
+access:
+  surface: direct_api
+  access_method: "API key (Gemini API, Decisions API)"
+  capabilities: [prototype, build, automation]
+  guide_ref: google#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: api_token
+  quota_scope: project
+  production_allowed: true
+evidence:
+  source_url: https://aistudio.google.com/docs/pricing
+  consulted_at: "2026-11-12"
+  status: confirmed
+  caveat: "Only through the Decisions API (v1beta, SDK 3.2 or later), not generateContent. It returns calibrated probabilities for yes/no, choice and score questions and never generates text, so there are no output tokens to bill. The paid tier needs Cloud Billing linked to the project; a rate-limited free tier also exists. No Batch API, context caching, or Flex and Priority inference."

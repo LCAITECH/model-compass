@@ -19,6 +19,17 @@ public release to version against.
 
 ---
 
+## 2026-11-12 — Gemini Decision, a model that decides instead of writing
+
+**Dataset, one access route and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**
+
+- **Gemini Decision** (`gemini-decision-1`), released by Google on 2026-11-11 with its own Decisions API. It reads text, images, audio, video and PDFs and answers yes/no, choice and score questions with calibrated probabilities. It generates no text and no output tokens. Input costs $0.10 per million tokens, there is nothing else to pay for, and the Gemini API free tier covers it. Context is 262,144 tokens. Google has announced no shutdown date.
+- **An exception to the scope.** The catalog lists text and code models (`VISION.md`). The owner decided on 2026-11-12 to add this one anyway (`IMPLEMENTATION_NOTES.md`, Iteration #44).
+- **How it fits the schema.** The schema has no "does not generate text" field. Google's "Output token limit 0" is stored as `max_output: null`, because 0 is not a valid value, and "Not applicable (0 output tokens)" as an output price of $0.00. The quality ratings are the bot's and deliberately low (reasoning, coding and creative writing `low`, instruction following `medium`), with the reasons in `Docs/models/gemini-decision-1.md`.
+- **What the recommendation does.** At $0.10 blended it is now the cheapest model in the catalog, so cost-first results pick it over Qwen3.7-Flash. With a dollar budget the result page fails, because the page divides the budget by the output price, which is now zero. Sixteen tests fail and were left as they are, for the owner to review.
+
+---
+
 ## 2026-11-11 — The eleven tests the new models turned red
 
 **Tests and a news-log row. No dataset change.**

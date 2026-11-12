@@ -2085,3 +2085,53 @@ has no tie.
 **Status**
 Applied on the review branch. Ratings still want the owner's eye.
 
+
+## Iteration #44
+
+**Observation**
+Google released Gemini Decision (`gemini-decision-1`) and the Decisions
+API on 2026-11-11 (release notes). Read on Google's own pages on
+2026-11-12: inputs text, image, video, audio and PDF; output "Calibrated
+probabilities (yes/no, choice, and score, with 0 output tokens)"; "Input
+token limit 262,144", "Output token limit 0"; "Text generation Not
+supported", "Function calling Not supported", "Structured outputs Not
+supported", "Thinking Not supported". Pricing: input $0.10 per 1M tokens,
+output "Not applicable (0 output tokens)", input "Free of charge" on the
+free tier. Deprecations page: "November 11, 2026 | No shutdown date
+announced". It is the first model in the catalog that generates no text,
+so it is outside the text-and-code scope (`VISION.md`). No earlier
+iteration recorded it as not admitted.
+
+The schema has no field for a model that does not write. Two published
+values have no valid slot: "Output token limit 0" (`max_output` must be a
+positive integer or `null`) and an output price that is "Not applicable".
+
+**Current decision**
+Owner decision (2026-11-12, "Sumalo al catálogo"): add it, as a one-off
+exception to the scope. It is not a change to `VISION.md` and does not
+admit other non-generative models (embeddings and the like). The bot
+mapped it to the closest valid values without new fields:
+`max_output: null` (there is no output to limit), `output_per_million:
+0.00` (no output token is ever billed), `tool_calling`,
+`structured_output` and `json_mode` `false`. The quality ratings are the
+bot's and conservative: reasoning, coding and creative writing `low`,
+instruction following `medium`, all languages `medium`,
+`integration_ease: medium` (a separate v1beta API), `maturity: stable`
+(stable id pattern, on the public models page). Reasons in
+`Docs/models/gemini-decision-1.md`.
+
+At $0.10 blended it becomes the cheapest model, so the engine, which
+cannot tell that it does not generate text, now recommends it first for
+cost-first scenarios. A zero output price also makes
+`interfaces/web/affordability.py` divide by zero on the dollar-budget
+result page. Sixteen tests fail: thirteen ranking or count changes and
+three `ZeroDivisionError`s. Only the catalog counts were updated
+(`CATALOG_BOT.md`, section 6). The other tests, `decision/` and
+`interfaces/` were left as they are.
+
+**Status**
+Proposed in the bot branch of 2026-11-12, pending the owner's review of
+the ratings, the schema mapping and the sixteen red tests. Merging it as
+it is breaks the dollar-budget page; that needs a code decision first
+(for example handling a zero output price, or a way to keep a
+non-generative model out of text recommendations).

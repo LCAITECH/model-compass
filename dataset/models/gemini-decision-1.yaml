@@ -1,0 +1,85 @@
+id: gemini-decision-1
+name: Gemini Decision
+provider: Google
+version: "1"
+license: proprietary
+
+# Added on the owner's decision of 2026-11-12 ("Sumalo al catalogo"), a
+# one-off exception to the text-and-code scope (Iteration #44): the model
+# reads text and media but returns calibrated probabilities, not text.
+# Model page: "Inputs Text, Image, Video, Audio, and PDF; Output Calibrated
+# probabilities (yes/no, choice, and score, with 0 output tokens)";
+# "Function calling Not supported", "Structured outputs Not supported",
+# "Image generation Not supported", "Audio generation Not supported",
+# "Text generation Not supported". json_mode is false: the model emits no
+# text, so there is no JSON mode (the API's typed answers are the response
+# format of the Decisions API, not model output).
+# Source: https://aistudio.google.com/docs/models/gemini-decision-1 (checked 2026-11-12).
+capabilities:
+  vision: true
+  audio: true
+  image_generation: false
+  tool_calling: false
+  structured_output: false
+  json_mode: false
+
+# Editorial (bot's judgment, 2026-11-12), deliberately conservative because
+# the model generates no text or code; reasoning in Docs/models/gemini-decision-1.md.
+quality:
+  reasoning: low
+  coding: low
+  creative_writing: low
+  instruction_following: medium
+
+# Curated Gemini language list (Iteration #1); Google publishes no language
+# list for this model. Values are the bot's judgment, not copied from a sibling.
+languages: [en, es, pt, fr, de, ja, zh, hi, ar, ru]
+language_quality:
+  en: medium
+  es: medium
+  pt: medium
+  fr: medium
+  de: medium
+  ja: medium
+  zh: medium
+  hi: medium
+  ar: medium
+  ru: medium
+
+# Model page: "Input token limit 262,144; Output token limit 0 (up to 1,000
+# questions per request)". The schema needs a positive integer or null for
+# max_output and 0 is not valid, so it is null: the model produces no output
+# tokens at all. Explained in Docs/models/gemini-decision-1.md.
+operational:
+  context_window: 262144
+  max_output: null
+
+# Pricing page, Gemini Decision, Paid Tier: "Input price (text, image, video,
+# audio, PDF) $0.10"; "Output price: Not applicable (0 output tokens)".
+# output_per_million is 0: no output token is ever billed.
+# Source: https://aistudio.google.com/docs/pricing#gemini-decision (checked 2026-11-12).
+cost:
+  input_per_million: 0.10
+  output_per_million: 0.00
+
+# Editorial: a separate API (Decisions API, v1beta, SDK 3.2+) rather than the
+# generateContent surface; "Stable" by Google's version-name patterns (no
+# -preview suffix) and listed on the public models page.
+ecosystem:
+  integration_ease: medium
+  maturity: stable
+
+# Pricing page, Free Tier: "Input price ... Free of charge"; rate-limits page:
+# Free tier 200 RPM, 50,000 TPM, 10,000 RPD.
+access:
+  has_free_access: true
+
+# Source: https://aistudio.google.com/docs/deprecations (checked 2026-11-12):
+# "gemini-decision-1 | November 11, 2026 | No shutdown date announced".
+# Release date: https://aistudio.google.com/docs/changelog (November 11, 2026:
+# "Released Gemini Decision (gemini-decision-1) and the Decisions API").
+lifecycle:
+  status: active
+  release_date: "2026-11-11"
+  shutdown_date: null
+  replacement: null
