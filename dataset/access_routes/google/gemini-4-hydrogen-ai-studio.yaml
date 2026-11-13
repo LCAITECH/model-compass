@@ -1,0 +1,25 @@
+provider: Google
+model_id: gemini-4-hydrogen
+access:
+  surface: playground_or_studio
+  access_method: "Google AI Studio"
+  capabilities: [prototype, build]
+  guide_ref: google#ai-studio
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [google-ai-pro, google-ai-ultra-5x, google-ai-ultra-20x]
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://aistudio.google.com/docs/google-ai-plans
+  consulted_at: "2026-11-13"
+  status: confirmed
+  caveat: "Available on all Google AI plans in AI Studio, including the Free plan. The plan's quota applies only in the AI Studio web interface; use through an API key, including one linked inside AI Studio, is billed separately as API usage."
+# Source, read 2026-11-13: "Gemini 4 Hydrogen is available on all plans,
+# including the Free plan." Overview table: Free includes Gemini 4 Hydrogen;
+# rows are Free, AI Pro and AI Ultra (Plus is not a row on this page).

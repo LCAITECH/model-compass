@@ -1,0 +1,26 @@
+provider: Google
+model_id: gemini-4-hydrogen
+access:
+  surface: consumer_subscription
+  access_method: "Google Antigravity (app, CLI and IDE extensions), signed in with a Google AI plan"
+  capabilities: [prototype, build]
+  guide_ref: google#antigravity
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [google-ai-plus, google-ai-pro, google-ai-ultra-5x, google-ai-ultra-20x]
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://antigravity.google/docs/models
+  consulted_at: "2026-11-13"
+  status: confirmed
+  caveat: "Included on the free plan, Google AI Plus, Google AI Pro, Google AI Ultra and Enterprise. Use draws from a five-hour and weekly quota that Google does not publish in tokens. Google does not state that the model in Antigravity is the same snapshot as the API model; the match is by the exact name on its pages."
+# Source, read 2026-11-13: "Reasoning model" table, "Gemini 4 Hydrogen ✅ ✅ ✅ ✅"
+# for Free & Google AI Plus, Google AI Pro, Google AI Ultra, Enterprise.
+# Name match (Iteration #34): https://aistudio.google.com/docs/models gives the
+# id gemini-4-hydrogen the name "Gemini 4 Hydrogen".

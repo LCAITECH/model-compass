@@ -1,0 +1,72 @@
+id: gemini-4-hydrogen
+name: Gemini 4 Hydrogen
+provider: Google
+version: "4"
+license: proprietary
+
+# Model page: "Inputs Text, Image, Video, Audio, and PDF; Output Text";
+# "Function calling Supported", "Structured outputs Supported",
+# "Image generation Not supported", "Audio generation Not supported".
+# json_mode on the same basis as the other Gemini entries.
+# Source: https://aistudio.google.com/docs/models/gemini-4-hydrogen (checked 2026-11-13).
+capabilities:
+  vision: true
+  audio: true
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+
+# Editorial (bot's judgment, 2026-11-13); reasoning in Docs/models/gemini-4-hydrogen.md.
+quality:
+  reasoning: high
+  coding: high
+  creative_writing: medium
+  instruction_following: high
+
+# Curated Gemini language set (Iteration #1).
+languages: [en, es, pt, fr, de, ja, zh, hi, ar, ru]
+language_quality:
+  en: very_high
+  es: high
+  pt: high
+  fr: high
+  de: high
+  ja: medium
+  zh: medium
+  hi: medium
+  ar: medium
+  ru: medium
+
+# max_output is the default synchronous limit. The model page also documents
+# "up to 1,048,576 (with long decode)" -- recorded in Docs/models/gemini-4-hydrogen.md
+# (Iteration #24/#26 convention).
+operational:
+  context_window: 1048576
+  max_output: 65536
+
+# Paid tier, no end date published: "$1.50" input, "$7.50" output per 1M tokens.
+# Source: https://aistudio.google.com/docs/pricing (Paid Tier; checked 2026-11-13).
+cost:
+  input_per_million: 1.50
+  output_per_million: 7.50
+
+# "Stable: gemini-4-hydrogen" (model page).
+ecosystem:
+  integration_ease: high
+  maturity: stable
+
+# Pricing page: Free Tier input and output "Free of charge". Release notes:
+# "Available on the free tier". AI Studio plans page: available on the Free plan.
+access:
+  has_free_access: true
+
+# Source: https://aistudio.google.com/docs/deprecations (checked 2026-11-13):
+# "gemini-4-hydrogen | November 12, 2026 | No shutdown date announced".
+# Release date: https://aistudio.google.com/docs/changelog (November 12, 2026:
+# "Gemini 4 Hydrogen (gemini-4-hydrogen) generally available (GA)").
+lifecycle:
+  status: active
+  release_date: "2026-11-12"
+  shutdown_date: null
+  replacement: null

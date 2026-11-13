@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-11-13 — Proposed: Gemini 4 Hydrogen
+
+**Dataset, access routes and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**
+
+- **Gemini 4 Hydrogen** (`gemini-4-hydrogen`), generally available 2026-11-12. It costs $1.50 / $7.50 per million tokens, with no published end date. It has a 1M context and 65,536 default output (up to 1,048,576 with long decode), takes text, image, audio, video and PDF input, and is on the free tier. It has four routes: the Gemini API (free and paid), AI Studio on all plans including Free, the Gemini app on Google AI Plus and the plans that include Plus, and Antigravity on the free plan, Plus, Pro and Ultra.
+- **Ratings are the bot's judgment.** Quality and ecosystem values were proposed by the bot from Google's own description, with the reasoning in `Docs/models/gemini-4-hydrogen.md`, and are flagged for the owner's review. Reasoning and coding are `high`, one step below Carbon and Argon, because Google positions Hydrogen for everyday coding and agentic workflows rather than as its strongest reasoning model.
+- **What the recommendation does.** The new model enters rankings. Engine tests that pin the old results may fail and were left as they are, for the owner to review (`IMPLEMENTATION_NOTES.md`, Iteration #44).
+
+---
+
 ## 2026-11-11 — The eleven tests the new models turned red
 
 **Tests and a news-log row. No dataset change.**

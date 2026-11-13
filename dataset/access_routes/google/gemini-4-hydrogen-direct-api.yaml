@@ -1,0 +1,26 @@
+provider: Google
+model_id: gemini-4-hydrogen
+access:
+  surface: direct_api
+  access_method: "API key (Gemini API)"
+  capabilities: [prototype, build, automation]
+  guide_ref: google#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: api_token
+  quota_scope: project
+  production_allowed: true
+evidence:
+  source_url: https://aistudio.google.com/docs/pricing
+  consulted_at: "2026-11-13"
+  status: confirmed
+  caveat: "Available on the Gemini API's free tier and on the paid tier. The paid tier needs Cloud Billing linked to the project, with quota per project. A rate-limited free tier exists outside the paid path. Every token is billed on the paid tier, including thinking tokens."
+# Sources, read 2026-11-13: https://aistudio.google.com/docs/pricing (Free Tier
+# input and output "Free of charge"; Paid Tier $1.50 / $7.50 per 1M tokens);
+# https://aistudio.google.com/docs/changelog (November 12, 2026: "Available on
+# the free tier and at paid-tier pricing of $1.50 per 1M input tokens and $7.50
+# per 1M output tokens").

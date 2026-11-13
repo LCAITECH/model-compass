@@ -2085,3 +2085,62 @@ has no tie.
 **Status**
 Applied on the review branch. Ratings still want the owner's eye.
 
+## Iteration #44
+
+**Observation**
+The bot's audit of 2026-11-13 found Gemini 4 Hydrogen (`gemini-4-hydrogen`)
+on Google's own pages, the day after it became generally available. The
+owner asked for it to be added the same day.
+
+The model page gives a unified 1,048,576-token context window and "Max
+output 65,536 (default synchronous) / up to 1,048,576 (with long
+decode)". The pricing page lists paid-tier $1.50 / $7.50 per 1M tokens,
+implicit cached input at $0.075, and Free Tier input and output "Free
+of charge". The release notes of November 12, 2026 say generally
+available (GA), "Available on the free tier and at paid-tier pricing of
+$1.50 per 1M input tokens and $7.50 per 1M output tokens". The
+deprecations page: "gemini-4-hydrogen | November 12, 2026 | No shutdown
+date announced". AI Studio's plans page: "Gemini 4 Hydrogen is
+available on all plans, including the Free plan." Antigravity's models
+page lists it on Free & Google AI Plus, Google AI Pro, Google AI Ultra
+and Enterprise. The Google One plans page names it on Google AI Plus
+("Gemini app with access to Gemini 4 Hydrogen"); Pro "gives you
+everything in Plus" and Ultra "a higher level of access to everything
+in Google AI Pro".
+
+The review log of 2026-11-06 listed "Hydrogen" among "LongCat, Hy4,
+Inkling, ERNIE, Cosmos and Hydrogen" and treated them as "new providers
+or outside text/code (`CATALOG_BOT.md`, section 3)". That outcome no
+longer holds: Google has since published a text and code Gemini API
+model under this name, with official prices, limits and a GA date.
+`IMPLEMENTATION_NOTES.md` on main had no earlier record of
+`gemini-4-hydrogen` being refused.
+
+**Current decision**
+Owner decision (2026-11-13): add Gemini 4 Hydrogen, with the editorial
+ratings marked as the bot's criterion. The entry follows the Carbon
+shape: the default `max_output`, curated Gemini languages (Iteration
+#1), and four routes (Gemini API, AI Studio, the Gemini app,
+Antigravity). There is no introductory-price window, so `cost.*` stores
+the current $1.50 / $7.50 with no `effective_until`. `has_free_access`
+is `true` on both paths Iteration #32 counts (a free API tier, and the
+free AI Studio plan naming the model). The Free plan is not a
+subscription entry in this catalog, so AI Studio and Antigravity list
+the paid plan ids the pages name and document the Free plan in the
+caveat and in `Docs/models/gemini-4-hydrogen.md`. Quality is
+conservative relative to Carbon and Argon: `high` reasoning and coding,
+`medium` creative writing, `high` instruction following. The ratings
+and their reasoning are in that document.
+
+Only the catalog counts were updated (`CATALOG_BOT.md`, section 6). Any
+other tests that change because the new model enters rankings were left
+as they are.
+
+This iteration number is the next one on `origin/main`. The unmerged
+`bot/catalog-2026-11-12` branch (Gemini Decision) also uses #44; the
+two will conflict if both land.
+
+**Status**
+Proposed in the bot branch of 2026-11-13, pending the owner's review of
+the ratings and any red tests.
+
