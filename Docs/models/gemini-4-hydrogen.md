@@ -117,7 +117,9 @@ shutdown date announced". `shutdown_date` and `replacement` are `null`.
 
 ## Access
 
-Four routes, each read on Google's own pages on 2026-11-13:
+Five routes. The first four were read on Google's own pages on
+2026-11-13; the Vertex AI route was added on 2026-11-16:
+
 
 - **Gemini API** (`-direct-api`), with a billing-linked project for the
   paid path. The pricing page lists Free Tier input and output as "Free
@@ -147,10 +149,17 @@ Four routes, each read on Google's own pages on 2026-11-13:
   it is "the default model for the Antigravity agent in Gemini Managed
   Agents".
 
+- **Google Cloud Vertex AI** (`-gcp-vertex`), on Vertex AI / Model
+  Garden (Gemini Enterprise Agent Platform). The Agent Platform
+  pricing page lists Gemini 4 Hydrogen at $1.50 / $7.50 per million
+  tokens on the Global endpoint (non-global $1.65 / $8.25). The
+  developer's guide uses the model id `gemini-4-hydrogen` and
+  locations `global`, `us`, or `eu`. Billing is through Google Cloud,
+  not the Gemini API key path.
+
 The Google AI Ultra plans in the catalog are `google-ai-ultra-5x` and
 `google-ai-ultra-20x`. Google's pages say "AI Ultra" without separating
-the tiers, so both are listed. Vertex AI / Gemini Enterprise Agent
-Platform availability was not checked, so there is no cloud route.
+the tiers, so both are listed.
 
 ## Sources
 
@@ -166,9 +175,16 @@ Platform availability was not checked, so there is no cloud route.
 
 All accessed 2026-11-13.
 
+- https://cloud.google.com/model-garden/pricing: Vertex / Agent Platform Standard Global $1.50 / $7.50, non-global $1.65 / $8.25, cache read $0.075. Accessed 2026-11-16.
+- https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/guides/gemini-4-hydrogen: model id `gemini-4-hydrogen`, locations `global`, `us`, `eu`. Accessed 2026-11-16.
+
 ## Verification result
 
 New entry. Objective fields confirmed on Google's own pages, except
 `languages` (not published, so the curated set is used) and `json_mode`
 (not itemized). The quality ratings are the bot's judgment and are
 flagged for owner review.
+
+The Vertex AI / Model Garden route was added 2026-11-16 from the
+Agent Platform pricing page and the Hydrogen developer's guide. No
+objective field on the model YAML itself changed.

@@ -73,3 +73,21 @@ five hours and capped weekly, not published in tokens.
    is not usable through the Gemini API.
 
 Sources: [Antigravity models](https://antigravity.google/docs/models) and [Antigravity plans](https://antigravity.google/docs/plans), consulted 2026-10-22 and 2026-10-27; Gemini 4 Carbon from the models page, consulted 2026-11-10; Gemini 4 Hydrogen from the same models page, consulted 2026-11-13.
+
+## `google#gcp-vertex`
+
+Gemini models on Google Cloud Vertex AI (Model Garden / Gemini
+Enterprise Agent Platform) are billed through Google Cloud, not through
+a Gemini API key.
+
+1. Create/use a Google Cloud project with Cloud Billing enabled.
+2. Call the model through the Vertex AI / Agent Platform API, using
+   Google Cloud authentication (for example Application Default
+   Credentials) and a supported location (`global`, `us`, or `eu`).
+3. Follow the official docs for your first call: [Developer's guide to Gemini 4 Hydrogen](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/guides/gemini-4-hydrogen).
+
+Standard Global pricing matches the Gemini API paid tier for the
+models that publish both. Non-global regions, Priority, Flex and Batch
+are billed at different rates; see [Agent Platform Pricing](https://cloud.google.com/model-garden/pricing).
+
+Sources: [Agent Platform Pricing](https://cloud.google.com/model-garden/pricing) and [Developer's guide to Gemini 4 Hydrogen](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/guides/gemini-4-hydrogen), consulted 2026-11-16.

@@ -19,6 +19,15 @@ public release to version against.
 
 ---
 
+## 2026-11-16 — Gemini 4 Hydrogen on Vertex AI / Model Garden
+
+**Dataset, access routes and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**
+
+- **Gemini 4 Hydrogen** gains a fifth route: Google Cloud Vertex AI (Model Garden / Gemini Enterprise Agent Platform). Standard Global pricing is $1.50 / $7.50 per million tokens, the same as the Gemini API paid tier; non-global regions are $1.65 / $8.25. The official model id is `gemini-4-hydrogen`. A `google#gcp-vertex` section was added to the Google access guide. No model-YAML field changed.
+- **Counts only.** The route count moves from 118 to 119. Direct-API and model counts are unchanged. Other tests were left as they are (`IMPLEMENTATION_NOTES.md`, Iteration #45).
+
+---
+
 ## 2026-11-13 — Proposed: Gemini 4 Hydrogen
 
 **Dataset, access routes and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**

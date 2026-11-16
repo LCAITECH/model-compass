@@ -67,7 +67,9 @@ def test_loads_all_real_access_routes():
     #   gemini-4-carbon (4), muse-ember-1.0 (1).
     # + 4 routes 2026-11-13 (Iteration #44): gemini-4-hydrogen (direct API,
     #   AI Studio, Gemini app, Antigravity).
-    assert len(routes) == 118
+    # + 1 cloud_hosted route 2026-11-16 (Iteration #45): gemini-4-hydrogen
+    #   on Vertex AI / Model Garden.
+    assert len(routes) == 119
     assert all(isinstance(route, AccessRoute) for route in routes)
     model_ids_with_direct_api = {route.model_id for route in routes if route.route_id.endswith("-direct-api")}
     assert len(model_ids_with_direct_api) == 49

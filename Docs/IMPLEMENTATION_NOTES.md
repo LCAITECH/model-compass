@@ -2144,3 +2144,38 @@ two will conflict if both land.
 Proposed in the bot branch of 2026-11-13, pending the owner's review of
 the ratings and any red tests.
 
+
+## Iteration #45
+
+**Observation**
+On 2026-11-16 Google Cloud's Agent Platform pricing page
+(https://cloud.google.com/model-garden/pricing) lists Gemini 4
+Hydrogen at $1.50 / $7.50 per million tokens on the Global endpoint
+(non-global $1.65 / $8.25, implicit cache read $0.075). The
+developer's guide
+(https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/guides/gemini-4-hydrogen)
+uses the model id `gemini-4-hydrogen` and locations `global`, `us`,
+or `eu`. The 2026-11-13 entry had recorded that Vertex AI / Gemini
+Enterprise Agent Platform availability was not checked, so there was
+no cloud route. No other Gemini model in this catalog has a Vertex
+route yet; the schema already has `surface: cloud_hosted`, used for
+Anthropic models on Vertex.
+
+**Current decision**
+Add a `cloud_hosted` route `gemini-4-hydrogen-gcp-vertex`, billed
+through Google Cloud, citing the pricing page as `evidence.source_url`.
+Add a `google#gcp-vertex` section to `Docs/access-guides/google.md`
+so the route's `guide_ref` resolves (the access-labels test requires
+the heading to exist). Do not change the model YAML: the $1.50 / $7.50
+Global rate matches the Gemini API paid tier already stored. Do not
+backfill Vertex routes for Argon or Carbon in this pass. Only the
+route count is updated (`CATALOG_BOT.md`, section 6).
+
+This is Iteration #45, the next number on this branch. The 2026-11-16
+catalog branch from `main` uses #44, as this branch already did for
+Hydrogen's admission, so CHANGELOG and IMPLEMENTATION_NOTES will still
+conflict with `bot/catalog-2026-11-16` and `bot/catalog-2026-11-12`.
+
+**Status**
+Proposed in the bot branch of 2026-11-13, as a follow-up commit on
+2026-11-16, pending the owner's review.
