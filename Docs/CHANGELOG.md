@@ -19,6 +19,17 @@ public release to version against.
 
 ---
 
+## 2026-11-16 — Qwen4-Max enters the catalog, and GPT-5.6 Sol's promo is extended
+
+**Dataset, access routes and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**
+
+- **Qwen4-Max** (`qwen4-max`), generally available 2026-11-16 on Alibaba Cloud Model Studio. International (Singapore) pricing is $1.50 / $4.50 per million tokens, with a 1M context and 131,072 default maximum output (the combined thinking-plus-answer budget is 262,144, recorded only in the model doc). It takes text, image and video input, and has one direct-API route. Cached input is $0.075, which the schema has no field for. A 90-day 1 million token Singapore free quota is not standing free access. The Token-Plan-only preview id `qwen4-max-preview` is a different model and is not admitted.
+- **GPT-5.6 Sol** promotional pricing of $4 / $20 is unchanged, but OpenAI's pricing page and model card now say it is available until 2026-11-30, not "at least through November 21, 2026". `effective_until` moves to 2026-11-30; the $5 / $30 reversion is unchanged.
+- **Ratings are the bot's judgment.** Qwen4-Max's quality and ecosystem values were proposed by the bot from Alibaba's own description, with the reasoning in `Docs/models/qwen4-max.md`, and are flagged for the owner's review.
+- **What the recommendation does.** Qwen4-Max enters rankings in the mid-price band, cheaper than Qwen3.8-Max at the same context. Catalog counts were updated; any ranking tests that change are left as they are (`IMPLEMENTATION_NOTES.md`, Iteration #44).
+
+---
+
 ## 2026-11-11 — The eleven tests the new models turned red
 
 **Tests and a news-log row. No dataset change.**

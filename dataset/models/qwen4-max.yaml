@@ -1,0 +1,81 @@
+id: qwen4-max
+name: Qwen4-Max
+provider: Alibaba Cloud
+version: "4"
+license: proprietary
+
+# Model page, Model capabilities, Singapore/International: "Input modalities
+# Text, image, video"; "Output modality Text"; "Function Calling Supported";
+# "Structured output (JSON Object, JSON Schema) Supported".
+# Sources: https://www.alibabacloud.com/help/en/model-studio/qwen4-max
+# (checked 2026-11-16).
+capabilities:
+  vision: true
+  audio: false
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+
+# Editorial (bot's judgment, 2026-11-16); reasoning in Docs/models/qwen4-max.md.
+quality:
+  reasoning: very_high
+  coding: very_high
+  creative_writing: medium
+  instruction_following: high
+
+# Curated Qwen language set (same list as qwen3.8-max; Alibaba publishes no
+# per-model list).
+languages: [en, zh, es, fr, de, ja, ko, ar, ru, pt]
+language_quality:
+  en: very_high
+  zh: very_high
+  es: high
+  fr: high
+  de: high
+  ja: medium
+  ko: medium
+  ar: medium
+  ru: medium
+  pt: high
+
+# Context limits: "Context length 1,000,000"; "Maximum output length
+# (non-thinking) 131,072". Thinking is on by default; "Maximum combined
+# tokens for thinking and the final answer 262,144" is recorded in
+# Docs/models/qwen4-max.md (sibling convention / Iteration #24/#26).
+operational:
+  context_window: 1000000
+  max_output: 131072
+
+# International (Singapore) scope pricing, USD -- Alibaba Cloud Model
+# Studio prices per-region (the China/Beijing and other regional scopes
+# are cheaper but are not the International tab this catalog uses).
+# Source: https://www.alibabacloud.com/help/en/model-studio/model-pricing
+# and https://www.alibabacloud.com/help/en/model-studio/qwen4-max
+# (checked 2026-11-16): "0<Token≤1M | $1.5 | $4.5". Cache (no schema
+# field): write 5m $1.875, 1h $3, explicit/implicit read $0.075.
+cost:
+  input_per_million: 1.50
+  output_per_million: 4.50
+
+ecosystem:
+  integration_ease: high
+  maturity: stable
+
+# The Singapore tab lists a 1 million token free quota, valid 90 days from
+# Model Studio activation, model release, or application approval. That is
+# a time-limited new-user quota, not a continuous free tier
+# (CATALOG_BOT.md §3, Iteration #32).
+access:
+  has_free_access: false
+
+# Source: https://www.alibabacloud.com/help/en/model-studio/newly-released-models
+# (checked 2026-11-16): "2026-11-16 / qwen4-max / Service deployment scope:
+# International". The model page and pricing page list it as a current
+# (non-preview) model; no shutdown date is published. The separate preview
+# id qwen4-max-preview is not this entry.
+lifecycle:
+  status: active
+  release_date: "2026-11-16"
+  shutdown_date: null
+  replacement: null

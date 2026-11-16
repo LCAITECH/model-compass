@@ -88,7 +88,7 @@ same style of nuance already noted for `gpt-5`/`gpt-5-mini`'s
 
 ## Cost `[Objective]`
 
-| Field                    | Value (through at least 2026-11-21) | Reverts to |
+| Field                    | Value (through 2026-11-30) | Reverts to |
 |----------------------------|------------------------------|----------------------------|
 | `input_per_million`         | $4.00                        | $5.00                      |
 | `output_per_million`        | $20.00                       | $30.00                     |
@@ -104,6 +104,14 @@ The dataset entry now uses `cost.effective_until`/`cost.reverts_to`
 first applied to an OpenAI model here) instead of overwriting
 `cost.*` with a bare number — same display-only pattern, same
 manual-correction caveat once the date passes.
+
+**End date extended, re-read 2026-11-16.** The pricing page footnote
+and the [GPT-5.6 Sol model page](https://developers.openai.com/api/docs/models/gpt-5.6-sol)
+now say "GPT-5.6 Sol’s promotional pricing is available until November
+30, 2026." The $4 / $20 rates and the $5 / $30 reversion are unchanged.
+The 2026-08-21 changelog entry and the Fast mode guide still use the
+older "at least through November 21, 2026" wording. `effective_until`
+follows the pricing page and the model page, re-read 2026-11-16.
 
 Additional tiers not represented in the schema: cached input $0.40/M,
 cache writes $5.00/M, long-context (short vs. long context split, a

@@ -1,0 +1,21 @@
+provider: Alibaba Cloud
+model_id: qwen4-max
+access:
+  surface: direct_api
+  access_method: "API key (Model Studio, DashScope/OpenAI-compatible endpoints)"
+  capabilities: [prototype, build, automation]
+  guide_ref: alibaba#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Alibaba Cloud
+  billing_scheme: api_token
+  quota_scope: account
+  production_allowed: true
+evidence:
+  source_url: https://www.alibabacloud.com/help/en/model-studio/qwen4-max
+  consulted_at: "2026-11-16"
+  status: confirmed
+  caveat: "Priced at the International (Singapore) scope, the one a standard account can use. Other regions are cheaper. Pay-as-you-go is available; the model is also on Token Plan. A 1 million token Singapore free quota lasts 90 days from Model Studio activation, model release or application approval, and is not a standing free tier."

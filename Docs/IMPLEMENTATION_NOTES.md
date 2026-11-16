@@ -2085,3 +2085,46 @@ has no tie.
 **Status**
 Applied on the review branch. Ratings still want the owner's eye.
 
+
+## Iteration #44
+
+**Observation**
+Alibaba Cloud generally available'd Qwen4-Max (`qwen4-max`) on 2026-11-16,
+with International (Singapore) pay-as-you-go pricing of $1.50 / $4.50,
+a 1,000,000-token context, a 131,072 non-thinking output ceiling and a
+262,144 combined thinking-plus-answer budget. The official pages also
+list cache reads at $0.075 and a 90-day 1 million token Singapore free
+quota. The earlier Token-Plan-only preview (`qwen4-max-preview`) is a
+different id and still retires after 2026-11-25 24:00 UTC+8.
+
+On the same day, OpenAI's pricing page footnote and the GPT-5.6 Sol
+model page say the $4 / $20 promotional price "is available until
+November 30, 2026". The dataset had `effective_until: 2026-11-21`,
+from the earlier "at least through November 21, 2026" wording, which
+is still on the 2026-08-21 changelog entry and the Fast mode guide.
+
+**Current decision**
+Admit Qwen4-Max as a new Alibaba Cloud entry, using the same
+International-scope, direct-API, curated-language and `max_output`
+conventions as `qwen3.8-max` and `qwen3.8-flash`. Store 131,072 as
+`max_output` and record the 262,144 thinking budget only in
+`Docs/models/`. Leave `has_free_access` false: the Singapore quota is
+a 90-day new-user allowance, not a continuous free tier (Iteration
+#32). Cached input has no schema field. Editorial ratings are the
+bot's, from Alibaba's own positioning, and wait for the owner.
+
+Move GPT-5.6 Sol's `effective_until` to 2026-11-30, citing the pricing
+page and the model page re-read on 2026-11-16. Keep `reverts_to` at
+$5 / $30; OpenAI did not publish a new reversion rate.
+
+Only catalog counts are updated (`CATALOG_BOT.md`, section 6). Any
+other test that changes because a new mid-price model entered the
+pool is left as it is.
+
+**Status**
+Proposed in the bot branch of 2026-11-16, pending the owner's review of
+the ratings and of any tests left red. This is Iteration #44, the next
+number on `origin/main`. The unmerged `bot/catalog-2026-11-12` and
+`bot/catalog-2026-11-13` branches already used #44, so CHANGELOG and
+IMPLEMENTATION_NOTES will conflict if more than one of those branches
+lands after another.
