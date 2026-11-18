@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-11-18 — GPT-6.2 Astra and GPT-6.2 Sol enter the catalog
+
+**Dataset, access routes and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**
+
+- **GPT-6.2 Astra** (`gpt-6-2-astra`) and **GPT-6.2 Sol** (`gpt-6-2-sol`), generally available 2026-11-17 on the OpenAI API. Official API ids are `gpt-6.2-astra` and `gpt-6.2-sol`; the dataset ids convert the dot to a dash, as with `gpt-6-1-terra`. Both take text and image input, return text, have a 1,050,000-token context and a 128,000-token maximum output, and reject `reasoning.effort` set to `none`.
+- **Prices** are the Standard short-context Flagship rates: Astra $8.00 / $40.00 per million tokens (cached input $0.40), Sol $2.00 / $10.00 (cached input $0.10). Prompts over 272K input tokens are billed at 2x input and cache rates and 1.5x output for the whole request; Batch is 50% of Standard, Fast is 2x, Ultrafast is 3x through 2027-02-28 then 6x from 2027-03-01 (Pacific), and background completion windows in the Responses API public beta are 30% below Standard (two-hour) or 40% below (eight-hour). None of those tiers has a schema field, so they are recorded only in the model docs and the route caveats (Iteration #24).
+- **Direct API only.** OpenAI's announcement names Plus, Pro, Enterprise and Edu in ChatGPT Work and Codex, but ChatGPT's plan comparison table does not name either model, so no subscription route was added (`CATALOG_BOT.md`, section 5). Neither model has a free API tier.
+- **Ratings are the bot's judgment.** Quality and ecosystem values were proposed by the bot from OpenAI's own description, with the reasoning in `Docs/models/gpt-6-2-astra.md` and `Docs/models/gpt-6-2-sol.md`, and are flagged for the owner's review.
+- **What the recommendation does.** Astra enters at $48 blended and Sol at $12 blended. Catalog counts were updated; any ranking tests that change are left as they are (`IMPLEMENTATION_NOTES.md`, Iteration #45). GPT-6 Astra, GPT-6.1 Sol and GPT-6 Sol stay in the catalog: they are not on the deprecations page.
+
 ## 2026-11-16 — Qwen4-Max enters the catalog, and GPT-5.6 Sol's promo is extended
 
 **Dataset, access routes and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**

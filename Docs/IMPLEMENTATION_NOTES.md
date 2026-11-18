@@ -2128,3 +2128,46 @@ number on `origin/main`. The unmerged `bot/catalog-2026-11-12` and
 `bot/catalog-2026-11-13` branches already used #44, so CHANGELOG and
 IMPLEMENTATION_NOTES will conflict if more than one of those branches
 lands after another.
+
+## Iteration #45
+
+**Observation**
+OpenAI generally available'd GPT-6.2 Astra (`gpt-6.2-astra`) and
+GPT-6.2 Sol (`gpt-6.2-sol`) on 2026-11-17. The model pages and the
+Flagship pricing table give Standard short-context rates of $8.00 /
+$40.00 (Astra; cached input $0.40) and $2.00 / $10.00 (Sol; cached
+input $0.10), a 1,050,000-token context and a 128,000-token output
+ceiling for both. Both accept text and image input, return text, and
+reject `reasoning.effort` set to `none`. Long-context (>272K input),
+Batch, Fast, Ultrafast and background-completion rates are published
+and have no schema field. The announcement makes both models available
+to Plus, Pro, Enterprise and Edu users in ChatGPT Work and Codex;
+ChatGPT's plan comparison table, read on 2026-11-18, does not name
+either model. Neither model is on the deprecations page, and GPT-6
+Astra, GPT-6.1 Sol and GPT-6 Sol remain listed as Active.
+
+**Current decision**
+Admit both as new OpenAI entries, using the same id convention
+(version-dot to hyphen), direct-API, curated-language and short-context
+Standard price conventions as `gpt-6-1-terra` and `gpt-6-1-sol`. Store
+$8 / $40 and $2 / $10 as `cost.*` and record the long-context
+multiplier, Batch, Fast, Ultrafast, background windows and cache-write
+prices only in `Docs/models/` and the route caveats (Iteration #24).
+Leave `has_free_access` false: the model pages list only paid usage
+tiers, and the announcement does not name the free ChatGPT plan
+(Iteration #32). Do not add a ChatGPT subscription route until the
+plan page itself names the exact model (`CATALOG_BOT.md`, section 5).
+Editorial ratings are the bot's, from OpenAI's own positioning, and
+wait for the owner.
+
+Only catalog counts are updated (`CATALOG_BOT.md`, section 6). Any
+other test that changes because these models entered the pool is left
+as it is.
+
+**Status**
+Proposed as a further commit on the bot branch of 2026-11-16, pending
+the owner's review of the ratings and of any tests left red. This is
+Iteration #45, the next number on this branch after #44. The unmerged
+`bot/catalog-2026-11-12` and `bot/catalog-2026-11-13` branches already
+used #44, so CHANGELOG and IMPLEMENTATION_NOTES will still conflict if
+more than one of those branches lands after another.

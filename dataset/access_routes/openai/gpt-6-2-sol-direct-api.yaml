@@ -1,0 +1,21 @@
+provider: OpenAI
+model_id: gpt-6-2-sol
+access:
+  surface: direct_api
+  access_method: "API key (Responses/Chat Completions)"
+  capabilities: [prototype, build, automation]
+  guide_ref: openai#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: OpenAI
+  billing_scheme: api_token
+  quota_scope: organization
+  production_allowed: true
+evidence:
+  source_url: https://developers.openai.com/api/docs/models/gpt-6.2-sol
+  consulted_at: "2026-11-18"
+  status: confirmed
+  caveat: "Ordinary self-serve API access with the standard usage tiers (Build, Launch, Grow). Tool calling requires the Responses API; Chat Completions works without tools. The API rejects requests that set reasoning effort to none. Prompts over 272K input tokens are billed at 2x input and cache rates and 1.5x output for the whole request. Batch is 50% of Standard, Fast is 2x, and Ultrafast is 3x Standard through February 28, 2027 then 6x from March 1, 2027 (Pacific time). Background completion windows in the Responses API public beta are 30% below Standard for a two-hour window and 40% below for an eight-hour window. This model is not listed in the Flex table. API usage is billed separately from ChatGPT and needs its own payment method under API billing."
