@@ -95,7 +95,7 @@ footnote 1 reading, verbatim: *"Introductory price expires on December
 output tokens will apply."*
 
 Notably, **this price does not appear on the Gemini Developer API
-pricing page** (`ai.google.dev/gemini-api/docs/pricing`) as of this
+pricing page** (`aistudio.google.com/docs/pricing`) as of this
 verification — checked directly against the page's raw HTML, not just
 its rendered text, and `gemini-3.8-flash` isn't present anywhere in it.
 The blog post's own footnote is used as the source instead, the same
@@ -108,7 +108,7 @@ card, not this same pricing page either).
 | Field                | Value    | Why |
 |------------------------|----------|-----|
 | `integration_ease`      | `high`   | Same Gemini API surface as the rest of the Gemini 3 Flash family — confirmed distribution via Gemini app, Gemini Enterprise Agent Platform, Google AI Studio, Gemini API, Google AI Mode, and Google Antigravity (model card, Distribution section). |
-| `maturity`              | `experimental` | Same principle applied to `gemini-3.7-flash` at its own admission: maturity requires evidence of stability in the platform's public model catalog, not just a model card and announcement. As of this verification date, `ai.google.dev/gemini-api/docs/models` (the page that labels each Gemini model's stability) does not list `gemini-3.8-flash` — and, checked in the same pass, still doesn't list `gemini-3.7-flash` either, three weeks after that model's own admission. Revisit once the model appears in that catalog with an explicit stability label. |
+| `maturity`              | `experimental` | Same principle applied to `gemini-3.7-flash` at its own admission: maturity requires evidence of stability in the platform's public model catalog, not just a model card and announcement. As of this verification date, `aistudio.google.com/docs/models` (the page that labels each Gemini model's stability) does not list `gemini-3.8-flash` — and, checked in the same pass, still doesn't list `gemini-3.7-flash` either, three weeks after that model's own admission. Revisit once the model appears in that catalog with an explicit stability label. |
 
 ---
 
@@ -128,18 +128,18 @@ every other Gemini model's non-API surfaces so far.
 `gemini-3.8-flash` with a Free Tier column of "Free of charge" for
 input, output (including thinking tokens), and context caching —
 confirmed directly against
-https://ai.google.dev/gemini-api/docs/pricing. Same continuous free
+https://aistudio.google.com/docs/pricing. Same continuous free
 path already recorded for `gemini-3.6-flash`/`gemini-3.7-flash`. Free
 tier remains rate-limited; data may be used to improve Google products
 on the free path (pricing page).
 
 ## Sources
 
-- [Gemini 3.8 Flash model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash) — identity, capabilities, context window, max output, distribution surfaces.
+- [Gemini 3.8 Flash model page](https://aistudio.google.com/docs/models/gemini-3.8-flash) — identity, capabilities, context window, max output, distribution surfaces.
 - [Gemini 3.8 Flash model card](https://deepmind.google/models/model-cards/gemini-3-8-flash/) — description, positioning, knowledge cutoff, safety-evaluation comparison to 3.7 Flash, distribution.
 - [Introducing Gemini 3.8 Flash and 3.8 Flash Cyber](https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/) — GA announcement, pricing (including the footnote expiration date), benchmark claims, Cyber variant's limited-availability terms, consumer/enterprise/developer access surfaces.
-- [Gemini Developer API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost (introductory + reversion) and Free Tier "Free of charge" for this model id (re-verified 2026-10-07). At original 2026-09-02 admission this page did not yet list the model; blog footnote was used for cost then.
-- [Gemini API models](https://ai.google.dev/gemini-api/docs/models) — checked directly, does not yet list this model (or `gemini-3.7-flash`); basis for the `maturity: experimental` call.
+- [Gemini Developer API pricing](https://aistudio.google.com/docs/pricing) — cost (introductory + reversion) and Free Tier "Free of charge" for this model id (re-verified 2026-10-07). At original 2026-09-02 admission this page did not yet list the model; blog footnote was used for cost then.
+- [Gemini API models](https://aistudio.google.com/docs/models) — checked directly, does not yet list this model (or `gemini-3.7-flash`); basis for the `maturity: experimental` call.
 
 All read directly in-browser, 2026-09-02, not via summarization
 tooling. No third-party AI-generated audit content used as a source

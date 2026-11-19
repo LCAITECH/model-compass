@@ -78,7 +78,7 @@ model card's "64K token output."
 | `input_per_million`         | $1.50  |
 | `output_per_million`        | $9.00  |
 
-Confirmed directly against `ai.google.dev/gemini-api/docs/pricing`,
+Confirmed directly against `aistudio.google.com/docs/pricing`,
 Standard tier ("Output price (including thinking tokens)"). The page
 also lists Batch/Flex ($0.75/$4.50) and Priority ($2.70/$16.20) tiers —
 Standard used here, consistent with every other entry in this catalog.
@@ -119,16 +119,16 @@ accurate then; Google has since made explicit that the endpoint stays
 up.) The model no longer appears on Google's models, pricing, or
 rate-limits pages. The dataset entry is kept (remove-vs-flag policy,
 Iteration #22, is still open); treat `gemini-3.6-flash` as the official
-successor. Source: https://ai.google.dev/gemini-api/docs/deprecations
+successor. Source: https://aistudio.google.com/docs/deprecations
 
 **2026-10-14, `lifecycle` block (Iteration #28):** the policy above is decided. The YAML now records `status: deprecated`, `shutdown_date: null` (Google publishes none: the endpoint stays up and serves `gemini-3.6-flash`), `replacement: gemini-3.6-flash`. Since requests to this id already get `gemini-3.6-flash`, recommending it would describe a model nobody receives. The Decision Engine never recommends a `deprecated` model; this one is listed among the exclusions with its date and successor. The YAML and its access routes are removed on the shutdown date (`tests/test_catalog_dates.py` fails from that day).
 
 ## Sources
 
-- [Gemini 3.5 Flash model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash) — capabilities, context window, max output, positioning.
+- [Gemini 3.5 Flash model page](https://aistudio.google.com/docs/models/gemini-3.5-flash) — capabilities, context window, max output, positioning.
 - [DeepMind model card](https://deepmind.google/models/model-cards/gemini-3-5-flash/) — license/terms, publish date.
-- [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost fields, Free Tier confirmation.
-- [Gemini API models index](https://ai.google.dev/gemini-api/docs/models) — comparative tiering language against 3.6 Flash and 3.5 Flash-Lite.
+- [Gemini API pricing](https://aistudio.google.com/docs/pricing) — cost fields, Free Tier confirmation.
+- [Gemini API models index](https://aistudio.google.com/docs/models) — comparative tiering language against 3.6 Flash and 3.5 Flash-Lite.
 
 Accessed 2026-08-10, official Google documentation only.
 
