@@ -55,7 +55,9 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
 
     assert recommendation.recommended.id == "claude-opus-4-7"
     assert len(recommendation.alternatives) == 3
-    assert len(recommendation.also_strong_options) == 13
+    # 2026-11-10: gemini-4-carbon (very_high reasoning, introductory $2/$10)
+    # joins this tie group.
+    assert len(recommendation.also_strong_options) == 14
     assert {a.model.id for a in recommendation.also_strong_options} == {
         "claude-opus-4-8",
         "claude-opus-5",
@@ -66,12 +68,13 @@ def test_also_strong_options_is_not_capped_at_max_alternatives(models):
         "gemini-3.1-pro-preview",
         "gemini-3.8-flash",
         "gemini-4-argon",
+        "gemini-4-carbon",
         "gpt-5-6-sol",
         "gpt-6-1-sol",
         "muse-wonder-1.0",
         "qwen3.8-max",
     }
-    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 15))  # score-sorted, contiguous
+    assert [a.rank for a in recommendation.also_strong_options] == list(range(2, 16))  # score-sorted, contiguous
 
 
 def test_also_strong_options_excludes_close_score_but_unfair_quality_gap(models):

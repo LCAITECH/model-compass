@@ -1,0 +1,22 @@
+provider: Anthropic
+model_id: claude-fable-5-2
+access:
+  surface: consumer_subscription
+  access_method: "Claude.ai or Claude Code, signed in with a Claude subscription"
+  capabilities: [prototype, build]
+  guide_ref: anthropic#claude-subscription
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [claude-max-5x, claude-ultra]
+  region_scope: account_dependent
+economics:
+  billing_owner: Anthropic
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan
+  consulted_at: "2026-11-10"
+  status: confirmed
+  caveat: "Included in Claude Max and Claude Ultra only, up to 50% of the plan's weekly usage limit (not an additional 50%), per Anthropic's support article on Fable models by plan. On Claude Pro, Fable 5.2 runs on pay-as-you-go usage credits billed at standard API rates, outside the plan's quota, so Pro is not listed as satisfying this route. Anthropic runs limited-time launch offers with extra Fable usage on eligible paid plans; confirm current terms before relying on them. In Claude Code it needs version 2.1.321 or later. Team and Enterprise tiers were not independently confirmed."

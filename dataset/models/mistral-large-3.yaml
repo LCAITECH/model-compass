@@ -59,6 +59,10 @@ access:
 # defines Deprecated as "Retirement announced. Still accessible until the
 # retirement date." (checked 2026-11-04). On 2026-10-14 the overview still
 # listed it among the generalist models.
+# The deprecated status was recorded on 2026-11-06 from the model card alone
+# (Iteration #41, no retirement date, replacement null while Large 4 was not in
+# the dataset); the retirement date and the replacement came with the admission
+# of mistral-large-4 (Iteration #45).
 # Release date: https://docs.mistral.ai/models/mistral-large-3-25-12 (model card date).
 lifecycle:
   status: deprecated

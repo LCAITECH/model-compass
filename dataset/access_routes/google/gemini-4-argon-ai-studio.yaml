@@ -16,7 +16,7 @@ economics:
   quota_scope: account
   production_allowed: false
 evidence:
-  source_url: https://ai.google.dev/gemini-api/docs/google-ai-plans
+  source_url: https://aistudio.google.com/docs/google-ai-plans
   consulted_at: "2026-10-17"
   status: confirmed
   caveat: "Included with Google AI Pro and both Ultra tiers, with the highest limits on Ultra. Not available on the free plan. The plan's quota applies only in the AI Studio web interface; use through an API key, including one linked inside AI Studio, is billed separately as API usage."

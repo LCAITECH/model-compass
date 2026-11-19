@@ -1935,6 +1935,35 @@ not a plan in the catalog.
 **Status**
 Proposed in the bot PR of 2026-10-29, pending the owner's review.
 
+## Iteration #41
+
+**Observation**
+On 2026-11-06 Google's deprecations page says `gemini-2.5-pro` and
+`gemini-2.5-flash` are deprecated, with shutdown date 2026-12-01 and
+recommended replacements `gemini-3.8-flash` and `gemini-3.5-flash-lite`.
+From that date the API routes requests and bills the successor's rates.
+Both entries were `restricted` (Iteration #29), Flash with the owner's
+stand-in successor `gemini-3.8-flash` and Pro with `replacement: null`.
+`gemini-2.5-flash-lite` is still "not deprecated" on that page.
+
+The same day, Mistral's Large 3 card says the model is deprecated as of
+2026-10-31 and names Mistral Large 4. No shutdown date. Large 4's own
+card is GA (2026-10-06), id `mistral-large-4`, context 1M, $0.70/$2.10,
+license "Mistral Ecosystem Open Weight License". Iteration #33 held it
+out because the license and weights were not published yet.
+
+**Current decision**
+Pro and Flash are `deprecated` with the dates and replacements Google
+names. Flash-Lite stays `restricted`. Large 3 is `deprecated` with
+`shutdown_date: null` and `replacement: null`, because Large 4 is not
+in the dataset and a replacement must name a model that is. Large 4
+is still not admitted: the license blocker is gone, and an admission
+still needs a full entry, including editorial ratings.
+
+**Status**
+Applied for the three deprecations. Large 4 remains owner work in
+progress.
+
 ## Iteration #40
 
 **Observation**
@@ -1981,6 +2010,157 @@ pending the owner's review.
 Owner's one-off test exception of 2026-10-31: the seven tests and the `Docs/SCHEMA.md` example were updated for the rename only; the suite passes.
 
 ## Iteration #42
+
+**Observation**
+The bot's audit of 2026-11-10 found three models that are not in the
+dataset. All three were read on the providers' own pages that day.
+
+- **Claude Fable 5.2** (`claude-fable-5-2`). Model page: "Released
+  November 9, 2026", 1M context, 128K output, $8 / $40. Deprecations page:
+  "Active | N/A | Not sooner than November 9, 2027". It is on Bedrock,
+  Foundry (Anthropic-hosted, Preview) and Vertex AI (GA), and on Claude
+  Max and Ultra per the Fable-by-plan article. Fable 5.1 left the
+  overview's compare table for its "Legacy models (still available)"
+  list, but the deprecations page still says "Active".
+- **Gemini 4 Carbon** (`gemini-4-carbon`). The release notes say GA on
+  November 10, 2026. Pricing: "$2.00 through November 30, 2026. $4.00
+  starting December 1, 2026" (input) and $10.00 → $20.00 (output), "not
+  available on the Free tier". AI Studio needs AI Ultra; the Gemini app
+  and Antigravity list it on Ultra only. The review log of 2026-10-31
+  recorded that it was "still not on Google's models page"; it is on that
+  page now.
+- **Muse Ember** (`muse-ember-1.0`). Meta's new small model line, in
+  Standard mode only. Two price tiers by input length ($0.10 / $0.50 up
+  to 200K input tokens, $0.30 / $1.50 above it, billed in full).
+  1,048,576 context, 524,288 output, text, image, video, audio and PDF
+  input. Released November 9, 2026 (Meta AI Research post).
+
+`IMPLEMENTATION_NOTES.md` had no earlier record of any of the three
+being refused. Muse Ember is none of the Meta ids Iteration #33 keeps
+out (Contributor ids, Spark 1.2/1.1, Wonder Full) and is not
+open-weight.
+
+**Current decision**
+Owner decision (2026-11-10): add all three ("Todos"), with the
+editorial ratings marked as the bot's criterion. The bot proposed the
+entries on the existing conventions. Fable 5.2 uses the Claude routes
+and curated Claude languages, with `shutdown_date: null` because a "not
+sooner than" floor is not a date (`CATALOG_BOT.md`, section 3). Carbon
+uses the Argon shape: the default `max_output`, the introductory price
+with `effective_until` and `reverts_to`, and Ultra-only subscription
+routes. Muse Ember uses the lower price tier (Iteration #24) and the
+curated Meta languages (Iteration #33). Fable 5.1's lifecycle is not
+changed, because Anthropic publishes no deprecation for it. The quality
+ratings and their reasoning are in each `Docs/models/{id}.md`. Fable
+5.2's `creative_writing` is `high`, not Fable 5.1's `very_high`,
+because no page claims creative writing and 5.1's value was inherited.
+
+Adding the models changes eleven engine tests' results (new entries in
+budget-tier sets, qualifying counts, "Also strong options" and what-if
+headlines, and the catalog notices). Only the catalog counts were
+updated (`CATALOG_BOT.md`, section 6). The others were left as they are.
+
+**Status**
+Proposed in the bot branch of 2026-11-10, pending the owner's review of the
+ratings and the eleven red tests.
+
+## Iteration #43
+
+**Observation**
+The 2026-11-10 branch never opened a pull request. Re-read on 2026-11-11,
+the objective fields match the pages the entries cite: Fable 5.2 is
+$8 / $40, 1M context, 128K output, released 2026-11-09, "Not sooner than
+November 9, 2027". Carbon is GA on 2026-11-10 at $2 / $10 through
+2026-11-30, then $4 / $20, default output 65,536. Ember is
+`muse-ember-1.0` at $0.10 / $0.50 up to 200K input tokens and $0.30 /
+$1.50 above that, context 1,048,576, output 524,288, released 2026-11-09.
+
+**Current decision**
+Keep the bot's editorial ratings as proposed. Re-derive the eleven tests
+from runs of this dataset. One scenario changed on purpose: cost then
+context window at a low budget now ties GPT-6 Luna with Muse Ember, so
+the "unmatched winner" check uses context window then cost, which still
+has no tie.
+
+**Status**
+Applied on the review branch. Ratings still want the owner's eye.
+
+## Iteration #44
+
+**Observation**
+Google's release notes of 2026-11-02 (`aistudio.google.com/docs/changelog`)
+and its deprecations page (`aistudio.google.com/docs/deprecations`) say
+`gemini-2.5-pro` and `gemini-2.5-flash` are deprecated, no longer
+selectable in Google AI Studio, and that from December 1, 2026 their API
+requests "automatically route to" `gemini-3.8-flash` and
+`gemini-3.5-flash-lite` respectively, billed at the new model's rates. The
+deprecations table gives "December 1, 2026" as the shutdown date and those
+two ids as the recommended replacements. `gemini-2.5-flash-lite` "is not
+deprecated and remains available through the API until further notice".
+The Gemini API docs moved from `ai.google.dev/gemini-api/docs/*` to
+`aistudio.google.com/docs/*`; the old addresses answer with a 301 to the
+new ones.
+
+**Current decision**
+The owner's decision of 2026-11-03, which changes the Iteration #29
+decision for these two models: `gemini-2.5-pro` and `gemini-2.5-flash` go
+from `restricted` to `deprecated`, and their successors follow Google:
+`gemini-2.5-pro` → `gemini-3.8-flash` (was `null`), `gemini-2.5-flash` →
+`gemini-3.5-flash-lite` (was `gemini-3.8-flash`, the owner's earlier
+pick). Both replacement ids exist in `dataset/models/`. `gemini-2.5-flash-lite`
+stays `restricted` with `gemini-3.5-flash-lite`. `shutdown_date` stays
+`2026-12-01` for now: the owner has not yet decided whether to read the
+deprecations table's "earliest possible dates" as a floor.
+
+By the same decision, every Gemini API source URL in `dataset/`,
+`Docs/models/` and `Docs/access-guides/google.md` was rewritten from
+`ai.google.dev/gemini-api/docs/...` to the `aistudio.google.com/docs/...`
+address the old one redirects to, after checking that the new address
+answers HTTP 200 (`quickstart` became `get-started`; query strings such
+as `?hl=es-419` were kept). All 23 distinct addresses had a working
+equivalent, so no old URL was kept as a source. The only remaining
+`ai.google.dev` mentions are prose (the domain named as a source family,
+and the "formerly ... which now redirects" notes in the two 2.5 YAML
+comments). The routes' `consulted_at` dates were not changed: the pages
+were not re-read for their content, only their address was checked.
+Older entries in `CHANGELOG.md`, `IMPLEMENTATION_NOTES.md` and
+`CATALOG_NEWS_LOG.md` keep the old URLs.
+
+Under the owner's one-off exception of 2026-11-03, the six tests that
+hard-coded the old status or successors were updated for this change only:
+`test_lifecycle.py::test_the_real_dataset_marks_exactly_the_provider_deprecated_models`
+(the two models added to the deprecated set),
+`test_restricted.py::test_the_real_dataset_marks_exactly_the_gemini_2_5_models`
+and `::test_restricted_models_are_not_listed_as_leaving_the_catalog`
+(`RESTRICTED` is now `gemini-2.5-flash-lite` alone),
+`test_catalog_notices.py::test_retiring_lists_dated_shutdowns_first_then_routed_ones`
+(the two models at 48 days, the active entry now at index 7) and
+`::test_result_page_dock_explains_the_winners_introductory_price`
+("9 models deprecated") and
+`test_restricted.py::test_successors_follow_the_owners_per_model_pick`
+(its two expectations only: `gemini-2.5-flash` → `gemini-3.5-flash-lite`,
+`gemini-2.5-pro` → `gemini-3.8-flash`; the owner extended the exception
+to it the same day). The suite passes.
+
+**Status**
+Proposed in the bot PR of 2026-11-03 (PR #10), pending the owner's review.
+
+**Update 2026-11-19:** merged into `main` as PR #10 (merge `a37ca55`). The
+deprecations, the successors and the test edits this iteration describes had
+already landed in Iteration #41 (2026-11-06) with the same values, so only
+the source-URL move was new; the nine conflicts were resolved in favor of
+`main`, and this iteration was renumbered from #41 to #44 because #41 was
+taken. `gemini-2.5-pro` and `gemini-2.5-flash` keep `deprecated`, shutdown
+2026-12-01 and the replacements Google names, so the reading of the
+deprecations table's "earliest possible dates" stays as `2026-12-01`. The
+owner confirmed on 2026-11-03 that the successor decision and the test edits
+in this iteration are theirs. All 24 distinct `aistudio.google.com/docs`
+addresses in `dataset/`, `Docs/models/` and the access guides, which include
+the Carbon pages added on 2026-11-10, returned HTTP 200 on 2026-11-19, and
+no source link remains on `ai.google.dev`; the few mentions left are prose
+about the move.
+
+## Iteration #45
 
 **Observation**
 On 2026-11-03 the three conditions Iteration #33 set for Mistral Large 4
@@ -2087,3 +2267,32 @@ in 24 and a top-three alternative in 80; 45 winners change in all.
 
 Status after the update: Mistral Large 3 deprecated (owner decision of
 2026-11-04); counts unchanged at 46 models and 106 routes.
+
+**Update 2026-11-19:** integrated with `main`, which had moved on:
+Iterations #41 to #44 were taken, so this one is #45. Three things changed
+under it. (1) `main` marked `mistral-large-3` `deprecated` on 2026-11-06
+(Iteration #41) from the model card alone: no retirement date, and
+`replacement: null` until Large 4 was admitted. The `shutdown_date`
+2027-04-30 and `replacement: mistral-large-4` above apply on top of that;
+the card, the overview table and the lifecycle policy were read again on
+2026-11-19 and say what they said on 2026-11-04. (2) Mistral's card for
+`mistral-large-4` was read again the same day: it now carries the label GA
+and the date November 5, 2026 (on 2026-11-03: Public Preview, October 6,
+2026); price, license and context are unchanged. `release_date` stays
+2026-10-06, the first API availability (Mistral's changelog of that day), by
+the rule of Iteration #30 that a preview date wins over the GA date, as for
+`deepseek-v4-pro`. With the label gone, the reason for `maturity:
+experimental` is gone too, so `maturity` is now `stable`, which Mistral's
+lifecycle policy backs (GA is "production-ready and stable", no silent
+updates); the owner approved the change on 2026-11-19 and the other ratings
+stand. The direct-API route caveat dropped its Public Preview sentence. (3)
+Counts and ranking tests were re-derived from engine runs over the dataset
+with Claude Fable 5.2, Gemini 4 Carbon and Muse Ember: 49 models, 116 routes
+and 49 models with a direct-API route, and 34 models qualifying at a high
+budget instead of 33. Six test files changed for it (`test_loader`,
+`test_access_loader`, `test_catalog_notices`, `test_evaluator`,
+`test_explainer_alternatives_outranked` and `test_whatif`), each to what the
+engine returns; no assertion about a winner changed and none was weakened.
+The edits this branch had made to the same tests before `main` re-derived
+them (2026-11-06 and 2026-11-10) were dropped in favor of `main`'s versions,
+which already covered Mistral Large 3's deprecation more strictly.

@@ -11,13 +11,13 @@ the sourcing rule it follows.
 ## Correcting an earlier mistake — logged, not hidden
 
 Earlier in this catalog's history, "Gemini 3.1 Pro" was checked
-against `ai.google.dev/gemini-api/docs/models` (the general models
+against `aistudio.google.com/docs/models` (the general models
 index) and wasn't found there, so it was treated as unconfirmed and
 left out — documented at the time in `gemini-3.6-flash.md`. That was
 half right: the model genuinely doesn't have a GA listing on that
 index page. But it does exist, in **Preview** status, with its own
 dedicated page and full official pricing, at
-`ai.google.dev/gemini-api/docs/models/gemini-3.1-pro-preview` — a URL
+`aistudio.google.com/docs/models/gemini-3.1-pro-preview` — a URL
 that wasn't tried in the first pass. The lesson isn't "trust the first
 official-looking page and stop" — it's to check whether a preview/beta
 model has its own page even when it's absent from a general index.
@@ -110,7 +110,7 @@ snapshot as the API.
 **Free access (`access.has_free_access`):** `false`. Google's own
 Gemini API pricing page marks this model's free-tier rows "Not
 available" for Standard, Batch, and Flex — confirmed directly against
-`ai.google.dev/gemini-api/docs/pricing`, 2026-08-09. The free Gemini app
+`aistudio.google.com/docs/pricing`, 2026-08-09. The free Gemini app
 names only "our Flash-Lite model" (gemini.google/subscriptions, checked
 2026-10-15), so the consumer path doesn't apply either.
 
@@ -125,9 +125,9 @@ names only "our Flash-Lite model" (gemini.google/subscriptions, checked
 
 ## Sources
 
-- [Gemini 3.1 Pro Preview model card](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-pro-preview) — capabilities, context window, max output, preview status.
-- [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost fields, including the 200k-token pricing tier.
-- [Gemini API models](https://ai.google.dev/gemini-api/docs/models), [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/) and [Gemini subscriptions](https://gemini.google/subscriptions/) — the name "Gemini 3.1 Pro" for this id, and the plans that include it in the Gemini app (2026-10-15).
+- [Gemini 3.1 Pro Preview model card](https://aistudio.google.com/docs/models/gemini-3.1-pro-preview) — capabilities, context window, max output, preview status.
+- [Gemini API pricing](https://aistudio.google.com/docs/pricing) — cost fields, including the 200k-token pricing tier.
+- [Gemini API models](https://aistudio.google.com/docs/models), [Google AI plans](https://one.google.com/intl/en_us/about/google-ai-plans/) and [Gemini subscriptions](https://gemini.google/subscriptions/) — the name "Gemini 3.1 Pro" for this id, and the plans that include it in the Gemini app (2026-10-15).
 
 Both accessed 2026-08-07, official Google documentation only.
 

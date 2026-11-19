@@ -19,27 +19,87 @@ public release to version against.
 
 ---
 
-## 2026-11-04 — Mistral Large 3 is deprecated
+## 2026-11-19 — Gemini API sources point to aistudio.google.com
 
-**Dataset, docs and tests. No change to the engine or the schema. Rankings change.**
+**Links and docs only. No change to the engine, the schema or any value.**
 
-- **What changed at Mistral.** Its model card for Mistral Large 3 now says "This model is deprecated. Use Mistral Large 4 for new integrations.", with deprecation on 2026-10-31 and Mistral Large 4 as the replacement. The "Deprecated & retired models" table of its models overview adds retirement on 2027-04-30, and Mistral's lifecycle policy says a deprecated model stays accessible until the retirement date.
-- **What changes here.** Mistral Large 3 goes from active to deprecated, with shutdown 2027-04-30 and Mistral Large 4 as its replacement. The engine stops recommending it; the entry stays until the retirement date. The entry below left this open for the owner, who decided it on 2026-11-04.
-- **What it moves.** Across 216 engine scenarios (three budgets, one or two priorities, English and Korean) Mistral Large 3 was the winner in 24 and one of the top three alternatives in 80. Without it, 45 winners change: Mistral Large 4 takes 19 (mostly Korean contexts), Qwen3.7-Plus 12, GPT-6 Luna 6, Qwen3.7-Flash 4 and GPT-5.6 Luna 4. Twenty-one of the 45 were never Large 3's wins; every one of them has the context window as a priority, where scores are relative to the models that qualify.
-- **Tests:** 361 pass. Twelve tests failed with the catalog change and now expect what the engine returns: 8 models deprecated, 32 qualifying at a high budget, the Korean and low-budget lists, the retirement order, two what-if headlines, and two web checks (one counted Mistral Large 3 as a tied option; the exact-tie one now uses another real scenario that gives the same sentence). A thirteenth test had kept passing only because the model's name still shows up in the list of excluded models; it was corrected too.
+- **What came in.** Bot PR #10 is merged. Every Gemini API source link in the dataset, the model docs and the Google access guide now points to aistudio.google.com/docs instead of ai.google.dev, which redirects there; the quickstart is now the "Get started" page. All 24 distinct addresses answered with HTTP 200 on 2026-11-19, including the Carbon pages added on 2026-11-10.
+- **What was already there.** The deprecations of Gemini 2.5 Pro and 2.5 Flash and their successors had been applied on 2026-11-06 (the entry below), with the same shutdown date and replacements, so the link move is all the PR added. Its two entries of 2026-11-03 stay as the bot wrote them and still say "Proposed" for changes that have since landed.
+- **Tests:** 363 pass. The nine conflicts of the merge were resolved in favor of what `main` already said.
 
 ---
 
-## 2026-11-03 — Mistral Large 4 joins the catalog
+## 2026-11-19 — Mistral Large 4 joins the catalog
 
 **Dataset, access catalog and docs. No change to the engine or the schema.**
 
 - **What came in.** Mistral Large 4 ($0.70/$2.10 per million tokens, 1M context, text and images in, open weights), with two routes: Mistral's API and self-hosting. It was held back on 2026-10-15 because its license said "Coming soon", its weights were not out and its price was a temporary sale with no end date. Mistral released the weights on 2026-10-29 under its own Ecosystem Open-Weight License, and its announcement states $0.70/$2.10 as the price.
 - **The license has one condition.** Free to use, modify, fine-tune and commercialize, but a business that operates a Model-as-a-Service offering needs a separate commercial license from Mistral. The self-hosted route says so.
-- **Marked experimental.** Mistral's model card is still labeled Public Preview, and the weights it released are described as an improved version of the preview.
-- **Not changed, for the owner.** Mistral's models overview now lists Mistral Large 3 as deprecated (deprecation 2026-10-31, retirement 2027-04-30) with Mistral Large 4 as the alternative. The dataset still has Large 3 active; marking it deprecated would stop the engine recommending it.
-- **Ratings:** the editorial ratings were proposed with Mistral's own words as evidence and approved by the project owner.
-- **Tests:** 361 pass. Catalog counts were updated (46 models, 106 routes) and so were four expectations that list catalog members: 33 models qualify at a high budget instead of 32. No winner changed.
+- **Rated stable.** On 2026-11-03 Mistral's model card still said Public Preview, so the model was first rated experimental. The card has said GA, dated November 5, 2026, since then, and Mistral's lifecycle policy calls GA "production-ready and stable" with no silent updates. The release date stays 2026-10-06, the day it first became available through the API.
+- **Ratings:** the editorial ratings were proposed with Mistral's own words as evidence and approved by the project owner, who also approved the move to stable.
+- **Tests:** 364 pass. Catalog counts were updated (49 models, 116 routes) and so were the expectations that list catalog members: 34 models qualify at a high budget instead of 33, and Mistral Large 4 joins the Korean-language set and takes the third alternative slot there. No winner changed.
+
+---
+
+## 2026-11-19 — Mistral Large 3 gets its retirement date and Mistral Large 4 as its replacement
+
+**Dataset, docs and tests. No change to the engine or the schema.**
+
+- **What changed at Mistral.** Its model card for Mistral Large 3 says "This model is deprecated. Use Mistral Large 4 for new integrations.", with deprecation on 2026-10-31 and Mistral Large 4 as the replacement. The "Deprecated & retired models" table of its models overview adds retirement on 2027-04-30, and Mistral's lifecycle policy says a deprecated model stays accessible until the retirement date. All three were read again on 2026-11-19.
+- **What changes here.** `main` had marked Mistral Large 3 deprecated on 2026-11-06 from the model card alone, which gives a deprecation date but no retirement date, and with no replacement because Mistral Large 4 was not in the dataset yet. Now it is, so Large 3 gets shutdown 2027-04-30 and Mistral Large 4 as its replacement. The owner decided this on 2026-11-04.
+- **What it moves.** The engine already left Large 3 out of recommendations from 2026-11-06, so no winner changes because of this. What changes is its place in the retirement notices, now dated April 30, 2027, and the successor they name.
+- **Tests:** 364 pass. One expectation moved: in the retirement notices Mistral Large 3 now sorts among the dated shutdowns (April 30, 2027), and the Korean test's exclusion reason for it names that date and Mistral Large 4.
+
+---
+
+## 2026-11-11 — The eleven tests the new models turned red
+
+**Tests and a news-log row. No dataset change.**
+
+The three entries from 2026-11-10 were checked again on the providers' own pages (Fable 5.2 at $8/$40, 1M/128K, retirement "not sooner than" 2027-11-09; Carbon GA at $2/$10 through 2026-11-30 then $4/$20; Ember at $0.10/$0.50 up to 200K input tokens). The editorial ratings stay the bot's. The eleven tests that pinned the old rankings were re-derived from engine runs on this dataset.
+
+---
+
+## 2026-11-10 — Three new models: Claude Fable 5.2, Gemini 4 Carbon and Muse Ember
+
+**Dataset, access routes and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**
+
+- **Claude Fable 5.2** (`claude-fable-5-2`), released 2026-11-09. It costs $8 / $40 per million tokens, down from Fable 5.1's $10 / $50, with a 1M context and 128K output. Anthropic's only retirement statement is "Not sooner than November 9, 2027", a floor rather than a date, so there is no shutdown date. It has five routes: the Claude API, Claude Max and Ultra, Amazon Bedrock, Microsoft Foundry (Anthropic-hosted, in preview) and Vertex AI. Fable 5.1 moved to Anthropic's "Legacy models (still available)" list but is still "Active" on the deprecations page, so its entry is unchanged.
+- **Gemini 4 Carbon** (`gemini-4-carbon`), generally available 2026-11-10. The introductory price is $2 / $10 through 2026-11-30, then $4 / $20 from 2026-12-01. It has a 1M context and 65,536 default output, takes text, image, audio, video and PDF input, and is not on the free tier. It has four routes: the Gemini API, plus AI Studio, the Gemini app and Antigravity on Google AI Ultra only.
+- **Muse Ember** (`muse-ember-1.0`), released 2026-11-09. Meta's small execution model costs $0.10 / $0.50 for requests up to 200K input tokens. Above that the whole request is billed at $0.30 / $1.50, and the entry stores the lower tier. It has a 1M context and 524,288 output, multimodal input, and one route on Meta Model API. It fits the Meta policy of Iteration #33: a Standard-mode API id, not a Contributor variant, not a subscription-only model.
+- **Ratings are the bot's judgment.** The quality and ecosystem values were proposed by the bot from each provider's own description, with the reasoning in `Docs/models/`, and are flagged for the owner's review.
+- **What the recommendation does.** The new models enter rankings: Fable 5.2 at the very-high cost tier, Muse Ember as one of the cheapest models, Carbon in the new-releases and promotions notice. Eleven tests that pin the old results fail and were left as they are, for the owner to review (`IMPLEMENTATION_NOTES.md`, Iteration #42).
+
+---
+
+## 2026-11-06 — Gemini 2.5 Pro and Flash, and Mistral Large 3, are deprecated
+
+**Dataset and docs. The engine already refuses a deprecated model, so no engine change.**
+
+- **Gemini 2.5 Pro and Gemini 2.5 Flash.** Google's deprecations page, read 2026-11-06, now calls both deprecated. They leave Google AI Studio. On 2026-12-01, API requests to Pro route to Gemini 3.8 Flash and requests to Flash route to Gemini 3.5 Flash-Lite, billed at the successor's rates. Both had been `restricted` since 2026-10-15, with Flash pointing at 3.8 Flash as an owner pick and Pro with no successor. `status` is now `deprecated`, `shutdown_date` is 2026-12-01, and `replacement` is the model Google names. Gemini 2.5 Flash-Lite is unchanged: the same page says it is not deprecated.
+- **Mistral Large 3.** Its model card, read the same day, says it is deprecated as of 2026-10-31 and to use Mistral Large 4 for new integrations. No shutdown date is published. `status` is `deprecated`. `replacement` stays empty because Large 4 is not in the dataset yet.
+- **What the recommendation does.** These three were already out of the ranking (the Gemini models as restricted, and Large 3 still competing). Large 3 no longer qualifies, so Korean and low-budget results that used it move to the remaining qualifying models. Tests were re-derived from those runs.
+
+---
+
+## 2026-11-03 — Proposed: Gemini 2.5 successors follow Google; Gemini sources point to the new docs
+
+**Dataset, docs and three tests. No change to the engine or the schema.**
+
+- **Successors.** The owner decided to follow the successors Google names for the two deprecated Gemini 2.5 models: Gemini 2.5 Pro now points to Gemini 3.8 Flash (it had none) and Gemini 2.5 Flash to Gemini 3.5 Flash-Lite (it pointed to Gemini 3.8 Flash). Those are the models Google routes their requests to from December 1, 2026. The shutdown date stays December 1, 2026 while the owner decides how to read Google's "earliest possible dates".
+- **Why this changes an earlier call.** Iteration #29 modeled the Gemini 2.5 models as `restricted` and left their successors to the owner. Google has now deprecated 2.5 Pro and 2.5 Flash and named a successor for each, so both are `deprecated` with Google's successor. Gemini 2.5 Flash-Lite stays `restricted`.
+- **Sources moved.** Every Gemini API link in the dataset, the model docs and the Google access guide now points to aistudio.google.com/docs instead of ai.google.dev, each new address checked to load before it was used. The quickstart is now the "Get started" page.
+- **Tests.** Six tests that listed which models are deprecated or restricted, how many, and their successors were updated for this change only, under the owner's one-off exception of 2026-11-03.
+
+---
+
+## 2026-11-03 — Proposed: Gemini 2.5 Pro and 2.5 Flash are deprecated
+
+**Dataset and docs only. No change to the engine or the schema.**
+
+- **What changed at Google.** Google's release notes of November 2, 2026 say `gemini-2.5-pro` and `gemini-2.5-flash` are deprecated and no longer selectable in Google AI Studio. From December 1, 2026, API requests to `gemini-2.5-pro` route to Gemini 3.8 Flash and requests to `gemini-2.5-flash` route to Gemini 3.5 Flash-Lite, billed at those models' rates. Gemini 2.5 Flash-Lite is not deprecated and stays available "until further notice".
+- **What changes here.** Both models go from `restricted` to `deprecated`, with a shutdown date of December 1, 2026. Neither was recommended before (restricted models are excluded too), so the ranking doesn't change. Their successors stay as the owner picked them for now: none for 2.5 Pro and Gemini 3.8 Flash for 2.5 Flash. Google now names its own, and the owner decides whether to follow them.
+- **Where Google's docs live now.** The Gemini API docs moved from ai.google.dev to aistudio.google.com/docs. The old links redirect, so the sources in the dataset still work.
 
 ---
 

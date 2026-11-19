@@ -47,16 +47,18 @@ cost:
   output_per_million: 2.10
 ecosystem:
   integration_ease: medium
-  maturity: experimental
+  maturity: stable
 # Free consumer plan or free API tier: no official page names Mistral Large 4
 # (Iteration #32). The model card's price block also marks it as not free.
 # Source: https://docs.mistral.ai/models/mistral-large-4 (checked 2026-11-03).
 access:
   has_free_access: false
-# Source: https://docs.mistral.ai/models/mistral-large-4 (checked 2026-11-03).
-# Model card date "October 6, 2026", label "Public Preview"; Mistral's
-# changelog of October 6 lists the model as available in Public Preview.
-# Not deprecated, no shutdown date, no successor named.
+# Source: https://docs.mistral.ai/models/mistral-large-4 (checked 2026-11-19).
+# Model card label "GA", date "November 5, 2026" (it said "Public Preview",
+# October 6, 2026 on 2026-11-03). release_date is the first API availability:
+# Mistral's changelog of October 6 lists the model as "now available in Public
+# Preview" (Iteration #30: a preview date wins over the GA date, as for
+# deepseek-v4-pro). Not deprecated, no shutdown date, no successor named.
 lifecycle:
   status: active
   release_date: "2026-10-06"

@@ -1,0 +1,76 @@
+id: gemini-4-carbon
+name: Gemini 4 Carbon
+provider: Google
+version: "4"
+license: proprietary
+
+# Model page: "Inputs Text, Image, Video, Audio, and PDF; Output Text";
+# "Function calling Supported", "Structured outputs Supported",
+# "Image generation Not supported", "Audio generation Not supported".
+# json_mode on the same basis as the other Gemini entries.
+# Source: https://aistudio.google.com/docs/models/gemini-4-carbon (checked 2026-11-10).
+capabilities:
+  vision: true
+  audio: true
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+
+# Editorial (bot's judgment, 2026-11-10); reasoning in Docs/models/gemini-4-carbon.md.
+quality:
+  reasoning: very_high
+  coding: very_high
+  creative_writing: medium
+  instruction_following: high
+
+# Curated Gemini language set (Iteration #1).
+languages: [en, es, pt, fr, de, ja, zh, hi, ar, ru]
+language_quality:
+  en: very_high
+  es: high
+  pt: high
+  fr: high
+  de: high
+  ja: medium
+  zh: medium
+  hi: medium
+  ar: medium
+  ru: medium
+
+# max_output is the default synchronous limit. The model page also documents
+# "up to 1,048,576 (with long decode)" -- recorded in Docs/models/gemini-4-carbon.md
+# (Iteration #24/#26 convention).
+operational:
+  context_window: 1048576
+  max_output: 65536
+
+# Introductory price: "$2.00 through November 30, 2026. $4.00 starting December 1, 2026"
+# (input), "$10.00 through November 30, 2026. $20.00 starting December 1, 2026" (output).
+# Source: https://aistudio.google.com/docs/pricing (Paid Tier, Standard; checked 2026-11-10).
+cost:
+  input_per_million: 2.00
+  output_per_million: 10.00
+  effective_until: "2026-11-30"
+  reverts_to:
+    input_per_million: 4.00
+    output_per_million: 20.00
+
+# "Stable: gemini-4-carbon" (model page).
+ecosystem:
+  integration_ease: high
+  maturity: stable
+
+# "Gemini 4 Carbon is not available on the Free tier" (pricing page).
+access:
+  has_free_access: false
+
+# Source: https://aistudio.google.com/docs/deprecations (checked 2026-11-10):
+# "gemini-4-carbon | November 10, 2026 | No shutdown date announced".
+# Release date: https://aistudio.google.com/docs/changelog (November 10, 2026:
+# "Gemini 4 Carbon (gemini-4-carbon) generally available (GA)").
+lifecycle:
+  status: active
+  release_date: "2026-11-10"
+  shutdown_date: null
+  replacement: null

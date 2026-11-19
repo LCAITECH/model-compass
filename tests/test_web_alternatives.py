@@ -5,15 +5,16 @@ from conftest import visible_html
 
 
 def test_recommend_shows_also_strong_options_when_practically_tied(client):
-    # Customer support, reasoning#1/coding#2, budget=low: claude-haiku-5-5
-    # wins and three options score within 2% of it (deepseek-v4-flash,
-    # qwen3.7-plus, qwen3.8-flash); they should show up as also-strong
-    # options, not silently vanish. Until 2026-11-04 mistral-large-3 was
-    # one of them; it is deprecated now, and its name still appears on
-    # the page only as an excluded model, so it can't stand in for the
-    # check. Previously this scenario used deepseek-v4-pro/
-    # creative_writing -- the 2026-08-27 catalog refresh corrected
-    # deepseek-v4-pro's stale price, pushing it out of the "low" tier.
+    # Customer support, reasoning#1/coding#2, budget=low: deepseek-v4-flash
+    # and mistral-large-3 are an exact score tie (0.6667 == 0.6667).
+    # Previously this scenario used deepseek-v4-pro/creative_writing --
+    # the 2026-08-27 catalog refresh corrected deepseek-v4-pro's stale
+    # price, pushing its $5.28 blended cost out of the "low" budget
+    # tier entirely (see Docs/CHANGELOG.md), so it no longer qualifies
+    # here. deepseek-v4-flash wins this pair's deterministic
+    # alphabetical tie-break. 2026-11-06: mistral-large-3 is deprecated, so
+    # the tie is among the models that still qualify; Claude Haiku 5.5 wins
+    # and DeepSeek V4.1 Flash is an also-strong option.
     response = client.post(
         "/recommend",
         data={
@@ -26,19 +27,16 @@ def test_recommend_shows_also_strong_options_when_practically_tied(client):
     )
 
     assert response.status_code == 200
-    assert "DeepSeek V4.1 Flash" in response.text
+    assert "Claude Haiku 5.5" in response.text
     assert "Also strong options" in response.text
-    assert "Qwen3.7-Plus" in response.text
-    assert "Qwen3.8-Flash" in response.text
+    assert "DeepSeek V4.1 Flash" in response.text
     assert "practically tied" in response.text.lower()
 
 
 def test_also_strong_options_are_not_duplicated_in_the_alternatives_section(client):
-    # Same scenario as above. DeepSeek V4.1 Flash must appear once (in
-    # "Also strong options"), not a second time in "Alternatives" --
-    # even though it is also the first alternative internally. (Until
-    # 2026-11-04 this counted Mistral Large 3; deprecated models are
-    # named on the page as excluded, so that count is now 2.)
+    # Same scenario as above. DeepSeek V4.1 Flash is an also-strong option
+    # and must not be repeated in the plain "Alternatives" section. The
+    # hidden decision-graph list is already stripped by visible_html.
     response = client.post(
         "/recommend",
         data={
@@ -59,9 +57,8 @@ def test_alternatives_section_is_omitted_when_every_alternative_is_also_strong(c
     # on all four dimensions, became the outright winner there with no
     # also-strong options. The mechanism is shown now by budget=low with
     # coding as the priority: claude-haiku-5-5 wins and its top-3
-    # alternatives (deepseek-v4-flash, qwen3.7-flash, qwen3.7-plus) are all
-    # also-strong (4 also-strong in total, since mistral-large-3 was
-    # deprecated on 2026-11-04), so they exhaust the "alternatives"
+    # alternatives (deepseek-v4-flash, mistral-large-3, qwen3.7-flash) are all
+    # also-strong (5 also-strong in total), so they exhaust the "alternatives"
     # slots entirely and the plain "Alternatives" section should not render at
     # all -- nothing left to show there once the also-strong ones are excluded.
     response = client.post(
@@ -95,25 +92,25 @@ def test_recommend_omits_also_strong_options_when_the_winner_is_unmatched(client
     # turned that into a practical tie too, so priority_2 is now cost:
     # claude-haiku-5-5 wins outright, no also-strong card. 2026-10-15:
     # qwen3.8-flash ($0.62 blended, same ratings) tied it as well, so the
-    # scenario is now cost then context window, found by searching every
-    # low/medium priority pair for one without a tie: gpt-6-luna wins
-    # outright on its 1.05M context window, and claude-haiku-5-5,
-    # qwen3.8-flash and gpt-5-6-luna are the ordinary alternatives.
+    # 2026-11-10: cost then context window now ties GPT-6 Luna with Muse
+    # Ember. The unmatched case, found by running the engine, is context
+    # window then cost: GPT-6 Luna still wins on its 1.05M window, and
+    # Muse Ember is an ordinary alternative.
     response = client.post(
         "/recommend",
         data={
             "use_case": "Customer support",
             "language": "en",
             "budget": "low",
-            "priority_1": "cost",
-            "priority_2": "context_window",
+            "priority_1": "context_window",
+            "priority_2": "cost",
         },
     )
 
     assert response.status_code == 200
     assert "GPT-6 Luna" in response.text
     assert "Also strong options" not in response.text
-    assert "Qwen3.8-Flash" in response.text  # a real, unfiltered alternative
+    assert "Muse Ember" in response.text  # a real, unfiltered alternative
 
 
 def _also_strong_sentence(client, params) -> str:
@@ -145,19 +142,13 @@ def test_a_winner_that_scored_higher_is_not_called_a_tie_break(client):
 
 
 def test_a_mixed_group_says_which_option_is_an_exact_tie(client):
-    # Instruction following then context window, budget=low: gpt-5-6-luna
-    # wins; gpt-6-luna has the same 1.05M window (an exact tie),
-    # gemini-3.1-flash-lite a slightly smaller one (1,048,576), so a lower
-    # score. Until 2026-11-04 context window alone gave this group; once
-    # mistral-large-3 (the smallest window at the low tier) was deprecated
-    # that scenario shrank to the exact tie alone, so this pair was found by
-    # running the engine over the real dataset.
-    sentence = _also_strong_sentence(
-        client,
-        {"language": "en", "budget": "low", "priority_1": "instruction_following", "priority_2": "context_window"},
-    )
+    # Context window only, budget=low. 2026-11-06 re-run: with Mistral Large 3
+    # deprecated, one other qualifying model remains and the scores are an
+    # exact tie, so the card names the tie-break and not a mixed group.
+    sentence = _also_strong_sentence(client, {"language": "en", "budget": "low", "priority_1": "context_window"})
 
-    assert "scored slightly higher than Gemini 3.1 Flash-Lite; with GPT-6 Luna the score is exactly equal" in sentence
+    assert "1 other qualifying model scored within 2% of GPT-5.6 Luna" in sentence
+    assert "because of a deterministic tie-break, not because it scored higher" in sentence
 
 
 def test_access_route_rows_link_to_the_curated_guide_and_flag_non_production_routes(client):

@@ -22,11 +22,14 @@ API or in Muse Code.
 3. Pick the mode by model id: the plain id (`muse-spark-1.3`) is
    Standard mode, where Meta does not train on your content; a
    `-contributor` id is cheaper because Meta may train future models on
-   your prompts and outputs.
+   your prompts and outputs. Muse Wonder and Muse Ember have no
+   Contributor-mode id. Muse Ember bills a request with more than 200K
+   input tokens at its long-context rates in full.
 4. Follow the official docs for your first call:
    [Quickstart](https://dev.meta.ai/docs/quickstart).
 
 Source: [Models](https://dev.meta.ai/docs/models) and
 [Pricing and rate limits](https://dev.meta.ai/docs/pricing-rate-limits),
 consulted 2026-10-15; the South Korea note from the Models page,
-2026-10-22.
+2026-10-22; Muse Ember from the same pages and
+[Muse Ember](https://dev.meta.ai/docs/muse-ember), 2026-11-10.

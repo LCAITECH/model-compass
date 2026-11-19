@@ -15,7 +15,7 @@ economics:
   quota_scope: project
   production_allowed: true
 evidence:
-  source_url: https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash
+  source_url: https://aistudio.google.com/docs/models/gemini-3.8-flash
   consulted_at: "2026-09-02"
   status: confirmed
   caveat: "Available through the Gemini API, and also in the Gemini app, Google AI Studio, Antigravity, Gemini Enterprise Agent Platform and AI Mode, per its model page. The paid tier needs Cloud Billing linked to the project, and a rate-limited free tier exists outside the paid path. Introductory price until 2026-12-31, per Google's announcement."

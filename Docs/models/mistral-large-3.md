@@ -1,7 +1,7 @@
 # Mistral Large 3
 
 Dataset entry: [`dataset/models/mistral-large-3.yaml`](../../dataset/models/mistral-large-3.yaml)
-Last verified: 2026-08-11 (Cost section only — see below; everything else last touched 2026-08-07); lifecycle re-read 2026-11-04
+Last verified: 2026-08-11 (Cost section only — see below; everything else last touched 2026-08-07); lifecycle re-read 2026-11-19
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -68,6 +68,12 @@ published, so `max_output` is `null` (Iteration #26). The same card
 confirms GA, Apache 2.0, the API id `mistral-large-2512` and $0.5/$1.5
 per million tokens.
 
+**2026-11-06, deprecated:** the same card now says the model is deprecated
+as of 2026-10-31 and to use Mistral Large 4 for new integrations. No
+shutdown date is published, and the card still documents this model.
+`status` is `deprecated`. `replacement` stays `null` because
+`mistral-large-4` is not in the dataset yet (Iteration #33).
+
 Before this, both values came from the original dataset curation and
 were never matched to a source: the card returned a 404 on 2026-08-07,
 and `max_output` had been set equal to the context window, the
@@ -118,22 +124,20 @@ restricted to smaller models — defaults to `false` per the strict,
 no-inference rule in `SCHEMA.md`'s Access section. Revisit if Mistral
 publishes a model-by-model free-tier breakdown.
 
-**2026-11-04, deprecated, retirement April 30, 2027:** Mistral's
-[model card](https://docs.mistral.ai/models/mistral-large-3-25-12) now says
-"This model is deprecated. Use Mistral Large 4 for new integrations.", with
-deprecation date 10/31/2026 and replacement Mistral Large 4, and the
-"Deprecated & retired models" table of its
+**2026-11-19, retirement date and replacement (read 2026-11-04):** the
+2026-11-06 note above read Mistral's model card alone, which gives a deprecation
+date (10/31/2026) but no retirement date, and `mistral-large-4` was not in the
+dataset yet. The "Deprecated & retired models" table of Mistral's
 [models overview](https://docs.mistral.ai/getting-started/models/models_overview/)
-adds retirement 4/30/2027. Mistral's
+adds retirement 4/30/2027 with Mistral Large 4 as the alternative. Mistral's
 [lifecycle policy](https://docs.mistral.ai/inference/model-lifecycle) defines
 Deprecated as "Retirement announced. Still accessible until the retirement
 date.", so the date is a firm one, not a floor (a General Availability model
-gets six months' notice, which is what 10/31 to 4/30 is). `lifecycle.status`
-is now `deprecated`, `shutdown_date` `2027-04-30` and `replacement`
-`mistral-large-4` (admitted 2026-11-03, Iteration #42), and the engine no
-longer recommends the model (Iterations #28, #29). Before this the block said
-`active` with no dates, read on 2026-10-14, when the overview still listed
-the model among the generalist models. Owner decision of 2026-11-04.
+gets six months' notice, which is what 10/31 to 4/30 is). `status` stays
+`deprecated`; `shutdown_date` is now `2027-04-30` and `replacement`
+`mistral-large-4` (admitted 2026-11-03, Iteration #45). Owner decision of
+2026-11-04. Read again on 2026-11-19: the card, the overview table and the
+policy say the same.
 
 ## Sources
 

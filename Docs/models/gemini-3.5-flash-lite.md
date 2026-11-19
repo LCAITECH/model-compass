@@ -88,7 +88,7 @@ in `cost.*` above. No other access surface checked for this entry.
 **Free access (`access.has_free_access`):** `true`. Google's own Gemini
 API pricing page lists this model's standard input/output as "Free of
 charge" under the free tier — confirmed directly against
-`ai.google.dev/gemini-api/docs/pricing`, 2026-08-09.
+`aistudio.google.com/docs/pricing`, 2026-08-09.
 
 **How to access:**
 
@@ -116,7 +116,7 @@ three dimensions — RPM (requests/minute), TPM (tokens/minute), RPD
 (requests/day) — applied per project (not per API key), varying by
 model and usage tier. Google does not publish a fixed public table of
 these values; active limits are only viewable per-account in Google AI
-Studio. Source: `ai.google.dev/gemini-api/docs/rate-limits`.
+Studio. Source: `aistudio.google.com/docs/rate-limits`.
 
 **Observed — Free Tier, one Google AI Studio project, 2026-08-09:**
 
@@ -138,11 +138,11 @@ the Paid Tier explicitly states the opposite).
 
 ## Sources
 
-- [Gemini 3.5 Flash-Lite model card](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite) — capabilities, context window, max output, positioning.
-- [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost fields, free/paid tier data-policy distinction.
-- [Gemini API rate limits](https://ai.google.dev/gemini-api/docs/rate-limits) — RPM/TPM/RPD definitions and per-project/per-model behavior.
-- [Gemini API billing](https://ai.google.dev/gemini-api/docs/billing) — Free vs. Paid Tier requirements.
-- [Gemini API quickstart](https://ai.google.dev/gemini-api/docs/quickstart) — access setup steps.
+- [Gemini 3.5 Flash-Lite model card](https://aistudio.google.com/docs/models/gemini-3.5-flash-lite) — capabilities, context window, max output, positioning.
+- [Gemini API pricing](https://aistudio.google.com/docs/pricing) — cost fields, free/paid tier data-policy distinction.
+- [Gemini API rate limits](https://aistudio.google.com/docs/rate-limits) — RPM/TPM/RPD definitions and per-project/per-model behavior.
+- [Gemini API billing](https://aistudio.google.com/docs/billing) — Free vs. Paid Tier requirements.
+- [Gemini API quickstart](https://aistudio.google.com/docs/get-started) — access setup steps.
 - Google AI Studio rate-limit dashboard (`aistudio.google.com/rate-limit`) — one project's observed Free Tier limits, 2026-08-09. Account-specific, not a public document — see caveat above.
 
 Identity/capabilities/cost/quality fields accessed 2026-08-07; Access

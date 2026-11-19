@@ -15,7 +15,7 @@ economics:
   quota_scope: project
   production_allowed: true
 evidence:
-  source_url: https://ai.google.dev/gemini-api/docs/billing?hl=es-419
+  source_url: https://aistudio.google.com/docs/billing?hl=es-419
   consulted_at: "2026-08-11"
   status: confirmed
   caveat: "The paid tier needs Cloud Billing linked to the project. A rate-limited free tier also exists for this model, outside the paid path; see the model's Access notes."

@@ -1,0 +1,64 @@
+id: muse-ember-1.0
+name: Muse Ember
+provider: Meta
+version: "1.0"
+license: proprietary
+
+# Muse Ember page: "Input Text, image, video, audio, and PDF", "Output Text";
+# "It works with computer use, image understanding, tool calling, structured
+# output, and search grounding." json_mode: Meta documents JSON Schema
+# structured output only, same basis as the other Muse entries.
+# Source: https://dev.meta.ai/docs/muse-ember (checked 2026-11-10).
+capabilities:
+  vision: true
+  audio: true
+  image_generation: false
+  tool_calling: true
+  structured_output: true
+  json_mode: true
+
+# Editorial (bot's judgment, 2026-11-10); reasoning in Docs/models/muse-ember-1.0.md.
+quality:
+  reasoning: medium
+  coding: medium
+  creative_writing: medium
+  instruction_following: medium
+
+# Meta publishes no supported-language list; curated (Iteration #33).
+languages: [en, es, pt, fr, de, it]
+language_quality:
+  en: very_high
+  es: high
+  pt: high
+  fr: high
+  de: high
+  it: high
+
+# "Context window 1,048,576 tokens", "Max output 524,288 tokens" (Muse Ember page).
+operational:
+  context_window: 1048576
+  max_output: 524288
+
+# Standard mode only. Lower tier ("Up to 200K input tokens"), Iteration #24;
+# over 200K input tokens the whole request is billed at $0.30/$1.50.
+# Source: https://dev.meta.ai/docs/pricing-rate-limits (checked 2026-11-10).
+cost:
+  input_per_million: 0.10
+  output_per_million: 0.50
+
+# Listed on Meta's models page, not marked preview.
+ecosystem:
+  integration_ease: high
+  maturity: stable
+
+access:
+  has_free_access: false
+
+# Source: https://dev.meta.ai/docs/models (checked 2026-11-10): listed, no
+# deprecation. Release date: https://research.meta.ai/blog/muse-ember
+# (November 9, 2026, "Muse Ember is available today on the Meta Model API").
+lifecycle:
+  status: active
+  release_date: "2026-11-09"
+  shutdown_date: null
+  replacement: null

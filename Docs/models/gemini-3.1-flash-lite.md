@@ -22,7 +22,7 @@ the 2026-08-10 candidate research (internal branch
 | Shutdown date | 2027-05-07 |
 | Recommended replacement | `gemini-3.5-flash-lite` (already in this catalog) |
 
-Source: [Gemini deprecations](https://ai.google.dev/gemini-api/docs/deprecations) (fetched 2026-10-07). Google Cloud also lists retirement "May 7, 2027 or later" on the Enterprise Agent Platform model page. Per `IMPLEMENTATION_NOTES.md` Iteration #22, whether to remove scheduled-shutdown entries from `dataset/models/` is still open — this entry stays until retirement or an explicit remove decision; lifecycle recorded here only.
+Source: [Gemini deprecations](https://aistudio.google.com/docs/deprecations) (fetched 2026-10-07). Google Cloud also lists retirement "May 7, 2027 or later" on the Enterprise Agent Platform model page. Per `IMPLEMENTATION_NOTES.md` Iteration #22, whether to remove scheduled-shutdown entries from `dataset/models/` is still open — this entry stays until retirement or an explicit remove decision; lifecycle recorded here only.
 
 **2026-10-14, `lifecycle` block (Iteration #28):** the YAML records `status: active`, `shutdown_date: "2027-05-07"`, `replacement: gemini-3.5-flash-lite`. Google publishes the date and a successor but announces no deprecation, so the model keeps qualifying; the comparator shows the date, and `tests/test_catalog_dates.py` warns from 30 days before it and fails on it.
 
@@ -94,7 +94,7 @@ limit: 1,048,576" / "Output token limit: 65,536").
 | `input_per_million`         | $0.25  |
 | `output_per_million`        | $1.50  |
 
-Confirmed directly against `ai.google.dev/gemini-api/docs/pricing`,
+Confirmed directly against `aistudio.google.com/docs/pricing`,
 Paid Tier, text/image/video input rate ($0.50/M for audio input, not
 represented — same known schema limitation as every other multimodal
 Gemini entry, see `IMPLEMENTATION_NOTES.md` Iteration #5).
@@ -123,9 +123,9 @@ positioned as genuinely different tiers, not the same model twice.
 
 ## Sources
 
-- [Gemini 3.1 Flash-Lite model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-lite) — capabilities, context window, max output, positioning.
-- [Gemini 3.1 Flash-Lite Preview model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-lite-preview) — deprecation/shutdown confirmation for the predecessor.
-- [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — cost fields, Free Tier confirmation, contrast with Gemini 3.1 Pro Preview pricing.
+- [Gemini 3.1 Flash-Lite model page](https://aistudio.google.com/docs/models/gemini-3.1-flash-lite) — capabilities, context window, max output, positioning.
+- [Gemini 3.1 Flash-Lite Preview model page](https://aistudio.google.com/docs/models/gemini-3.1-flash-lite-preview) — deprecation/shutdown confirmation for the predecessor.
+- [Gemini API pricing](https://aistudio.google.com/docs/pricing) — cost fields, Free Tier confirmation, contrast with Gemini 3.1 Pro Preview pricing.
 
 Accessed 2026-08-10, official Google documentation only.
 

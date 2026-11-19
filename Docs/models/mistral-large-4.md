@@ -1,7 +1,7 @@
 # Mistral Large 4
 
 Dataset entry: [`dataset/models/mistral-large-4.yaml`](../../dataset/models/mistral-large-4.yaml)
-Last verified: 2026-11-03 (every field, on Mistral's own pages)
+Last verified: 2026-11-19 (status, price and lifecycle read again on Mistral's pages; every other field 2026-11-03)
 
 See [README.md](README.md) for what this document is (and isn't) and
 the sourcing rule it follows.
@@ -33,7 +33,7 @@ schema offers `proprietary`, `open-weights` and `open-source` without
 defining the last two; `open-weights` is Mistral's own term and the value
 Large 3 already uses. The schema has no field for license conditions, so
 the condition is written in the self-hosted route's caveat (Iteration
-#42).
+#45).
 
 ## Capabilities `[Objective]`
 
@@ -107,12 +107,28 @@ priced at $0.70 input / M, $0.07 cached input / M, and $2.10 output / M
 tokens", and the docs card shows those figures with no sale marker. They
 are stored as the price in force; there is no `effective_until`.
 
+## Lifecycle `[Objective]`
+
+| Field            | Value        |
+|--------------------|--------------|
+| `status`            | `active`      |
+| `release_date`      | `2026-10-06`  |
+| `shutdown_date`     | `null`        |
+| `replacement`       | `null`        |
+
+`release_date` is the first API availability: Mistral's changelog of
+2026-10-06 says "Mistral Large 4 is now available in Public Preview". The docs
+card now carries November 5, 2026, the date it went GA; by the rule of
+[Iteration #30](../IMPLEMENTATION_NOTES.md#iteration-30) a preview date wins over
+the GA date (the same call as `deepseek-v4-pro`). Mistral announces no
+retirement and names no successor.
+
 ## Ecosystem `[Editorial]`
 
 | Field                | Value          | Why |
 |------------------------|----------------|-----|
 | `integration_ease`      | `medium`       | Same call as `mistral-large-3`: open weights with support in vLLM, SGLang and transformers (the repository), and available through the Mistral API, Microsoft Foundry, NVIDIA-hosted endpoints and OpenRouter (the announcement), but first-party API tooling is less mature than OpenAI, Anthropic or Google. |
-| `maturity`              | `experimental` | The docs card is dated October 6, 2026 and still labels the model "Public Preview", and the 2026-10-29 announcement calls the open weights "this improved Mistral Large 4", a later checkpoint than the preview. Against it: the models overview lists Large 4 in its public catalog and names it the alternative to the deprecated Large 3. `maturity` only shows in the comparison table; the engine does not use it. |
+| `maturity`              | `stable`       | Mistral's docs card has labeled the model GA, dated November 5, 2026, since the first reading of 2026-11-03, when it said "Public Preview" (the model launched in preview on October 6, and the 2026-10-29 announcement calls the open weights "this improved Mistral Large 4"). Mistral's lifecycle policy defines GA as "production-ready and stable", with no silent updates, and the models overview lists Large 4 in its public catalog as the alternative to the deprecated Large 3. It was `experimental` while the label said Public Preview; the owner approved the move on 2026-11-19. `maturity` only shows in the comparison table; the engine does not use it. |
 
 ---
 
@@ -134,21 +150,21 @@ read), NVIDIA-hosted endpoints and OpenRouter (a hosting platform, the
 owner's call).
 
 **Related:** Mistral's models overview lists Mistral Large 3
-(`mistral-large-2512`) under "Deprecated & retired models" with
-deprecation 10/31/2026, retirement 4/30/2027 and Mistral Large 4 as the
-alternative. `mistral-large-3` was not changed by the entry that admitted
-this model; the owner marked it `deprecated` on 2026-11-04 (Iteration #42,
-update).
+(`mistral-large-2512`) under "Deprecated & retired models" with deprecation
+10/31/2026, retirement 4/30/2027 and Mistral Large 4 as the alternative.
+`mistral-large-3` was marked `deprecated` on 2026-11-06 (Iteration #41) without a
+retirement date or a replacement, because this model was not in the dataset yet;
+both were added when it was (Iteration #45).
 
 ## Sources
 
 - [Mistral Large 4 model card](https://docs.mistral.ai/models/mistral-large-4) — identity, license label, status, context, price, free flag.
 - [Mistral Large 4 on Hugging Face](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B) — README (capabilities, languages, reasoning efforts, serving), `config.json` (context), `LICENSE` (terms).
 - [Mistral announcement, 2026-10-29](https://mistral.ai/news/mistral-large-4-oss/) — weights release, price, positioning, availability.
-- [Mistral changelog](https://docs.mistral.ai/getting-started/changelog/) — Public Preview on October 6, launch pricing.
+- [Mistral changelog](https://docs.mistral.ai/getting-started/changelog/) — first availability (Public Preview) on October 6, launch pricing.
 - [Mistral models overview](https://docs.mistral.ai/getting-started/models/models_overview/) — public catalog listing, Large 3 deprecation table.
 
-Accessed 2026-11-03, Mistral's own pages only (no aggregator).
+Accessed 2026-11-03 and, for the card's status and price and for Large 3's deprecation, 2026-11-19; Mistral's own pages only (no aggregator).
 
 ## Verification result
 
