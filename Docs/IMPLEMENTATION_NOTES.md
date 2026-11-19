@@ -2144,3 +2144,18 @@ to it the same day). The suite passes.
 
 **Status**
 Proposed in the bot PR of 2026-11-03 (PR #10), pending the owner's review.
+
+**Update 2026-11-19:** merged into `main` as PR #10 (merge `a37ca55`). The
+deprecations, the successors and the test edits this iteration describes had
+already landed in Iteration #41 (2026-11-06) with the same values, so only
+the source-URL move was new; the nine conflicts were resolved in favor of
+`main`, and this iteration was renumbered from #41 to #44 because #41 was
+taken. `gemini-2.5-pro` and `gemini-2.5-flash` keep `deprecated`, shutdown
+2026-12-01 and the replacements Google names, so the reading of the
+deprecations table's "earliest possible dates" stays as `2026-12-01`. The
+owner confirmed on 2026-11-03 that the successor decision and the test edits
+in this iteration are theirs. All 24 distinct `aistudio.google.com/docs`
+addresses in `dataset/`, `Docs/models/` and the access guides, which include
+the Carbon pages added on 2026-11-10, returned HTTP 200 on 2026-11-19, and
+no source link remains on `ai.google.dev`; the few mentions left are prose
+about the move.

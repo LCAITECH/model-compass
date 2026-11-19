@@ -19,6 +19,16 @@ public release to version against.
 
 ---
 
+## 2026-11-19 — Gemini API sources point to aistudio.google.com
+
+**Links and docs only. No change to the engine, the schema or any value.**
+
+- **What came in.** Bot PR #10 is merged. Every Gemini API source link in the dataset, the model docs and the Google access guide now points to aistudio.google.com/docs instead of ai.google.dev, which redirects there; the quickstart is now the "Get started" page. All 24 distinct addresses answered with HTTP 200 on 2026-11-19, including the Carbon pages added on 2026-11-10.
+- **What was already there.** The deprecations of Gemini 2.5 Pro and 2.5 Flash and their successors had been applied on 2026-11-06 (the entry below), with the same shutdown date and replacements, so the link move is all the PR added. Its two entries of 2026-11-03 stay as the bot wrote them and still say "Proposed" for changes that have since landed.
+- **Tests:** 363 pass. The nine conflicts of the merge were resolved in favor of what `main` already said.
+
+---
+
 ## 2026-11-11 — The eleven tests the new models turned red
 
 **Tests and a news-log row. No dataset change.**
