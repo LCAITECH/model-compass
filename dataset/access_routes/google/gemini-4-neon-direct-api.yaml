@@ -1,0 +1,31 @@
+provider: Google
+model_id: gemini-4-neon
+access:
+  surface: direct_api
+  access_method: "API key (Gemini API)"
+  capabilities: [prototype, build, automation]
+  guide_ref: google#direct-api
+eligibility:
+  requirements:
+    - kind: api_billing_linked
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: api_token
+  quota_scope: project
+  production_allowed: true
+evidence:
+  source_url: https://ai.google.dev/gemini-api/docs/pricing
+  consulted_at: "2026-11-19"
+  status: confirmed
+  caveat: "Not available on the Gemini API's free tier. The paid tier needs Cloud Billing linked to the project, with quota per project. Every token is billed, including thinking tokens. Implicit cached input is $0.15 per million tokens; explicit caching is not supported. Default max output is 65,536 tokens; long decode can extend output up to 1,048,576. There is no prompt-length price split."
+# Sources, read 2026-11-19:
+# - https://ai.google.dev/gemini-api/docs/pricing : Free Tier "Not available";
+#   Paid Tier input $3.00, output $15.00 (including thinking tokens), context
+#   caching $0.15 "Implicit caching only (explicit caching is not supported)".
+# - https://ai.google.dev/gemini-api/docs/changelog, November 18, 2026: GA at
+#   "$3.00 per 1M input tokens and $15.00 per 1M output tokens"; thinking
+#   levels low, medium, default high, and xhigh; unified 1M context; long
+#   decode up to 1M tokens.
+# - https://ai.google.dev/gemini-api/docs/models/gemini-4-neon : max output
+#   "65,536 (default synchronous) / up to 1,048,576 (with long decode)".

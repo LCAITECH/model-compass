@@ -1,0 +1,31 @@
+provider: Google
+model_id: gemini-4-neon
+access:
+  surface: cloud_hosted
+  access_method: "Google Cloud Vertex AI (Model Garden / Gemini Enterprise Agent Platform)"
+  capabilities: [prototype, build, deploy, automation]
+  guide_ref: google#gcp-vertex
+eligibility:
+  requirements:
+    - kind: cloud_account
+      value: gcp
+  region_scope: region_dependent
+economics:
+  billing_owner: Google Cloud
+  billing_scheme: cloud_paygo
+  quota_scope: project
+  production_allowed: true
+evidence:
+  source_url: https://cloud.google.com/model-garden/pricing
+  consulted_at: "2026-11-19"
+  status: confirmed
+  caveat: "Billed through Google Cloud, not the Gemini API key path. Needs Cloud Billing linked to the project. Standard Global pricing is $3.00 input and $15.00 output per million tokens, the same as the Gemini API paid tier; non-global regions are higher ($3.30 / $16.50). Priority, Flex and Batch are billed at different rates. Implicit cached input is $0.15 per million tokens on the Global endpoint. Google's model page says Neon is available to verified enterprise customers in select regions. The model id is gemini-4-neon."
+# Consulted 2026-11-19:
+# - https://cloud.google.com/model-garden/pricing : "Gemini 4 Neon",
+#   Input (text, image, video, audio) Global $3.00, cache read $0.15,
+#   cache write $3.75 (effective January 12, 2027); Text output (response
+#   and reasoning) Global $15.00; Non-global $3.30 / $16.50.
+# - https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-neon
+#   : model id `gemini-4-neon`, GA release date November 18, 2026, regions
+#   Global, us, or eu. "Gemini 4 Neon is available to verified enterprise
+#   customers in select regions." Implicit caching only.

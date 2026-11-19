@@ -1,0 +1,34 @@
+provider: Google
+model_id: gemini-4-neon
+access:
+  surface: consumer_subscription
+  access_method: "Google Antigravity (app, CLI and IDE extensions), signed in with a Google AI plan"
+  capabilities: [prototype, build]
+  guide_ref: google#antigravity
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [google-ai-pro, google-ai-ultra-5x, google-ai-ultra-20x]
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://antigravity.google/docs/models
+  consulted_at: "2026-11-19"
+  status: confirmed
+  caveat: "Included with Google AI Pro (a paid plan, or a trial on eligible premium devices) and both Ultra tiers; not on the free plan or Google AI Plus. Use draws from a five-hour and weekly quota that Google does not publish in tokens; Pro and Ultra can buy AI credits for usage beyond it. In Antigravity the context window is up to 512K tokens, narrower than the API's 1,048,576. Google does not state that the model in Antigravity is the same snapshot as the API model; the match is by the exact name on its pages."
+# Sources, read 2026-11-19:
+# - https://antigravity.google/docs/models, "Reasoning model" table: Gemini 4
+#   Neon "❌" for "Free & Google AI Plus", "✅" with the dagger note for
+#   Google AI Pro ("Available with paid Google AI Pro plans or on trial with
+#   eligible premium devices"), "✅" for Google AI Ultra and Enterprise.
+#   "Context window: Up to 512K tokens." Default thinking level High, plus
+#   Extra / xhigh.
+# - https://one.google.com/intl/en_us/about/google-ai-plans/: Pro "access to
+#   Gemini 4 Neon in Google Antigravity"; Ultra "Higher rate limits and
+#   access to Gemini 4 Carbon and Gemini 4 Neon in Google Antigravity".
+# - Name match (Iteration #34): https://ai.google.dev/gemini-api/docs/models/gemini-4-neon
+#   gives the id gemini-4-neon the name "Gemini 4 Neon".

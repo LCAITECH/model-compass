@@ -1,0 +1,33 @@
+provider: Google
+model_id: gemini-4-neon
+access:
+  surface: consumer_subscription
+  access_method: "Gemini app (web and mobile), signed in with a Google AI plan"
+  capabilities: [prototype]
+  guide_ref: google#gemini-app
+eligibility:
+  requirements:
+    - kind: consumer_subscription
+      value: [google-ai-pro, google-ai-ultra-5x, google-ai-ultra-20x]
+  region_scope: account_dependent
+economics:
+  billing_owner: Google
+  billing_scheme: subscription_quota
+  quota_scope: account
+  production_allowed: false
+evidence:
+  source_url: https://one.google.com/intl/en_us/about/google-ai-plans/
+  consulted_at: "2026-11-19"
+  status: confirmed
+  caveat: "Google's plans page lists 'Gemini app with access to Gemini 4 Neon' on Google AI Pro, and 'Gemini app with higher access to Gemini 4 Carbon and Gemini 4 Neon' on Google AI Ultra. Not on Google AI Plus. Use draws from the app quota, which is not published in tokens. Google does not state that the model in its apps is the same snapshot as the API model; the match is by the exact name on its page."
+# Sources, read 2026-11-19:
+# - https://one.google.com/intl/en_us/about/google-ai-plans/ : Pro "Gemini app
+#   with access to Gemini 4 Neon"; Ultra "Gemini app with higher access to
+#   Gemini 4 Carbon and Gemini 4 Neon for frontier performance in complex
+#   workflows"; Ultra card also "Higher access to Gemini 4 Neon for deeper
+#   analysis in the Gemini app." Plus names Hydrogen, not Neon.
+# - Name match (Iteration #34): https://ai.google.dev/gemini-api/docs/models/gemini-4-neon
+#   gives the id gemini-4-neon the name "Gemini 4 Neon".
+# - Also https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/
+#   (2026-11-18): "If you’re a Google AI Pro or Ultra subscriber, you can
+#   select Gemini 4 Neon from the model drop-down in the Gemini app."

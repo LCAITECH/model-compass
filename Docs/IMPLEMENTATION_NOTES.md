@@ -2171,3 +2171,44 @@ Iteration #45, the next number on this branch after #44. The unmerged
 `bot/catalog-2026-11-12` and `bot/catalog-2026-11-13` branches already
 used #44, so CHANGELOG and IMPLEMENTATION_NOTES will still conflict if
 more than one of those branches lands after another.
+
+## Iteration #46
+
+**Observation**
+Google generally available'd Gemini 4 Neon (`gemini-4-neon`) on
+2026-11-18. The model page, pricing page and release notes give paid-tier
+rates of $3.00 / $15.00 per million tokens, implicit cached input at
+$0.15, a unified 1,048,576-token context and a 65,536 default
+synchronous output ceiling (up to 1,048,576 with long decode). There is
+no free tier and no prompt-length price split. Thinking levels are
+`low`, `medium`, default `high`, and `xhigh`. Official plan pages name
+the exact model on Google AI Pro and Ultra in AI Studio, the Gemini app
+and Antigravity (Antigravity also lists Enterprise; its in-app context
+is up to 512K tokens). Google Cloud's Agent Platform pricing and model
+pages list a Vertex AI / Model Garden route at the same Standard Global
+rate, with higher non-global prices and an enterprise-availability note.
+
+**Current decision**
+Admit Gemini 4 Neon as a new Google entry, using the same family
+conventions as `gemini-4-carbon` and `gemini-4-argon` for id, curated
+languages, default `max_output`, and implicit-cache documentation
+(Iteration #24/#26). Store $3 / $15 as `cost.*` with no
+`effective_until`. Leave `has_free_access` false (Iteration #32). Add
+the five officially confirmed routes: Gemini API, AI Studio, Gemini app,
+Antigravity and Vertex AI / Agent Platform. Record cache prices,
+long decode, Antigravity's 512K window, non-global Vertex rates and the
+enterprise-availability restriction only in `Docs/models/` and the
+route caveats. Editorial ratings are the bot's, from Google's own
+positioning (frontier-level, not everyday), and wait for the owner.
+
+Only catalog counts are updated (`CATALOG_BOT.md`, section 6). Any
+other test that changes because a new mid-price frontier model entered
+the pool is left as it is.
+
+**Status**
+Proposed as a further commit on the bot branch of 2026-11-16, pending
+the owner's review of the ratings and of any tests left red. This is
+Iteration #46, the next number on this branch after #45. The unmerged
+`bot/catalog-2026-11-12` and `bot/catalog-2026-11-13` branches already
+used #44, so CHANGELOG and IMPLEMENTATION_NOTES will still conflict if
+more than one of those branches lands after another.

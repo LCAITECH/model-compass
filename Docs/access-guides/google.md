@@ -39,7 +39,7 @@ Sources: [Google AI Pro](https://support.google.com/googleone/answer/14534406?hl
 
 Currently listed as a Google AI Pro/Ultra benefit.
 
-1. Subscribe to Google AI Pro or one of the two Ultra tiers (Google One). Ultra has the highest limits for the newest models (for example Gemini 4 Argon); the free plan does not include them. Gemini 4 Carbon needs an Ultra plan in AI Studio; it is not on the Free or AI Pro plans.
+1. Subscribe to Google AI Pro or one of the two Ultra tiers (Google One). Ultra has the highest limits for the newest models (for example Gemini 4 Argon); the free plan does not include them. Gemini 4 Carbon needs an Ultra plan in AI Studio; it is not on the Free or AI Pro plans. Gemini 4 Argon and Gemini 4 Neon are available on AI Pro and AI Ultra (not on the Free plan).
 2. Open Google AI Studio with that account.
 3. If you link a paid API key inside AI Studio, its usage is billed
    separately as API usage.
@@ -48,7 +48,7 @@ Currently listed as a Google AI Pro/Ultra benefit.
    Pro, 40 on Ultra 5x, 100 on Ultra 20x, through the Google Developer
    Program) that apply to Cloud services, including the Gemini API.
 
-Sources: [Google One restrictions](https://support.google.com/googleone/answer/16105039?hl=en-en), consulted 2026-08-11; [Google AI plans and the Gemini API](https://ai.google.dev/gemini-api/docs/google-ai-plans), consulted 2026-10-17; the Carbon requirement from [the same page at its new address](https://aistudio.google.com/docs/google-ai-plans), consulted 2026-11-10.
+Sources: [Google One restrictions](https://support.google.com/googleone/answer/16105039?hl=en-en), consulted 2026-08-11; [Google AI plans and the Gemini API](https://ai.google.dev/gemini-api/docs/google-ai-plans), consulted 2026-10-17; the Carbon requirement from [the same page at its new address](https://aistudio.google.com/docs/google-ai-plans), consulted 2026-11-10. Gemini 4 Neon from the same page, consulted 2026-11-19.
 
 ## `google#antigravity`
 
@@ -61,7 +61,9 @@ five hours and capped weekly, not published in tokens.
    such as Gemini 4 Argon; the free plan and Google AI Plus get a smaller
    model set. On Pro, Google lists Argon for paid plans, or on trial with
    eligible premium devices. Gemini 4 Carbon is on Google AI
-   Ultra (and Enterprise) only.
+   Ultra (and Enterprise) only. Gemini 4 Neon, like Argon, is on Google AI Pro
+   (a paid plan, or a trial on eligible premium devices), Ultra and
+   Enterprise; it is not on Free or Plus.
 2. Install Antigravity and sign in with that account
    ([Quickstart](https://antigravity.google/docs)).
 3. Pick the model in the model selector.
@@ -69,4 +71,25 @@ five hours and capped weekly, not published in tokens.
    credits. Antigravity offers no bring-your-own-key option, and its quota
    is not usable through the Gemini API.
 
-Sources: [Antigravity models](https://antigravity.google/docs/models) and [Antigravity plans](https://antigravity.google/docs/plans), consulted 2026-10-22 and 2026-10-27; Gemini 4 Carbon from the models page, consulted 2026-11-10.
+Sources: [Antigravity models](https://antigravity.google/docs/models) and [Antigravity plans](https://antigravity.google/docs/plans), consulted 2026-10-22 and 2026-10-27; Gemini 4 Carbon from the models page, consulted 2026-11-10. Gemini 4 Neon from the same page, consulted 2026-11-19.
+
+## `google#gcp-vertex`
+
+Gemini models on Google Cloud Vertex AI (Model Garden / Gemini
+Enterprise Agent Platform) are billed through Google Cloud, not through
+a Gemini API key.
+
+1. Create/use a Google Cloud project with Cloud Billing enabled.
+2. Call the model through the Vertex AI / Agent Platform API, using
+   Google Cloud authentication (for example Application Default
+   Credentials) and a supported location (`global`, `us`, or `eu`).
+3. Follow the official model page for a first call, for example
+   [Gemini 4 Neon](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-neon).
+
+Standard Global pricing matches the Gemini API paid tier for the
+models that publish both. Non-global regions, Priority, Flex and Batch
+are billed at different rates; see [Agent Platform Pricing](https://cloud.google.com/model-garden/pricing).
+Some Gemini 4 models are limited to verified enterprise customers in
+select regions; the model page states the restriction.
+
+Sources: [Agent Platform Pricing](https://cloud.google.com/model-garden/pricing) and [Gemini 4 Neon](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-neon), consulted 2026-11-19.

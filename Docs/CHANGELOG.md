@@ -19,6 +19,14 @@ public release to version against.
 
 ---
 
+## 2026-11-19 — Gemini 4 Neon enters the catalog
+
+**Dataset, access routes and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**
+
+- **Gemini 4 Neon** (`gemini-4-neon`), generally available 2026-11-18 on the Gemini API. It costs $3.00 / $15.00 per million tokens, with no published end date and no prompt-length split. Cached input is $0.15 (implicit only), which the schema has no field for. It has a 1M context and 65,536 default output (up to 1,048,576 with long decode), takes text, image, audio, video and PDF input, and is not on the free tier. It has five routes: the Gemini API (paid), AI Studio on Pro and Ultra, the Gemini app on Pro and Ultra, Antigravity on Pro (paid, or a trial on eligible premium devices) and Ultra, and Vertex AI / Model Garden at the same Standard Global rate (non-global $3.30 / $16.50).
+- **Ratings are the bot's judgment.** Quality and ecosystem values were proposed by the bot from Google's own description, with the reasoning in `Docs/models/gemini-4-neon.md`, and are flagged for the owner's review. Reasoning and coding are `very_high`, the same ceiling as Carbon and Argon, because Google positions Neon as frontier-level intelligence rather than as everyday work (the reason Hydrogen stayed at `high`).
+- **What the recommendation does.** The new model enters rankings at $18 blended. Catalog counts were updated; any ranking tests that change are left as they are (`IMPLEMENTATION_NOTES.md`, Iteration #46).
+
 ## 2026-11-18 — GPT-6.2 Astra and GPT-6.2 Sol enter the catalog
 
 **Dataset, access routes and docs, proposed by the catalog bot at the owner's request. No engine or schema change.**
