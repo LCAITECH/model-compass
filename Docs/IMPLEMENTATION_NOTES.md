@@ -2296,3 +2296,77 @@ engine returns; no assertion about a winner changed and none was weakened.
 The edits this branch had made to the same tests before `main` re-derived
 them (2026-11-06 and 2026-11-10) were dropped in favor of `main`'s versions,
 which already covered Mistral Large 3's deprecation more strictly.
+
+## Iteration #46
+
+**Observation**
+The catalog bot's branch `bot/catalog-2026-11-13` (two commits, no PR)
+adds Gemini 4 Hydrogen (`gemini-4-hydrogen`, generally available
+2026-11-12) with four routes and, on 2026-11-16, a Vertex AI route. Read
+on Google's own pages on 2026-11-20 (model page, pricing, deprecations,
+release notes, "What's new", the AI Studio plans page, the Google One
+plans page, the Agent Platform pricing page and developer's guide, and
+Antigravity's models page rendered in a browser): every objective value
+matches the branch. Three things did not carry over as they were:
+
+1. **Antigravity.** The branch records Hydrogen as "✅" in all four plan
+   columns of Antigravity's "Reasoning model" table, free plan and Google
+   AI Plus included. The page as read on 2026-11-20, in English and in
+   Spanish, says "❌" for Free & Google AI Plus, "✅" with the footnote
+   "Available on Google AI Pro for non-trial subscriptions only" for Pro,
+   and "✅" for Ultra and Enterprise. The page was not archived on
+   2026-11-13, so whether it changed or the bot misread it is unknown.
+2. **Ratings.** The bot rated reasoning and coding `high`. The catalog
+   rates `gemini-3.8-flash` `very_high` on both, Google's migration guide
+   moves workloads from it to Hydrogen, and the "What's new" page says
+   Hydrogen "Writes cleaner code" and "cuts fabricated claims by more than
+   5x compared to Gemini 3.8 Flash". A `high` would put the newer model
+   below the one it improves on.
+3. **Iteration numbers and shared files.** The branch's Iterations #44
+   and #45, its CHANGELOG entries and its Google-guide edits collide with
+   `main`'s (#44 and #45 exist, and the guide moved its links to
+   `aistudio.google.com` with PR #10), and the test counts conflict. The
+   branch cannot be merged as it is.
+
+The Free plan is not a subscription entry in `dataset/subscriptions/`, so
+a route for a model that Google gives to the Free plan (AI Studio, here)
+cannot name it: it lists the paid plans the pages name and documents the
+Free plan in its caveat. First appearance of this friction in this
+log; it is not a proposal to change `SCHEMA.md`.
+
+**Current decision**
+Assembled by hand on `main` from the branch's files, not merged (the same
+approach as PR #7 and Iteration #44's renumbering). Five routes:
+`gemini-4-hydrogen-direct-api`, `-ai-studio`, `-gemini-app`,
+`-antigravity` and `-gcp-vertex`. The Antigravity route lists Google AI Pro
+(non-trial), Ultra 5x and Ultra 20x, and its caveat says the free plan and
+Google AI Plus do not have the model there. `has_free_access` stays
+`true`: the Gemini API's free tier and the AI Studio free plan both name
+the model, which is what Iteration #32 counts. `cost.*` is $1.50/$7.50
+with no end date; `max_output` is the default 65,536 (the 1,048,576 with
+long decode is in the model doc, as in Iterations #24 and #26).
+
+Ratings: the owner set reasoning and coding to `very_high` on 2026-11-20,
+matching `gemini-3.8-flash`. Creative writing `medium`, instruction
+following `high`, `integration_ease: high` and `maturity: stable` are the
+bot's judgment and have not been reviewed by the owner. A
+`google#gcp-vertex` section was added to the Google access guide so the
+Vertex route's `guide_ref` resolves; no other Gemini model has a Vertex
+route, and none was backfilled.
+
+Tests re-derived from engine runs over the dataset: the model and route
+counts (50, 121) and the direct-API count (50) in `test_loader` and
+`test_access_loader`; and five expectations in
+`test_explainer_also_strong` (15 also-strong options with Hydrogen in the
+set), `test_explainer_alternatives_outranked` (Hydrogen excluded for
+Korean; 35 qualifying and 31 outranked at a high budget) and
+`test_whatif` (35 qualifying; Hydrogen takes Claude Sonnet 5.5's place in
+the origin's top alternatives). No assertion about a winner changed and
+none was weakened.
+
+**Status**
+Hydrogen admitted (50 models, 121 routes, 365 tests). The sibling bot
+branches `bot/catalog-2026-11-12` (Gemini Decision) and
+`bot/catalog-2026-11-16` (Qwen4-Max, GPT-6.2 Astra and Sol, Gemini 4 Neon)
+remain unmerged and also use Iterations #44 and #45. Whether the owner
+reviews the remaining ratings is pending.

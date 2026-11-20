@@ -94,7 +94,9 @@ def test_excluded_models_carry_their_disqualification_reasons(models):
     # 2026-11-06: mistral-large-3 is deprecated and no longer an alternative.
     # 2026-11-19: mistral-large-4 qualifies for "ko" and takes the third slot from qwen3.8-max.
     assert [alt.model.id for alt in recommendation.alternatives] == ["qwen3.8-flash", "qwen3.7-plus", "mistral-large-4"]
+    # 2026-11-20: gemini-4-hydrogen joins the excluded (curated Gemini list, no "ko").
     assert {excl.model.id for excl in recommendation.excluded} == {
+        "gemini-4-hydrogen",
         "gemini-2.5-flash",
         "mistral-large-3",
         "gemini-2.5-flash-lite",
@@ -190,7 +192,8 @@ def test_total_qualifying_and_alternative_ranks(models):
     # (4). gemini-4-carbon and muse-ember-1.0 qualify. 48 - 4 - 10
     # deprecated - 1 restricted = 33.
     # 2026-11-19: mistral-large-4 qualifies too (blended $2.80, the medium tier): 34.
-    assert recommendation.total_qualifying == 34
+    # 2026-11-20: gemini-4-hydrogen qualifies (blended $9.00, the high tier): 35.
+    assert recommendation.total_qualifying == 35
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
@@ -216,8 +219,8 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 30  # 34 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 35))
+    assert len(recommendation.outranked) == 31  # 35 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 36))
 
     first = recommendation.outranked[0]
     assert first.model.id == "qwen3.8-flash"

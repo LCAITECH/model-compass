@@ -19,6 +19,19 @@ public release to version against.
 
 ---
 
+## 2026-11-20 — Gemini 4 Hydrogen joins the catalog
+
+**Dataset, access catalog and docs. No change to the engine or the schema.**
+
+- **What came in.** Gemini 4 Hydrogen ($1.50/$7.50 per million tokens, 1M context, 65,536 default output, text, images, audio, video and PDF in, text out), generally available since 2026-11-12. It has five routes: the Gemini API (a free tier and the paid one), AI Studio, the Gemini app, Antigravity and Google Cloud Vertex AI ($1.50/$7.50 on the Global endpoint). It is the first Gemini model with a Vertex AI route.
+- **Where it came from.** The catalog bot's branch of 2026-11-13, which was never opened as a PR. The branch conflicted with `main` in five files and its iteration numbers were already taken, so it was assembled by hand instead of merged. Every value was read again on Google's own pages on 2026-11-20.
+- **One route corrected.** The branch listed Antigravity for the free plan and Google AI Plus. Antigravity's models page, read in a browser on 2026-11-20, shows Hydrogen only on Google AI Pro (non-trial subscriptions), Ultra and Enterprise, so the route lists those. Whether the page changed since the bot read it or the bot misread it is not known.
+- **Ratings.** The bot proposed `high` for reasoning and coding. The owner set `very_high`, the value of Gemini 3.8 Flash, which Google's pages present Hydrogen as improving on. Creative writing (`medium`) and instruction following (`high`) are the bot's, not yet reviewed by the owner.
+- **AI Studio and the free plan.** Google gives Hydrogen to every AI Studio plan, free included. The free plan is not a plan in the catalog, so the route lists AI Pro and the two Ultra tiers and says so in its caveat. The model still counts as having free access, through the API's free tier.
+- **Tests:** 365 pass. Catalog counts were updated (50 models, 121 routes, 50 models with a direct-API route) and so were the expectations that list catalog members: 35 models qualify at a high budget instead of 34, Hydrogen joins the "also strong" group for reasoning (15 instead of 14), it is excluded for Korean like the other Gemini models, and it takes Claude Sonnet 5.5's place among the top alternatives in one what-if scenario. No winner changed.
+
+---
+
 ## 2026-11-19 — Gemini API sources point to aistudio.google.com
 
 **Links and docs only. No change to the engine, the schema or any value.**

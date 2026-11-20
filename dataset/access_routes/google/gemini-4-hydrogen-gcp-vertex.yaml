@@ -1,0 +1,28 @@
+provider: Google
+model_id: gemini-4-hydrogen
+access:
+  surface: cloud_hosted
+  access_method: "Google Cloud Vertex AI (Model Garden / Gemini Enterprise Agent Platform)"
+  capabilities: [prototype, build, deploy, automation]
+  guide_ref: google#gcp-vertex
+eligibility:
+  requirements:
+    - kind: cloud_account
+      value: gcp
+  region_scope: region_dependent
+economics:
+  billing_owner: Google Cloud
+  billing_scheme: cloud_paygo
+  quota_scope: project
+  production_allowed: true
+evidence:
+  source_url: https://cloud.google.com/model-garden/pricing
+  consulted_at: "2026-11-20"
+  status: confirmed
+  caveat: "Billed through Google Cloud, not the Gemini API key path. Needs Cloud Billing linked to the project. Standard Global pricing is $1.50 input and $7.50 output per million tokens, the same as the Gemini API paid tier; non-global regions are higher ($1.65 / $8.25). Priority, Flex and Batch are billed at different rates. The model id is gemini-4-hydrogen."
+# Consulted 2026-11-16, re-read 2026-11-20:
+# - https://cloud.google.com/model-garden/pricing : "Gemini 4 Hydrogen",
+#   Input (text, image, video, audio) Global $1.50, cache read $0.075;
+#   Text output (response and reasoning) Global $7.50; Non-global $1.65 / $8.25.
+# - https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/guides/gemini-4-hydrogen
+#   : model id `gemini-4-hydrogen`, regions Global, us, or eu.
