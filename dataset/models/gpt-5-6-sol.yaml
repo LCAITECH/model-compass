@@ -35,15 +35,21 @@ operational:
   context_window: 1050000
   max_output: 128000
 
-# Promotional pricing since 2026-08-21, guaranteed at least through
-# 2026-11-21 per OpenAI's own pricing page footnote. Reverts to the
-# standard $5.00/$30.00 rate afterward (same effective_until/reverts_to
-# pattern established for gemini-3.6-flash/gemini-3.7-flash, SCHEMA.md).
-# Source: https://developers.openai.com/api/docs/pricing
+# Promotional pricing since 2026-08-21. OpenAI's pricing page footnote and
+# the model page, re-read 2026-11-19, say the promotional pricing "is
+# available until November 30, 2026" (the 2026-08-21 changelog entry still
+# says "at least through November 21, 2026"). The price holds through that
+# day, then reverts to the standard $5.00/$30.00 rate (same
+# effective_until/reverts_to pattern established for
+# gemini-3.6-flash/gemini-3.7-flash, SCHEMA.md). Neither page prints the
+# $5.00/$30.00; it follows from the changelog's "20% lower input pricing
+# and 33% lower output pricing".
+# Sources: https://developers.openai.com/api/docs/pricing
+# and https://developers.openai.com/api/docs/models/gpt-5.6-sol
 cost:
   input_per_million: 4.00
   output_per_million: 20.00
-  effective_until: "2026-11-21"
+  effective_until: "2026-11-30"
   reverts_to:
     input_per_million: 5.00
     output_per_million: 30.00
