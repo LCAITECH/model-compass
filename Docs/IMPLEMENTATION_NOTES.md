@@ -2370,3 +2370,78 @@ branches `bot/catalog-2026-11-12` (Gemini Decision) and
 `bot/catalog-2026-11-16` (Qwen4-Max, GPT-6.2 Astra and Sol, Gemini 4 Neon)
 remain unmerged and also use Iterations #44 and #45. Whether the owner
 reviews the remaining ratings is pending.
+
+---
+
+## Iteration #47
+
+**Observation**
+On 2026-11-23 Anthropic deprecated Claude Opus 4.5 and set a retirement
+date of 22 January 2027 on the Claude API, with `claude-opus-5-5` as the
+replacement (https://platform.claude.com/docs/en/about-claude/model-deprecations,
+checked 2026-11-24). The same page says those dates apply to
+Anthropic-operated platforms, including Microsoft Foundry, and that
+partner-operated platforms (Amazon Bedrock and Google-managed Claude on
+Google Cloud) set their own schedules.
+
+The cloud pages do not agree with a single date:
+
+1. **Amazon Bedrock** (partner-operated): the model card says the model
+   is in the Legacy stage in all Regions, public extended access starts
+   on 23 February 2027, and end of life is 23 May 2027
+   (https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-opus-4-5.html).
+2. **Microsoft Foundry**: Microsoft's retirement schedule lists
+   `claude-opus-4-5` version 1 (hosted on Anthropic infrastructure) as
+   GA, retiring 22 February 2027, replacement `claude-opus-5-5`
+   (https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule).
+   That is 31 days later than Anthropic's Foundry claim.
+3. **Google Cloud / Vertex AI** (Google managed): the model page only
+   says "Retirement Date: Not sooner than Nov 24, 2026", a floor rather
+   than a specific date
+   (https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/opus-4-5).
+   The partner-models page still lists the model as available.
+
+The schema has one `lifecycle.shutdown_date` on the model, not per
+route. If that field is Anthropic's 2027-01-22, `tests/test_catalog_dates.py`
+will demand the YAML and every route be removed on that day, including
+the Bedrock route that AWS says stays until 23 May 2027 and the Foundry
+route that Microsoft says stays until 22 February 2027. Access-route
+YAML has no shutdown field, so the platform dates go in each caveat.
+
+The same case is due first with Claude Sonnet 4.5, which retires on the
+Claude API, Microsoft Foundry and Vertex AI on 2026-11-30 while Amazon
+Bedrock's model card (read 2026-11-24) puts its end of life on 2027-04-08
+(2027-04-27 in AWS GovCloud (US)). The dataset's Sonnet 4.5 routes record
+none of this. Two independent instances of the same friction: the owner
+decides what to do with a route that outlives its model's shutdown date,
+and a change to `SCHEMA.md` or to the removal rule of Iteration #28 would
+be a proposal to the owner, not an edit made here.
+
+**Current decision**
+No schema change. The model entry follows the same pattern as Claude
+Sonnet 4.5 (Iteration #28): `status: deprecated`, `shutdown_date:
+"2027-01-22"`, `replacement: claude-opus-5-5`, from Anthropic's
+deprecations page. The Bedrock caveat records AWS's 23 May 2027 EOL;
+the Foundry caveat records Microsoft's 22 February 2027 date, because a
+cloud route comes from that cloud's own docs; the Vertex caveat records
+only the published floor, with no invented date. What to do on 22
+January 2027 with the still-live cloud routes is left to the owner, and
+it comes due first on 2026-11-30 with Sonnet 4.5 (above).
+
+**Status**
+Opus 4.5 marked deprecated on `bot/catalog-2026-11-24`. No PR opened
+(the owner will review with Claude first). On the bot's branch pytest
+gave 6 failed, 359 passed: the failing tests pin the deprecated set, the
+retiring radar, the "10 models deprecated" copy and two qualifying counts
+(35 becomes 34), and were not edited, per section 6 of `CATALOG_BOT.md`.
+
+**Update 2026-11-24:** applied to `main` by hand, not merged (the branch
+commit's title says DO NOT MERGE). The dataset, route and model-doc edits
+are the bot's, as it wrote them; this iteration's note on later cloud
+dates was corrected with the Sonnet 4.5 case above. Six tests were
+re-derived from engine runs: the deprecated set (11
+models with this one), the retiring list (Opus 4.5 sorts between GPT-4o
+and Mistral Large 3, 100 days from the pinned date), the "11 models
+deprecated" copy, and 34 qualifying instead of 35 at a high budget (30
+outranked, ranks 5 to 34). No winner changed and no assertion was
+weakened. 365 pass.

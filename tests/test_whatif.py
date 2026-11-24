@@ -40,12 +40,13 @@ def test_headline_when_the_winner_changes_and_the_top_reshuffles(client):
     # 2026-11-20: gemini-4-hydrogen qualifies at a high budget (35 instead of
     # 34) and, scoring 1.0 on reasoning at $9.00 blended, takes Claude Sonnet
     # 5.5's place among the origin's top alternatives.
+    # 2026-11-24: claude-opus-4-5 is deprecated and stops qualifying (34).
     assert data["headline"] == (
-        "Winner: Gemini 3.8 Flash → Claude Haiku 5.5. 9 models qualify instead of 35. "
+        "Winner: Gemini 3.8 Flash → Claude Haiku 5.5. 9 models qualify instead of 34. "
         "DeepSeek V4.1 Flash, Qwen3.7-Flash and Qwen3.8-Flash move into the top alternatives. "
         "DeepSeek V4 Pro, Gemini 4 Hydrogen and Qwen3.8-Max drop out of the top alternatives."
     )
-    assert data["diff"]["qualifying"] == {"from": 35, "to": 9}
+    assert data["diff"]["qualifying"] == {"from": 34, "to": 9}
     assert not data["diff"]["practically_tied"]
 
 

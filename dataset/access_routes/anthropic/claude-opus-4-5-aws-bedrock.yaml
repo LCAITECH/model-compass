@@ -15,8 +15,13 @@ economics:
   billing_scheme: cloud_paygo
   quota_scope: account
   production_allowed: true
+# Amazon Bedrock model card (checked 2026-11-24): "Claude Opus 4.5 is in the
+# Legacy stage in all Regions. Public extended access starts on February 23,
+# 2027, and the model has an upcoming end of life of May 23, 2027".
+# "Model EOL date: May 23, 2027". Source:
+# https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-opus-4-5.html
 evidence:
   source_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html
-  consulted_at: "2026-08-13"
+  consulted_at: "2026-11-24"
   status: confirmed
-  caveat: "Billed through AWS, not Anthropic directly; model access must be requested per-model in the Bedrock console before first use, and availability is region-dependent."
+  caveat: "Billed through AWS, not Anthropic directly; model access must be requested per-model in the Bedrock console before first use, and availability is region-dependent. Amazon Bedrock has this model in the Legacy stage in all Regions; public extended access starts on February 23, 2027, and the model reaches end of life on May 23, 2027, after which requests fail."

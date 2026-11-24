@@ -193,7 +193,8 @@ def test_total_qualifying_and_alternative_ranks(models):
     # deprecated - 1 restricted = 33.
     # 2026-11-19: mistral-large-4 qualifies too (blended $2.80, the medium tier): 34.
     # 2026-11-20: gemini-4-hydrogen qualifies (blended $9.00, the high tier): 35.
-    assert recommendation.total_qualifying == 35
+    # 2026-11-24: claude-opus-4-5 is deprecated and stops qualifying: 34.
+    assert recommendation.total_qualifying == 34
     assert [alt.rank for alt in recommendation.alternatives] == [2, 3, 4]
 
 
@@ -219,8 +220,8 @@ def test_outranked_models_get_ranked_and_include_priority_dimensions(models):
 
     recommendation = explain(context, candidates)
 
-    assert len(recommendation.outranked) == 31  # 35 - winner - 3 alternatives
-    assert [o.rank for o in recommendation.outranked] == list(range(5, 36))
+    assert len(recommendation.outranked) == 30  # 34 - winner - 3 alternatives
+    assert [o.rank for o in recommendation.outranked] == list(range(5, 35))
 
     first = recommendation.outranked[0]
     assert first.model.id == "qwen3.8-flash"

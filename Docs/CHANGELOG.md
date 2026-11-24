@@ -19,6 +19,18 @@ public release to version against.
 
 ---
 
+## 2026-11-24 — Claude Opus 4.5 is deprecated and retires on 22 January 2027
+
+**Dataset, docs and access-route caveats. No change to the engine or the schema.**
+
+- **What changed at Anthropic.** On 2026-11-23 it notified developers that Claude Opus 4.5 (`claude-opus-4-5-20251101` and the dateless alias `claude-opus-4-5`) is deprecated on the Claude API and retires on 22 January 2027. The recommended replacement is `claude-opus-5-5`, which is already in this catalog. Source: https://platform.claude.com/docs/en/about-claude/model-deprecations (checked 2026-11-24).
+- **What changes here.** `main` still had the model as `active` with no shutdown date. The entry is now `deprecated`, with shutdown 2027-01-22 and Claude Opus 5.5 as its replacement. The engine will stop recommending it and list it among the exclusions with that date and successor.
+- **Cloud platforms publish different dates.** Amazon Bedrock's model card puts the model in the Legacy stage, with public extended access from 23 February 2027 and end of life on 23 May 2027 (https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-opus-4-5.html). Microsoft Foundry's schedule lists version 1 as GA, retiring 22 February 2027, replacement `claude-opus-5-5` (https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule); that is 31 days later than the date Anthropic says also applies to Foundry, so the Foundry route uses Microsoft's date. Google Cloud's model page only says retirement is "Not sooner than Nov 24, 2026", a floor rather than a date, so the Vertex route stores none (https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/opus-4-5). Those platform dates are in each route's caveat and in the model note. The schema has one model-level `shutdown_date`, which keeps Anthropic's API date.
+- **Where it came from.** The catalog bot's branch of 2026-11-24, never opened as a PR. It was applied by hand rather than merged, because its commit title says "DO NOT MERGE (bot)". Every date was read again on the providers' own pages on 2026-11-24.
+- **Tests:** 365 pass. Six expectations that pin the catalog were re-derived from engine runs: the set of deprecated models (now with this one), the retiring list (it sorts between GPT-4o and Mistral Large 3), the "11 models deprecated" copy (10 before), two qualifying counts (35 becomes 34, because this model no longer qualifies) and one what-if headline. No winner changed.
+
+---
+
 ## 2026-11-20 — Gemini 4 Hydrogen joins the catalog
 
 **Dataset, access catalog and docs. No change to the engine or the schema.**

@@ -46,10 +46,18 @@ ecosystem:
 access:
   has_free_access: false
 
-# Source: https://platform.claude.com/docs/en/about-claude/model-deprecations (checked 2026-10-14).
-# Release date: https://platform.claude.com/docs/en/models/opus-4-5/overview ("Released").
+# Source: https://platform.claude.com/docs/en/about-claude/model-deprecations (checked 2026-11-24).
+# Anthropic's words, 2026-11-23 announcement: status "Deprecated", deprecated
+# "November 23, 2026", tentative retirement "January 22, 2027" for
+# claude-opus-4-5-20251101. "This retirement includes claude-opus-4-5, the
+# same model's ID without a date." Recommended replacement: claude-opus-5-5.
+# Those dates "apply to Anthropic-operated platforms: the Claude API, Claude
+# Platform on AWS, Claude Models on Google Cloud (Anthropic managed), and
+# Microsoft Foundry." Partner-operated platforms "set their own retirement
+# schedules." Release date: https://platform.claude.com/docs/en/models/opus-4-5/overview ("Released").
+# Platform dates that differ are in each route's caveat and in Docs/models/claude-opus-4-5.md.
 lifecycle:
-  status: active
+  status: deprecated
   release_date: "2025-11-24"
-  shutdown_date: null
-  replacement: null
+  shutdown_date: "2027-01-22"
+  replacement: claude-opus-5-5

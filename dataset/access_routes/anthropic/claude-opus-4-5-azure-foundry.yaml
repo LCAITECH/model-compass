@@ -15,8 +15,14 @@ economics:
   billing_scheme: cloud_paygo
   quota_scope: account
   production_allowed: true
+# Microsoft Foundry retirement schedule (checked 2026-11-24):
+# claude-opus-4-5, Version 1 ("Hosted on Anthropic infrastructure"),
+# Lifecycle GA, Retirement date 2027-02-22, Replacement claude-opus-5-5.
+# Source: https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule
+# Anthropic's deprecations page says its January 22, 2027 date also applies
+# to Microsoft Foundry; this route uses Microsoft's own published date.
 evidence:
   source_url: https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/how-to/use-foundry-models-claude
-  consulted_at: "2026-08-13"
+  consulted_at: "2026-11-24"
   status: confirmed
-  caveat: "Billed via an Azure Marketplace subscription, not Anthropic directly; needs a paid Azure subscription with an active pay-as-you-go billing method in a supported region (student, free-trial and sponsored-credit-only subscriptions don't qualify)."
+  caveat: "Billed via an Azure Marketplace subscription, not Anthropic directly; needs a paid Azure subscription with an active pay-as-you-go billing method in a supported region (student, free-trial and sponsored-credit-only subscriptions don't qualify). On Microsoft Foundry, version 1 (hosted on Anthropic infrastructure) retires on February 22, 2027; Microsoft's recommended replacement is claude-opus-5-5."

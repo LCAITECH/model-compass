@@ -70,17 +70,20 @@ def test_retiring_lists_dated_shutdowns_first_then_routed_ones(models):
     # 2026-11-06: Gemini 2.5 Pro and Flash shut down 2026-12-01 (48 days
     # from 2026-10-14). 2026-11-19: Mistral Large 3 has its retirement date,
     # 2027-04-30 (198 days), so it sorts with the dated shutdowns.
+    # 2026-11-24: claude-opus-4-5 retires on the Claude API 2027-01-22
+    # (100 days), between gpt-4o and mistral-large-3.
     assert [r.model.id for r in retiring] == [
         "claude-sonnet-4-5",  # 47 days
         "gemini-2.5-flash", "gemini-2.5-pro",  # 48 days
         "gpt-5", "gpt-5-mini", "gpt-5-nano",  # 58 days
         "gpt-4o",  # 92 days
+        "claude-opus-4-5",  # 100 days
         "mistral-large-3",  # 198 days
         "gemini-3.1-flash-lite",  # 205 days, active
         "gemini-3.5-flash", "gemini-3.7-flash",  # no date
     ]
     assert retiring[0].days_left == 47 and retiring[0].replacement.name == "Claude Sonnet 5.5"
-    assert not retiring[8].deprecated
+    assert not retiring[9].deprecated
 
 
 def test_catalog_lists_new_releases_and_promos_soonest_first(models):
@@ -128,7 +131,8 @@ def test_result_page_dock_explains_the_winners_introductory_price(client, pinned
     assert "data-notice-dock" in html
     assert "Gemini 3.8 Flash costs $0.75 / $3.75 per 1M tokens until Dec 31, 2026" in html
     assert "This ranking used today&#39;s price." in html or "This ranking used today's price." in html
-    assert "10 models deprecated by their providers" in html
+    # 2026-11-24: claude-opus-4-5 is deprecated too (10 before, 11 now).
+    assert "11 models deprecated by their providers" in html
     assert 'data-promo="Dec 31, 2026"' in html
 
 

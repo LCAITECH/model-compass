@@ -15,8 +15,14 @@ economics:
   billing_scheme: cloud_paygo
   quota_scope: project
   production_allowed: true
+# Google Cloud Claude Opus 4.5 page (checked 2026-11-24): "Retirement Date:
+# Not sooner than Nov 24, 2026." Launch stage GA. That is a floor, not a
+# specific shutdown date, so none is stored for this route.
+# Source: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/opus-4-5
+# The Vertex partner-models page still lists the model as available:
+# https://docs.cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-claude
 evidence:
   source_url: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-claude
-  consulted_at: "2026-08-13"
+  consulted_at: "2026-11-24"
   status: confirmed
-  caveat: "Billed through Google Cloud, not Anthropic directly; requires Cloud Billing linked to the project, and the model must be enabled in Vertex AI's Model Garden."
+  caveat: "Billed through Google Cloud, not Anthropic directly; requires Cloud Billing linked to the project, and the model must be enabled in Vertex AI's Model Garden. Google Cloud has not published a specific retirement date for this model on Vertex AI; its model page only states that retirement is not sooner than November 24, 2026."
