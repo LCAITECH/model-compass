@@ -9,12 +9,16 @@ the sourcing rule it follows. Proposed by the catalog bot on 2026-11-13
 (branch `bot/catalog-2026-11-13`, never opened as a PR), the day after
 Google made the model generally available; the bot records that the
 owner asked for it to be added that day. It was admitted to `main` on
-2026-11-20, assembled by hand from that branch (Iteration #46). The
-review log's entry of 2026-11-06 listed "Hydrogen" among items treated
-as "new providers or outside text/code". That is no longer the case: on
+2026-11-20, assembled by hand from that branch (Iteration #46). On
 2026-11-12 Google published Gemini 4 Hydrogen (`gemini-4-hydrogen`) as a
 generally available text and code model on the Gemini API models,
-pricing, deprecations and release-notes pages. Every value below was
+pricing, deprecations and release-notes pages. The word "Hydrogen" in
+the review log's row of 2026-11-06 (listed among items treated as "new
+providers or outside text/code") is not this model: the log does not
+name its maker, and the row of 2026-11-03 names Deep Principle's
+Hydrogen-1.0, a different model (Google's was not published until
+2026-11-12). The bot's branch had read that row as Google's; this entry
+does not. Every value below was
 read on Google's own pages on 2026-11-13 and read again on 2026-11-20;
 where the two readings differ (Antigravity), the text says so. The
 Gemini API docs live at `aistudio.google.com/docs`.

@@ -44,6 +44,18 @@ public release to version against.
 
 ---
 
+## 2026-11-19 — GPT-5.6 Sol's introductory price now runs through 30 November
+
+**Dataset and one model note. No change to the engine or the schema.**
+
+- **What changed at OpenAI.** The pricing page and the model page of GPT-5.6 Sol, read on 2026-11-19, say its promotional pricing "is available until November 30, 2026". The changelog entry of 2026-08-21 still says "at least through November 21, 2026". The stored `cost.effective_until` moves from 2026-11-21 to 2026-11-30, and the price shown in the catalog ($4/$20) holds through that day.
+- **What did not change.** The standard price it reverts to, $5/$30, is the same as before. Neither current page prints it: it follows from the 2026-08-21 changelog entry, which describes $4/$20 as 20% lower on input and 33% lower on output. The YAML comment and the model note now say so.
+- **Why it mattered.** With the old date the test suite would have started failing on 2026-11-22. It now fails from 2026-12-01.
+- **Where it came from.** The catalog bot's branch of 2026-11-16 carried this date together with four new models. That branch was reviewed but not merged (it had seven red tests, conflicts in five files and iteration numbers already taken), so only this one value was applied, by hand.
+- **Tests:** 364 pass.
+
+---
+
 ## 2026-11-19 — Gemini API sources point to aistudio.google.com
 
 **Links and docs only. No change to the engine, the schema or any value.**
