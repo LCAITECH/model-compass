@@ -2370,3 +2370,60 @@ branches `bot/catalog-2026-11-12` (Gemini Decision) and
 `bot/catalog-2026-11-16` (Qwen4-Max, GPT-6.2 Astra and Sol, Gemini 4 Neon)
 remain unmerged and also use Iterations #44 and #45. Whether the owner
 reviews the remaining ratings is pending.
+
+---
+
+## Iteration #47
+
+**Observation**
+On 2026-11-23 Anthropic deprecated Claude Opus 4.5 and set a retirement
+date of 22 January 2027 on the Claude API, with `claude-opus-5-5` as the
+replacement (https://platform.claude.com/docs/en/about-claude/model-deprecations,
+checked 2026-11-24). The same page says those dates apply to
+Anthropic-operated platforms, including Microsoft Foundry, and that
+partner-operated platforms (Amazon Bedrock and Google-managed Claude on
+Google Cloud) set their own schedules.
+
+The cloud pages do not agree with a single date:
+
+1. **Amazon Bedrock** (partner-operated): the model card says the model
+   is in the Legacy stage in all Regions, public extended access starts
+   on 23 February 2027, and end of life is 23 May 2027
+   (https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-opus-4-5.html).
+2. **Microsoft Foundry**: Microsoft's retirement schedule lists
+   `claude-opus-4-5` version 1 (hosted on Anthropic infrastructure) as
+   GA, retiring 22 February 2027, replacement `claude-opus-5-5`
+   (https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule).
+   That is 31 days later than Anthropic's Foundry claim.
+3. **Google Cloud / Vertex AI** (Google managed): the model page only
+   says "Retirement Date: Not sooner than Nov 24, 2026", a floor rather
+   than a specific date
+   (https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/opus-4-5).
+   The partner-models page still lists the model as available.
+
+The schema has one `lifecycle.shutdown_date` on the model, not per
+route. If that field is Anthropic's 2027-01-22, `tests/test_catalog_dates.py`
+will demand the YAML and every route be removed on that day, including
+the Bedrock route that AWS says stays until 23 May 2027 and the Foundry
+route that Microsoft says stays until 22 February 2027. Access-route
+YAML has no shutdown field, so the platform dates go in each caveat.
+This is the first time a deprecation in this catalog has confirmed,
+official, later dates on some cloud routes. It is not a proposal to
+change `SCHEMA.md`.
+
+**Current decision**
+No schema change. The model entry follows the same pattern as Claude
+Sonnet 4.5 (Iteration #28): `status: deprecated`, `shutdown_date:
+"2027-01-22"`, `replacement: claude-opus-5-5`, from Anthropic's
+deprecations page. The Bedrock caveat records AWS's 23 May 2027 EOL;
+the Foundry caveat records Microsoft's 22 February 2027 date, because a
+cloud route comes from that cloud's own docs; the Vertex caveat records
+only the published floor, with no invented date. What to do on 22
+January 2027 with the still-live cloud routes is left to the owner.
+
+**Status**
+Opus 4.5 marked deprecated on `bot/catalog-2026-11-24`. No PR opened
+(the owner will review with Claude first). pytest: 6 failed, 359 passed.
+The failing tests pin the deprecated set, the retiring radar, the "10
+models deprecated" copy and two qualifying counts (35 becomes 34). They
+were not edited, per section 6 of `CATALOG_BOT.md`.
